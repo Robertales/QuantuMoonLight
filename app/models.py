@@ -15,8 +15,9 @@ class Files(db.Model):
 
 class Utente(db.Model):
     id_user = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email = db.Column(db.text, nullable=True)
-    token = db.Column(db.text, nullable=True)
+    email = db.Column(db.Text, nullable=True)
+    token = db.Column(db.Text, nullable=True)
+    newsletter = db.Column(db.Boolean,default=0)
 
 
 def __repr__(self):
