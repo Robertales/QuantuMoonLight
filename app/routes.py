@@ -6,6 +6,7 @@ from flask import render_template, request
 import subprocess as sp
 from app import app, db
 from app.models import Files
+from app.source.utils import getlog as log
 
 
 @app.route('/')
@@ -28,8 +29,7 @@ def classifica():
 def upload():
     print('Request send on ')
     ROOT_DIR = pathlib.Path(__file__).cwd()
-    logpath = Path(ROOT_DIR / "app/source/utils/getlog.py")
-    sp.run("python " + logpath.__str__())
+    log.log()
     file = request.files.get('userfile')
     ext_ok = ['txt', 'csv', 'data']
     temp = file.filename
@@ -56,7 +56,7 @@ def upload():
 
     file.save(userpath)
 
-    salvataggiodatabase = Files(paths=userpath,fe= bool(fe),ps= bool(ps))
+    salvataggiodatabase = Files(paths=userpath, fe=bool(fe), ps=bool(ps))
 
     db.session.add(salvataggiodatabase)
     db.session.commit()
