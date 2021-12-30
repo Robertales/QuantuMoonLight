@@ -24,7 +24,7 @@ def classifica():
 def upload():
     print('Request send on ')
     ROOT_DIR = os.path.abspath(os.curdir)
-    sp.run("python "+ROOT_DIR+"\\app\\source\\utils\\getlog.py" )
+    sp.run("python " + ROOT_DIR + "\\app\\source\\utils\\getlog.py")
     file = request.files.get('userfile')
     ext_ok = ['txt', 'csv', 'data']
     temp = file.filename
@@ -42,19 +42,24 @@ def upload():
 
     if file.content_length > 80000000:
         return 'Il file è troppo grande!'
-    ps = request.args.get('reduce1')
-    fe = request.args.get('reduce')
+    ps = request.form.get('reduce1')
+    fe = request.form.get('reduce')
+
+    print(ps)
+    print(fe)
+    print(userpath)
 
     file.save(userpath)
+    userpath.replace("\\", "backslash")
 
     if (fe == 'reduceFeatureExtraction') and (ps == 'reduceProtypeSelection'):
-        sql = 'INSERT INTO files (paths,ps,fe) VALUES (\'%s\',TRUE,TRUE)' % userpath
+        sql = 'INSERT INTO files (paths,ps,fe) VALUES ("%s",1,1)' % userpath
     elif (fe != 'reduceFeatureExtraction') and (ps == 'reduceProtypeSelection'):
-        sql = 'INSERT INTO files (paths,ps,fe) VALUES (\'%s\',FALSE,TRUE)' % userpath
+        sql = 'INSERT INTO files (paths,ps,fe) VALUES ("%s",0,1)' % userpath
     elif (fe == 'reduceFeatureExtraction') and (ps != 'reduceProtypeSelection'):
-        sql = 'INSERT INTO files (paths,ps,fe) VALUES (\'%s\',TRUE,FALSE)' % userpath
+        sql = 'INSERT INTO files (paths,ps,fe) VALUES ("%s",1,0)' % userpath
     elif (fe != 'reduceFeatureExtraction') and (ps != 'reduceProtypeSelection'):
-        sql = 'INSERT INTO files (paths,ps,fe) VALUES (\'%s\',FALSE,FALSE)' % userpath
+        sql = 'INSERT INTO files (paths,ps,fe) VALUES ("%s",0,0)' % userpath
 
     result = db.engine.execute(sql)
 
@@ -64,4 +69,4 @@ def upload():
     else:
         return ("<br>ATTENZIONE! Inserimento non eseguito")
 
-#Effettua il caricamento dei file, va colelgato al modulo che esegue effettivamente la ps
+# Effettua il caricamento dei file, va colelgato al modulo che esegue effettivamente la ps

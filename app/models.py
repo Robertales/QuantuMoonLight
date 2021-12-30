@@ -2,7 +2,6 @@ from app import db
 
 
 class Files(db.Model):
-
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_user = db.Column(db.Integer, nullable=True)
     name = db.Column(db.VARCHAR(255), nullable=True)
@@ -13,11 +12,14 @@ class Files(db.Model):
     autosplit = db.Column(db.Boolean, nullable=True)
 
 
+
+
+
 class Utente(db.Model):
     id_user = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.Text, nullable=True)
     token = db.Column(db.Text, nullable=True)
-    newsletter = db.Column(db.Boolean,default=0)
+    newsletter = db.Column(db.Boolean, default=0)
 
 
 def __repr__(self):
