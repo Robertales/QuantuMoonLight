@@ -56,7 +56,7 @@ def upload():
 
     file.save(userpath)
 
-    salvataggiodatabase = Files(paths=userpath.__str__(),fe= bool(fe),ps= bool(ps))
+    salvataggiodatabase = Files(paths=userpath,fe= bool(fe),ps= bool(ps))
 
     db.session.add(salvataggiodatabase)
     db.session.commit()
