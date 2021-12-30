@@ -11,10 +11,7 @@ class Files(db.Model):
     fe = db.Column(db.Boolean, nullable=True)
     autosplit = db.Column(db.Boolean, nullable=True)
 
-    def __init__(self, paths, ps, fe):
-        self.paths = paths
-        self.ps = ps
-        self.fe = fe
+
 
 
 class Utente(db.Model):
