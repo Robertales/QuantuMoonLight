@@ -1,7 +1,11 @@
 import os
+import pathlib
+from pathlib import Path
+from app import models
 from flask import render_template, request
 import subprocess as sp
 from app import app, db
+from app.models import Files
 
 
 @app.route('/')
@@ -23,8 +27,9 @@ def classifica():
 @app.route('/upload_dataset/', methods=['GET', 'POST'])
 def upload():
     print('Request send on ')
-    ROOT_DIR = os.path.abspath(os.curdir)
-    sp.run("python " + ROOT_DIR + "\\app\\source\\utils\\getlog.py")
+    ROOT_DIR = pathlib.Path(__file__).cwd()
+    logpath = Path(ROOT_DIR / "app/source/utils/getlog.py")
+    sp.run("python " + logpath.__str__())
     file = request.files.get('userfile')
     ext_ok = ['txt', 'csv', 'data']
     temp = file.filename
@@ -36,9 +41,9 @@ def upload():
     if file is None:
         return 'No Train set uploaded'
 
-    uploaddir = ROOT_DIR + '\\uploads\\'
+    uploaddir = ROOT_DIR / 'uploads/'
     userfile_name = file.filename
-    userpath = uploaddir + userfile_name
+    userpath = uploaddir / userfile_name
 
     if file.content_length > 80000000:
         return 'Il file è troppo grande!'
@@ -50,20 +55,13 @@ def upload():
     print(userpath)
 
     file.save(userpath)
-    userpath.replace("\\", "backslash")
 
-    if (fe == 'reduceFeatureExtraction') and (ps == 'reduceProtypeSelection'):
-        sql = 'INSERT INTO files (paths,ps,fe) VALUES ("%s",1,1)' % userpath
-    elif (fe != 'reduceFeatureExtraction') and (ps == 'reduceProtypeSelection'):
-        sql = 'INSERT INTO files (paths,ps,fe) VALUES ("%s",0,1)' % userpath
-    elif (fe == 'reduceFeatureExtraction') and (ps != 'reduceProtypeSelection'):
-        sql = 'INSERT INTO files (paths,ps,fe) VALUES ("%s",1,0)' % userpath
-    elif (fe != 'reduceFeatureExtraction') and (ps != 'reduceProtypeSelection'):
-        sql = 'INSERT INTO files (paths,ps,fe) VALUES ("%s",0,0)' % userpath
+    salvataggiodatabase = Files(userpath.__str__(), bool(fe), bool(ps))
 
-    result = db.engine.execute(sql)
+    db.session.add(salvataggiodatabase)
+    db.session.commit()
 
-    if result:
+    if salvataggiodatabase:
         return ("<br><p>Connection with database: Done!</p>")
 
     else:

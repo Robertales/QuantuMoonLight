@@ -10,7 +10,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 from app import models
 
-
 # Create database if it does not exist.
 if not database_exists(app.config['SQLALCHEMY_DATABASE_URI']):
     create_database(app.config['SQLALCHEMY_DATABASE_URI'])
