@@ -9,10 +9,10 @@ from deap import creator
 from deap import tools
 
 
-import genetic_algorithm as ga
+from app.source.preprocessingDataset import genetic_algorithm as ga
 
 
-import utils
+from app.source.utils import utils
 
 import statistics as s
 

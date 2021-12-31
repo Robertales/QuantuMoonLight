@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
+import pathlib
 import pandas as pd
 from qiskit import BasicAer, IBMQ
 from qiskit.aqua.components.multiclass_extensions import AllPairs
@@ -9,7 +10,7 @@ from qiskit.aqua import QuantumInstance, aqua_globals
 from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.utils import split_dataset_to_data_and_labels, map_label_to_class_name
 from qiskit.ml.datasets import iris
-from datasetLoader import LoadDataset
+from app.source.classificazioneDataset.datasetLoader import LoadDataset
 from sklearn.metrics import confusion_matrix, recall_score, precision_score
 import winsound
 
@@ -37,8 +38,12 @@ def myQSVM(train,test,features,token,qubit=2):
     #take a prediction value from csv
    # predizione=np.array([[0.3621
     # 859211670321,-1.411125025971791],[-2.501000087750893,0.6440884977209455],[2.532876452783644,-1.151269502578352]], np.int64)
-    predizione= np.array(list(csv.reader(open("doPrediction1.csv", "r"), delimiter=","))).astype("float")
-    dataset = pd.read_csv('ground_truth.csv')
+    pathDoPrediction = pathlib.Path(__file__).cwd()
+    pathDoPrediction = pathDoPrediction/'app/source/classificazioneDataset/doPrediction1.csv'
+    predizione= np.array(list(csv.reader(open(pathDoPrediction.__str__(), "r"), delimiter=","))).astype("float")
+    pathGroundTruth = pathlib.Path(__file__).cwd()
+    pathGroundTruth = pathGroundTruth/'app/source/classificazioneDataset/ground_truth.csv'
+    dataset = pd.read_csv(pathGroundTruth.__str__())
     y = dataset['labels']
     ground_truth=np.array(y)
 
@@ -66,8 +71,8 @@ def myQSVM(train,test,features,token,qubit=2):
     predicted_classes = result["predicted_classes"]
 
 
-    print('recall: ', recall_score(ground_truth,predicted_labels))
-    print('precision: ', precision_score(ground_truth, predicted_labels))
+    #print('recall: ', recall_score(ground_truth,predicted_labels))
+    #print('precision: ', precision_score(ground_truth, predicted_labels))
 
     #print(f'  accuracy: {100 * np.count_nonzero(predicted_labels == ground_truth)/len(predicted_labels)}%')
 

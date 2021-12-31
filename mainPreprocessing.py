@@ -2,29 +2,19 @@
 #print("Content-Type: text/html\n")
 #Import packages
 
-from app.source.utils import callPS
-import callPS
-import train_testSplit
-#import getFileToDB
 import mysql.connector
+import pathlib
 from mysql.connector import errorcode
-import featureExtractionPCA1
-import QSVM_iris as qsvm
-import addAttribute
-import addClass
-import aggId, aggIdTesting
+from app.source.validazioneDataset import train_testSplit
+from app.source.preprocessingDataset import callPS, featureExtractionPCA
+from app.source.classificazioneDataset import QSVM_iris as qsvm
+from app.source.utils import addAttribute, addClass, aggId, aggIdTesting, utils
 
-autosplit = True
-prototypeSelection = True
-featureExtraction = True
-ten_kfold = True
 
 try:
     mydb = mysql.connector.connect(user='root',
                                    database='quantumknn_db')
     mycursor = mydb.cursor()
-
-
     mycursor.execute("SELECT paths,ps,fe FROM files ORDER BY id_files DESC")
 
     myresult = mycursor.fetchone()
@@ -69,7 +59,7 @@ kFold = False
 print("K-Fold: ", kFold)
 doQSVM = True
 print("Do QSVM: ", doQSVM)
-token = ''
+token = 'ab13c0c375e41880eb7859adafd65cff1fbfb258d423015c6ab5d1f03f3e83d9a8a937076478eee47c8b897d31010496339879c8a1ffa8ab1801571155983c50'
 
 #Creo le Liste di features per la qsvm
 features = utils.createFeatureList(numCols-1)
@@ -80,32 +70,32 @@ print("\n")
 
 
 #spilt and PS
-if autosplit == True and prototypeSelection == True and featureExtraction == False and ten_kfold == False:
+if autosplit == True and prototypeSelection == True and featureExtraction == False and kFold == False:
     print("I'm doing Prototype Selection and QSVM...")
-    addAttribute.addAttribute(filename)
-    train_testSplit.splitDataset('featureDataset.csv')
-    callPS.callPS('Data_training.csv')
-    addAttribute.addAttribute('reducedTrainingPS.csv')
+    addAttribute.addAttribute(filename)  #copia il dataset dell'utente (con il suo path preso dal DB), con  l'aggiunta degli attributi in 'featureDataset.csv'
+    train_testSplit.splitDataset('featureDataset.csv') #crea 'Data_training.csv' e 'Data_testing.csv'
+    callPS.callPS('Data_training.csv') #crea 'reducedTrainingPS.csv'
+    addAttribute.addAttribute('reducedTrainingPS.csv') #modifica 'featureDataset.csv' con le istanze create da 'reducedTrainingPS.csv'
     aggId.addId('featureDataset.csv')
     aggIdTesting.aggIdTesting()
-    qsvm.myQSVM('IdFeatureDataset_compatted.csv','IdData_Testing_compatted.csv',features,token,4)
+    qsvm.myQSVM('IdFeatureDataset_compatted.csv','IdData_Testing_compatted.csv',features,token, len(features))
 
 
 
 #split and PCA
-elif autosplit == True and prototypeSelection == False and featureExtraction == True and ten_kfold == False:
+elif autosplit == True and prototypeSelection == False and featureExtraction == True and kFold == False:
     print("I'm doing Feature Extraction and QSVM...")
     addAttribute.addAttribute(filename)
     train_testSplit.splitDataset('featureDataset.csv')
 
-    featureExtractionPCA1.featureExtractionPCA2('Data_training.csv',features1)  # do pca of training
-    featureExtractionPCA1.featureExtractionPCA2('Data_testing.csv',features1)  # do pca of testing
+    featureExtractionPCA.featureExtractionPCA2('Data_training.csv',features1)  # do pca of training
+    featureExtractionPCA.featureExtractionPCA2('Data_testing.csv',features1)  # do pca of testing
     addClass.addClassPCAtraining('Data_training.csv')  # add class to pca dataset training
     addClass.addClassPCAtesting('Data_testing.csv')  # add class to pca dataset training
     qsvm.myQSVM('Data_PCA_training.csv', 'Data_PCA_testing.csv', featuresPCA, token, 2)
 
 #Split PCA and PS:
-elif autosplit == True and prototypeSelection == True and featureExtraction ==True and ten_kfold == False:
+elif autosplit == True and prototypeSelection == True and featureExtraction ==True and kFold == False:
     print("I'm doing Protype Selection, feature extraction and QSVM")
     # ps
     addAttribute.addAttribute(filename)
@@ -114,14 +104,14 @@ elif autosplit == True and prototypeSelection == True and featureExtraction ==Tr
     addAttribute.addAttribute_to_ps('reducedTrainingPS.csv')
 
     #pca
-    featureExtractionPCA1.featureExtractionPCA2('reducedTrainingPS_attribute.csv', features1)  # do pca of PS training
-    featureExtractionPCA1.featureExtractionPCA2('Data_testing.csv', features1)  # do pca of testing
+    featureExtractionPCA.featureExtractionPCA2('reducedTrainingPS_attribute.csv', features1)  # do pca of PS training
+    featureExtractionPCA.featureExtractionPCA2('Data_testing.csv', features1)  # do pca of testing
     addClass.addClassPCAtraining('Data_training.csv')  # add class to pca dataset training
     addClass.addClassPCAtesting('Data_testing.csv')  # add class to pca dataset training
     qsvm.myQSVM('Data_PCA_training.csv', 'Data_PCA_testing.csv', featuresPCA, token, 2)
 
 #NOTHING ONLY QSVM
-elif autosplit == True and prototypeSelection == False and featureExtraction == False and ten_kfold == False:
+elif autosplit == True and prototypeSelection == False and featureExtraction == False and kFold == False:
     print("I'm doing only QSVM")
     #split
     addAttribute.addAttribute(filename)
@@ -132,7 +122,7 @@ elif autosplit == True and prototypeSelection == False and featureExtraction == 
     qsvm.myQSVM('IdFeatureDataset_compatted.csv', 'IdData_Testing_compatted.csv', features, token, 10)
 
 #PROTOTYPE SELECTION AND 10 KFOLD
-elif autosplit == True and prototypeSelection == True and featureExtraction == False and ten_kfold == True:
+elif autosplit == True and prototypeSelection == True and featureExtraction == False and kFold == True:
     print("I'm doing Prototype Selection and QSVM with ten_kfolds validation...")
 
     callPS.callPS('venv/10-kfolds/training/training_fold_1.csv') #chiamo ps su training
@@ -144,7 +134,7 @@ elif autosplit == True and prototypeSelection == True and featureExtraction == F
 
 
 #PROTOTYPE SELECTION, FEATURE EXTRACTION AND 10 KFOLD
-elif autosplit == True and prototypeSelection == True and featureExtraction == True and ten_kfold == True:
+elif autosplit == True and prototypeSelection == True and featureExtraction == True and kFold == True:
     print("I'm doing Prototype Selection, Feature Extraction and QSVM with ten_kfolds validation...")
 
     # ps
@@ -152,9 +142,9 @@ elif autosplit == True and prototypeSelection == True and featureExtraction == T
     addAttribute.addAttribute_to_ps('reducedTrainingPS.csv')
 
     # pca
-    featureExtractionPCA1.featureExtractionPCA2('reducedTrainingPS_attribute.csv', features1)  # do pca of PS training
+    featureExtractionPCA.featureExtractionPCA2('reducedTrainingPS_attribute.csv', features1)  # do pca of PS training
     addAttribute.addAttribute('venv/10-kfolds/testing/testing_fold_8.csv')
-    featureExtractionPCA1.featureExtractionPCA2('featureDataset.csv', features1)  # do pca of testing
+    featureExtractionPCA.featureExtractionPCA2('featureDataset.csv', features1)  # do pca of testing
     addClass.addClassPCAtraining('reducedTrainingPS_attribute.csv ') #take labels from reduced trainingps that is a dataset of training set and apply id, features and labels
     addClass.addClassPCAtesting('featureDataset.csv') #take labels from feature dataset that is a dataset of testing set and apply id, features and labels
 
