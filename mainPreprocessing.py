@@ -48,34 +48,35 @@ def convertTuple(tuple):
     dbpath = ''.join(tuple)
     return dbpath
 
-
-# Driver code
+# Recupero dataset e conto le colonne
 dbpath = convertTuple(myresult[0])
-print("Dataset: ",dbpath)
-
-autosplit = True
-
-if myresult[1] == 1:
-    prototypeSelection = True
-    print("Prototype Selection: ",prototypeSelection)
-else:
-    prototypeSelection = False
-    print("Prototype Selection ", prototypeSelection)
-
-if myresult[2] == 1:
-    featureExtraction = True
-    print("Feature Extraction: ", featureExtraction)
-else:
-    featureExtraction= False
-    print("Feature Extraction: ", featureExtraction)
-
-
+print("Dataset: ", dbpath)
 filename = dbpath
+numCols = utils.numberOfColumns(filename)
+
+# Recupero le impostazioni dell'utente, cioè
+# quali operazioni vuole effettuare e, in caso di QSVM, anche il token
+autosplit = True
+print("AutoSplit: ", autosplit)
+prototypeSelection = (myresult[1] == 1)
+numRawsPS = 200 #numero di righe dopo la Prototype Selection con GA
+print("Prototype Selection: ", prototypeSelection)
+featureExtraction = (myresult[2] == 1)
+numColsFE = 2 #numero di colonne dopo la Feature Extraction con PCA
+print("Feature Extraction: ", featureExtraction)
+kFold = False
+print("K-Fold: ", kFold)
+doQSVM = True
+print("Do QSVM: ", doQSVM)
 token = ''
-features = ['feature1','feature2','feature3','feature4']
-features1= ['feature1','feature2','feature3','feature4','labels']
-featuresPCA = ['feature1','feature2']
+
+#Creo le Liste di features per la qsvm
+features = utils.createFeatureList(numCols-1)
+features1 = features.copy()
+features1.append("labels")
+featuresPCA = utils.createFeatureList(numColsFE)
 print("\n")
+
 
 #spilt and PS
 if autosplit == True and prototypeSelection == True and featureExtraction == False and ten_kfold == False:

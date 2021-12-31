@@ -1,19 +1,22 @@
+from app.source.utils import utils
 
+def createFeatureString(numCols):
+    featureString = ""
 
-#filename="heart.csv"
+    for x in range(numCols - 1):
+        stringa = "feature{},".format(x + 1)
+        featureString += stringa
+
+    featureString += "labels\r"
+
+    return featureString
 
 def addAttribute(filename):
-
-    #text = open(filename, "r")
-    #text = ''.join([i for i in text]) \
-     #   .replace(" ", ",")
-    #x = open("featureDataset.csv", "w")
-    #x.writelines(text)
-   # x.close()
-
+    numCols = utils.numberOfColumns(filename)
+    featuresString = createFeatureString(numCols)
 
     f = open("featureDataset.csv", "w")
-    f.write("feature1,feature2,feature3,feature4,labels\r")
+    f.write(featuresString)
     f.close()
 
     f = open("featureDataset.csv", "a+")
@@ -27,15 +30,11 @@ def addAttribute(filename):
 
 
 def addAttribute_to_ps(filename):
-    # text = open(filename, "r")
-    # text = ''.join([i for i in text]) \
-    #   .replace(" ", ",")
-    # x = open("featureDataset.csv", "w")
-    # x.writelines(text)
-    # x.close()
+    numCols = utils.numberOfColumns(filename)
+    featuresString = createFeatureString(numCols)
 
     f = open("reducedTrainingPS_attribute.csv", "w")
-    f.write("feature1,feature2,feature3,feature4,labels\r")
+    f.write(featuresString)
     f.close()
 
     f = open("reducedTrainingPS_attribute.csv", "a+")
@@ -44,7 +43,6 @@ def addAttribute_to_ps(filename):
     f.write(contents)
     f.close()
     g.close()
-
 
     return 0
 

@@ -10,6 +10,22 @@ from sklearn.model_selection import train_test_split
 
 from sklearn.neighbors import KNeighborsClassifier
 
+# ritorna il numero di colonne di un dataset (di default conta anche la colonna dei labels)
+def numberOfColumns(filename):
+    f = open(filename, 'r')
+    reader = csv.reader(f, delimiter=',')
+    numCols = len(next(reader))
+    f.close()
+    return numCols  # Read first line and count columns
+
+# crea la Lista contenente le label delle feature
+def createFeatureList(numCols):
+    featureList = []
+    for x in range(numCols):
+        stringa = "feature{}".format(x + 1)
+        featureList.append(stringa)
+    return featureList
+
 def classifier(number_of_training_instances):
     c = KNeighborsClassifier(n_neighbors =number_of_training_instances, weights='distance')
     return c
