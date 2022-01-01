@@ -49,14 +49,15 @@ def upload():
         return 'Il file è troppo grande!'
     ps = request.form.get('reduce1')
     fe = request.form.get('reduce')
-
+    split=request.form.get('test')
     print(ps)
     print(fe)
     print(userpath)
+    print(split)
 
     file.save(userpath)
 
-    salvataggiodatabase = Files(paths=userpath, fe=bool(fe), ps=bool(ps))
+    salvataggiodatabase = Files(paths=userpath, fe=bool(fe), ps=bool(ps),autosplit=bool(split))
 
     db.session.add(salvataggiodatabase)
     db.session.commit()
