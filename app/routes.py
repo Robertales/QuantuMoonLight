@@ -29,7 +29,7 @@ def classifica():
 def upload():
     print('Request send on ')
     ROOT_DIR = pathlib.Path(__file__).cwd()
-    log.log()
+    #log.log()
     file = request.files.get('userfile')
     ext_ok = ['txt', 'csv', 'data']
     temp = file.filename
@@ -41,7 +41,7 @@ def upload():
     if file is None:
         return 'No Train set uploaded'
 
-    uploaddir = ROOT_DIR / 'uploads/'
+    uploaddir = ROOT_DIR / 'upload_dataset/'
     userfile_name = file.filename
     userpath = uploaddir / userfile_name
 
