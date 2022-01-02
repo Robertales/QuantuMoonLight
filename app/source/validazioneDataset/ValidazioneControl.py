@@ -37,6 +37,6 @@ def simpleSplit(filepath, test_size=20):
     return X_train.to_csv('Data_training.csv', index=False), X_test.to_csv('Data_testing.csv', index=False)
 
 
-def kFoldValidation(k, filepath):
+def kFoldValidation(filepath, k=10):
     from app.source.validazioneDataset.kFoldValidation import cross_fold_validation
     return cross_fold_validation(filepath, k)

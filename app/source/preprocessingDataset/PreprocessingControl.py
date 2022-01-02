@@ -41,9 +41,10 @@ def preprocessing(userpath, prototypeSelection, featureExtraction, numRawsPS, nu
         addClass.addClassPCAtraining('Data_training.csv')  # add class to pca dataset training
         addClass.addClassPCAtesting('Data_testing.csv')  # add class to pca dataset training
 
-    # Split PCA and PS:
-    elif autosplit and prototypeSelection and featureExtraction:
+    # FE and PS:
+    elif prototypeSelection and featureExtraction:
         print("I'm doing Protype Selection and feature extraction ")
+
         # ps
         callPS.callPS('Data_training.csv')
         addAttribute.addAttribute_to_ps('reducedTrainingPS.csv')
