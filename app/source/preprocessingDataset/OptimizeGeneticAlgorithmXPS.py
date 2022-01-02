@@ -12,7 +12,7 @@ from deap import tools
 import genetic_algorithm as ga
 
 
-import utils
+import app.source.utils
 
 import statistics as s
 
