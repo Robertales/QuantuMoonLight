@@ -10,12 +10,6 @@ from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.components.multiclass_extensions import AllPairs
 from qiskit.circuit.library import ZZFeatureMap
 
-
-@app.route('/Classificazione/', methods=['GET', 'POST'])
-def valida():
-    return "sei in Classificazione";
-
-
 def classify(pathTrain, pathTest, features, token, qubit=2, backend='ibmq_qasm_simulator'):
     start_time = time.time()
 

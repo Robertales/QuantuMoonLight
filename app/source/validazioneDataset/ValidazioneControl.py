@@ -1,11 +1,23 @@
+import pathlib
+
+from flask import request
+
 from app import app
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+from app.source.utils import addAttribute
+from app.source.validazioneDataset import train_testSplit
 
-@app.route('/Validazione/', methods=['GET', 'POST'])
-def valida():
-    return "sei in Validazione";
+
+def valida(userpath, autosplit, kFold):
+    # VALIDAZIONE FATTA BELLLA
+    if autosplit:
+        addAttribute.addAttribute(userpath)  # copia il dataset dell'utente (con il suo path preso dal DB),
+        # con  l'aggiunta degli attributi in 'featureDataset.csv'
+        train_testSplit.splitDataset('featureDataset.csv')  # crea 'Data_training.csv' e 'Data_testing.csv'
+    if kFold:
+        kFoldValidation(userpath)
 
 
 def simpleSplit(filepath, test_size=20):
