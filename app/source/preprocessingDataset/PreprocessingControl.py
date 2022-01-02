@@ -1,18 +1,106 @@
+from flask import request
+
 from app import app
 import numpy as np
 import pandas as pd
 import os
 import pathlib
-from app.source.utils import utils
-from app.source.preprocessingDataset import PrototypeSelectionProblem as ps
+from app.source.utils import utils, addAttribute, aggId, aggIdTesting, addClass
+from app.source.preprocessingDataset import PrototypeSelectionProblem as ps, callPS, featureExtractionPCA
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
+from app.source.validazioneDataset import train_testSplit
+
 
 @app.route('/Preprocessing/', methods=['GET', 'POST'])
 def preprocessing():
-    return "sei in Preprocessing";
+    print('Request send on ')
+    ROOT_DIR = pathlib.Path(__file__).cwd()
+    # log.log()
+    file = request.files.get('userfile')
+    ext_ok = ['txt', 'csv', 'data']
+    temp = file.filename
+    extension = temp.split('.')[-1]
+    print(extension)
+    if not ext_ok.__contains__(extension):
+        return 'Il file ha un estensione non ammessa!'
+
+    if file is None:
+        return 'No Train set uploaded'
+
+    uploaddir = ROOT_DIR / 'upload_dataset/'
+    userfile_name = file.filename
+    userpath = uploaddir / userfile_name
+
+    if file.content_length > 80000000:
+        return 'Il file è troppo grande!'
+    prototypeSelection = request.form.get('reduce1')
+    featureExtraction = request.form.get('reduce')
+    autosplit = request.form.get('test')
+
+    file.save(userpath)
+    print("Dataset: ", file.filename)
+    numCols = utils.numberOfColumns(userpath)
+    # Recupero le impostazioni dell'utente, cioè
+    # quali operazioni vuole effettuare e, in caso di QSVM, anche il token
+    print("AutoSplit: ", autosplit)
+    numRawsPS = 200  # numero di righe dopo la Prototype Selection con GA
+    print("Prototype Selection: ", prototypeSelection)
+    numColsFE = 2  # numero di colonne dopo la Feature Extraction con PCA
+    print("Feature Extraction: ", featureExtraction)
+
+    features = utils.createFeatureList(numCols - 1)
+    features1 = features.copy()
+    features1.append("labels")
+    featuresPCA = utils.createFeatureList(numColsFE)
+    print("\n")
+
+    # spilt and PS
+    if autosplit and prototypeSelection and not featureExtraction:
+        print("I'm doing Prototype Selection ...")
+        addAttribute.addAttribute(userpath)  # copia il dataset dell'utente (con il suo path preso dal DB),
+        # con  l'aggiunta degli attributi in 'featureDataset.csv'
+        train_testSplit.splitDataset('featureDataset.csv')  # crea 'Data_training.csv' e 'Data_testing.csv'
+        callPS.callPS('Data_training.csv')  # crea 'reducedTrainingPS.csv'
+        addAttribute.addAttribute(
+            'reducedTrainingPS.csv')  # modifica 'featureDataset.csv' con le istanze create da 'reducedTrainingPS.csv'
+        aggId.addId('featureDataset.csv')
+        aggIdTesting.aggIdTesting()
+
+
+
+
+    # split and PCA
+    elif autosplit == True and prototypeSelection == False and featureExtraction == True and kFold == False:
+        print("I'm doing Feature Extraction ...")
+        addAttribute.addAttribute(file)
+        train_testSplit.splitDataset('featureDataset.csv')
+
+        featureExtractionPCA.featureExtractionPCA2('Data_training.csv', features1)  # do pca of training
+        featureExtractionPCA.featureExtractionPCA2('Data_testing.csv', features1)  # do pca of testing
+        addClass.addClassPCAtraining('Data_training.csv')  # add class to pca dataset training
+        addClass.addClassPCAtesting('Data_testing.csv')  # add class to pca dataset training
+
+
+    # Split PCA and PS:
+    elif autosplit == True and prototypeSelection == True and featureExtraction == True:
+        print("I'm doing Protype Selection and feature extraction ")
+        # ps
+        addAttribute.addAttribute(file)
+        train_testSplit.splitDataset('featureDataset.csv')
+        callPS.callPS('Data_training.csv')
+        addAttribute.addAttribute_to_ps('reducedTrainingPS.csv')
+
+        # pca
+        featureExtractionPCA.featureExtractionPCA2('reducedTrainingPS_attribute.csv',
+                                                   features1)  # do pca of PS training
+        featureExtractionPCA.featureExtractionPCA2('Data_testing.csv', features1)  # do pca of testing
+        addClass.addClassPCAtraining('Data_training.csv')  # add class to pca dataset training
+        addClass.addClassPCAtesting('Data_testing.csv')  # add class to pca dataset training
+
+    return "Preprocessing fatto"
 
 
 def featureExtraction(path, features, n_components=2):
