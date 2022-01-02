@@ -199,7 +199,7 @@ h1:before {
                     <!--Upload Dataset-->
                     <div class="schedule-box clearfix col-md-5">
                         <br>
-                        <form enctype="multipart/form-data" action="upload_dataset/" target="_blank" method="POST">
+                        <form enctype="multipart/form-data" action="/Preprocessing/" target="_blank" method="POST">
                             <input type="hidden" name="MAX_FILE_SIZE" value="300000000000000000000">
                             <h2>Load your Dataset for Quantum Classification</h2>
                             <br>
@@ -213,7 +213,7 @@ h1:before {
                               </div>
                             </div>
 
-                            <input type="checkbox" id="checkSplitTrain" name="test" value="testDataset" >  Automatically Split the Training Set<br>
+                            <input type="checkbox" id="checkSplitTrain" name="test" value="testDataset" checked>  Automatically Split the Training Set<br>
                             <input type="checkbox" id="checkFeatureExtraction" name="reduce" value="reduceFeatureExtraction" checked>  Reduce coloums with Feature Extraction<br>
                             <input type="checkbox" id="checkPrototypeSelection" name="reduce1" value="reduceProtypeSelection" checked> Reduce rows with Prototype Selection  <br>
 
@@ -223,7 +223,7 @@ h1:before {
                                 <div class="form-group">
                                   <div class="input-group">
                                     <input type="file" id="inputFileTest" name="userfile1" style="display: none">
-                                    <input type="text" value="Test Set to upload" class="form-control checkSplitted" id="inputFakeFileTest" readonly>
+                                    <input type="text" value="Test Set to upload" class="form-control checkSplitted" id="inputFakeFileTest" readonly disabled>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default checkSplitted" type="button" id="inputFakeBrowseFileTest">Choose File</button>
                                     </span>
