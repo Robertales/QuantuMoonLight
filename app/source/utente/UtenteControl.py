@@ -1,10 +1,8 @@
-
 from flask import request, render_template
 import hashlib
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user
 from app import app, db
 from app.models import Utente
-
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -30,4 +28,10 @@ def login():
     attempted_user: Utente = Utente.query.filter_by(email=email).first()
     if attempted_user.password == hashed_password:
         login_user(attempted_user)
+    return render_template('index.html')
+
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    logout_user()
     return render_template('index.html')
