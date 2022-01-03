@@ -3,11 +3,15 @@ from flask_executor import Executor
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
+from flask_login import LoginManager
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@127.0.0.1/quantumknn_db'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config['SECRET_KEY']='jshwifhjwieoajhf5847f5ae4eaws'
 db = SQLAlchemy(app)
+login_manager = LoginManager(app)
 from app import models
 
 # Create database if it does not exist.

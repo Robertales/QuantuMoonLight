@@ -1,11 +1,8 @@
 from unittest import TestCase
-
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import database_exists, create_database
-
 from app import app, db
+from flask_login import current_user
 from app.models import Utente
-
 
 
 class Test(TestCase):
@@ -19,22 +16,33 @@ class Test(TestCase):
             create_database(app.config['SQLALCHEMY_DATABASE_URI'])
             with app.app_context():
                 db.create_all()
-        else:
-            with app.app_context():
-                db.drop_all()
-                db.create_all()
 
+    def test_signup(self):
+        tester = app.test_client(self)
+        with app.app_context():
+            db.drop_all()
+            db.create_all()
 
-
-
-    def test_login(self):
-        tester=app.test_client(self)
-        app.config
         data = dict(email="mariorossi12@gmail.com", password="prosopagnosia", username="Antonio de Curtis ",
                     nome="Antonio", cognome="De Curtis")
-        response=tester.post(
+        response = tester.post(
             '/signup',
-            data = dict(email="mariorossi12@gmail.com", password="prosopagnosia",username="Antonio de Curtis ",nome="Antonio",cognome="De Curtis"))
-        statuscode=response.status_code
-        self.assertEqual(statuscode,200)
-        self.assertTrue(Utente.query.filter_by(email=data['email']).first())
+            data=dict(email="mariorossi12@gmail.com", password="prosopagnosia", username="Antonio de Curtis ",
+                      nome="Antonio", cognome="De Curtis"))
+        statuscode = response.status_code
+        self.assertEqual(statuscode, 200)
+
+    def test_login(self):
+            tester = app.test_client(self)
+            self.assertFalse(current_user)
+            with tester:
+                response = tester.post(
+                    '/login',
+                    data=dict(email="mariorossi12@gmail.com", password="prosopagnosia"))
+                statuscode = response.status_code
+                print(current_user)
+                self.assertEqual(statuscode, 200)
+                assert isinstance(current_user, Utente)
+                self.assertTrue(current_user.is_authenticated)
+
+

@@ -84,11 +84,3 @@ def smista():
 
     return "ora classifica bastardo"
 
-@app.route('/classificazione/', methods=['GET', 'POST'])
-def classifica():
-    try:
-        email = request.args.get('email', str)
-        token = request.args.get('token', str)
-        return str(email + "   " + token)
-    except ValueError:
-        return "invalid input"

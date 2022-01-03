@@ -1,16 +1,14 @@
-import os
 
-from flask import request
-import hashlib, uuid
+from flask import request, render_template
+import hashlib
+from flask_login import login_user, current_user
 from app import app, db
 from app.models import Utente
-import secrets
 
 
 
 @app.route('/signup', methods=['GET', 'POST'])
-def login():
-
+def signup():
     email = request.form.get('email')
     password = request.form.get('password')
     hashed_password = hashlib.sha512(password.encode()).hexdigest()
@@ -18,7 +16,18 @@ def login():
     username = request.form.get('username')
     nome = request.form.get('nome')
     cognome = request.form.get('cognome')
-    utente = Utente(email=email, password=hashed_password, token=token,username=username,nome=nome,cognome=cognome)
+    utente = Utente(email=email, password=hashed_password, token=token, username=username, nome=nome, cognome=cognome)
     db.session.add(utente)
     db.session.commit()
-    return "sei in utente";
+    return render_template('index.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    email = request.form.get('email')
+    password = request.form.get('password')
+    hashed_password = hashlib.sha512(password.encode()).hexdigest()
+    attempted_user: Utente = Utente.query.filter_by(email=email).first()
+    if attempted_user.password == hashed_password:
+        login_user(attempted_user)
+    return render_template('index.html')

@@ -1,4 +1,7 @@
-from app import db
+from flask_login._compat import text_type
+
+from app import db, login_manager
+from flask_login import UserMixin
 
 
 class Files(db.Model):
@@ -12,7 +15,12 @@ class Files(db.Model):
     autosplit = db.Column(db.Boolean, nullable=True)
 
 
-class Utente(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return Utente.query.get(int(user_id))
+
+
+class Utente(db.Model, UserMixin):
     id_user = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.Text, nullable=False, unique=True)
     username = db.Column(db.Text, nullable=False, unique=True)
@@ -21,7 +29,13 @@ class Utente(db.Model):
     isAdmin = db.Column(db.Boolean, default=False)
     nome = db.Column(db.Text, nullable=False, unique=False)
     cognome = db.Column(db.Text, nullable=False, unique=False)
-    newsletter = db.Column(db.Boolean,default=0)
+    newsletter = db.Column(db.Boolean, default=0)
+
+    def get_id(self):
+        try:
+            return text_type(self.id_user)
+        except AttributeError:
+            raise NotImplementedError('No `id` attribute - override `get_id`')
 
 
 def __repr__(self):
