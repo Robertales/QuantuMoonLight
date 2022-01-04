@@ -5,17 +5,34 @@ import pathlib
 import numpy as np
 import pandas as pd
 from qiskit import IBMQ
+from qiskit.providers.ibmq import least_busy
 from qiskit.aqua import QuantumInstance, aqua_globals
 from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.components.multiclass_extensions import AllPairs
 from qiskit.circuit.library import ZZFeatureMap
+import smtplib, ssl
+from flask import session
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
+from email.utils import formatdate
+from os.path import basename
+from email import encoders
+from flask_login import current_user
+from app.models import User
+from email.mime.application import MIMEApplication
 
-def classify(pathTrain, pathTest, features, token, qubit=2, backend='ibmq_qasm_simulator'):
+
+def classify(pathTrain, pathTest, features, token, qubit, backend):
     start_time = time.time()
 
     IBMQ.enable_account(token)
     provider = IBMQ.get_provider(hub='ibm-q')
-    backend = provider.get_backend(backend)  # Specifying Simulator Quantum device
+    backend = provider.get_backend('ibmq_qasm_simulator')  # Specifying Simulator Quantum device
+
+    #backend = least_busy(provider.backends(filters=lambda
+    #    x: x.configuration().n_qubits >= qubit and not x.configuration().simulator and x.status().operational == True))
+   # print("least busy backend: ", backend)
 
     seed = 8192
     shots = 1024
@@ -81,3 +98,41 @@ def loadDataset(training_path, testing_path, features, label, gaussian=True, min
         test_dict[category] = test[test['labels'] == category][features].values
 
     return train_dict, test_dict
+
+def getClassifiedDataset(result):
+    """
+
+    :type result: dict
+    """
+    msg = MIMEMultipart()
+    #assert isinstance(current_user, User)
+    #user = current_user
+    #dataset=session["currentDataset"]
+    msg['From'] = "quantumoonlight@gmail.com"
+    msg['To'] = "matteocicalese01@gmail.com"
+    msg['Date'] = formatdate(localtime=True)
+    msg['Subject'] = "Classification Result of " #+ dataset.name + " " + dataset.upload_date
+    msg.attach(MIMEText("This is your classification:"))
+
+    accuracy= result.get("testing_accuracy")
+    successRatio= result.get("testing_accuracy")
+    msg.attach(MIMEText("Predicted labels: " + str(accuracy)))
+    msg.attach(MIMEText("Predicted classes: " + str(successRatio)))
+
+    file="C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\app\\source\\classificazioneDataset\\doPrediction1.csv"
+    attach_file=open(file, "rb")
+    payload = MIMEBase('application', "octet-stream")
+    payload.set_payload(attach_file.read())
+    encoders.encode_base64(payload)
+    payload.add_header('Content-Disposition', 'attachment', filename="fileName.csv")
+    msg.attach(payload)
+
+    #with open(, "rb") as file:
+    #    part = MIMEApplication(file.read(),Name=basename(f))
+    #msg.attach(part)
+    server=smtplib.SMTP_SSL("smtp.gmail.com", 465)
+    server.ehlo()
+    server.login("quantumoonlight@gmail.com", "Quantum123?")
+    server.send_message( msg)
+    server.close()
+
