@@ -1867,12 +1867,12 @@ ul,li{
 
 .main-footer{
 	position:relative;
-	background:#ffffff;
+	background:#000080;
 }
 
 .main-footer .footer-upper{
 	position:relative;
-	background:#212121;
+	background:linear-gradient(to right,#000080,#4B0082);
 	padding:40px 0px 10px;	
 }
 
