@@ -17,6 +17,7 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.utils import formatdate
 from email import encoders
+from sklearn.metrics import recall_score, precision_score
 from flask_login import current_user
 
 
@@ -71,11 +72,11 @@ def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
         print("{} : {}".format(k, v))
     print("ground truth :", ground_truth)
 
-    # predicted_labels = result["predicted_labels"]
+    #predicted_labels = result["predicted_labels"]
     # predicted_classes = result["predicted_classes"]
-    # print('recall: ', recall_score(ground_truth,predicted_labels))
-    # print('precision: ', precision_score(ground_truth, predicted_labels))
-    # print(f'  accuracy: {100 * np.count_nonzero(predicted_labels == ground_truth)/len(predicted_labels)}%')
+    #print('recall: ', recall_score(ground_truth,predicted_labels))
+    #print('precision: ', precision_score(ground_truth, predicted_labels))
+    #print(f'  accuracy: {100 * np.count_nonzero(predicted_labels == ground_truth)/len(predicted_labels)}%')
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
@@ -114,10 +115,13 @@ def getClassifiedDataset(result):
     #user = current_user
     #dataset=session["currentDataset"]
     msg['From'] = "quantumoonlight@gmail.com"
-    msg['To'] = "matteocicalese01@gmail.com"
+    msg['To'] = "quantumoonlight@gmail.com"
     msg['Date'] = formatdate(localtime=True)
     msg['Subject'] = "Classification Result of " #+ dataset.name + " " + dataset.upload_date
     msg.attach(MIMEText("This is your classification:"))
+
+    classifiedFile=open("C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv", "a")
+
 
     accuracy= result.get("testing_accuracy")
     successRatio= result.get("testing_accuracy")
