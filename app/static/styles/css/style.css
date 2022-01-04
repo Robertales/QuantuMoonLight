@@ -54,9 +54,9 @@
 	padding:0px;
 	border:none;
 	outline:none;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
-
-/*** 
+/***
 
 ====================================================================
 	Global Settings
@@ -65,7 +65,7 @@
  ***/
 
 body {
-	font-family: 'Droid Sans', sans-serif;
+
 	font-size:16px;
 	color:#292929;
 	line-height:2em;
@@ -85,7 +85,7 @@ a:hover,a:focus,a:visited{
 
 h1,h2,h3,h4,h5,h6 {
 	position:relative;
-	font-family: 'Montserrat', sans-serif;
+
 	font-weight:normal;
 	margin:0px;
 	background:none;
@@ -93,7 +93,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 input,button,select,textarea{
-	font-family: 'Droid Sans', sans-serif;	
+
 }
 
 /*::-webkit-input-placeholder { color:rgba(0,0,0,0.80);}
@@ -188,7 +188,7 @@ ul,li{
 	margin-bottom:5px;
 	color:#ffffff;
 	text-transform:uppercase;
-	font-family: 'Droid Sans', sans-serif;
+
 	transition:all 300ms ease;
 	-moz-transition:all 300ms ease;
 	-webkit-transition:all 300ms ease;
@@ -206,7 +206,7 @@ ul,li{
 	margin-bottom:5px;
 	color:#ffffff;
 	text-transform:uppercase;
-	font-family: 'Droid Sans', sans-serif;
+
 	transition:all 300ms ease;
 	-moz-transition:all 300ms ease;
 	-webkit-transition:all 300ms ease;
@@ -231,7 +231,7 @@ ul,li{
 	padding:8px 22px;
 	font-size:14px;
 	text-transform:uppercase;
-	font-family: 'Montserrat', sans-serif;
+
 }
 
 .btn-style-one .fa{
@@ -248,7 +248,7 @@ ul,li{
 	text-transform:uppercase;
 	margin:0px 10px;
 	color:#ffffff;
-	font-family: 'Montserrat', sans-serif;
+
 	transition:all 300ms ease;
 	-moz-transition:all 300ms ease;
 	-webkit-transition:all 300ms ease;
@@ -317,7 +317,7 @@ ul,li{
 	left:0px;
 	top:0px;
 	z-index:999;
-	background:#ffffff;
+	background:linear-gradient(to right,#000080,#4B0082);
 	transition:all 300ms ease;
 	-moz-transition:all 300ms ease;
 	-webkit-transition:all 300ms ease;
@@ -450,7 +450,7 @@ ul,li{
 }
 
 .main-menu .navbar-collapse > ul > li > ul li.dropdown:after{
-	font-family: 'FontAwesome';
+
 	content:'\f0da';
 	position:absolute;
 	right:7px;
@@ -607,7 +607,7 @@ ul,li{
 	font-size:15px;
 	text-transform:uppercase;
 	background:#c34515;
-	font-family:'Droid Sans',sans-serif;
+
 }
 
 .main-slider .form-container .form-group{
@@ -704,7 +704,7 @@ ul,li{
 	margin-bottom:60px;
 	font-size:22px;
 	color:#909090;
-	font-family:'Lato',sans-serif;
+
 }
 
 .sec-text p{
@@ -782,7 +782,7 @@ ul,li{
 .features-section .post h3{
 	position:relative;
 	font-size:18px;
-	font-family:'Droid Sans',sans-serif;
+
 	margin-bottom:20px;
 }
 
@@ -865,7 +865,7 @@ ul,li{
 	border:2px solid #a0a0a0;
 	color:#a6a6a6;
 	font-size:14px;
-	font-family:'Montserrat',sans-serif;
+
 	text-transform:uppercase;
 }
 
@@ -907,7 +907,7 @@ ul,li{
 	padding:20px 10px;
 	border-bottom:1px solid #dadada;
 	border-right:1px solid #dadada;
-	font-family:'Lato',sans-serif;
+
 	cursor:pointer;
 	transition:all 300ms ease;
 	-webkit-transition:all 300ms ease;
@@ -1099,7 +1099,7 @@ ul,li{
 }
 
 .schedule-box .hour-box .toggle-btn h3:after{
-	font-family: 'FontAwesome';
+
 	content:'\f107';
 	position:absolute;
 	right:0px;
@@ -1431,7 +1431,7 @@ ul,li{
 }
 
 .check-listing li:before{
-	font-family: 'FontAwesome';
+
 	content:'\f00c';
 	position:absolute;
 	left:0px;
@@ -1575,7 +1575,7 @@ ul,li{
 
 .team-section .team-member .member-title h5{
 	font-size:18px;
-	font-family:'Droid Sans',sans-serif;
+
 	color:#292929;
 }
 
@@ -1697,7 +1697,7 @@ ul,li{
 	color:#8f8f8f;
 	margin-bottom:0px;
 	text-align:center;
-	font-family:'Open Sans',sans-serif;	
+
 }
 
 .price-plans .list{
@@ -1731,7 +1731,7 @@ ul,li{
 }
 
 .price-plans .list li:before{
-	font-family: 'FontAwesome';
+
 	content:'\f00c';
 	position:absolute;
 	left:0px;
@@ -1783,7 +1783,7 @@ ul,li{
 	width:auto;
 	font-size:14px;
 	text-transform:uppercase;
-	font-family:'Montserrat',sans-serif;
+
 	margin-bottom:30px;
 }
 
@@ -1842,7 +1842,7 @@ ul,li{
 
 .intro-section h2{
 	font-weight:300;
-	font-family:'Open Sans',sans-serif;
+
 	margin-bottom:15px;
 	font-size:28px;
 }
@@ -1867,7 +1867,7 @@ ul,li{
 
 .main-footer{
 	position:relative;
-	background:#000080;
+	background:#ffffff;
 }
 
 .main-footer .footer-upper{
@@ -1888,7 +1888,7 @@ ul,li{
 .main-footer .footer-upper h3{
 	position:relative;
 	font-size:18px;
-	font-family:'Droid Sans',sans-serif;
+
 	margin-bottom:25px;
 	color:#dddddd;
 }
@@ -1896,7 +1896,7 @@ ul,li{
 .main-footer .footer-upper .text{
 	position:relative;
 	font-size:16px;
-	font-family:'Lato',sans-serif;
+
 	margin-bottom:10px;
 	color:#BFBFBF;
 }
@@ -1957,7 +1957,7 @@ ul,li{
 }
 
 .main-footer .footer-upper .links li a:before{
-	font-family: 'FontAwesome';
+
 	content:'\f0da';
 	position:absolute;
 	left:-20px;
@@ -2171,7 +2171,7 @@ ul,li{
 	color:#fc5a1b;
 	font-size:15px;
 	text-transform:uppercase;
-	font-family:'Lato',sans-serif;
+
 	text-align:center;
 }
 
@@ -2180,7 +2180,7 @@ ul,li{
 	display:inline-block;
 	font-size:46px;
 	color:#202020;
-	font-family:'Montserrat',sans-serif;
+
 }
 
 .counter-section .countdown .counter-column .colon{
@@ -2190,8 +2190,7 @@ ul,li{
 	top:-5px;
 	font-size:46px;
 	color:#202020;
-	font-family:'Montserrat',sans-serif;
-}
+	}
 
 .counter-section .btn-style-one{
 	margin-top:12px;	
@@ -2543,7 +2542,7 @@ ul,li{
 .testimonials-area .testimonial-content{
 	position:relative;
 	padding:30px;
-	font-family:'Lato',sans-serif;
+
 	border:1px solid #d0d0d0;
 	background:#ffffff;
 	font-style:italic;
@@ -2608,7 +2607,7 @@ ul,li{
 
 .testimonials-area .testimonial-author .author-title{
 	font-size:18px;
-	font-family:'Droid Sans',sans-serif;
+
 	color:#292929;
 	font-weight:500;
 }
@@ -2811,7 +2810,7 @@ ul,li{
 	display:block;
 	margin-bottom:20px;
 	font-size:56px;
-	font-family:'Open Sans',sans-serif;	
+
 }
 
 /*** 
@@ -2853,7 +2852,7 @@ ul,li{
 .contact-section .contact-info .text{
 	position:relative;
 	font-size:15px;
-	font-family:'Open Sans',sans-serif;
+
 	margin-bottom:10px;
 	color:#7f7f7f;
 }
@@ -3034,20 +3033,20 @@ ul,li{
 .post-content i {
 	font-size:20px;
 	font-weight:700;
-	font-family: 'Lato',sans-serif;
+
 	font-style:italic;
 }
 
 .post-item h2 {
 	text-align:left;
 	margin-bottom: 40px;
-	font-family: 'Droid Sans',sans-serif;
+
 	font-size:30px;
 }
 
 .post-item h2, .post-item h2 a {
 	color:#0c1f34;
-	font-family: 'Droid Sans',sans-serif;
+
 	font-weight: bold;
 }
 
@@ -3136,7 +3135,7 @@ ul,li{
 
 .sidebar .widget h2 {
 	font-size:20px;
-	font-family: 'Droid Sans',sans-serif;
+
 	font-weight:bold;
 	margin-bottom:30px;
 	color:#cccccc;
@@ -3149,7 +3148,7 @@ ul,li{
 	font-size:20px;
 	color:#0c1f34;
 	text-align:left;
-	font-family: 'Droid Sans',sans-serif;
+
 	font-weight: bold;
 	
 }
@@ -3255,7 +3254,7 @@ ul,li{
 
 .blog-area .comments p {
 	margin-bottom:0px;
-	font-family: 'Droid Sans',sans-serif;
+
 	font-size: 15px;
 }
 
@@ -3459,7 +3458,7 @@ ul,li{
 
 .general-question .panel-group .panel-default .panel-title a:after {
    	content: "\f106";
-   	font-family: fontawesome;
+
    	background: #f9f9f9 none repeat scroll 0 0;
     border-left: 1px solid #e9e9e9;
     color: #7d7d7d;
@@ -3472,7 +3471,7 @@ ul,li{
 
 .general-question .panel-group .panel-default .panel-title a.collapsed:after {
    	content: "\f107";
-   	font-family: fontawesome;
+
    	background: #f9f9f9 none repeat scroll 0 0;
     border-left: 1px solid #e9e9e9;
     color: #7d7d7d;
@@ -3778,7 +3777,7 @@ ul,li{
     text-align: center;
 }
 .testimonials_v1 .testimonials_v1_content .single_client .single_client_left h4 {
-	font-family: open sans;
+
     font-size: 14px;
     font-weight: 700;
     line-height: 22px;
@@ -3854,7 +3853,7 @@ ul,li{
     z-index: 1;
 }
 .testimonials_v2 .testimonials_v2_content .single_client .single_client_left h4 {
-	font-family: open sans;
+
     font-size: 14px;
     font-weight: 700;
     line-height: 22px;
@@ -3915,7 +3914,7 @@ ul,li{
 
 .sponsors .single-sponsors .col-lg-8 h2 {
     color: #0c1f34;
-    font-family: 'Droid Sans',sans-serif;
+
     font-weight: bold;
 }
 .sponsors .single-sponsors .col-lg-8 p {
@@ -3943,7 +3942,7 @@ ul,li{
 }
 .sponsors .single-sponsors .col-lg-6 h2 {
     color: #0c1f34;
-    font-family: 'Droid Sans',sans-serif;
+
     font-weight: bold;
 }
 .sponsors .single-sponsors .col-lg-3 a {
@@ -3963,7 +3962,7 @@ ul,li{
 }
 #single-event .col-lg-9 h2 {
     color: #0c1f34;
-    font-family: 'Droid Sans',sans-serif;
+
     font-weight: bold;
     margin-bottom: 10px;
 }
@@ -4102,7 +4101,7 @@ ul,li{
 
 #single-speakers .col-lg-3 h2 {
 	color: #0c1f34;
-    font-family: 'Droid Sans',sans-serif;
+
     font-weight: bold;
     font-size: 18px
 }
@@ -4110,13 +4109,13 @@ ul,li{
 
 #single-speakers .col-lg-9 h2 {
     color: #0c1f34;
-    font-family: 'Droid Sans',sans-serif;
+
     font-weight: bold;
     margin-bottom: 25px;
 }
 #single-speakers .col-lg-9 h4 {
 	color: #0c1f34;
-    font-family: 'Droid Sans',sans-serif;
+
     font-weight: bold;
     font-size: 24px;
     margin-top: 10px;
@@ -4130,7 +4129,7 @@ ul,li{
 }
 #single-speakers .session-time h3 {
     color: #0c1f34;
-    font-family: 'Droid Sans',sans-serif;
+
     font-weight: bold;
     font-size: 15px;
     color: #fff;
