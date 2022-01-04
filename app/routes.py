@@ -11,7 +11,7 @@ from app.source.preprocessingDataset.PreprocessingControl import preprocessing
 from app.source.utils import getlog as log
 from app.source.validazioneDataset.ValidazioneControl import valida
 from app.source.classificazioneDataset.ClassificazioneControl import classify
-
+from app.source.classificazioneDataset.ClassificazioneControl import getClassifiedDataset
 
 @app.route('/')
 @app.route('/home')
@@ -70,6 +70,8 @@ def smista():
         preprocessing(userpath, prototypeSelection, featureExtraction, numRawsPS, numColsFE)
 
     # Classificazione
+    #backend=request.form.get("backend")
+
     numCols = utils.numberOfColumns(userpath)
     features = utils.createFeatureList(numCols - 1)
     features1 = features.copy()
@@ -77,10 +79,11 @@ def smista():
     featuresPCA = utils.createFeatureList(numColsFE)
     if doQSVM and featureExtraction:
         # facciamo QSVM con i dati della FE ovvero
-        classify('Data_PCA_training.csv', 'Data_PCA_testing.csv', featuresPCA, token, 2)
+        result = classify('Data_PCA_training.csv', 'Data_PCA_testing.csv', featuresPCA, token, 2)
+        getClassifiedDataset(result)
     elif doQSVM and not featureExtraction:
         # facciamo QSVM senza FE
-        classify('IdFeatureDataset_compatted.csv', 'IdData_Testing_compatted.csv', features, token, len(features))
-
-    return "ora classifica bastardo"
+        result: dict = classify('IdFeatureDataset_compatted.csv', 'IdData_Testing_compatted.csv', features, token, len(features), "")
+        getClassifiedDataset(result)
+    return "ora classifica"
 
