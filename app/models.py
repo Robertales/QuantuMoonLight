@@ -52,12 +52,12 @@ class Like(db.Model):
 
 
     @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
+    def load_user(user_email):
+        return User.query.get(str(user_email))
 
     def get_id(self):
         try:
-            return text_type(self.id_user)
+            return text_type(self.email_user)
         except AttributeError:
             raise NotImplementedError('No `id` attribute - override `get_id`')
 
