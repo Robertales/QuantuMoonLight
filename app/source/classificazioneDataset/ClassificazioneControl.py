@@ -10,29 +10,34 @@ from qiskit.aqua import QuantumInstance, aqua_globals
 from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.components.multiclass_extensions import AllPairs
 from qiskit.circuit.library import ZZFeatureMap
-import smtplib, ssl
+import smtplib
 from flask import session
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.utils import formatdate
-from os.path import basename
 from email import encoders
 from flask_login import current_user
-from app.models import User
-from email.mime.application import MIMEApplication
 
 
-def classify(pathTrain, pathTest, features, token, qubit, backend):
+def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
     start_time = time.time()
 
     IBMQ.enable_account(token)
     provider = IBMQ.get_provider(hub='ibm-q')
-    backend = provider.get_backend('ibmq_qasm_simulator')  # Specifying Simulator Quantum device
+    #backend = provider.get_backend('ibmq_qasm_simulator')  # Specifying Simulator Quantum device
 
-    #backend = least_busy(provider.backends(filters=lambda
-    #    x: x.configuration().n_qubits >= qubit and not x.configuration().simulator and x.status().operational == True))
-   # print("least busy backend: ", backend)
+    try:
+        if backendSelected:
+            print("backend selected:" + str(backendSelected))
+            backend = provider.get_backend(backendSelected)  # Specifying Quantum System
+        else:
+            backend = least_busy(provider.backends(filters=lambda x: x.configuration().n_qubits >= qubit and not x.configuration().simulator and x.status().operational == True))
+            print("least busy backend: ", backend)
+    except:
+        backend = provider.get_backend('ibmq_qasm_simulator')
+        print("backend selected: simulator")
+
 
     seed = 8192
     shots = 1024

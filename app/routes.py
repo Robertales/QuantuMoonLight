@@ -59,7 +59,7 @@ def smista():
     # doQSVM= request.form.get('QSVM') da inserire nel form
     doQSVM = True
     #token= request.form.get('token') da inserire nel form
-    token='ab13c0c375e41880eb7859adafd65cff1fbfb258d423015c6ab5d1f03f3e83d9a8a937076478eee47c8b897d31010496339879c8a1ffa8ab1801571155983c50'
+    token='43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
 
     # Validazione
     if autosplit or kFold:
@@ -83,7 +83,7 @@ def smista():
         getClassifiedDataset(result)
     elif doQSVM and not featureExtraction:
         # facciamo QSVM senza FE
-        result: dict = classify('IdFeatureDataset_compatted.csv', 'IdData_Testing_compatted.csv', features, token, len(features), "")
+        result: dict = classify('IdFeatureDataset_compatted.csv', 'IdData_Testing_compatted.csv', features, token, len(features), "ibmq_jakarta")#backend
         getClassifiedDataset(result)
     return "ora classifica"
 
