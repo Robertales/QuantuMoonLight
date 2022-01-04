@@ -1,7 +1,5 @@
 from flask import Flask
-from flask_executor import Executor
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from flask_login import LoginManager
 
@@ -24,4 +22,6 @@ else:
         db.create_all()
 from app import routes
 from app.source.utente import UtenteControl
+from app.source.gestione import GestioneControl
+
 
