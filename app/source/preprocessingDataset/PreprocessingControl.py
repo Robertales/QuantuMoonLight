@@ -14,7 +14,16 @@ from sklearn.decomposition import PCA
 from app.source.validazioneDataset import train_testSplit
 
 
-def preprocessing(userpath, prototypeSelection, featureExtraction, numRawsPS, numColsFE):
+def preprocessing(userpath: str, prototypeSelection: bool, featureExtraction: bool, numRawsPS: int, numColsFE: int):
+    """
+
+    :param userpath: strings that points to the location di file to be preprocessed is stored in
+    :param prototypeSelection: boolean flag that indicated whether the user wants to execute a prototype Selection or not
+    :param featureExtraction:boolean flag that indicated whether the user wants to execute a feature Extraction or not
+    :param numRawsPS: number of rows the prototype selection should reduce the dataset to
+    :param numColsFE:number of columns the feature extraction should reduce the dataset to
+    :return: ancora non deciso
+    """
     numCols = utils.numberOfColumns(userpath)
     features = utils.createFeatureList(numCols - 1)
     features1 = features.copy()
