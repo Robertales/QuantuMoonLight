@@ -4,8 +4,10 @@ from sqlalchemy import ForeignKey
 from app import db, login_manager
 from flask_login import UserMixin
 
+from app.source.utente.UserAuth import UserAuth
 
-class User(db.Model, UserMixin):
+
+class User(db.Model, UserAuth):
     email = db.Column(db.VARCHAR(255), primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(150), nullable=False)
@@ -15,15 +17,8 @@ class User(db.Model, UserMixin):
     surname = db.Column(db.String(30), nullable=False, unique=False)
     newsletter = db.Column(db.Boolean, default=False)
 
-    @login_manager.user_loader
-    def load_user(user_email):
-        return User.query.get(str(user_email))
 
-    def get_id(self):
-        try:
-            return text_type(self.email)
-        except AttributeError:
-            raise NotImplementedError('No `id` attribute - override `get_id`')
+
 
 
 class Dataset(db.Model):
