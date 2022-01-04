@@ -16,6 +16,7 @@
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <!--[if lt IE 9]>
     <script src="../../static/js/respond.js"></script><![endif]-->
+    <link href="css/nav.css" rel="stylesheet">
 
 
 </head>
@@ -26,165 +27,24 @@
 
         <!-- Preloader -->
 
-
-        <!-- Main Header -->
-        <header class="main-header">
-            <div class="auto-container clearfix">
-                <!--Logo-->
-                <div class="logo"><a href="index.html"><img width="300" src="../static/images/logoQ3.png" alt="QUASAR" title="dada"></a></div>
-
-                <!--Main Menu-->
-                <nav class="main-menu">
-                    <div class="navbar-header">
-                        <!-- Toggle Button -->
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                    </div>
-
-                    <div class="navbar-collapse collapse clearfix">
-                        <ul class="navigation">
-                            <li class="current dropdown"><a href="index.html">Home</a>
-
-                            </li>
-                            <li class="dropdown"><a href="about.html">Partners</a>
-                                <ul class="submenu">
-                                    <li><a href="academias.html">Academias</a></li>
-                                    <li><a href="companies.html">Companies</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown"><a href="#">People</a>
-                                <ul class="submenu">
-                                    <li><a href="professors.html">Professors</a></li>
-                                    <li><a href="assistantprofessors.html">Assistant Professors</a></li>
-                                    <li><a href="phdstudents.html">PhD Students</a></li>
-                                    <li><a href="alumni.html">Alumni</a></li>
-                                    <li><a href="visitors.html">Visitors</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown"><a href="schedule.html">Research</a>
-                                <ul class="submenu">
-                                    <li><a href="computationalintelligence.html">Computational Intelligence</a></li>
-                                    <li><a href="quantummachineintelligence.html">Quantum Machine Intelligence</a></li>
-                                    <li><a href="cognitiverobotics.html">Cognitive Robotics</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown"><a href="speakers.html">Facilities</a>
-                                <ul class="submenu">
-                                    <li><a href="spaces.html">QUASAR Spaces</a></li>
-                                    <li><a href="hpcdevices.html">HPC Devices</a></li>
-                                    <li><a href="bpalaboratory.html">BPA Laboratory</a></li>
-                                    <li><a href="meetingspace.html">Meeting Space</a></li>
-                                    <li><a href="retromuseum.html">RetroMuseum</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown"><a href="blog.html">Publications</a>
-                                <ul class="submenu">
-                                    <li><a href="books.html">Books</a></li>
-                                    <li><a href="journals.html">International Journals Papers</a></li>
-                                    <li><a href="conferences.html">International Conference Papers</a></li>
-                                    <li><a href="chapters.html">Book Chapters</a></li>
-                                    <li><a href="thesis.html">Doctorate Thesis</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="contact.html">Contact</a></li>
-                        </ul>
-                    </div>
-                </nav>
-                <!--Main Menu End-->
-
+            <!-- Navbar -->
+        <header>
+            <div class="header">
+                <a class=nolink href="index.html"><img src="../static/images/logos/Logo_SenzaScritta_SenzaOmbra.png" width="150" height="150"></a>
+                <div class="header-right">
+                        <a class=link href="#">HOME</a>
+                        <a class=link href="#">PREPROCESSING</a>
+                        <a class=link href="#">QUANTUM ML</a>
+                        <a class=link href="#">BLOG</a>
+                 </div>
+                <div class="login">
+                    <a href="login.html"><img src="../static/images/icons/person-circle.svg" height="50px"></a>
+                </div>
             </div>
         </header>
-        <!--End Main Header -->
 
-        <!-- Main Slider -->
-        <section>
-          <style>
-          .hpimg1 {
-  /* Set a specific height */
-  height: 540px;
-  /* Create the parallax scrolling effect */
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  padding-left: 0;
-}
+            <!-- Main Slider -->
 
-.hpimg1 {
-  /* The image used */
-  background-image: url("../static/images/preprocessing.gif");
-}
-
-.welcome {
-  height: 200px;
-  background-color: #fff;
-  word-wrap: normal;
-  word-break: keep-all;
-  font-family: '';
-  font-weight: 700;
-  font-size: 31px;
-  line-height: 1.125em;
-  margin-right: 0;
-  margin-left: 0;
-  margin-bottom: 0;
-  box-sizing: border-box;
-  top: 300px;
-}
-
-.Welcome {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-}
-
-h1 {
-  color: white;
-  top: 100px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-transform: uppercase;
-  padding-bottom: 38px;
-  -webkit-margin-before: 0.67em;
-  -webkit-margin-after: 0.67em;
-  -webkit-margin-start: 0;
-  -webkit-margin-end: 0;
-  -webkit-tap-highlight-colour: rgba(0, 0, 0, 0);
-  -webkit-font-smoothing: antialiased;
-  -webkit-box-direction: normal;
-}
-
-h1:after,
-h1:before {
-  content: '';
-  width: 50px;
-  height: 2px;
-  background: black;
-  margin: 0 10px;
-}
-                  </style>
-              <!-- Container element -->
-
-
-
-          <!--<div class="parallax"> </div> -->
-          <div class="hpimg1">
-              <div class="Welcome">
-                <h1>Welcome to <br>QUANTUM REDAMP platform</h1>
-              </div>
-            </div>
-
-                  <!--
-                      <p style="text-align:center;">
-                          <img src="images/preprocessing.gif" alt="" title="" class="center" style="margin: 40px">
-                      </p>
-                    -->
-                  </section>
 
 
 
@@ -313,7 +173,7 @@ h1:before {
                         <!--Footer Widget-->
                         <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="600ms" data-wow-duration="1500ms">
                             <div class="footer-widget newsletter-widget">
-                                <h3>Newsletter</h3>
+                                <h3>Newsletter</h3> <!-- togliere il quadratino che esce in output -->
                                 <div class="text" style="-webkit-user-select: none; -moz-user-select: none; user-select:none;">Get QML News by using our newsletter</div>
 
                                 <div class="form">
