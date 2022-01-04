@@ -1,4 +1,4 @@
-name: quantum
+name: QML
 channels:
   - conda-forge
   - defaults
@@ -119,4 +119,4 @@ dependencies:
     - websocket-client==1.2.3
     - werkzeug==2.0.2
     - yfinance==0.1.67
-prefix: C:\Users\lucac\miniconda3\envs\quantum
+prefix: C:\Users\Matteo\miniconda3\envs\QML

@@ -2,7 +2,7 @@ from flask import request, render_template
 import hashlib
 from flask_login import login_user, current_user, logout_user
 from app import app, db
-from app.models import Utente
+from app.models import User
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -18,7 +18,7 @@ Reads the user credentials from a http request and adds him to the project datab
     username = request.form.get('username')
     nome = request.form.get('nome')
     cognome = request.form.get('cognome')
-    utente = Utente(email=email, password=hashed_password, token=token, username=username, nome=nome, cognome=cognome)
+    utente = User(email=email, password=hashed_password, token=token, username=username, nome=nome, cognome=cognome)
     db.session.add(utente)
     db.session.commit()
     return render_template('index.html')
@@ -34,7 +34,7 @@ def login():
     email = request.form.get('email')
     password = request.form.get('password')
     hashed_password = hashlib.sha512(password.encode()).hexdigest()
-    attempted_user: Utente = Utente.query.filter_by(email=email).first()
+    attempted_user: User = User.query.filter_by(email=email).first()
     if attempted_user.password == hashed_password:
         login_user(attempted_user)
     return render_template('index.html')
