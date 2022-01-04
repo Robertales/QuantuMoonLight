@@ -18,7 +18,7 @@ Reads the user credentials from a http request and adds him to the project datab
     username = request.form.get('username')
     nome = request.form.get('nome')
     cognome = request.form.get('cognome')
-    utente = User(email=email, password=hashed_password, token=token, username=username, nome=nome, cognome=cognome)
+    utente = User(email=email, password=hashed_password, token=token, username=username, name=nome, surname=cognome)
     db.session.add(utente)
     db.session.commit()
     return render_template('index.html')

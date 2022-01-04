@@ -52,7 +52,7 @@ class Test_Login_Logout(TestCase):
             password = 'quercia'
             password = hashlib.sha512(password.encode()).hexdigest()
             utente = User(email="boscoverde27@gmail.com", password=password, username="Antonio de Curtis",
-                          nome="Antonio", cognome="De Curtis")
+                          name="Antonio", surname="De Curtis")
             db.session.add(utente)
             db.session.commit()
 
