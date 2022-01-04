@@ -19,6 +19,9 @@ class Test(TestCase):
             db.create_all()
 
     def test_signup(self):
+        """
+test the sign-up functionality of the website, creating a dummy  account and verifying it was correctly registered as a user
+        """
         tester = app.test_client(self)
         with app.app_context():
             db.create_all()
@@ -54,6 +57,9 @@ class Test_Login_Logout(TestCase):
             db.session.commit()
 
     def test_login_logout(self):
+        """
+test the login functionality of the website,by trying to log in a predetermined and existing user account and then logging out
+        """
         tester = app.test_client(self)
         self.assertFalse(current_user)
         with tester:
