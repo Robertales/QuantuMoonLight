@@ -9,10 +9,10 @@ from app.source.validazioneDataset import train_testSplit
 from app.source.preprocessingDataset import callPS, featureExtractionPCA
 from app.source.classificazioneDataset import QSVM_iris as qsvm
 from app.source.utils import addAttribute, addClass, aggId, aggIdTesting, utils
-from app.models import Files
+from app.models import Dataset
 
 # Recupero dataset e conto le colonne
-file = Files.query.order_by(desc(Files.id)).first()
+file = Dataset.query.order_by(desc(Dataset.id)).first()
 dbpath = file.paths
 print("Dataset: ", dbpath)
 filename = dbpath

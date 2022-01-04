@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import Utente
+from app.models import Utente, Article
 from flask import request, render_template
 
 @app.route('/gestione/', methods=['GET', 'POST'])
@@ -32,6 +32,13 @@ def modifyUserProfile():
     db.session.commit()
     return render_template('index.html')
 
-#def getListaUser(): List<User>
-#def getListaArticlesData(Date data): List<Article>
-#def getListaArticlesUser(User user): List<Articles>
+def getListaUser():
+    return Utente.query.all()
+
+def getListaArticlesData():
+    datetime = request.form.get("date")
+    return  Article.query.filter_by(Article.data == datetime)
+
+def getListaArticlesUser():
+    id = request.form.get("id")
+    return Article.query.filter_by(Article.id_user == id)

@@ -4,7 +4,7 @@ from app import db, login_manager
 from flask_login import UserMixin
 
 
-class Files(db.Model):
+class Dataset(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_user = db.Column(db.Integer, nullable=True)
     name = db.Column(db.String(length=255), nullable=True)
@@ -19,6 +19,13 @@ class Files(db.Model):
 def load_user(user_id):
     return Utente.query.get(int(user_id))
 
+class Article(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id_user = db.Column(db.Integer, nullable=True)
+    category = db.Column(db.String(length=50), nullable=True)
+    title = db.Column(db.String(length=50), nullable=True)
+    description = db.Column(db.String(length=1000), nullable=True)
+    data = db.Column(db.date, nullable=True)
 
 class Utente(db.Model, UserMixin):
     id_user = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -40,3 +47,6 @@ class Utente(db.Model, UserMixin):
 
 def __repr__(self):
     return f'Item{self.name}'
+
+
+

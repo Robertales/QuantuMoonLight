@@ -6,7 +6,7 @@ from flask import render_template, request
 import subprocess as sp
 from app import app, db
 from app.source.utils import utils
-from app.models import Files
+from app.models import Dataset
 from app.source.preprocessingDataset.PreprocessingControl import preprocessing
 from app.source.utils import getlog as log
 from app.source.validazioneDataset.ValidazioneControl import valida
