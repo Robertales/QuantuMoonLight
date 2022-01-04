@@ -16,8 +16,8 @@ class Dataset(db.Model):
 
 
 @login_manager.user_loader
-def load_user(user_id):
-    return Utente.query.get(int(user_id))
+def load_user(user_email):
+    return Utente.query.get(str(user_email))
 
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -40,7 +40,7 @@ class Utente(db.Model, UserMixin):
 
     def get_id(self):
         try:
-            return text_type(self.id_user)
+            return text_type(self.email)
         except AttributeError:
             raise NotImplementedError('No `id` attribute - override `get_id`')
 
