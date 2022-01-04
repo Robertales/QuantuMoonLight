@@ -25,7 +25,7 @@ class Article(db.Model):
     category = db.Column(db.String(length=50), nullable=True)
     title = db.Column(db.String(length=50), nullable=True)
     description = db.Column(db.String(length=1000), nullable=True)
-    data = db.Column(db.date, nullable=True)
+    data = db.Column(db.Date, nullable=True)
 
 class Utente(db.Model, UserMixin):
     id_user = db.Column(db.Integer, primary_key=True, autoincrement=True)
