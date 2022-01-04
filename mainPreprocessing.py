@@ -13,7 +13,7 @@ from app.models import Dataset
 
 # Recupero dataset e conto le colonne
 file = Dataset.query.order_by(desc(Dataset.id)).first()
-dbpath = file.paths
+dbpath = file.path
 print("Dataset: ", dbpath)
 filename = dbpath
 numCols = utils.numberOfColumns(filename)

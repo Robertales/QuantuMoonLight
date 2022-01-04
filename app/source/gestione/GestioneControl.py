@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import Utente, Article
+from app.models import User, Article
 from flask import request, render_template
 
 @app.route('/gestione/', methods=['GET', 'POST'])
@@ -9,14 +9,14 @@ def valida():
 def removeUser():
     id = request.form.get('id')
 
-    user = Utente.query.get(id)
+    user = User.query.get(id)
     db.session.delete(user)
     db.session.commit()
     return render_template('index.html')
 
 def modifyUserProfile():
     id = request.form.get('id')
-    user = Utente.query.get(id)
+    user = User.query.get(id)
 
     newEmail = request.form.get('email')
     newToken = request.form.get('token')
@@ -33,7 +33,7 @@ def modifyUserProfile():
     return render_template('index.html')
 
 def getListaUser():
-    return Utente.query.all()
+    return User.query.all()
 
 def getListaArticlesData():
     datetime = request.form.get("date")

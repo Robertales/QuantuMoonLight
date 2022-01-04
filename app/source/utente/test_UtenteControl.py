@@ -3,7 +3,7 @@ from unittest import TestCase
 from sqlalchemy_utils import database_exists, create_database
 from app import app, db
 from flask_login import current_user
-from app.models import Utente
+from app.models import User
 
 
 class Test(TestCase):
@@ -28,7 +28,7 @@ class Test(TestCase):
                       nome="Antonio", cognome="De Curtis"))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
-        self.assertTrue(Utente.query.filter_by(email='mariorossi12@gmail.com').first())
+        self.assertTrue(User.query.filter_by(email='mariorossi12@gmail.com').first())
         db.session.commit()
 
     def tearDown(self):
@@ -48,8 +48,8 @@ class Test_Login_Logout(TestCase):
             db.create_all()
             password = 'quercia'
             password = hashlib.sha512(password.encode()).hexdigest()
-            utente = Utente(email="boscoverde27@gmail.com", password=password, username="Antonio de Curtis",
-                            nome="Antonio", cognome="De Curtis")
+            utente = User(email="boscoverde27@gmail.com", password=password, username="Antonio de Curtis",
+                          nome="Antonio", cognome="De Curtis")
             db.session.add(utente)
             db.session.commit()
 
@@ -63,7 +63,7 @@ class Test_Login_Logout(TestCase):
                 data=dict(email="boscoverde27@gmail.com", password='quercia'))
             statuscode = response.status_code
             self.assertEqual(statuscode, 200)
-            assert isinstance(current_user, Utente)
+            assert isinstance(current_user, User)
             self.assertTrue(current_user.is_authenticated)
             response = tester.post('/logout')
             statuscode = response.status_code

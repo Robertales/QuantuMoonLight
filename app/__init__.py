@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 from app import models
 
-# Create database if it does not exist.
+# Create database if it does not exist
 if not database_exists(app.config['SQLALCHEMY_DATABASE_URI']):
     create_database(app.config['SQLALCHEMY_DATABASE_URI'])
     with app.app_context():
