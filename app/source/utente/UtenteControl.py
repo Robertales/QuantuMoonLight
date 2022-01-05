@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from flask import request, render_template
 import hashlib
 from flask_login import login_user, current_user, logout_user
@@ -21,6 +23,8 @@ Reads the user credentials from a http request and adds him to the project datab
     utente = User(email=email, password=hashed_password, token=token, username=username, name=nome, surname=cognome)
     db.session.add(utente)
     db.session.commit()
+    path = Path.cwd().parents[2]/'upload_dataset'/email
+    path.mkdir()
     return render_template('index.html')
 
 
@@ -47,4 +51,16 @@ logs a user out, changing his state from logged user to anonymous user
     :return:tbd
     """
     logout_user()
+    return render_template('index.html')
+
+
+
+
+@app.route('/newsletter', methods=['GET', 'POST'])
+def signup_newsletter():
+    email = request.form.get('email')
+    utente: User=User.query.filter_by(email=email).first()
+    utente.newsletter=True;
+    db.session.commit()
+
     return render_template('index.html')

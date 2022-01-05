@@ -23,8 +23,14 @@ from flask_login import current_user
 
 def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
     start_time = time.time()
+    noBackend=False
 
-    IBMQ.enable_account(token)
+    try:
+        IBMQ.enable_account(token)
+    except:
+        print("token non valido")
+        return 0
+
     provider = IBMQ.get_provider(hub='ibm-q')
 
     try:
@@ -35,6 +41,7 @@ def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
             backend = least_busy(provider.backends(filters=lambda x: x.configuration().n_qubits >= qubit and not x.configuration().simulator and x.status().operational == True))
             print("least busy backend: ", backend)
     except:
+        noBackend=True
         backend = provider.get_backend('ibmq_qasm_simulator')
         print("backend selected: simulator")
 
@@ -42,11 +49,9 @@ def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
     seed = 8192
     shots = 1024
     aqua_globals.random_seed = seed
-
     feature_dim = len(features)  # number of quibits
     # creating dataset
     training_input, test_input = loadDataset(pathTrain, pathTest, features, label='labels')
-
     pathDoPrediction = pathlib.Path(__file__).cwd()
     pathDoPrediction = pathDoPrediction / 'app/source/classificazioneDataset/doPrediction1.csv'
     predizione = np.array(list(csv.reader(open(pathDoPrediction.__str__(), "r"), delimiter=","))).astype("float")
@@ -64,7 +69,13 @@ def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
     quantum_instance = QuantumInstance(backend, shots=shots, seed_simulator=seed, seed_transpiler=seed)
 
     print('Running....\n')
-    result = qsvm.run(quantum_instance)
+    try:
+        result = qsvm.run(quantum_instance)
+    except:
+        print("errore su server ibm")
+        result= 1
+        return result
+
     totalTime = time.time() - start_time
     result["totalTime"]=str(totalTime)[0:6]
 
@@ -79,17 +90,20 @@ def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
     #print('precision: ', precision_score(ground_truth, predicted_labels))
     #print(f'  accuracy: {100 * np.count_nonzero(predicted_labels == ground_truth)/len(predicted_labels)}%')
 
-    print("--- %s seconds ---" % (time.time() - start_time))
-
     classifiedFile = open("upload_dataset\\classifiedFile.csv", "w")
     predictionFile = open("app\\source\\classificazioneDataset\\doPrediction1.csv", "r")
     rows = predictionFile.readlines()
 
+    for j in range(1,qubit):
+        classifiedFile.write("feature"+str(j)+",")
+    classifiedFile.write("label\n")
     i = 0
     for row in rows:
         classifiedFile.write(row.rstrip("\n") + "," + str(predicted_labels[i])+"\n")
         i += 1
 
+    if noBackend:
+        result["noBackend"]=True
     return result
 
 
@@ -128,27 +142,25 @@ def getClassifiedDataset(result):
     msg['To'] = "quantumoonlight@gmail.com"
     msg['Date'] = formatdate(localtime=True)
     msg['Subject'] = "Classification Result of " #+ dataset.name + " " + dataset.upload_date
-    msg.attach(MIMEText("This is your classification:\n\n"))
 
+    if result==1:
+        msg.attach(MIMEText("IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems \n\n"))
+    else:
+        msg.attach(MIMEText("This is your classification:\n\n"))
+        accuracy = result.get("testing_accuracy")
+        successRatio = result.get("test_success_ratio")
+        msg.attach(MIMEText("Testing accuracy: " + "{:.2%}".format(accuracy) + "\n"))
+        msg.attach(MIMEText("Success ratio: " + "{:.2%}".format(successRatio) + "\n"))
+        msg.attach(MIMEText("Total time elapsed:" + result.get("totalTime") + "s"))
 
-    accuracy = result.get("testing_accuracy")
-    successRatio = result.get("test_success_ratio")
-    msg.attach(MIMEText("Testing accuracy: " + "{:.2%}".format(accuracy)+"\n"))
-    msg.attach(MIMEText("Success ratio: " + "{:.2%}".format(successRatio)+"\n"))
-    msg.attach(MIMEText("Total time elapsed:" + result.get("totalTime")+"s"))
+        file = "upload_dataset\\classifiedFile.csv"
+        attach_file = open(file, "rb")
+        payload = MIMEBase('application', "octet-stream")
+        payload.set_payload(attach_file.read())
+        encoders.encode_base64(payload)
+        payload.add_header('Content-Disposition', 'attachment', filename="ClassifiedDataset.csv")
+        msg.attach(payload)
 
-
-    file="upload_dataset\\classifiedFile.csv"
-    attach_file=open(file, "rb")
-    payload = MIMEBase('application', "octet-stream")
-    payload.set_payload(attach_file.read())
-    encoders.encode_base64(payload)
-    payload.add_header('Content-Disposition', 'attachment', filename="ClassifiedDataset.csv")
-    msg.attach(payload)
-
-    #with open(, "rb") as file:
-    #    part = MIMEApplication(file.read(),Name=basename(f))
-    #msg.attach(part)
     server=smtplib.SMTP_SSL("smtp.gmail.com", 465)
     server.ehlo()
     server.login("quantumoonlight@gmail.com", "Quantum123?")

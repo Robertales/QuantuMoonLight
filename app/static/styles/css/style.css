@@ -1866,7 +1866,7 @@ ul,li{
 ***/
 
 .main-footer{
-	position:relative;
+	position:relative !important;
 	background:#ffffff;
 }
 
