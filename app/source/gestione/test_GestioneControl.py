@@ -1,8 +1,9 @@
+import datetime
 from unittest import TestCase
 from sqlalchemy_utils import database_exists, create_database
 from app import app, db
 from app.models import User, Article
-
+from datetime import datetime
 
 class TestUser(TestCase):
 
@@ -62,30 +63,54 @@ class TestList(TestCase):
             create_database(app.config['SQLALCHEMY_DATABASE_URI'])
         with app.app_context():
             db.create_all()
-            user = User(email="mariorossi12@gmail.com", password="prosopagnosia", username="Antonio de Curtis ",
-                        name="Antonio", surname="De Curtis")
-            art1 = Article(email_user="mariorossi12@gmail.com", title="BuonNatale", body="primobody", category="all", data='2021-12-25')
-            art2 = Article(email_user="mariorossi12@gmail.com", title="BuonCapodanno", body="secondoBody", category="all", data='2022-01-01')
-            db.session.add(user)
+            user1 = User(email="mariorossi12@gmail.com", password="prosopagnosia", username="Antonio de Curtis ", name="Antonio", surname="De Curtis")
+            user2 = User(email="giuseppeverdi@gmail.com", password="asperger", username="giuVerdiProXX", name="Giuseppe", surname="Verdi")
+            art1 = Article(email_user="mariorossi12@gmail.com", title="BuonNatale", body="primobody", category="primaCat", data=datetime(2021, 12, 25))
+            art2 = Article(email_user="mariorossi12@gmail.com", title="BuonCapodanno", body="secondoBody", category="secondaCat", data=datetime(2022, 1, 1))
+            db.session.add(user1)
+            db.session.add(user2)
+            db.session.commit()
             db.session.add(art1)
             db.session.add(art2)
             db.session.commit()
 
-    def test_listUser(self): #TO DO
+    def test_listUser(self):
         tester = app.test_client()
         with app.app_context():
             db.create_all()
         self.assertTrue(User.query.filter_by(email='mariorossi12@gmail.com').first())
-        self.assertTrue(Article.query.filter_by(id='0').first())
-        self.assertTrue(Article.query.filter_by(id='1').first())
         response = tester.post(
             '/gestione/',
             data=dict(scelta="listUser", email="mariorossi12@gmail.com"))
-        #TODO
+        statuscode = response.status_code
+        self.assertEqual(statuscode, 200)
+        self.assertTrue(User.query.filter_by(email='mariorossi12@gmail.com').first())
+        self.assertTrue(User.query.filter_by(email='giuseppeverdi@gmail.com').first())
+        db.session.commit()
 
-    def test_listArticlesData(self): #TODO
+    def test_listArticlesUser(self):
+        tester = app.test_client()
+        with app.app_context():
+            db.create_all()
+        response = tester.post(
+            '/gestione/',
+            data=dict(scelta="listArticlesUser", email="mariorossi12@gmail.com"))
+        statuscode = response.status_code
+        self.assertEqual(statuscode, 200)
+        self.assertTrue(Article.query.filter_by(email_user ='mariorossi12@gmail.com').limit(2))
+        db.session.commit()
 
-    def test_listArticlesUser(self): #TODO
+    def test_listArticlesData(self):
+        tester = app.test_client()
+        with app.app_context():
+            db.create_all()
+        response = tester.post(
+            '/gestione/',
+            data=dict(scelta="listArticlesData", firstData='2021-12-20', secondData='2021-12-30'))
+        statuscode = response.status_code
+        self.assertEqual(statuscode, 200)
+        self.assertTrue(Article.query.filter(Article.data.between('2021-12-20','2021-12-30')).first())
+        db.session.commit()
 
     def tearDown(self):
         with app.app_context():

@@ -1,6 +1,5 @@
 from flask_login._compat import text_type
 from sqlalchemy import ForeignKey
-
 from app import db, login_manager
 from flask_login import UserMixin
 
@@ -26,7 +25,7 @@ class Dataset(db.Model):
     email_user = db.Column(db.VARCHAR(255), ForeignKey('user.email'))
     name = db.Column(db.String(30), nullable=False)
     path = db.Column(db.String(150), nullable=True)
-    upload_date = db.Column(db.Date, nullable=False)
+    upload_date = db.Column(db.DateTime, nullable=False)
     simple_split = db.Column(db.Boolean, nullable=True)
     k_fold = db.Column(db.Boolean, nullable=True)
     ps = db.Column(db.Boolean, nullable=True)
@@ -39,7 +38,7 @@ class Article(db.Model):
     title = db.Column(db.Text(length=200), nullable=False)
     body = db.Column(db.Text(length=1200), nullable=False)
     category = db.Column(db.String(20), nullable=True)
-    data = db.Column(db.Date, nullable=False)
+    data = db.Column(db.DateTime, nullable=False)
 
 
 class Comment(db.Model):
