@@ -83,7 +83,13 @@ def smista():
         getClassifiedDataset(result)
     elif doQSVM and not featureExtraction:
         # facciamo QSVM senza FE
-        result: dict = classify('IdFeatureDataset_compatted.csv', 'IdData_Testing_compatted.csv', features, token, len(features), "ibmq_jakarta")#backend
-        getClassifiedDataset(result)
+        result = classify('IdFeatureDataset_compatted.csv', 'IdData_Testing_compatted.csv', features, token, len(features), "ibmq_jakarta")#backend
+        if result!=0:
+            getClassifiedDataset(result)
+
+    #if result==0 il token non è valido
+    #if result==1 errore su server IBM (comunica errore tramite email)
+    #if result["noBackend"]==True il backend selezionato non è attivo per il token oppure non ce ne sono disponibili di default quindi usa il simulatore
+    #aggiungere controlli per result["noBackend"]==True e result==0 per mostrare gli errori tramite frontend
     return "ora classifica"
 
