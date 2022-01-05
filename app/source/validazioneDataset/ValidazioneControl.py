@@ -1,5 +1,3 @@
-import pathlib
-
 from flask import request
 
 from app import app
@@ -10,14 +8,20 @@ from app.source.utils import addAttribute
 from app.source.validazioneDataset import train_testSplit
 
 
-def valida(userpath, autosplit, kFold):
-    # VALIDAZIONE FATTA BELLLA
-    if autosplit:
-        addAttribute.addAttribute(userpath)  # copia il dataset dell'utente (con il suo path preso dal DB),
-        # con  l'aggiunta degli attributi in 'featureDataset.csv'
+def valida(userpath, userpathTest, autosplit, kFold, k):
+    # VALIDAZIONE FATTA BELLA
+    if autosplit and kFold:
+        print("impossibile eseguirle entrambe")
+        return
+    elif autosplit:
+        addAttribute.addAttribute(userpath, 'featureDataset.csv')
         train_testSplit.splitDataset('featureDataset.csv')  # crea 'Data_training.csv' e 'Data_testing.csv'
-    if kFold:
-        kFoldValidation(userpath)
+    elif kFold:
+        kFoldValidation(userpath, k)
+    else:
+        addAttribute.addAttribute(userpath, 'Data_training.csv')
+        addAttribute.addAttribute(userpathTest, 'Data_testing.csv')
+
 
 
 def simpleSplit(filepath, test_size=20):
@@ -38,5 +42,5 @@ def simpleSplit(filepath, test_size=20):
 
 
 def kFoldValidation(filepath, k=10):
-    from app.source.validazioneDataset.kFoldValidation import cross_fold_validation
-    return cross_fold_validation(filepath, k)
+    from app.source.validazioneDataset.kFoldValidationMock import cross_fold_validationMock
+    return cross_fold_validationMock(filepath, k)

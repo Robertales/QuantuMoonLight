@@ -1,11 +1,10 @@
 import csv
+import os
 
 
-def addId(filename):
+def addId(filename, filenameOut='IdFeatureDataset.csv'):
 
-
-
-    with open(filename, 'r') as input, open('IdFeatureDataset.csv', 'w') as output:
+    with open(filename, 'r') as input, open('DatasetTEMP.csv', 'w') as output:
         reader = csv.reader(input, delimiter=',')
         writer = csv.writer(output, delimiter=',')
 
@@ -19,13 +18,16 @@ def addId(filename):
             row.insert(0, count)
             all.append(row)
         writer.writerows(all)
+        input.close()
+        output.close()
 
-    with open('IdFeatureDataset.csv') as input, open('IdFeatureDataset_compatted.csv', 'w', newline='') as output:
+    with open('DatasetTEMP.csv') as input, open(filenameOut, 'w', newline='') as output:
         writer = csv.writer(output)
         for row in csv.reader(input):
             if any(field.strip() for field in row):
                 writer.writerow(row)
+    input.close()
+    output.close()
+    os.remove('DatasetTEMP.csv')
 
     return 0
-
-#print(addId('bupa.csv'))

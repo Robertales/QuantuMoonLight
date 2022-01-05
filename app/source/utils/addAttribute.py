@@ -11,15 +11,15 @@ def createFeatureString(numCols):
 
     return featureString
 
-def addAttribute(filename):
+def addAttribute(filename, outputName = "featureDataset.csv"):
     numCols = utils.numberOfColumns(filename)
     featuresString = createFeatureString(numCols)
 
-    f = open("featureDataset.csv", "w")
+    f = open(outputName, "w")
     f.write(featuresString)
     f.close()
 
-    f = open("featureDataset.csv", "a+")
+    f = open(outputName, "a+")
     g = open(filename, "r")
     contents = g.read()
     f.write(contents)

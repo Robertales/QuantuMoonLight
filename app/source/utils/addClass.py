@@ -5,18 +5,21 @@ import os
 
 
 
-def addClassPCAtraining(filename):
-    # save the class in array y
+def addClassPCAtraining(filename, filenameOut, numColsFE = 2):
+
+    # salva le label originali da filename
     dataset = pd.read_csv(filename)
     y = dataset['labels']
-    #k=dataset['Id']
 
-    # add component name in file
+    # aggiunge la riga feature e le righe del dataset yourPCA
     h = open("yourPCA_attribute.csv", "a+")
-    h.write("feature1,feature2\r")
-    h.close()
-    h = open("yourPCA_attribute.csv", "a+")
-    g = open("yourPCA.csv", "r")
+    featureString = ''
+    for x in range(1, numColsFE):
+        stringa = "feature{},".format(x)
+        featureString += stringa
+    featureString += ("feature{}\r".format(numColsFE))
+    h.write(featureString)
+    g = open("yourPCA_Train.csv", "r")
     contents = g.read()
     h.write(contents)
     h.close()
@@ -24,12 +27,8 @@ def addClassPCAtraining(filename):
     # addClass in file
     df = pd.read_csv("yourPCA_attribute.csv")
     df["labels"] = y
-    #df["Id"]=k
 
     df.to_csv("myPCAclass_Training.csv", index=False)
-
-
-
 
     with open('myPCAclass_Training.csv', 'r') as input, open('IdPCADatasetTrain.csv', 'w') as output:
         reader = csv.reader(input, delimiter=',')
@@ -46,14 +45,17 @@ def addClassPCAtraining(filename):
             all.append(row)
         writer.writerows(all)
 
-    with open('IdPCADatasetTrain.csv') as input, open('Data_PCA_training.csv', 'w', newline='') as output:
+    with open('IdPCADatasetTrain.csv') as input, open(filenameOut, 'w', newline='') as output:
         writer = csv.writer(output)
         for row in csv.reader(input):
             if any(field.strip() for field in row):
                 writer.writerow(row)
 
+    os.remove('myPCAclass_Training.csv')
+    os.remove('yourPCA_attribute.csv')
 
-def addClassPCAtesting(filename):
+
+def addClassPCAtesting(filename, filenameOut, numColsFE = 2):
     # save the class in array y
     dataset = pd.read_csv(filename)
     y = dataset['labels']
@@ -61,10 +63,13 @@ def addClassPCAtesting(filename):
 
     # add component name in file
     h = open("yourPCA_attribute1.csv", "a+")
-    h.write("feature1,feature2\r")
-    h.close()
-    h = open("yourPCA_attribute1.csv", "a+")
-    g = open("yourPCA1.csv", "r")
+    featureString = ''
+    for x in range(1, numColsFE):
+        stringa = "feature{},".format(x)
+        featureString += stringa
+    featureString += ("feature{}\r".format(numColsFE))
+    h.write(featureString)
+    g = open("yourPCA_Test.csv", "r")
     contents = g.read()
     h.write(contents)
     h.close()
@@ -91,8 +96,11 @@ def addClassPCAtesting(filename):
             all.append(row)
         writer.writerows(all)
 
-    with open('IdPCADataset.csv') as input, open('Data_PCA_testing.csv', 'w', newline='') as output:
+    with open('IdPCADataset.csv') as input, open(filenameOut, 'w', newline='') as output:
         writer = csv.writer(output)
         for row in csv.reader(input):
             if any(field.strip() for field in row):
                 writer.writerow(row)
+
+    os.remove('myPCAclass_Testing.csv')
+    os.remove('yourPCA_attribute1.csv')
