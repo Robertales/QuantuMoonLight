@@ -26,7 +26,6 @@ def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
 
     IBMQ.enable_account(token)
     provider = IBMQ.get_provider(hub='ibm-q')
-    #backend = provider.get_backend('ibmq_qasm_simulator')  # Specifying Simulator Quantum device
 
     try:
         if backendSelected:
@@ -66,19 +65,30 @@ def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
 
     print('Running....\n')
     result = qsvm.run(quantum_instance)
+    totalTime = time.time() - start_time
+    result["totalTime"]=str(totalTime)[0:6]
 
     print('Prediction from datapoints set:')
     for k, v in result.items():
         print("{} : {}".format(k, v))
     print("ground truth :", ground_truth)
 
-    #predicted_labels = result["predicted_labels"]
-    # predicted_classes = result["predicted_classes"]
+    predicted_labels = result["predicted_labels"]
+    predicted_classes = result["predicted_classes"]
     #print('recall: ', recall_score(ground_truth,predicted_labels))
     #print('precision: ', precision_score(ground_truth, predicted_labels))
     #print(f'  accuracy: {100 * np.count_nonzero(predicted_labels == ground_truth)/len(predicted_labels)}%')
 
     print("--- %s seconds ---" % (time.time() - start_time))
+
+    classifiedFile = open("C:\\Users\\Matteo\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv", "w")
+    predictionFile = open("C:\\Users\\Matteo\\PycharmProjects\\QuantuMoonLight\\app\\source\\classificazioneDataset\\doPrediction1.csv", "r")
+    rows = predictionFile.readlines()
+
+    i = 0
+    for row in rows:
+        classifiedFile.write(row.rstrip("\n") + "," + str(predicted_labels[i])+"\n")
+        i + 1
 
     return result
 
@@ -118,22 +128,22 @@ def getClassifiedDataset(result):
     msg['To'] = "quantumoonlight@gmail.com"
     msg['Date'] = formatdate(localtime=True)
     msg['Subject'] = "Classification Result of " #+ dataset.name + " " + dataset.upload_date
-    msg.attach(MIMEText("This is your classification:"))
-
-    classifiedFile=open("C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv", "a")
+    msg.attach(MIMEText("This is your classification:\n\n"))
 
 
-    accuracy= result.get("testing_accuracy")
-    successRatio= result.get("testing_accuracy")
-    msg.attach(MIMEText("Predicted labels: " + str(accuracy)))
-    msg.attach(MIMEText("Predicted classes: " + str(successRatio)))
+    accuracy = result.get("testing_accuracy")
+    successRatio = result.get("test_success_ratio")
+    msg.attach(MIMEText("Testing accuracy: " + "{:.2%}".format(accuracy)+"\n"))
+    msg.attach(MIMEText("Success ratio: " + "{:.2%}".format(successRatio)+"\n"))
+    msg.attach(MIMEText("Total time elapsed:" + result.get("totalTime")))
 
-    file="C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\app\\source\\classificazioneDataset\\doPrediction1.csv"
+
+    file="C:\\Users\\Matteo\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv"
     attach_file=open(file, "rb")
     payload = MIMEBase('application', "octet-stream")
     payload.set_payload(attach_file.read())
     encoders.encode_base64(payload)
-    payload.add_header('Content-Disposition', 'attachment', filename="fileName.csv")
+    payload.add_header('Content-Disposition', 'attachment', filename="ClassifiedDataset.csv")
     msg.attach(payload)
 
     #with open(, "rb") as file:
