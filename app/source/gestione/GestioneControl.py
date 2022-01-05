@@ -4,23 +4,23 @@ from flask import request, render_template
 
 @app.route('/gestione/', methods=['GET', 'POST'])
 def getList():
-    email = request.form.get('email')
-    fristData = request.form.get('fristData')
-    secondData = request.form.get('secondData')
-
     scelta = request.form.get("scelta")
     if scelta=="listUser":
+        email = request.form.get('email')
         listUser = getListaUser()
     if scelta == "listArticlesData":
+        fristData = request.form.get('fristData')
+        secondData = request.form.get('secondData')
         listArticleData = getListaArticlesData(fristData,secondData)
     if scelta=="listArticlesUser":
+        email = request.form.get('email')
         listArticleUser= getListaArticlesUser(email)
+
     return "sei in gestione";
 
 @app.route('/removeUser/', methods=['GET', 'POST'])
 def removeUser():
     email = request.form.get('email')
-    print(email)
 
     user = User.query.get(email)
     db.session.delete(user)
@@ -50,9 +50,7 @@ def getListaUser():
     return User.query.all()
 
 def getListaArticlesData(data1, data2):
-    listArticles = Article.query.filter(Article.data.between(data1,data2).all())
-    return listArticles
+    return Article.query.filter(Article.data.between(data1,data2))
 
 def getListaArticlesUser(email):
-    list = Article.query.filter_by(Article.email_user == email).all()
-    return list
+    return Article.query.filter_by(email_user = email).all()
