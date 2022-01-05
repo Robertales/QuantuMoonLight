@@ -18,6 +18,13 @@ from app.source.classificazioneDataset.ClassificazioneControl import getClassifi
 def homepage():  # put application's code here
     return render_template('index.html')
 
+@app.route('/LogIn/')
+def loginPage():  # put application's code here
+    return render_template('logIn.html')
+@app.route('/Homepage/')
+def homePage():  # put application's code here
+    return render_template('index.html')
+
 
 @app.route('/formcontrol', methods=['GET', 'POST'])
 def smista():
