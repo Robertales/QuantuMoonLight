@@ -42,5 +42,5 @@ def simpleSplit(filepath, test_size=20):
 
 
 def kFoldValidation(filepath, k=10):
-    from app.source.validazioneDataset.kFoldValidationMock import cross_fold_validationMock
-    return cross_fold_validationMock(filepath, k)
+    from app.source.validazioneDataset.kFoldValidation import cross_fold_validation
+    return cross_fold_validation(filepath, k)
