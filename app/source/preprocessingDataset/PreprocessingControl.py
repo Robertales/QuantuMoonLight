@@ -58,15 +58,16 @@ def preprocessing(userpath: str, prototypeSelection: bool, featureExtraction: bo
         print("I'm doing Protype Selection and feature extraction ")
 
         # ps
-        callPS.callPS('Data_training.csv')
-        addAttribute.addAttribute_to_ps('reducedTrainingPS.csv')
+        callPrototypeSelection('Data_training.csv', numRawsPS)  # crea 'reducedTrainingPS.csv'
+        addAttribute.addAttribute('reducedTrainingPS.csv', 'reducedTrainingPS_attribute.csv')
 
         # pca
-        featureExtractionPCA.featureExtractionPCA2('reducedTrainingPS_attribute.csv',
-                                                   features1)  # do pca of PS training
-        featureExtractionPCA.featureExtractionPCA2('Data_testing.csv', features1)  # do pca of testing
-        addClass.addClassPCAtraining('Data_training.csv')  # add class to pca dataset training
-        addClass.addClassPCAtesting('Data_testing.csv')  # add class to pca dataset training
+        callFeatureExtraction('reducedTrainingPS_attribute.csv', 'yourPCA_Train.csv', features1, numColsFE)  # effettua FE su Data_Training e genera yourPCA_Train.csv
+        callFeatureExtraction('Data_testing.csv', 'yourPCA_Test.csv', features1, numColsFE)  # effettua FE su Data_testing e genera yourPCA_Test.csv
+        # Aggiunge ID, features e label al Dataset Train
+        addClass.addClassPCAtraining('Data_training.csv', 'DataSetTrainPreprocessato.csv', numColsFE)
+        # Aggiunge ID, features e label al Dataset Test
+        addClass.addClassPCAtesting('Data_testing.csv', 'DataSetTestPreprocessato.csv', numColsFE)
 
     if doQSVM and featureExtraction:
         # effettua feature Extraction sul doPrediction e rigenera doPrediction

@@ -84,6 +84,7 @@ def smista():
     # Classificazione
     # backend = request.form.get("backend")
     backend = 'ibmq_jakarta'
+    backend = 'ibmq_qasm_simulator'
 
     if doQSVM:
         if featureExtraction:
