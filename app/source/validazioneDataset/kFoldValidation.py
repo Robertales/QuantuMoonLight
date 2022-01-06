@@ -5,6 +5,13 @@ from sklearn.model_selection import KFold
 
 
 def cross_fold_validation(userpath, split):
+    """
+    This function is a data partitioning strategy so that you can effectively use
+    your dataset to build a more generalized project.
+    :param userpath: string that points to the location of the file that is going to be validated
+    :param split: number of groups that a given data sample will be split into
+    :return: to be decided
+    """
     dataset = pd.read_csv(userpath)
 
     kf = KFold(n_splits=split)
