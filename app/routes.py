@@ -37,9 +37,8 @@ def smista():
     ROOT_DIR = pathlib.Path(__file__).cwd()
     # log.log()
     file = request.files.get('userfile')
-
-
-
+    file1 = request.files.get('userfile1')
+    file2 = request.files.get('userfile2')
 
     ext_ok = ['txt', 'csv', 'data']
     temp = file.filename
@@ -56,12 +55,12 @@ def smista():
     userfile_name = file.filename
     userpath = uploaddir / userfile_name
 
-
     # Dataset Test from form
-    userpathTest = ''
+    userpathTest = uploaddir / file1.filename
 
     # Dataset to Predict from form
-    userpathToPredict = 'app/source/classificazioneDataset/doPrediction1.csv'
+    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction1.csv'
+    userpathToPredict = uploaddir / file2.filename
 
     if file.content_length > 80000000:
         return 'Il file è troppo grande!'
@@ -69,8 +68,13 @@ def smista():
     featureExtraction = request.form.get('reduce')
     autosplit = request.form.get('test')
 
+    file.save(userpath)
     print("Userpath: ", userpath)
     print("Dataset: ", file.filename)
+    print("UserpathTest: ", userpathTest)
+    print("DatasetTest: ", file1.filename)
+    print("UserpathToPredict: ", userpathToPredict)
+    print("DatasetToPredict: ", file2.filename)
     # Recupero le impostazioni dell'utente, cioè
     # quali operazioni vuole effettuare e, in caso di QSVM, anche il token
     print("AutoSplit: ", autosplit)
@@ -82,7 +86,7 @@ def smista():
     kFold = False
     k = 10
     # doQSVM= request.form.get('QSVM') da inserire nel form
-    doQSVM = True
+    doQSVM = False
     # token= request.form.get('token') da inserire nel form
     token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
     # assert isinstance(current_user, User)

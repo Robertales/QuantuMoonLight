@@ -16,8 +16,7 @@
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <!--[if lt IE 9]>
     <script src="../../static/js/respond.js"></script><![endif]-->
-    <link href="../static/styles/css/nav.css" rel="stylesheet">
-
+    <link href="../static/styles/css/assets/nav.css" rel="stylesheet">
 
 
 </head>
@@ -29,32 +28,299 @@
         <!-- Preloader -->
 
             <!-- Navbar -->
-            {% extends 'base.html' %}
-            {% block content %}
-            <!-- Main Slider -->
-            <div>   <!-- rivedere l'altezza del bg-->
-                <video id="videoBG" autoplay muted loop width="100%">
-                    <source src="../static/images/main-slider/stars.mp4" type="video/mp4">
-                </video>
+        <header>
+            <div class="header">
+                <a class=nolink href="index.html"><img src="../static/images/logos/Logo_SenzaScritta_SenzaOmbra.png" width="150" height="150"></a>
+                <div class="header-right">
+                        <a class=link href="#">HOME</a>
+                        <a class=link href="#">PREPROCESSING</a>
+                        <a class=link href="#">QUANTUM ML</a>
+                        <a class=link href="#">BLOG</a>
+                 </div>
+                <div class="login">
+                    <a href="login.html"><img src="../static/images/icons/person-circle.svg" height="50px"></a>
+                </div>
             </div>
+        </header>
 
-            <div class="descrizioneQML">
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vestibulum massa neque,
-                    sit amet ultricies enim venenatis ut. Maecenas consectetur est ligula, sit amet aliquam odio sodales ac.
-                    Vivamus eget tortor odio. Etiam quis tellus blandit, laoreet nisl non, eleifend dui. Curabitur pulvinar eleifend pharetra.</p>
-                    <p>Integer cursus purus eu magna posuere finibus. Fusce tincidunt, nibh sit amet imperdiet imperdiet, arcu ipsum bibendum turpis,
-                        non tincidunt mi ipsum vitae orci. Suspendisse porta elit vel accumsan cursus. Suspendisse ullamcorper ex felis, vel suscipit massa play</p>
-
-            </div>
-            {% endblock %}
             <!-- Main Slider -->
-   <!-- <div class="gif">
-        <video  autoplay controls loop><source src="></video>
-    </div> -->
+
+
+
 
     <!-- Container element -->
+        <section>
+          <style>
+          .hpimg1 {
+  /* Set a specific height */
+  height: 540px;
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-left: 0;
+}
+
+.hpimg1 {
+  /* The image used */
+  background-image: url("../static/images/preprocessing.gif");
+}
+
+.welcome {
+  height: 200px;
+  background-color: #fff;
+  word-wrap: normal;
+  word-break: keep-all;
+  font-family: '';
+  font-weight: 700;
+  font-size: 31px;
+  line-height: 1.125em;
+  margin-right: 0;
+  margin-left: 0;
+  margin-bottom: 0;
+  box-sizing: border-box;
+  top: 300px;
+}
+
+.Welcome {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  color: white;
+  top: 100px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  padding-bottom: 38px;
+  -webkit-margin-before: 0.67em;
+  -webkit-margin-after: 0.67em;
+  -webkit-margin-start: 0;
+  -webkit-margin-end: 0;
+  -webkit-tap-highlight-colour: rgba(0, 0, 0, 0);
+  -webkit-font-smoothing: antialiased;
+  -webkit-box-direction: normal;
+}
+
+h1:after,
+h1:before {
+  content: '';
+  width: 50px;
+  height: 2px;
+  background: black;
+  margin: 0 10px;
+}
+
+          </style>
+    <!-- Container element -->
+    <!-- Container element -->
+        </section>
+
+        <p id="research"> </p>
+        <!--Features Section-->
+        <section class="features-section">
+            <div class="auto-container">
+                <div class="row clearfix">
+                    <!-- <div id="research" class="sec-title wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1000ms"><h2> Conventionality in research belongs to yesterday!</h2></div>
+            <div class="sec-text wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1000ms"><p>The QUASAR Lab is part of the Department of Physics "Ettore Pancini" of University of Naples Federico II, <br> where it is committed to perform research activities in theory and applications of <br> Computational Intelligence, Quantum Machine Intelligence and Cognitive Robotics.  </p></div>
+        	-->
+
+                    <!--Upload Dataset-->
+                    <div class="schedule-box clearfix col-md-5">
+                        <br>
+                        <form enctype="multipart/form-data" action="/formcontrol" target="_blank" method="POST">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="300000000000000000000">
+                            <h2>Load your Dataset for Quantum Classification</h2>
+                            <br>
+                            <div class="form-group">
+                              <div class="input-group">
+                                <input type="file" id="inputFileTrain" name="userfile" style="display: none">
+                                <input type="text" value="Training Set to upload" class="form-control" id="inputFakeFileTrain" readonly>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" id="inputFakeBrowseFileTrain">Choose File</button>
+                                </span>
+                              </div>
+                            </div>
+                                <br>
+                                <div class="form-group">
+                                  <div class="input-group">
+                                    <input type="file" id="inputFileTest" name="userfile1" style="display: none">
+                                    <input type="text" value="Test Set to Upload" class="form-control checkSplitted" id="inputFakeFileTest" readonly disabled>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default checkSplitted" type="button" id="inputFakeBrowseFileTest">Choose File</button>
+                                    </span>
+                                  </div>
+                                </div>
+                                <br> <!-- Prediction -->
+                                <div class="form-group">
+                                  <div class="input-group">
+                                    <input type="file" id="inputFilePrediction" name="userfile2" style="display: none">
+                                    <input type="text" value="Prediction Set to Upload" class="form-control checkSplitted" id="inputFakeFilePrediction" readonly disabled>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default checkSplitted" type="button" id="inputFakeBrowseFilePrediction">Choose File</button>
+                                    </span>
+                                  </div>
+                                </div>
+                                <br>
+
+                                <ul class="dropmenudata">
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" id="checkSplitTrain" name="test" value="testDataset" >  Automatically Split the Training Set
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                          <input type="checkbox" id="checkFeatureExtraction" name="reduce" value="reduceFeatureExtraction" >  Reduce coloums with Feature Extraction
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" id="checkPrototypeSelection" name="reduce1" value="reduceProtypeSelection" > Reduce rows with Prototype Selection
+                                        </label>
+                                    </li>
+                                </ul>
+                            <br>
+                                <button type="submit" name="submit"  onclick="openpage()" class="theme-btn btn-style-one mainred hvr-bounce-to-right"><span class="fa fa-database"></span>Upload</button>
+
+
+                        </form>
+
+                            <script>
+                            function openpage() {
+                              window.open("");
+                            }
+                            </script>
+
+                            <br>
+                    </div>
+                    <!--result form-->
+                    <div class="col-md-2">
+                    </div>
+                    <div class="schedule-box clearfix col-md-5">
+                        <br>
+                        <form method="get" action='classificazione'>
+                            <h2> Get your Quantum Classification Results</h2>
+                            <br>
+                            <div style="text-align: center;"><input class="form-control" type="email" name="email" value="" placeholder="Enter your email" required autocomplete="on"></div>
+                            <br>
+                            <br>
+                            <div style="text-align: center;"><input class="form-control" type="token" name="token" value="" placeholder="Enter your token" required autocomplete="on"></div>
+                            <div style="text-align: center;"><a href="https://quantum-computing.ibm.com/">
+                                <font size=2>Create an IMBid account</font>
+                            </a></div>
+                            <br><br>
+                            <button type="submit" name="submit" class="theme-btn btn-style-one mainred hvr-bounce-to-right"><span class="fa fa-play"></span>SEND</button>
+                            <br><br>
+                        </form>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!--Main Footer-->
+        <!--Main Footer-->
+        <footer class="main-footer">
+            <!--Footer Upper-->
+            <div class="footer-upper">
+                <div class="auto-container">
+                    <div class="row clearfix">
+                        <!--Footer Widget-->
+                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+                            <div class="footer-widget contact-widget">
+                                <h3>Contact Us</h3>
+                                <ul class="info">
+                                    <li><strong>Email</strong> <a href="mailto:alessio.robertazzi@gmail.com">alessio.robertazzi@gmail.com</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <!--Footer Bottom-->
+
+
+
+
+                        <!--Footer Widget-->
+                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms">
+                            <div class="footer-widget services-widget">
+
+                            </div>
+                        </div>
+
+                        <!--Footer Widget-->
+                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="400ms" data-wow-duration="1500ms">
+                            <div class="footer-widget support-widget">
+                                <h3>Useful Links</h3>
+                                <ul class="links">
+                                    <li><a href="https://www.unisa.it/" target="_blank">University of Salerno</a></li>
+                                    <li><a href="#">About us</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!--Footer Widget-->
+                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="600ms" data-wow-duration="1500ms">
+                            <div class="footer-widget newsletter-widget">
+                                <h3>Newsletter</h3> <!-- togliere il quadratino che esce in output -->
+                                <div class="text" style="-webkit-user-select: none; -moz-user-select: none; user-select:none;">Get QML News by using our newsletter</div>
+
+                                <div class="form">
+                                    <form method="post" action="index.html">
+                                        <div class="form-group">
+                                            <input type="email" name="email" value="" placeholder="Enter your email address" required autocomplete="off">
+                                            <button type="submit" name="submit" class="hvr-bounce-to-right"><span class="fa fa-paper-plane"></span></button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                 <div class="text" style="-webkit-user-select: none; -moz-user-select: none; user-select:none;">
+                                    Copryright 2021 by QML | All rights reserved
+                                </div>
+
+                                <!--
+                                <div class="social-links wow fadeInRight" data-wow-delay="1000ms" data-wow-duration="1500ms">
+                                    <a href="#"><span class="fa fa-facebook-f"></span></a>
+                                    <a href="#"><span class="fa fa-twitter"></span></a>
+                                    <a href="#"><span class="fa fa-google"></span></a>
+                                    <a href="#"><span class="fa fa-pinterest-p"></span></a>
+                                    <a href="#"><span class="fa fa-instagram"></span></a>
+                                </div> -->
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </footer>
+
+
     </div>
+    <!--End pagewrapper-->
+
+    <!--Scroll to top-->
+    <div class="scroll-to-top"></div>
+
+
+    <script src="../../../static/js/jquery.js"></script>
+    <script src="../../../static/js/bootstrap.min.js"></script>
+    <script src="../../../static/js/revolution.min.js"></script>
+    <script src="../../../static/js/bxslider.js"></script>
+    <script src="../../../static/js/owl.carousel.min.js"></script>
+    <script src="../../../static/js/jquery.fancybox.pack.js"></script>
+    <script src="../../../static/js/wow.js"></script>
+    <script src="../../../static/js/script.js"></script>
 </body>
 
 </html>

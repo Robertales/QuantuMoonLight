@@ -42,6 +42,13 @@
 	  var file_name = this.value.replace(/\\/g, '/').replace(/.*\//, '');
 	  $('#inputFakeFileTest').val(file_name);
 	});
+	$('#inputFakeBrowseFilePrediction').on('click', function() {
+	  $('#inputFilePrediction').trigger("click");
+	});
+	$('#inputFilePrediction').change(function() {
+	  var file_name = this.value.replace(/\\/g, '/').replace(/.*\//, '');
+	  $('#inputFakeFilePrediction').val(file_name);
+	});
 
 
 	$('#checkSplitTrain').change(function() {

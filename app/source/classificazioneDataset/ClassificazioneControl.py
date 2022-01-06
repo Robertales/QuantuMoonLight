@@ -37,10 +37,11 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
             print("backend selected:" + str(backendSelected))
             backend = provider.get_backend(backendSelected)  # Specifying Quantum System
         else:
-            backend = least_busy(provider.backends(filters=lambda x: x.configuration().n_qubits >= qubit and not x.configuration().simulator and x.status().operational == True))
+            backend = least_busy(provider.backends(filters=lambda
+                x: x.configuration().n_qubits >= qubit and not x.configuration().simulator and x.status().operational == True))
             print("least busy backend: ", backend)
     except:
-        noBackend=True
+        noBackend = True
         backend = provider.get_backend('ibmq_qasm_simulator')
         print("backend selected: simulator")
 
@@ -67,11 +68,11 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
         result = qsvm.run(quantum_instance)
     except:
         print("Errore su server ibm")
-        result= 1
+        result = 1
         return result
 
     totalTime = time.time() - start_time
-    result["totalTime"]=str(totalTime)[0:6]
+    result["totalTime"] = str(totalTime)[0:6]
 
     print('Prediction from datapoints set:')
     for k, v in result.items():
@@ -85,15 +86,15 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     rows = predictionFile.readlines()
 
     for j in range(1, qubit):
-        classifiedFile.write("feature"+str(j)+",")
+        classifiedFile.write("feature" + str(j) + ",")
     classifiedFile.write("label\n")
     i = 0
     for row in rows:
-        classifiedFile.write(row.rstrip("\n") + "," + str(predicted_labels[i])+"\n")
+        classifiedFile.write(row.rstrip("\n") + "," + str(predicted_labels[i]) + "\n")
         i += 1
 
     if noBackend:
-        result["noBackend"]=True
+        result["noBackend"] = True
     return result
 
 
@@ -119,22 +120,24 @@ def loadDataset(training_path, testing_path, features, label, gaussian=True, min
 
     return train_dict, test_dict
 
+
 def getClassifiedDataset(result):
     """
 
     :type result: dict
     """
     msg = MIMEMultipart()
-    #assert isinstance(current_user, User)
-    #user = current_user
-    #dataset=session["currentDataset"]
+    # assert isinstance(current_user, User)
+    # user = current_user
+    # dataset=session["currentDataset"]
     msg['From'] = "quantumoonlight@gmail.com"
     msg['To'] = "quantumoonlight@gmail.com"
     msg['Date'] = formatdate(localtime=True)
-    msg['Subject'] = "Classification Result of " #+ dataset.name + " " + dataset.upload_date
+    msg['Subject'] = "Classification Result of "  # + dataset.name + " " + dataset.upload_date
 
-    if result==1:
-        msg.attach(MIMEText("IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems \n\n"))
+    if result == 1:
+        msg.attach(MIMEText(
+            "IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems \n\n"))
     else:
         msg.attach(MIMEText("This is your classification:\n\n"))
         accuracy = result.get("testing_accuracy")
@@ -151,9 +154,8 @@ def getClassifiedDataset(result):
         payload.add_header('Content-Disposition', 'attachment', filename="ClassifiedDataset.csv")
         msg.attach(payload)
 
-    server=smtplib.SMTP_SSL("smtp.gmail.com", 465)
+    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
     server.ehlo()
     server.login("quantumoonlight@gmail.com", "Quantum123?")
-    server.send_message( msg)
+    server.send_message(msg)
     server.close()
-
