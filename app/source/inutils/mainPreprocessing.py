@@ -6,9 +6,9 @@
 from sqlalchemy import desc
 
 from app.source.validazioneDataset import train_testSplit
-from app.source.preprocessingDataset import callPS, featureExtractionPCA
+from app.source.preprocessingDataset import callPS, featureExtractionPCA, addClass, aggId
 from app.source.classificazioneDataset import QSVM_iris as qsvm
-from app.source.utils import addAttribute, addClass, aggId, aggIdTesting, utils
+from app.source.utils import addAttribute, aggIdTesting, utils
 from app.models import Dataset
 
 # Recupero dataset e conto le colonne
@@ -46,11 +46,11 @@ if autosplit == True and prototypeSelection == True and featureExtraction == Fal
     print("I'm doing Prototype Selection and QSVM...")
     addAttribute.addAttribute(
         filename)  # copia il dataset dell'utente (con il suo path preso dal DB), con  l'aggiunta degli attributi in 'featureDataset.csv'
-    train_testSplit.splitDataset('featureDataset.csv')  # crea 'Data_training.csv' e 'Data_testing.csv'
+    train_testSplit.splitDataset('../../../featureDataset.csv')  # crea 'Data_training.csv' e 'Data_testing.csv'
     callPS.callPS('Data_training.csv')  # crea 'reducedTrainingPS.csv'
     addAttribute.addAttribute(
-        'reducedTrainingPS.csv')  # modifica 'featureDataset.csv' con le istanze create da 'reducedTrainingPS.csv'
-    aggId.addId('featureDataset.csv')
+        '../../../reducedTrainingPS.csv')  # modifica 'featureDataset.csv' con le istanze create da 'reducedTrainingPS.csv'
+    aggId.addId('../../../featureDataset.csv')
     aggIdTesting.aggIdTesting()
     qsvm.myQSVM('IdFeatureDataset_compatted.csv', 'IdData_Testing_compatted.csv', features, token, len(features))
 
@@ -60,12 +60,12 @@ if autosplit == True and prototypeSelection == True and featureExtraction == Fal
 elif autosplit == True and prototypeSelection == False and featureExtraction == True and kFold == False:
     print("I'm doing Feature Extraction and QSVM...")
     addAttribute.addAttribute(filename)
-    train_testSplit.splitDataset('featureDataset.csv')
+    train_testSplit.splitDataset('../../../featureDataset.csv')
 
     featureExtractionPCA.featureExtractionPCA2('Data_training.csv', features1)  # do pca of training
     featureExtractionPCA.featureExtractionPCA2('Data_testing.csv', features1)  # do pca of testing
-    addClass.addClassPCAtraining('Data_training.csv')  # add class to pca dataset training
-    addClass.addClassPCAtesting('Data_testing.csv')  # add class to pca dataset training
+    addClass.addClassPCAtraining('../../../Data_training.csv')  # add class to pca dataset training
+    addClass.addClassPCAtesting('../../../Data_testing.csv')  # add class to pca dataset training
     qsvm.myQSVM('Data_PCA_training.csv', 'Data_PCA_testing.csv', featuresPCA, token, 2)
 
 # Split PCA and PS:
@@ -73,15 +73,15 @@ elif autosplit == True and prototypeSelection == True and featureExtraction == T
     print("I'm doing Protype Selection, feature extraction and QSVM")
     # ps
     addAttribute.addAttribute(filename)
-    train_testSplit.splitDataset('featureDataset.csv')
+    train_testSplit.splitDataset('../../../featureDataset.csv')
     callPS.callPS('Data_training.csv')
     addAttribute.addAttribute_to_ps('reducedTrainingPS.csv')
 
     # pca
     featureExtractionPCA.featureExtractionPCA2('reducedTrainingPS_attribute.csv', features1)  # do pca of PS training
     featureExtractionPCA.featureExtractionPCA2('Data_testing.csv', features1)  # do pca of testing
-    addClass.addClassPCAtraining('Data_training.csv')  # add class to pca dataset training
-    addClass.addClassPCAtesting('Data_testing.csv')  # add class to pca dataset training
+    addClass.addClassPCAtraining('../../../Data_training.csv')  # add class to pca dataset training
+    addClass.addClassPCAtesting('../../../Data_testing.csv')  # add class to pca dataset training
     qsvm.myQSVM('Data_PCA_training.csv', 'Data_PCA_testing.csv', featuresPCA, token, 2)
 
 # NOTHING ONLY QSVM
@@ -89,8 +89,8 @@ elif autosplit == True and prototypeSelection == False and featureExtraction == 
     print("I'm doing only QSVM")
     # split
     addAttribute.addAttribute(filename)
-    train_testSplit.splitDataset('featureDataset.csv')
-    aggId.addId('Data_training.csv')
+    train_testSplit.splitDataset('../../../featureDataset.csv')
+    aggId.addId('../../../Data_training.csv')
     aggIdTesting.aggIdTesting()
     # qsvm
     qsvm.myQSVM('IdFeatureDataset_compatted.csv', 'IdData_Testing_compatted.csv', features, token, 10)
@@ -100,10 +100,10 @@ elif autosplit == True and prototypeSelection == True and featureExtraction == F
     print("I'm doing Prototype Selection and QSVM with ten_kfolds validation...")
 
     callPS.callPS('venv/10-kfolds/training/training_fold_1.csv')  # chiamo ps su training
-    addAttribute.addAttribute('reducedTrainingPS.csv')  # aggiungo attributi al risultato della ps
-    aggId.addId('featureDataset.csv')  # aggiungo id ai dati
+    addAttribute.addAttribute('../../../reducedTrainingPS.csv')  # aggiungo attributi al risultato della ps
+    aggId.addId('../../../featureDataset.csv')  # aggiungo id ai dati
     addAttribute.addAttribute('testing_fold_0.csv')  # aggiungo attributi al testing
-    aggIdTesting.aggIdTesting('featureDataset.csv')  # aggiungo id al testing
+    aggIdTesting.aggIdTesting('../../../featureDataset.csv')  # aggiungo id al testing
     qsvm.myQSVM('IdFeatureDataset_compatted.csv', 'IdData_Testing_compatted.csv', features, token, 4)
 
 
@@ -122,6 +122,6 @@ elif autosplit == True and prototypeSelection == True and featureExtraction == T
     addClass.addClassPCAtraining(
         'reducedTrainingPS_attribute.csv ')  # take labels from reduced trainingps that is a dataset of training set and apply id, features and labels
     addClass.addClassPCAtesting(
-        'featureDataset.csv')  # take labels from feature dataset that is a dataset of testing set and apply id, features and labels
+        '../../../featureDataset.csv')  # take labels from feature dataset that is a dataset of testing set and apply id, features and labels
 
     qsvm.myQSVM('Data_PCA_training.csv', 'Data_PCA_testing.csv', featuresPCA, token, 2)

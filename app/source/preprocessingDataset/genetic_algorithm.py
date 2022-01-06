@@ -1,5 +1,3 @@
-#!C:\Users\Gennaro\Miniconda3\envs\python\python.exe
-#print("Content-Type: text/html\n")
 from __future__ import division
 import random
 import math

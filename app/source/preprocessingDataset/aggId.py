@@ -2,8 +2,15 @@ import csv
 import os
 
 
-def addId(filename, filenameOut='IdFeatureDataset.csv'):
+def addId(filename: str, filenameOut='IdFeatureDataset.csv'):
+    """
+    This function adds the colomumn ID as the first column of the given dataset
 
+    :param filename: string that points to the location of the dataset
+    :param filenameOut: string that points to the location of new the dataset
+    :return: string that points to the location of new the dataset
+    :rtype: str
+    """
     with open(filename, 'r') as input, open('DatasetTEMP.csv', 'w') as output:
         reader = csv.reader(input, delimiter=',')
         writer = csv.writer(output, delimiter=',')
@@ -30,4 +37,4 @@ def addId(filename, filenameOut='IdFeatureDataset.csv'):
     output.close()
     os.remove('DatasetTEMP.csv')
 
-    return 0
+    return filenameOut

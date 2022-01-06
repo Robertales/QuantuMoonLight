@@ -1,12 +1,17 @@
 import csv
-
-import pandas as pd
 import os
+import pandas as pd
 
 
-
-def addClassPCAtraining(filename, filenameOut, numColsFE = 2):
-
+def addClassPCAtraining(filename, filenameOut, numColsFE=2):
+    """
+    This function generate a new dataset train with ID and labels columns, and string
+    "ID,feature1,feature2,...,featuren,labels" on top of the file
+    :param filename: data set input, with just the attribute raws
+    :param filenameOut: data set output
+    :param numColsFE: number of columns for the Feature Extraction
+    :return: file name out, ready to be downloaded or classified
+    """
     # salva le label originali da filename
     dataset = pd.read_csv(filename)
     y = dataset['labels']
@@ -29,6 +34,7 @@ def addClassPCAtraining(filename, filenameOut, numColsFE = 2):
     df["labels"] = y
 
     df.to_csv("myPCAclass_Training.csv", index=False)
+
 
     with open('myPCAclass_Training.csv', 'r') as input, open('IdPCADatasetTrain.csv', 'w') as output:
         reader = csv.reader(input, delimiter=',')
@@ -54,12 +60,22 @@ def addClassPCAtraining(filename, filenameOut, numColsFE = 2):
     os.remove('myPCAclass_Training.csv')
     os.remove('yourPCA_attribute.csv')
 
+    return filenameOut
 
-def addClassPCAtesting(filename, filenameOut, numColsFE = 2):
+
+def addClassPCAtesting(filename, filenameOut, numColsFE=2):
+    """
+    This function generate a new dataset test with ID and labels columns, and string
+    "ID,feature1,feature2,...,featuren,labels" on top of the file
+    :param filename: data set input, with just the attribute raws
+    :param filenameOut: data set output
+    :param numColsFE: number of columns for the Feature Extraction
+    :return: file name out, ready to be downloaded or classified
+    """
     # save the class in array y
     dataset = pd.read_csv(filename)
     y = dataset['labels']
-    #k = dataset['Id']
+    # k = dataset['Id']
 
     # add component name in file
     h = open("yourPCA_attribute1.csv", "a+")
@@ -77,7 +93,7 @@ def addClassPCAtesting(filename, filenameOut, numColsFE = 2):
     # addClass in file
     df = pd.read_csv("yourPCA_attribute1.csv")
     df["labels"] = y
-    #df["Id"]=k
+    # df["Id"]=k
 
     df.to_csv("myPCAclass_Testing.csv", index=False)
 
@@ -104,3 +120,5 @@ def addClassPCAtesting(filename, filenameOut, numColsFE = 2):
 
     os.remove('myPCAclass_Testing.csv')
     os.remove('yourPCA_attribute1.csv')
+
+    return filenameOut
