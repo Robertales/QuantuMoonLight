@@ -21,9 +21,9 @@ from sklearn.metrics import recall_score, precision_score
 from flask_login import current_user
 
 
-def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
+def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSelected):
     start_time = time.time()
-    noBackend=False
+    noBackend = False
 
     try:
         IBMQ.enable_account(token)
@@ -45,7 +45,7 @@ def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
         backend = provider.get_backend('ibmq_qasm_simulator')
         print("backend selected: simulator")
 
-
+    qubit = len(features)
     seed = 8192
     shots = 1024
     aqua_globals.random_seed = seed
@@ -53,7 +53,7 @@ def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
     # creating dataset
     training_input, test_input = loadDataset(pathTrain, pathTest, features, label='labels')
     pathDoPrediction = pathlib.Path(__file__).cwd()
-    pathDoPrediction = pathDoPrediction / 'app/source/classificazioneDataset/doPrediction1.csv'
+    pathDoPrediction = pathDoPrediction / userpathToPredict
     predizione = np.array(list(csv.reader(open(pathDoPrediction.__str__(), "r"), delimiter=","))).astype("float")
     pathGroundTruth = pathlib.Path(__file__).cwd()
     pathGroundTruth = pathGroundTruth / 'app/source/classificazioneDataset/ground_truth.csv'
@@ -94,7 +94,7 @@ def classify(pathTrain, pathTest, features, token, qubit, backendSelected):
     predictionFile = open("app\\source\\classificazioneDataset\\doPrediction1.csv", "r")
     rows = predictionFile.readlines()
 
-    for j in range(1,qubit):
+    for j in range(1, qubit):
         classifiedFile.write("feature"+str(j)+",")
     classifiedFile.write("label\n")
     i = 0

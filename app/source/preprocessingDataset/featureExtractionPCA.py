@@ -93,7 +93,7 @@ def extractFeatureForPrediction(path: str, output: str, n_components=2):
 
     # nuovo salvataggio, da testare
     pathFileYourPCA = pathlib.Path(__file__).parents[3]
-    pathFileYourPCA = pathFileYourPCA / "app/source/classificazioneDataset/doPrediction1.csv"
+    pathFileYourPCA = pathFileYourPCA / output
     print("pathFileYourPCA :", pathFileYourPCA)
     np.savetxt(pathFileYourPCA.__str__(), z, delimiter=",", fmt='%s')
 

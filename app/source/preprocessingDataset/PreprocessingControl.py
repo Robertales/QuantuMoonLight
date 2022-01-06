@@ -73,7 +73,7 @@ def preprocessing(userpath: str, prototypeSelection: bool, featureExtraction: bo
         print(pathDoPrediction)
 
         # aggiungere riga delle feature al do Prediction
-        h = open("doPredictionFeatured", "a+")
+        h = open("doPredictionFeatured.csv", "a+")
         featureString = ''
         for x in range(1, utils.numberOfColumns(userpath)):
             stringa = "feature{},".format(x)
@@ -84,6 +84,6 @@ def preprocessing(userpath: str, prototypeSelection: bool, featureExtraction: bo
         contents = g.read()
         h.write(contents)
         h.close()
-        featureExtractionPCA.extractFeatureForPrediction("doPredictionFeatured", 'doPredictionFE', numColsFE)
+        featureExtractionPCA.extractFeatureForPrediction("doPredictionFeatured.csv", 'doPredictionFE.csv', numColsFE)
 
     return 'DataSetTrainPreprocessato.csv', 'DataSetTestPreprocessato.csv'

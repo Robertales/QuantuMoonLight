@@ -36,11 +36,16 @@ def smista():
     if file is None:
         return 'No Train set uploaded'
 
+    # Dataset Train from form
     uploaddir = ROOT_DIR / 'upload_dataset/'
     userfile_name = file.filename
     userpath = uploaddir / userfile_name
 
+    # Dataset Test from form
     userpathTest = ''
+
+    # Dataset to Predict from form
+    userpathToPredict = 'app/source/classificazioneDataset/doPrediction1.csv'
 
     if file.content_length > 80000000:
         return 'Il file è troppo grande!'
@@ -89,7 +94,8 @@ def smista():
     if doQSVM:
         if featureExtraction:
             features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
-        result: dict = classify(pathTrain, pathTest, features, token, len(features), backend)  # backend
+            userpathToPredict = "doPredictionFE.csv"
+        result: dict = classify(pathTrain, pathTest, userpathToPredict, features, token, backend)  # backend
         getClassifiedDataset(result)
 
     return "ora classifica"
