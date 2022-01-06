@@ -84,13 +84,19 @@ def smista():
 
     # Classificazione
     # backend = request.form.get("backend")
-    backend = 'ibmq_jakarta'
     backend = 'ibmq_qasm_simulator'
 
     if doQSVM:
         if featureExtraction:
             features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
-        result: dict = classify(pathTrain, pathTest, features, token, len(features), backend)  # backend
-        getClassifiedDataset(result)
+
+        result: dict = classify(pathTrain, pathTest, features, token, len(features), backend)
+        if result != 0:
+            getClassifiedDataset(result)
+
+        # if result==0 il token non è valido
+        # if result==1 errore su server IBM (comunica errore tramite email)
+        # if result["noBackend"]==True il backend selezionato non è attivo per il token oppure non ce ne sono disponibili di default quindi usa il simulatore
+        # aggiungere controlli per result["noBackend"]==True e result==0 per mostrare gli errori tramite frontend
 
     return "ora classifica"
