@@ -1,13 +1,8 @@
-import os
+
 import pathlib
-from pathlib import Path
-from app import models
 from flask import render_template, request
-import subprocess as sp
 from app import app, db
 from app.source.utils import utils
-from app.models import Dataset
-from app.source.utils import getlog as log
 from app.source.validazioneDataset.ValidazioneControl import valida
 from app.source.preprocessingDataset.PreprocessingControl import preprocessing
 from app.source.classificazioneDataset.ClassificazioneControl import classify
@@ -18,6 +13,12 @@ from app.source.classificazioneDataset.ClassificazioneControl import getClassifi
 @app.route('/home')
 def homepage():  # put application's code here
     return render_template('index.html')
+
+
+@app.route('/LogIn')
+def loginPage():
+    return render_template('login.html')
+
 
 
 @app.route('/formcontrol', methods=['GET', 'POST'])
