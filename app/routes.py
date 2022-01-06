@@ -1,4 +1,4 @@
-import os
+
 import pathlib
 from pathlib import Path
 from app import models
@@ -18,6 +18,12 @@ from app.source.classificazioneDataset.ClassificazioneControl import getClassifi
 @app.route('/home')
 def homepage():  # put application's code here
     return render_template('index.html')
+
+
+@app.route('/LogIn')
+def loginPage():
+    return render_template('login.html')
+
 
 
 @app.route('/formcontrol', methods=['GET', 'POST'])
@@ -95,7 +101,13 @@ def smista():
         if featureExtraction:
             features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
             userpathToPredict = "doPredictionFE.csv"
-        result: dict = classify(pathTrain, pathTest, userpathToPredict, features, token, backend)  # backend
-        getClassifiedDataset(result)
+        result: dict = classify(pathTrain, pathTest, features, token, len(features), backend)
+        if result != 0:
+            getClassifiedDataset(result)
+
+        # if result==0 il token non è valido
+        # if result==1 errore su server IBM (comunica errore tramite email)
+        # if result["noBackend"]==True il backend selezionato non è attivo per il token oppure non ce ne sono disponibili di default quindi usa il simulatore
+        # aggiungere controlli per result["noBackend"]==True e result==0 per mostrare gli errori tramite frontend
 
     return "ora classifica"

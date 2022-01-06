@@ -24,7 +24,8 @@ Reads the user credentials from a http request and adds him to the project datab
     db.session.add(utente)
     db.session.commit()
     path = Path.cwd().parents[2]/'upload_dataset'/email
-    path.mkdir()
+    if not path.is_dir():
+        path.mkdir()
     return render_template('index.html')
 
 
@@ -58,6 +59,10 @@ logs a user out, changing his state from logged user to anonymous user
 
 @app.route('/newsletter', methods=['GET', 'POST'])
 def signup_newsletter():
+    """
+changes the User ,whose email was passed as a http request parameter ,newsletter flag to true
+    :return: tbd
+    """
     email = request.form.get('email')
     utente: User=User.query.filter_by(email=email).first()
     utente.newsletter=True;

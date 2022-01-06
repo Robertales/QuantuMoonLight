@@ -63,7 +63,6 @@ test the login functionality of the website,by trying to log in a predetermined 
         tester = app.test_client(self)
         self.assertFalse(current_user)
         with tester:
-
             response = tester.post(
                 '/login',
                 data=dict(email="boscoverde27@gmail.com", password='quercia'))
@@ -75,6 +74,19 @@ test the login functionality of the website,by trying to log in a predetermined 
             statuscode = response.status_code
             self.assertEqual(statuscode, 200)
             self.assertFalse(current_user.is_authenticated)
+
+    def test_Newsletter(self):
+        tester = app.test_client(self)
+        with tester:
+            tester.post(
+                '/login',
+                data=dict(email="boscoverde27@gmail.com", password='quercia'))
+            assert isinstance(current_user, User)
+            self.assertFalse(current_user.newsletter)
+            response = tester.post(
+                    '/newsletter',
+                    data=dict(email="boscoverde27@gmail.com"))
+            self.assertTrue(current_user.newsletter)
 
     def tearDown(self):
         with app.app_context():

@@ -33,6 +33,46 @@
     margin-left: 10%;
     margin-top: 3%;
 }
+
+.navbar-dark .nav-item .nav-link {
+  color: #fff;
+  padding-right: 5em;
+  padding-left: 5em ;
+}
+
+.navbar-grad {
+    background: -moz-linear-gradient(left, #000080 0%, #4B0082 100%);
+    background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
+    background: linear-gradient(to right, #000080 0%, #4B0082 100%);
+    color: #fff;
+    padding-left: 5em;
+    padding-right: 5em;
+}
+
+.navbar-dark .nav-item .nav-link:hover {
+  overflow: hidden;
+  transition: all 0.6s ease;
+  color: #fff;
+  padding-left: 5em;
+  padding-right: 5em;
+}
+
+.fa-li {
+  position: relative;
+  left: 0;
+}
+
+.user{
+    right: 1% ;
+}
+
+.nav-item {
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: x-large;
+    color: white;
+}
+
 /* SISTEMARE LA MEDIA QUERY*/
 @media screen and (max-width: 480px)
 {
@@ -54,4 +94,3 @@
     transform: scale(1.1);
     z-index: 2;
 }
-

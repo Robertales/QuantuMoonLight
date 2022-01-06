@@ -7,10 +7,12 @@ def addClassPCAtraining(filename, filenameOut, numColsFE=2):
     """
     This function generate a new dataset train with ID and labels columns, and string
     "ID,feature1,feature2,...,featuren,labels" on top of the file
+
     :param filename: data set input, with just the attribute raws
     :param filenameOut: data set output
     :param numColsFE: number of columns for the Feature Extraction
     :return: file name out, ready to be downloaded or classified
+    :rtype: str
     """
     # salva le label originali da filename
     dataset = pd.read_csv(filename)
@@ -67,10 +69,12 @@ def addClassPCAtesting(filename, filenameOut, numColsFE=2):
     """
     This function generate a new dataset test with ID and labels columns, and string
     "ID,feature1,feature2,...,featuren,labels" on top of the file
+
     :param filename: data set input, with just the attribute raws
     :param filenameOut: data set output
     :param numColsFE: number of columns for the Feature Extraction
     :return: file name out, ready to be downloaded or classified
+    :rtype: str
     """
     # save the class in array y
     dataset = pd.read_csv(filename)

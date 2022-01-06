@@ -1,4 +1,3 @@
-from app import app
 import time
 import csv
 import pathlib
@@ -55,11 +54,6 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     pathDoPrediction = pathlib.Path(__file__).cwd()
     pathDoPrediction = pathDoPrediction / userpathToPredict
     predizione = np.array(list(csv.reader(open(pathDoPrediction.__str__(), "r"), delimiter=","))).astype("float")
-    pathGroundTruth = pathlib.Path(__file__).cwd()
-    pathGroundTruth = pathGroundTruth / 'app/source/classificazioneDataset/ground_truth.csv'
-    dataset = pd.read_csv(pathGroundTruth.__str__())
-    y = dataset['labels']
-    ground_truth = np.array(y)
 
     feature_map = ZZFeatureMap(feature_dimension=feature_dim, reps=2, entanglement='linear')
     print(feature_map)
@@ -72,7 +66,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     try:
         result = qsvm.run(quantum_instance)
     except:
-        print("errore su server ibm")
+        print("Errore su server ibm")
         result= 1
         return result
 
@@ -82,13 +76,9 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     print('Prediction from datapoints set:')
     for k, v in result.items():
         print("{} : {}".format(k, v))
-    print("ground truth :", ground_truth)
 
     predicted_labels = result["predicted_labels"]
     predicted_classes = result["predicted_classes"]
-    #print('recall: ', recall_score(ground_truth,predicted_labels))
-    #print('precision: ', precision_score(ground_truth, predicted_labels))
-    #print(f'  accuracy: {100 * np.count_nonzero(predicted_labels == ground_truth)/len(predicted_labels)}%')
 
     classifiedFile = open("upload_dataset\\classifiedFile.csv", "w")
     predictionFile = open("app\\source\\classificazioneDataset\\doPrediction1.csv", "r")
