@@ -63,6 +63,7 @@ def callFeatureExtraction(path: str, output: str, features: list, n_components=2
 def extractFeatureForPrediction(path: str, output: str, n_components=2):
     """
     This function executes the Feature Extraction on the doPrediction
+
     :param path: string that points to the location of the dataset that is going to be reduced with FE
     :param output: string that points to the location of the dataset preprocessed with FE :param features: list that specify the labels of the dataset input
     :param n_components: number of new columns
