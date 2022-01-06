@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="../static/styles/css/style.css" rel="stylesheet">
+  <link href="../static/styles/css/nav.css" rel="stylesheet">
+    <meta charset="UTF-8">
+</head>
+<body>
+  <header>
+    <div class="header">
+                <a class=nolink href="index.html"><img src="../static/images/logos/Logo_SenzaScritta_SenzaOmbra.png" width="150" height="150"></a>
+                <div class="header-right">
+                        <a class=link href="#">HOME</a>
+                        <a class=link href="#">PREPROCESSING</a>
+                        <a class=link href="#">QUANTUM ML</a>
+                        <a class=link href="#">BLOG</a>
+                 </div>
+                <div class="login">
+                    <a href={{url_for("loginPage")}}><img src="../static/images/icons/person-circle.svg" height="50px"></a>
+                </div>
+            </div>
+  </header>
+  {% block content %}
+
+  {% endblock %}
+
+  <footer class="main-footer">
+  <div class="footer-upper">
+                <div class="auto-container">
+                    <div class="row clearfix">
+                        <!--Footer Widget-->
+                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+                            <div class="footer-widget contact-widget">
+                                <h3>Contact Us</h3>
+                                <ul class="info">
+                                    <li><strong>Email</strong> <a href="mailto:alessio.robertazzi@gmail.com">alessio.robertazzi@gmail.com</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--Footer Bottom-->
+
+
+
+
+                        <!--Footer Widget-->
+                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms">
+                            <div class="footer-widget services-widget">
+
+                            </div>
+                        </div>
+
+                        <!--Footer Widget-->
+                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="400ms" data-wow-duration="1500ms">
+                            <div class="footer-widget support-widget">
+                                <h3>Useful Links</h3>
+                                <ul class="links">
+                                    <li><a href="https://www.unisa.it/" target="_blank">University of Salerno</a></li>
+                                    <li><a href="#">About us</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!--Footer Widget-->
+                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="600ms" data-wow-duration="1500ms">
+                            <div class="footer-widget newsletter-widget">
+                                <h3>Newsletter</h3>
+                                <div class="text" style="-webkit-user-select: none; -moz-user-select: none; user-select:none;">Get QML News by using our newsletter</div>
+
+                                <div class="form">
+                                    <form method="post" action="index.html">
+                                        <div class="form-group">
+                                            <input type="email" name="email" value="" placeholder="Enter your email address" required autocomplete="off">
+                                            <button type="submit" name="submit" class="hvr-bounce-to-right"><span class="fa fa-paper-plane"></span></button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                 <div class="text" style="-webkit-user-select: none; -moz-user-select: none; user-select:none;">
+                                    Copryright 2021 by QML | All rights reserved
+                                </div>
+
+                                <!--
+                                <div class="social-links wow fadeInRight" data-wow-delay="1000ms" data-wow-duration="1500ms">
+                                    <a href="#"><span class="fa fa-facebook-f"></span></a>
+                                    <a href="#"><span class="fa fa-twitter"></span></a>
+                                    <a href="#"><span class="fa fa-google"></span></a>
+                                    <a href="#"><span class="fa fa-pinterest-p"></span></a>
+                                    <a href="#"><span class="fa fa-instagram"></span></a>
+                                </div> -->
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+  </footer>
+
+    <script src="../../../static/js/jquery.js"></script>
+    <script src="../../../static/js/bootstrap.min.js"></script>
+    <script src="../../../static/js/revolution.min.js"></script>
+    <script src="../../../static/js/bxslider.js"></script>
+    <script src="../../../static/js/owl.carousel.min.js"></script>
+    <script src="../../../static/js/jquery.fancybox.pack.js"></script>
+    <script src="../../../static/js/wow.js"></script>
+    <script src="../../../static/js/script.js"></script>
+
+</body>
+</html>
