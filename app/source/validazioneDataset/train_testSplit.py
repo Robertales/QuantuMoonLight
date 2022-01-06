@@ -1,16 +1,13 @@
-# Split the dataset in training set and testing set in order to be consistent on the comparisons
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+
 def splitDataset(filename):
-    #df = pd.read_csv(filename, index_col=0)
-
-    #SEED = 1
-
-    # 80/20 holdout split
-    #train, test = train_test_split(df, stratify=df['Species'], test_size=20, random_state=SEED)
-
-    #return train.to_csv('Data_training.csv'), test.to_csv('Data_testing.csv')
+    """
+    This function splits the dataset in training set and testing set in order to be consistent on the comparisons
+    :param filename: string that points to the location of the dataset that will be split into
+    :return: returns the dataset training set and the dataset testing set
+    """
 
     data = pd.read_csv(filename)
     X = data
@@ -25,9 +22,4 @@ def splitDataset(filename):
     print(X_test.head())
     print(X_test.shape)
 
-
-
     return X_train.to_csv('Data_training.csv', index=False), X_test.to_csv('Data_testing.csv',index=False)
-
-
-
