@@ -24,6 +24,7 @@ class Dataset(db.Model):
     k_fold = db.Column(db.Boolean, nullable=True)
     ps = db.Column(db.Boolean, nullable=True)
     fe = db.Column(db.Boolean, nullable=True)
+    doQSVM =db.Column(db.Boolean,nullable=True)
 
 
 class Article(db.Model):

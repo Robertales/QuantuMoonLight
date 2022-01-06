@@ -85,11 +85,10 @@ def smista():
     doQSVM = True
     # token= request.form.get('token') da inserire nel form
     token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
-
     # assert isinstance(current_user, User)
     # salvataggiodatabase = Dataset(email_user=current_user.email, name=file.filename, upload_date=datetime.now(),
     #                               paths=userpath, simple_split=bool(autosplit), ps=bool(prototypeSelection),
-    #                               fe=bool(featureExtraction), k_fold=bool(kFold))
+    #                               fe=bool(featureExtraction), k_fold=bool(kFold),doQSVM=bool(doQSVM))
     # db.session.add(salvataggiodatabase)
     # db.session.commit()
     # path = Path.cwd().parents[2] / 'upload_dataset' / current_user.email / salvataggiodatabase.id
