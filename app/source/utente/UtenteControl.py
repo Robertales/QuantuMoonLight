@@ -23,7 +23,8 @@ Reads the user credentials from a http request and adds him to the project datab
     utente = User(email=email, password=hashed_password, token=token, username=username, name=nome, surname=cognome)
     db.session.add(utente)
     db.session.commit()
-    path = Path.cwd().parents[2]/'upload_dataset'/email
+    path = Path(__file__).parents[3]/'upload_dataset'/email
+    print(path.__str__())
     if not path.is_dir():
         path.mkdir()
     return render_template('index.html')
