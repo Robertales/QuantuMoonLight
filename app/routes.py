@@ -66,9 +66,10 @@ def smista():
     temp = file1.filename
     extension = temp.split('.')[-1]
     userpathTest = ''
-    if file1.__sizeof__() != 0 and not ext_ok.__contains__(extension):
+    if file1.filename != "" and not ext_ok.__contains__(extension):
+        print(file1.filename)
         return 'Il file Dataset Test ha un estensione non ammessa!'
-    if file1.__sizeof__() != 0:
+    if file1.filename != "":
         userpathTest = uploaddir / file1.filename
         file1.save(userpathTest)
     if file1.content_length > 80000000:
@@ -83,9 +84,9 @@ def smista():
     print("file2: ", file2)
     extension = temp.split('.')[-1]
     userpathToPredict = ''
-    if file2.__sizeof__() != 0 and not ext_ok.__contains__(extension):
+    if file2.filename != "" and not ext_ok.__contains__(extension):
         return 'Il file to Predict ha un estensione non ammessa!'
-    if file2.__sizeof__() != 0:
+    if file2.filename != "" != 0:
         userpathToPredict = uploaddir / file2.filename
         file2.save(userpathToPredict)
     if file2.content_length > 80000000:
