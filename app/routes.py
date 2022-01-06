@@ -1,12 +1,17 @@
 
 import pathlib
+from datetime import datetime
 from pathlib import Path
+
+from flask_login import current_user
+
 from app import models
 from flask import render_template, request
 import subprocess as sp
 from app import app, db
 from app.source.utils import utils
 from app.models import Dataset
+from app.models import User
 from app.source.utils import getlog as log
 from app.source.validazioneDataset.ValidazioneControl import valida
 from app.source.preprocessingDataset.PreprocessingControl import preprocessing
@@ -32,6 +37,10 @@ def smista():
     ROOT_DIR = pathlib.Path(__file__).cwd()
     # log.log()
     file = request.files.get('userfile')
+
+
+
+
     ext_ok = ['txt', 'csv', 'data']
     temp = file.filename
     extension = temp.split('.')[-1]
@@ -47,6 +56,7 @@ def smista():
     userfile_name = file.filename
     userpath = uploaddir / userfile_name
 
+
     # Dataset Test from form
     userpathTest = ''
 
@@ -59,7 +69,6 @@ def smista():
     featureExtraction = request.form.get('reduce')
     autosplit = request.form.get('test')
 
-    file.save(userpath)
     print("Userpath: ", userpath)
     print("Dataset: ", file.filename)
     # Recupero le impostazioni dell'utente, cioè
@@ -76,6 +85,24 @@ def smista():
     doQSVM = True
     # token= request.form.get('token') da inserire nel form
     token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
+
+    # assert isinstance(current_user, User)
+    # salvataggiodatabase = Dataset(email_user=current_user.email, name=file.filename, upload_date=datetime.now(),
+    #                               paths=userpath, simple_split=bool(autosplit), ps=bool(prototypeSelection),
+    #                               fe=bool(featureExtraction), k_fold=bool(kFold))
+    # db.session.add(salvataggiodatabase)
+    # db.session.commit()
+    # path = Path.cwd().parents[2] / 'upload_dataset' / current_user.email / salvataggiodatabase.id
+    # if not path.is_dir():
+    #     path.mkdir()
+
+    file.save(userpath)
+
+
+
+
+
+
 
     numCols = utils.numberOfColumns(userpath)
     features = utils.createFeatureList(numCols - 1)
