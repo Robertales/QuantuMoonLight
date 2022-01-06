@@ -1,8 +1,5 @@
-from flask_login._compat import text_type
 from sqlalchemy import ForeignKey
 from app import db, login_manager
-from flask_login import UserMixin
-
 from app.source.utente.UserAuth import UserAuth
 
 
@@ -15,9 +12,6 @@ class User(db.Model, UserAuth):
     name = db.Column(db.String(30), nullable=False, unique=False)
     surname = db.Column(db.String(30), nullable=False, unique=False)
     newsletter = db.Column(db.Boolean, default=False)
-
-
-
 
 
 class Dataset(db.Model):
