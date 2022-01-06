@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <link rel="stylesheet" href="../static/styles/css/logIn.css">
     <meta charset="UTF-8">
-    <title>Log-In</title>
+    <title>Registration</title>
 </head>
 <body>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -15,22 +14,25 @@
 <div class="wrapper fadeInDown">
   <div id="formContent">
     <!-- Tabs Titles -->
-
-    <!-- Logo -->
+          <!-- Logo -->
     <div class="fadeIn first">
       <a href={{url_for("homepage")}}><img src="../static/images/logos/Logo_SenzaScritta.png" id="icon" alt="Logo"></a>
     </div>
 
     <!-- Login Form -->
-    <form action="#">
+      <form action="#">
       <input type="text" id="login" class="fadeIn second" name="login" placeholder="E-mail">
       <input type="password" id="password" class="fadeIn third" name="login" placeholder="Password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
+      <input type="text" id="username" class="fadeIn second" name="username" placeholder="Username">
+      <input type="text" id="nome" class="fadeIn third" name="nome" placeholder="Name">
+      <input type="text" id="cognome" class="fadeIn second" name="cognome" placeholder="Surname">
+      <input type="text" id="token" class="fadeIn third" name="token" placeholder="Token IBM">
+      <input type="submit" class="fadeIn fourth" value="Sign In">
     </form>
 
     <!-- Registration -->
     <div id="formFooter">
-      <a class="underlineHover" href={{url_for("registrationPage")}}>Register Here</a>
+      <a class="underlineHover" href={{url_for("loginPage")}}>Login Here</a>
       <br>
       <a class="underlineHover" href={{url_for("homepage")}}>Back to homepage</a>
     </div>

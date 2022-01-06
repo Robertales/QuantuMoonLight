@@ -28,6 +28,10 @@ def homepage():  # put application's code here
 def loginPage():
     return render_template('login.html')
 
+@app.route('/SignIn')
+def registrationPage():
+    return render_template('registration.html')
+
 
 @app.route('/formPage')
 def formPage():
