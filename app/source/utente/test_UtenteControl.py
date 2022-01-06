@@ -77,16 +77,16 @@ test the login functionality of the website,by trying to log in a predetermined 
 
     def test_Newsletter(self):
         tester = app.test_client(self)
-        tester.post(
-            '/login',
-            data=dict(email="boscoverde27@gmail.com", password='quercia'))
-        assert isinstance(current_user, User)
-        self.assertFalse(current_user.newsletter)
         with tester:
+            tester.post(
+                '/login',
+                data=dict(email="boscoverde27@gmail.com", password='quercia'))
+            assert isinstance(current_user, User)
+            self.assertFalse(current_user.newsletter)
             response = tester.post(
-                '/newsletter',
-                data=dict(email="boscoverde27@gmail.com"))
-        self.assertTrue(current_user.newsletter)
+                    '/newsletter',
+                    data=dict(email="boscoverde27@gmail.com"))
+            self.assertTrue(current_user.newsletter)
 
     def tearDown(self):
         with app.app_context():
