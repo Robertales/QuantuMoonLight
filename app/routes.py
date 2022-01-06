@@ -101,7 +101,7 @@ def smista():
         if featureExtraction:
             features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
             userpathToPredict = "doPredictionFE.csv"
-        result: dict = classify(pathTrain, pathTest, features, token, len(features), backend)
+        result: dict = classify(pathTrain, pathTest, userpathToPredict, features, token, backend)
         if result != 0:
             getClassifiedDataset(result)
 
