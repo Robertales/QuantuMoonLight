@@ -20,7 +20,7 @@
   <!-- Container wrapper -->
   <div class="container-fluid">
     <!-- Navbar brand -->
-    <a class="" href="newHomepage.html">
+    <a class="" href={{url_for("homepage")}}>
       <img src="../static/images/logos/Logo_SenzaScritta.png" height="70" alt="QML" loading="lazy" />
     </a>
 
@@ -35,10 +35,10 @@
       <!-- Left links -->
       <ul class="navbar-nav" style="">
         <li class="nav-item">
-          <a class="nav-link" href="#">HOME</a>
+          <a class="nav-link" href={{url_for("homepage")}}>HOME</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">PREPROCESSING</a>
+          <a class="nav-link" href={{url_for("formPage")}}>PREPROCESSING</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">QUANTUM ML</a>
@@ -50,7 +50,7 @@
       <!-- Left links -->
     </div>
   </div>
-    <a href="login.html"><img src="../static/images/icons/person-circle.svg" class="user" height="50px" alt="User page"></a>
+    <a href={{url_for("loginPage")}}><img src="../static/images/icons/person-circle.svg" class="user" height="50px" alt="User page"></a>
   <!-- Container wrapper -->
 </nav>
 <!-- End Navbar -->
@@ -110,7 +110,7 @@
                                 <div class="text" style="-webkit-user-select: none; -moz-user-select: none; user-select:none;">Get QML News by using our newsletter</div>
 
                                 <div class="form">
-                                    <form method="post" action="../templates/index.html">
+                                    <form method="post" action="../../../../../Desktop/fiorentino/fiorentino/templates/index.html">
                                         <div class="form-group">
                                             <input type="email" name="email" value="" placeholder="Enter your email address" required autocomplete="off">
                                             <button type="submit" name="submit" class="hvr-bounce-to-right"><span class="fa fa-paper-plane"></span></button>

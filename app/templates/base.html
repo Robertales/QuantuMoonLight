@@ -1,25 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="../static/styles/css/style.css" rel="stylesheet">
-  <link href="../static/styles/css/nav.css" rel="stylesheet">
     <meta charset="UTF-8">
+    <title>QuantuMoonLight</title>
+    <link href="../static/styles/css/style.css" rel="stylesheet">
+    <link href="../static/styles/css/nav.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/styles/css/nav.css">
+    <link href="../static/styles/css/style.css" rel="stylesheet">
 </head>
 <body>
   <header>
-    <div class="header">
-                <a class=nolink href="index.html"><img src="../static/images/logos/Logo_SenzaScritta_SenzaOmbra.png" width="150" height="150"></a>
-                <div class="header-right">
-                        <a class=link href="#">HOME</a>
-                        <a class=link href="#">PREPROCESSING</a>
-                        <a class=link href="#">QUANTUM ML</a>
-                        <a class=link href="#">BLOG</a>
-                 </div>
-                <div class="login">
-                    <a href={{url_for("loginPage")}}><img src="../static/images/icons/person-circle.svg" height="50px"></a>
-                </div>
-            </div>
-  </header>
+    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-grad bg-dark">
+  <!-- Container wrapper -->
+  <div class="container-fluid">
+    <!-- Navbar brand -->
+    <a class="" href={{url_for("homepage")}}>
+      <img src="../static/images/logos/Logo_SenzaScritta.png" height="70" alt="QML" loading="lazy" />
+    </a>
+
+    <!-- Toggle button -->
+    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse nav justify-content-center" id="navbarSupportedContent">
+      <!-- Left links -->
+      <ul class="navbar-nav" style="">
+        <li class="nav-item">
+          <a class="nav-link" href={{url_for("homepage")}}>HOME</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href={{url_for("formPage")}}>PREPROCESSING</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">QUANTUM ML</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">BLOG</a>
+        </li>
+      </ul>
+      <!-- Left links -->
+    </div>
+  </div>
+    <a href={{url_for("loginPage")}}><img src="../static/images/icons/person-circle.svg" class="user" height="50px" alt="User page"></a>
+  <!-- Container wrapper -->
+</nav>
+<!-- End Navbar -->
+</header>
+
   {% block content %}
 
   {% endblock %}
@@ -55,7 +87,7 @@
                                 <h3>Useful Links</h3>
                                 <ul class="links">
                                     <li><a href="https://www.unisa.it/" target="_blank">University of Salerno</a></li>
-                                    <li><a href="#">About us</a></li>
+                                    <li><a href={{url_for("aboutUs")}}>About us</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -67,7 +99,7 @@
                                 <div class="text" style="-webkit-user-select: none; -moz-user-select: none; user-select:none;">Get QML News by using our newsletter</div>
 
                                 <div class="form">
-                                    <form method="post" action="index.html">
+                                    <form method="post" action="../../../../../Desktop/fiorentino/fiorentino/templates/index.html">
                                         <div class="form-group">
                                             <input type="email" name="email" value="" placeholder="Enter your email address" required autocomplete="off">
                                             <button type="submit" name="submit" class="hvr-bounce-to-right"><span class="fa fa-paper-plane"></span></button>
