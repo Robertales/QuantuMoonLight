@@ -46,66 +46,17 @@ def aboutUs():
 
 @app.route('/formcontrol', methods=['GET', 'POST'])
 def smista():
-    print('Request send on ')
-    ROOT_DIR = pathlib.Path(__file__).cwd()
-    ext_ok = ['txt', 'csv', 'data']
-    # log.log()
-
-    # Dataset Train from form
-    file = request.files.get('userfile')
-    temp = file.filename
-    extension = temp.split('.')[-1]
-    if not ext_ok.__contains__(extension):
-        return 'Il file Dataset Train ha un estensione non ammessa!'
-    if file is None:
-        return 'No Train set uploaded'
-    uploaddir = ROOT_DIR / 'upload_dataset/'
-    userfile_name = file.filename
-    userpath = uploaddir / userfile_name
-    file.save(userpath)
-    if file.content_length > 80000000:
-        return 'Il file è troppo grande!'
-
-    # Dataset Test from form
-    file1 = request.files.get('userfile1')
-    temp = file1.filename
-    extension = temp.split('.')[-1]
-    userpathTest = ''
-    if file1.filename != "" and not ext_ok.__contains__(extension):
-        print(file1.filename)
-        return 'Il file Dataset Test ha un estensione non ammessa!'
-    if file1.filename != "":
-        userpathTest = uploaddir / file1.filename
-        file1.save(userpathTest)
-    if file1.content_length > 80000000:
-        return 'Il file è troppo grande!'
-
-    # Dataset to Predict from form
-    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction1.csv'
-    file2 = request.files.get('userfile2')
-    temp = file2.filename
-    print("TempDataToPredict: ", temp)
-    print("file2: ", file2)
-    extension = temp.split('.')[-1]
-    userpathToPredict = ''
-    if file2.filename != "" and not ext_ok.__contains__(extension):
-        return 'Il file to Predict ha un estensione non ammessa!'
-    if file2.filename != "" != 0:
-        userpathToPredict = uploaddir / file2.filename
-        file2.save(userpathToPredict)
-    if file2.content_length > 80000000:
-        return 'Il file è troppo grande!'
-
+    dataset_train = request.files.get('userfile')
+    dataset_test = request.files.get('userfile1')
+    dataset_prediction = request.files.get('userfile2')
+    paths = upload(dataset_train, dataset_test, dataset_prediction)
     prototypeSelection = request.form.get('reduce1')
     featureExtraction = request.form.get('reduce')
     autosplit = request.form.get('test')
+    userpath = paths[0]
+    userpathTest = paths[1]
+    userpathToPredict = paths[2]
 
-    print("Userpath: ", userpath)
-    print("Dataset: ", file.filename)
-    print("UserpathTest: ", userpathTest)
-    print("DatasetTest: ", file1.filename)
-    print("UserpathToPredict: ", userpathToPredict)
-    print("DatasetToPredict: ", file2.filename)
     # Recupero le impostazioni dell'utente, cioè
     # quali operazioni vuole effettuare e, in caso di QSVM, anche il token
     print("AutoSplit: ", autosplit)
@@ -164,3 +115,61 @@ def smista():
         # aggiungere controlli per result["noBackend"]==True e result==0 per mostrare gli errori tramite frontend
 
     return "ora classifica"
+
+
+def upload(file, file1, file2):
+    print('Request send on ')
+    ROOT_DIR = pathlib.Path(__file__).cwd()
+    ext_ok = ['txt', 'csv', 'data']
+    # log.log()
+
+    # Dataset Train from form
+
+    temp = file.filename
+    extension = temp.split('.')[-1]
+    if not ext_ok.__contains__(extension):
+        return 'Il file Dataset Train ha un estensione non ammessa!'
+    if file is None:
+        return 'No Train set uploaded'
+    uploaddir = ROOT_DIR / 'upload_dataset/'
+    userfile_name = file.filename
+    userpath = uploaddir / userfile_name
+    file.save(userpath)
+    if file.content_length > 80000000:
+        return 'Il file è troppo grande!'
+
+    # Dataset Test from form
+    temp = file1.filename
+    extension = temp.split('.')[-1]
+    userpathTest = ''
+    if file1.filename != "" and not ext_ok.__contains__(extension):
+        print(file1.filename)
+        return 'Il file Dataset Test ha un estensione non ammessa!'
+    if file1.filename != "":
+        userpathTest = uploaddir / file1.filename
+        file1.save(userpathTest)
+    if file1.content_length > 80000000:
+        return 'Il file è troppo grande!'
+
+    # Dataset to Predict from form
+    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction1.csv'
+    temp = file2.filename
+    print("TempDataToPredict: ", temp)
+    print("file2: ", file2)
+    extension = temp.split('.')[-1]
+    userpathToPredict = ''
+    if file2.filename != "" and not ext_ok.__contains__(extension):
+        return 'Il file to Predict ha un estensione non ammessa!'
+    if file2.filename != "" != 0:
+        userpathToPredict = uploaddir / file2.filename
+        file2.save(userpathToPredict)
+    if file2.content_length > 80000000:
+        return 'Il file è troppo grande!'
+    print("Userpath: ", userpath)
+    print("Dataset: ", file.filename)
+    print("UserpathTest: ", userpathTest)
+    print("DatasetTest: ", file1.filename)
+    print("UserpathToPredict: ", userpathToPredict)
+    print("DatasetToPredict: ", file2.filename)
+    paths = [userpath, userpathTest, userpathToPredict]
+    return paths
