@@ -1,4 +1,3 @@
-import csv
 import numpy as np
 import os
 import pandas as pd
@@ -65,7 +64,7 @@ def extractFeatureForPrediction(path: str, output: str, n_components=2):
     This function executes the Feature Extraction on the doPrediction
 
     :param path: string that points to the location of the dataset that is going to be reduced with FE
-    :param output: string that points to the location of the dataset preprocessed with FE :param features: list that specify the labels of the dataset input
+    :param output: string that points to the location of the dataset preprocessed with FE
     :param n_components: number of new columns
     :return: string that points to the location of the dataset preprocessed with FE
     :rtype: str
@@ -88,7 +87,7 @@ def extractFeatureForPrediction(path: str, output: str, n_components=2):
 
     z = np.concatenate((X_train, X_test))
 
-    #salvataggio
+    # salvataggio
     pathFileYourPCA = pathlib.Path(__file__).parents[3]
     pathFileYourPCA = pathFileYourPCA / output
     print("pathFileYourPCA :", pathFileYourPCA)

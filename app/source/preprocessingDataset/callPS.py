@@ -1,6 +1,6 @@
 import pathlib
-from app.source.utils import utils
 import numpy as np
+from app.source.utils import utils
 from app.source.preprocessingDataset import PrototypeSelectionProblem as ps
 
 

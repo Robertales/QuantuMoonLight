@@ -1,16 +1,15 @@
 import random
 import time as t
 import numpy as np
+import statistics as s
 from deap import base
 from deap import creator
 from deap import tools
 from app.source.preprocessingDataset import genetic_algorithm as ga
 from app.source.utils import utils
 
-import statistics as s
 
-
-### fitness for scikit-learn knn pesato #####
+# fitness for scikit-learn knn pesato #####
 def fitness_knn(chromosome, x_train):
     # print(chromosome)
     num = len(chromosome)
@@ -21,13 +20,13 @@ def fitness_knn(chromosome, x_train):
 
 
 def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_training_instances):
-    ##### PARAMETERS FOR THE  PROBLEM ############################################################
+    # PARAMETERS FOR THE  PROBLEM
     chromosome_size = number_of_reduced_training_instances
     reportName = "TestPS_"
     upB = len(x_train) - 1
     lowB = 0
 
-    ### PARAMETERS FOR THE EVOLUTIVE ALGORITHM ###############################################
+    # PARAMETERS FOR THE EVOLUTIVE ALGORITHM
     population = 100  # starting population
     generations = 5000000000  # number of generations
     num_evals_max = number_of_solutions
@@ -40,7 +39,7 @@ def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_traini
 
     numRuns = 3
 
-    ### CREATE TOOLBOX ################################################################################
+    # CREATE TOOLBOX
     # creates classes
     creator.create("FitnessMax", base.Fitness, weights=(1.0,))
     creator.create("Individual", list, fitness=creator.FitnessMax)
@@ -67,7 +66,7 @@ def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_traini
     toolbox.register("select", tools.selTournament, tournsize=tournsize)
     toolbox.register("evaluate", fitness_knn, x_train=x_train)
 
-    #### CALL EVOLUTIVE ALGORITHMS ##########################################################################
+    # CALL EVOLUTIVE ALGORITHMS
     gens = list()
     evaluations = list()
     bestInds = list()
@@ -86,10 +85,6 @@ def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_traini
 
         best_population, logbook = ga.deapGeneticAlgorithm(toolbox, population, cxpb, mutpb, generations, num_evals_max,
                                                            stats, hof)
-        # best_population,logbook=ga.simpleGeneticAlgorithm(toolbox, population, cxpb, simpleMutpb, generations, num_evals_max, stats,  hof)
-        # best_population, logbook = ga.simpleElitistGeneticAlgorithm(toolbox, population, cxpb, simpleMutpb, generations,num_evals_max, stats, hof)
-        # best_population,logbook=ga.geneticAlgorithm(toolbox, population, cxpb, simpleMutpb, generations, num_evals_max, stats,  hof)
-        # best_ind,logbook=hc.hillclimbing(toolbox, num_evals_max)
         time_End = t.time()
 
         time = time_End - time_Start

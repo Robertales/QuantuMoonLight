@@ -1,11 +1,10 @@
 import os
-import pathlib
 from app.source.utils import utils, addAttribute
 from app.source.preprocessingDataset import addClass, callPS, aggId, featureExtractionPCA
 
 
-def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict:str, featureExtraction: bool, numRawsPS: int, numColsFE: int,
-                  doQSVM: bool):
+def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict: str, featureExtraction: bool,
+                  numRawsPS: int, numColsFE: int, doQSVM: bool):
     """
     This function is going to preprocess a given Dataset with prototypeSelection or featureExtraction
 
