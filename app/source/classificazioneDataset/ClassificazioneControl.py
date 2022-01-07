@@ -18,9 +18,29 @@ from email.mime.text import MIMEText
 from email.utils import formatdate
 from email import encoders
 from app.source.utils import utils
+from app import app
+from flask import request
 from sklearn.metrics import recall_score, precision_score
 from flask_login import current_user
 
+@app.route('/classificazioneControl', methods=['POST'])
+def classificazioneControl():
+    pathTrain=request.form.get("pathTrain")
+    pathTest = request.form.get("pathTest")
+    userpathToPredict=request.form.get("userpathToPredict")
+    features=request.form.getlist("features")
+    token=request.form.get("token")
+    backend = request.form.get("backend")
+
+    result: dict = classify(pathTrain, pathTest, userpathToPredict , features, token, backend)
+    if result != 0:
+        getClassifiedDataset(result)
+
+        # if result==0 il token non è valido
+        # if result==1 errore su server IBM (comunica errore tramite email)
+        # if result["noBackend"]==True il backend selezionato non è attivo per il token oppure non ce ne sono disponibili di default quindi usa il simulatore
+        # aggiungere controlli per result["noBackend"]==True e result==0 per mostrare gli errori tramite frontend
+    return "ciao"
 
 def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSelected):
     start_time = time.time()
@@ -44,10 +64,12 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
             backend = least_busy(provider.backends(filters=lambda
                 x: x.configuration().n_qubits >= qubit and not x.configuration().simulator and x.status().operational == True))
             print("least busy backend: ", backend)
+            print("backend qubit:" + str(provider.get_backend(backend).configuration().n_qubits))
     except:
         noBackend = True
         backend = provider.get_backend('ibmq_qasm_simulator')
         print("backend selected: simulator")
+        print("backend qubit:" + str(provider.get_backend(backend).configuration().n_qubits))
 
     seed = 8192
     shots = 1024
