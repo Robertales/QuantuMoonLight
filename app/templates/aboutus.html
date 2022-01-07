@@ -14,43 +14,8 @@
 </head>
 <body>
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-grad bg-dark">
-  <!-- Container wrapper -->
-  <div class="container-fluid">
-    <!-- Navbar brand -->
-    <a class="" href="newHomepage.html">
-      <img src="../static/images/logos/Logo_SenzaScritta.png" height="70" alt="QML" loading="lazy" />
-    </a>
-
-    <!-- Toggle button -->
-    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <i class="fas fa-bars"></i>
-    </button>
-
-    <!-- Collapsible wrapper -->
-    <div class="collapse navbar-collapse nav justify-content-center" id="navbarSupportedContent">
-      <!-- Left links -->
-      <ul class="navbar-nav" style="">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">HOME</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">PREPROCESSING</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">QUANTUM ML</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">BLOG</a>
-        </li>
-      </ul>
-      <!-- Left links -->
-    </div>
-  </div>
-    <a href="logIn.html"><img src="../static/images/icons/person-circle.svg" class="user" height="50px" alt="User page"></a>
-  <!-- Container wrapper -->
-</nav>
+            {% extends 'base.html' %}
+            {% block content %}
 
 <br>
 <!-- ABOUT US SECTION -->
@@ -189,84 +154,10 @@
       </div>
     </div>
 </div>
-<!-- FOOTER -->
+
+    <!-- FOOTER  -->
+{% endblock %}
 
 
-<footer class="main-footer">
-            <!--Footer Upper-->
-            <div class="footer-upper">
-                <div class="auto-container">
-                    <div class="row clearfix">
-                        <!--Footer Widget-->
-                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
-                            <div class="footer-widget contact-widget">
-                                <h3>Contact Us</h3>
-                                <ul class="info">
-                                    <li><strong>Email</strong> <a href="mailto:alessio.robertazzi@gmail.com">alessio.robertazzi@gmail.com</a></li>
-
-                                </ul>
-                            </div>
-                        </div>
-                        <!--Footer Bottom-->
-
-
-
-
-                        <!--Footer Widget-->
-                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms">
-                            <div class="footer-widget services-widget">
-
-                            </div>
-                        </div>
-
-                        <!--Footer Widget-->
-                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="400ms" data-wow-duration="1500ms">
-                            <div class="footer-widget support-widget">
-                                <h3>Useful Links</h3>
-                                <ul class="links">
-                                    <li><a href="https://www.unisa.it/" target="_blank">University of Salerno</a></li>
-                                    <li><a href="#">About us</a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!--Footer Widget-->
-                        <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="600ms" data-wow-duration="1500ms">
-                            <div class="footer-widget newsletter-widget">
-                                <h3>Newsletter</h3> <!-- togliere il quadratino che esce in output -->
-                                <div class="text" style="-webkit-user-select: none; -moz-user-select: none; user-select:none;">Get QML News by using our newsletter</div>
-
-                                <div class="form">
-                                    <form method="post" action="../../../Users/Giacomo/Desktop/Nuova%20cartella%20(2)/QuantuMoonLight/app/templates/index.html">
-                                        <div class="form-group">
-                                            <input type="email" name="email" value="" placeholder="Enter your email address" required autocomplete="off">
-                                            <button type="submit" name="submit" class="hvr-bounce-to-right"><span class="fa fa-paper-plane"></span></button>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                 <div class="text" style="-webkit-user-select: none; -moz-user-select: none; user-select:none;">
-                                    Copryright 2021 by QML | All rights reserved
-                                </div>
-
-                                <!--
-                                <div class="social-links wow fadeInRight" data-wow-delay="1000ms" data-wow-duration="1500ms">
-                                    <a href="#"><span class="fa fa-facebook-f"></span></a>
-                                    <a href="#"><span class="fa fa-twitter"></span></a>
-                                    <a href="#"><span class="fa fa-google"></span></a>
-                                    <a href="#"><span class="fa fa-pinterest-p"></span></a>
-                                    <a href="#"><span class="fa fa-instagram"></span></a>
-                                </div> -->
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-
-
-</footer>
 </body>
 </html>
