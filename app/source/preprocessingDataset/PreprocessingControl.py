@@ -1,9 +1,10 @@
+import os
 import pathlib
 from app.source.utils import utils, addAttribute
 from app.source.preprocessingDataset import addClass, callPS, aggId, featureExtractionPCA
 
 
-def preprocessing(userpath: str, prototypeSelection: bool, featureExtraction: bool, numRawsPS: int, numColsFE: int,
+def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict:str, featureExtraction: bool, numRawsPS: int, numColsFE: int,
                   doQSVM: bool):
     """
     This function is going to preprocess a given Dataset with prototypeSelection or featureExtraction
@@ -65,12 +66,10 @@ def preprocessing(userpath: str, prototypeSelection: bool, featureExtraction: bo
         addClass.addClassPCAtraining('Data_training.csv', 'DataSetTrainPreprocessato.csv', numColsFE)
         # Aggiunge ID, features e label al Dataset Test
         addClass.addClassPCAtesting('Data_testing.csv', 'DataSetTestPreprocessato.csv', numColsFE)
+        os.remove('reducedTrainingPS_attribute.csv')
 
     if doQSVM and featureExtraction:
         # effettua feature Extraction sul doPrediction e rigenera doPrediction
-        pathDoPrediction = pathlib.Path(__file__).cwd()
-        pathDoPrediction = pathDoPrediction / 'app/source/classificazioneDataset/doPrediction1.csv'
-        print(pathDoPrediction)
 
         # aggiungere riga delle feature al do Prediction
         h = open("doPredictionFeatured.csv", "a+")
@@ -80,10 +79,13 @@ def preprocessing(userpath: str, prototypeSelection: bool, featureExtraction: bo
             featureString += stringa
         featureString += ("labels\r")
         h.write(featureString)
-        g = open(pathDoPrediction, "r")
+        g = open(userpathToPredict, "r")
         contents = g.read()
         h.write(contents)
         h.close()
+        g.close()
+
         featureExtractionPCA.extractFeatureForPrediction("doPredictionFeatured.csv", 'doPredictionFE.csv', numColsFE)
+        os.remove("doPredictionFeatured.csv")
 
     return 'DataSetTrainPreprocessato.csv', 'DataSetTestPreprocessato.csv'

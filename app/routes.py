@@ -137,7 +137,7 @@ def smista():
 
     # Preprocessing
     if prototypeSelection or featureExtraction:
-        preprocessing(userpath, prototypeSelection, featureExtraction, numRawsPS, numColsFE, doQSVM)
+        preprocessing(userpath, prototypeSelection, userpathToPredict, featureExtraction, numRawsPS, numColsFE, doQSVM)
         pathTrain = 'DataSetTrainPreprocessato.csv'
         pathTest = 'DataSetTestPreprocessato.csv'
 

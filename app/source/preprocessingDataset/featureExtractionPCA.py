@@ -86,13 +86,9 @@ def extractFeatureForPrediction(path: str, output: str, n_components=2):
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
-    explained_variance = pca.explained_variance_ratio_
-
     z = np.concatenate((X_train, X_test))
 
-    # write csv data
-
-    # nuovo salvataggio, da testare
+    #salvataggio
     pathFileYourPCA = pathlib.Path(__file__).parents[3]
     pathFileYourPCA = pathFileYourPCA / output
     print("pathFileYourPCA :", pathFileYourPCA)

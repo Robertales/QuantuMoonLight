@@ -64,7 +64,7 @@ elif autosplit == True and prototypeSelection == False and featureExtraction == 
 
     featureExtractionPCA.featureExtractionPCA2('Data_training.csv', features1)  # do pca of training
     featureExtractionPCA.featureExtractionPCA2('Data_testing.csv', features1)  # do pca of testing
-    addClass.addClassPCAtraining('../../../Data_training.csv')  # add class to pca dataset training
+    addClass.addClassPCAtraining('../../../upload_dataset/Data_training.csv')  # add class to pca dataset training
     addClass.addClassPCAtesting('../../../Data_testing.csv')  # add class to pca dataset training
     qsvm.myQSVM('Data_PCA_training.csv', 'Data_PCA_testing.csv', featuresPCA, token, 2)
 
@@ -80,7 +80,7 @@ elif autosplit == True and prototypeSelection == True and featureExtraction == T
     # pca
     featureExtractionPCA.featureExtractionPCA2('reducedTrainingPS_attribute.csv', features1)  # do pca of PS training
     featureExtractionPCA.featureExtractionPCA2('Data_testing.csv', features1)  # do pca of testing
-    addClass.addClassPCAtraining('../../../Data_training.csv')  # add class to pca dataset training
+    addClass.addClassPCAtraining('../../../upload_dataset/Data_training.csv')  # add class to pca dataset training
     addClass.addClassPCAtesting('../../../Data_testing.csv')  # add class to pca dataset training
     qsvm.myQSVM('Data_PCA_training.csv', 'Data_PCA_testing.csv', featuresPCA, token, 2)
 
@@ -90,7 +90,7 @@ elif autosplit == True and prototypeSelection == False and featureExtraction == 
     # split
     addAttribute.addAttribute(filename)
     train_testSplit.splitDataset('../../../featureDataset.csv')
-    aggId.addId('../../../Data_training.csv')
+    aggId.addId('../../../upload_dataset/Data_training.csv')
     aggIdTesting.aggIdTesting()
     # qsvm
     qsvm.myQSVM('IdFeatureDataset_compatted.csv', 'IdData_Testing_compatted.csv', features, token, 10)
