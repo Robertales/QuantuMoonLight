@@ -30,9 +30,9 @@ def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict:str
         print("I'm doing Prototype Selection ...")
 
         callPS.callPrototypeSelection('Data_training.csv', numRawsPS)  # crea 'reducedTrainingPS.csv'
-        # addAttribute.addAttribute('reducedTrainingPS.csv', 'featureDataset.csv')  # modifica 'featureDataset.csv'
+        addAttribute.addAttribute('reducedTrainingPS.csv', 'featureDataset.csv')  # modifica 'featureDataset.csv'
         # con le istanze create da 'reducedTrainingPS.csv'
-        aggId.addId('reducedTrainingPS.csv', 'DataSetTrainPreprocessato.csv')
+        aggId.addId('featureDataset.csv', 'DataSetTrainPreprocessato.csv')
         aggId.addId('Data_testing.csv', 'DataSetTestPreprocessato.csv')
 
     # FE with PCA

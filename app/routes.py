@@ -2,10 +2,11 @@ import pathlib
 from datetime import datetime
 from pathlib import Path
 
+import requests
 from flask_login import current_user
 
 from app import models
-from flask import render_template, request
+from flask import render_template, request, url_for
 import subprocess as sp
 from app import app, db
 from app.source.utils import utils
@@ -73,8 +74,6 @@ def smista():
     k = 10
     # doQSVM= request.form.get('QSVM') da inserire nel form
     doQSVM = True
-    # token= request.form.get('token') da inserire nel form
-    token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
     # assert isinstance(current_user, User)
     # salvataggiodatabase = Dataset(email_user=current_user.email, name=file.filename, upload_date=datetime.now(),
     #                               path=userpath, simple_split=bool(autosplit), ps=bool(prototypeSelection),
@@ -101,23 +100,15 @@ def smista():
         pathTest = 'DataSetTestPreprocessato.csv'
 
     # Classificazione
-    # backend = request.form.get("backend")
-    backend = 'ibmq_jakarta'
-    backend = 'ibmq_qasm_simulator'
-
     if doQSVM:
+        backend = request.form.get("backend")
+        backend = "ibmq_qasm_simulator"
+        # token= request.form.get('token') da inserire nel form
+        token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
         if featureExtraction:
             features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
-            # userpathToPredict = "doPredictionFE.csv"
-        result: dict = classify(pathTrain, pathTest, userpathToPredict, features, token, backend)
-        if result != 0:
-            getClassifiedDataset(result)
-
-        # if result==0 il token non è valido
-        # if result==1 errore su server IBM (comunica errore tramite email)
-        # if result["noBackend"]==True il backend selezionato non è attivo per il token oppure non ce ne sono disponibili di default quindi usa il simulatore
-        # aggiungere controlli per result["noBackend"]==True e result==0 per mostrare gli errori tramite frontend
-
+        app.test_client().post("/classificazioneControl", data=dict(pathTrain=pathTrain, pathTest=pathTest,
+                                                      userpathToPredict=userpathToPredict, features=features, token=token, backend=backend))
     return "ora classifica"
 
 
