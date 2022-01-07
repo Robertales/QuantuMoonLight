@@ -33,10 +33,12 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
         return 0
 
     provider = IBMQ.get_provider(hub='ibm-q')
+    qubit = len(features)
 
     try:
-        if backendSelected:
+        if backendSelected and provider.get_backend(backendSelected).configuration().n_qubits >= qubit:
             print("backend selected:" + str(backendSelected))
+            print("backend qubit:" + str(provider.get_backend(backendSelected).configuration().n_qubits))
             backend = provider.get_backend(backendSelected)  # Specifying Quantum System
         else:
             backend = least_busy(provider.backends(filters=lambda
@@ -47,7 +49,6 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
         backend = provider.get_backend('ibmq_qasm_simulator')
         print("backend selected: simulator")
 
-    qubit = len(features)
     seed = 8192
     shots = 1024
     aqua_globals.random_seed = seed
