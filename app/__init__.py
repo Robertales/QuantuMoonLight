@@ -24,5 +24,6 @@ else:
 from app import routes
 from app.source.utente import UtenteControl
 from app.source.gestione import GestioneControl
+from app.source.validazioneDataset import ValidazioneControl
 from app.source.classificazioneDataset import ClassificazioneControl
 

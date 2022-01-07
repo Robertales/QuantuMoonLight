@@ -39,6 +39,10 @@ def registrationPage():
 def formPage():
     return render_template('formDataset.html')
 
+@app.route('/preprocessingPage')
+def preprocessingPage():
+    return render_template('preprocessing.html')
+
 
 @app.route('/aboutUs')
 def aboutUs():
@@ -66,10 +70,10 @@ def smista():
     numColsFE = 3  # numero di colonne dopo la Feature Extraction con PCA
     print("Feature Extraction: ", featureExtraction)
     # kFold= request.form.get('kFold') da inserire nel form
-    kFold = False
+    kFold = None
     k = 10
     # doQSVM= request.form.get('QSVM') da inserire nel form
-    doQSVM = True
+    doQSVM = False
     # assert isinstance(current_user, User)
     # salvataggiodatabase = Dataset(email_user=current_user.email, name=file.filename, upload_date=datetime.now(),
     #                               path=userpath, simple_split=bool(autosplit), ps=bool(prototypeSelection),
@@ -83,9 +87,9 @@ def smista():
     numCols = utils.numberOfColumns(userpath)
     features = utils.createFeatureList(numCols - 1)
 
-    valida(userpath, userpathTest, autosplit, kFold, k)
-    pathTrain = 'Data_training.csv'  # dataset risultanti dalla validazione
-    pathTest = 'Data_testing.csv'
+    # Validazione
+    app.test_client().post("/validazioneControl", data=dict(userpath=userpath, userpathTest=userpathTest,
+                                                             autosplit=autosplit, kFold=kFold, k=k))
     if kFold:
         return "ora scarica e procedi dalla home specificando quali usare"
 
@@ -143,7 +147,7 @@ def upload(file, file1, file2):
         return 'Il file è troppo grande!'
 
     # Dataset to Predict from form
-    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction1.csv'
+    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction.csv'
     temp = file2.filename
     print("TempDataToPredict: ", temp)
     print("file2: ", file2)
