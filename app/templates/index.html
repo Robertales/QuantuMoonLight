@@ -23,6 +23,29 @@
 </head>
 
 <body>
+<style>
+
+h1 {
+  color: white;
+  font-weight: bold;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+h4{
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+
+}
+div#description{
+    background: -moz-linear-gradient(left, #000080 0%, #4B0082 100%);
+    background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
+    background: linear-gradient(to right, #000080 0%, #4B0082 100%);
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+    position: relative;
+	}
+</style>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <div class="page-wrapper">
 
@@ -36,23 +59,19 @@
     <video id="videoBG" autoplay muted loop width="100%">
         <source src="../static/images/main-slider/stars_1.mp4" type="video/mp4">
     </video>
-</div>
 
-            <div class="descrizioneQML">
-                <p>
+        <div id="description" class=" wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1000ms">
+            <h1 class="text-center">WHAT IS QUANTUMOONLIGHT</h1>
+        </div><br>
+                <h4>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vestibulum massa neque,
                     sit amet ultricies enim venenatis ut. Maecenas consectetur est ligula, sit amet aliquam odio sodales ac.
-                    Vivamus eget tortor odio. Etiam quis tellus blandit, laoreet nisl non, eleifend dui. Curabitur pulvinar eleifend pharetra.</p>
-                    <p>Integer cursus purus eu magna posuere finibus. Fusce tincidunt, nibh sit amet imperdiet imperdiet, arcu ipsum bibendum turpis,
-                        non tincidunt mi ipsum vitae orci. Suspendisse porta elit vel accumsan cursus. Suspendisse ullamcorper ex felis, vel suscipit massa play</p>
+                    Vivamus eget tortor odio. Etiam quis tellus blandit, laoreet nisl non, eleifend dui. Curabitur pulvinar eleifend pharetra.</h4>
+                    <h4>Integer cursus purus eu magna posuere finibus. Fusce tincidunt, nibh sit amet imperdiet imperdiet, arcu ipsum bibendum turpis,
+                        non tincidunt mi ipsum vitae orci. Suspendisse porta elit vel accumsan cursus. Suspendisse ullamcorper ex felis, vel suscipit massa play</h4>
 
-            </div>
             {% endblock %}
-            <!-- Main Slider -->
-   <!-- <div class="gif">
-        <video  autoplay controls loop><source src="></video>
-    </div> -->
-
+            </div>
     <!-- Container element -->
     </div>
 </body>

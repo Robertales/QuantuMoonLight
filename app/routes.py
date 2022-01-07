@@ -39,6 +39,10 @@ def registrationPage():
 def formPage():
     return render_template('formDataset.html')
 
+@app.route('/preprocessingPage')
+def preprocessingPage():
+    return render_template('preprocessing.html')
+
 
 @app.route('/aboutUs')
 def aboutUs():
