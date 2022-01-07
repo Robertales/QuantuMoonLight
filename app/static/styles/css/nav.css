@@ -36,8 +36,8 @@
 
 .navbar-dark .nav-item .nav-link {
   color: #fff;
-  padding-right: 5em;
-  padding-left: 5em ;
+  padding-right: 2em;
+  padding-left: 2em ;
 }
 
 .navbar-grad {
@@ -45,16 +45,13 @@
     background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
     background: linear-gradient(to right, #000080 0%, #4B0082 100%);
     color: #fff;
-    padding-left: 5em;
-    padding-right: 5em;
+    padding-left: 2em;
+    padding-right: 2em;
 }
 
 .navbar-dark .nav-item .nav-link:hover {
   overflow: hidden;
-  transition: all 0.6s ease;
   color: #fff;
-  padding-left: 5em;
-  padding-right: 5em;
 }
 
 .fa-li {
