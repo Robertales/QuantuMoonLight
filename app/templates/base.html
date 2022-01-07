@@ -42,6 +42,10 @@
         <li class="nav-item">
           <a class="nav-link" href="#">BLOG</a>
         </li>
+          {% if current_user.is_authenticated %}
+           <li class="nav-item">
+          <a class="nav-link" href="#">Ciao,{{current_user.username}}</a>
+          {% endif %}
       </ul>
       <!-- Left links -->
     </div>
