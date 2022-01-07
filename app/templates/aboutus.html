@@ -13,16 +13,31 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+<style>
+  div#aboutus{
+    background: -moz-linear-gradient(left, #000080 0%, #4B0082 100%);
+    background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
+    background: linear-gradient(to right, #000080 0%, #4B0082 100%);
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+	}
+
+  #text{
+    color: white;
+  }
+
+</style>
 <!-- NAVBAR -->
             {% extends 'base.html' %}
             {% block content %}
 
-<br>
+
 <!-- ABOUT US SECTION -->
 <div>
-  <h2 class="font-weight-bold mb-2">About Us</h2>
-  <p class="font-italic text-muted mb-4">QuantuMoonLight Managers & Members</p>
-
+  <div id="aboutus">
+      <h2 id="text" class="text-center font-weight-bold mb-2">ABOUT US</h2>
+      <p class="font-italic mb-4 text-center" id="text">QuantuMoonLight Managers & Members</p>
+  </div><br>
   <div class="row pb-5 mb-4">
     <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
       <!-- Card-->
