@@ -1,5 +1,4 @@
 from flask import request
-
 from app import app
 from app.source.utils import addAttribute
 from app.source.validazioneDataset import train_testSplit
