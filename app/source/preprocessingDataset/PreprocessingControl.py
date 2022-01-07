@@ -10,7 +10,8 @@ def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict:str
     This function is going to preprocess a given Dataset with prototypeSelection or featureExtraction
 
     :param userpath: string that points to the location of the dataset to be preprocessed
-    :param prototypeSelection: boolean flag that indicated whether the user wants to execute a prototype Selection or not
+    :param prototypeSelection: boolean flag that indicated whether the user wants to execute a prototypeSelection or not
+    :param userpathToPredict: string that points to the location of the dataset to be predicted
     :param featureExtraction: boolean flag that indicated whether the user wants to execute a feature Extraction or not
     :param numRawsPS: number of rows the prototype selection should reduce the dataset to
     :param numColsFE: number of columns the feature extraction should reduce the dataset to
@@ -29,9 +30,9 @@ def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict:str
         print("I'm doing Prototype Selection ...")
 
         callPS.callPrototypeSelection('Data_training.csv', numRawsPS)  # crea 'reducedTrainingPS.csv'
-        addAttribute.addAttribute('reducedTrainingPS.csv',
-                                  'featureDataset.csv')  # modifica 'featureDataset.csv' con le istanze create da 'reducedTrainingPS.csv'
-        aggId.addId('featureDataset.csv', 'DataSetTrainPreprocessato.csv')
+        # addAttribute.addAttribute('reducedTrainingPS.csv', 'featureDataset.csv')  # modifica 'featureDataset.csv'
+        # con le istanze create da 'reducedTrainingPS.csv'
+        aggId.addId('reducedTrainingPS.csv', 'DataSetTrainPreprocessato.csv')
         aggId.addId('Data_testing.csv', 'DataSetTestPreprocessato.csv')
 
     # FE with PCA
@@ -60,7 +61,8 @@ def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict:str
         featureExtractionPCA.callFeatureExtraction('reducedTrainingPS_attribute.csv', 'yourPCA_Train.csv',
                                                    featuresLabels,
                                                    numColsFE)  # effettua FE su Data_Training e genera yourPCA_Train.csv
-        featureExtractionPCA.callFeatureExtraction('Data_testing.csv', 'yourPCA_Test.csv', featuresLabels,
+        featureExtractionPCA.callFeatureExtraction('Data_testing.csv', 'yourPCA_Test.csv',
+                                                   featuresLabels,
                                                    numColsFE)  # effettua FE su Data_testing e genera yourPCA_Test.csv
         # Aggiunge ID, features e label al Dataset Train
         addClass.addClassPCAtraining('Data_training.csv', 'DataSetTrainPreprocessato.csv', numColsFE)
@@ -77,7 +79,7 @@ def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict:str
         for x in range(1, utils.numberOfColumns(userpath)):
             stringa = "feature{},".format(x)
             featureString += stringa
-        featureString += ("labels\r")
+        featureString += "labels\r"
         h.write(featureString)
         g = open(userpathToPredict, "r")
         contents = g.read()
@@ -87,5 +89,11 @@ def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict:str
 
         featureExtractionPCA.extractFeatureForPrediction("doPredictionFeatured.csv", 'doPredictionFE.csv', numColsFE)
         os.remove("doPredictionFeatured.csv")
+
+    if os.path.exists("TestPS_500_0.15_0.8_5.txt"):
+        os.remove("TestPS_500_0.15_0.8_5.txt")
+    if os.path.exists("TestPS_500_0.15_0.8_5.xlsx"):
+        os.remove("TestPS_500_0.15_0.8_5.xlsx")
+
 
     return 'DataSetTrainPreprocessato.csv', 'DataSetTestPreprocessato.csv'
