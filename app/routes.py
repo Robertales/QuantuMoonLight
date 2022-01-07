@@ -28,6 +28,7 @@ def homepage():  # put application's code here
 def loginPage():
     return render_template('login.html')
 
+
 @app.route('/SignIn')
 def registrationPage():
     return render_template('registration.html')
@@ -79,7 +80,6 @@ def smista():
     if file1.content_length > 80000000:
         return 'Il file è troppo grande!'
 
-
     # Dataset to Predict from form
     # userpathToPredict = 'app/source/classificazioneDataset/doPrediction1.csv'
     file2 = request.files.get('userfile2')
@@ -122,19 +122,19 @@ def smista():
     token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
     # assert isinstance(current_user, User)
     # salvataggiodatabase = Dataset(email_user=current_user.email, name=file.filename, upload_date=datetime.now(),
-    #                               paths=userpath, simple_split=bool(autosplit), ps=bool(prototypeSelection),
-    #                               fe=bool(featureExtraction), k_fold=bool(kFold),doQSVM=bool(doQSVM))
+    #                               path=userpath, simple_split=bool(autosplit), ps=bool(prototypeSelection),
+    #                               fe=bool(featureExtraction), k_fold=bool(kFold), doQSVM=bool(doQSVM))
     # db.session.add(salvataggiodatabase)
     # db.session.commit()
-    # path = Path.cwd().parents[2] / 'upload_dataset' / current_user.email / salvataggiodatabase.id
-    # if not path.is_dir():
+    # path = Path.cwd()/ 'upload_dataset' / current_user.email / str(salvataggiodatabase.id)
+    # if not path.exists():
     #     path.mkdir()
 
     numCols = utils.numberOfColumns(userpath)
     features = utils.createFeatureList(numCols - 1)
 
     valida(userpath, userpathTest, autosplit, kFold, k)
-    pathTrain = 'Data_training.csv' #dataset risultanti dalla validazione
+    pathTrain = 'Data_training.csv'  # dataset risultanti dalla validazione
     pathTest = 'Data_testing.csv'
     if kFold:
         return "ora scarica e procedi dalla home specificando quali usare"
@@ -153,7 +153,7 @@ def smista():
     if doQSVM:
         if featureExtraction:
             features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
-            #userpathToPredict = "doPredictionFE.csv"
+            # userpathToPredict = "doPredictionFE.csv"
         result: dict = classify(pathTrain, pathTest, userpathToPredict, features, token, backend)
         if result != 0:
             getClassifiedDataset(result)
