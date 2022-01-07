@@ -13,16 +13,31 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+<style>
+  div#aboutus{
+    background: -moz-linear-gradient(left, #000080 0%, #4B0082 100%);
+    background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
+    background: linear-gradient(to right, #000080 0%, #4B0082 100%);
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+	}
+
+  #text{
+    color: white;
+  }
+
+</style>
 <!-- NAVBAR -->
             {% extends 'base.html' %}
             {% block content %}
 
-<br>
+
 <!-- ABOUT US SECTION -->
 <div>
-  <h2 class="font-weight-bold mb-2">About Us</h2>
-  <p class="font-italic text-muted mb-4">QuantuMoonLight Managers & Members</p>
-
+  <div id="aboutus">
+      <h2 id="text" class="text-center font-weight-bold mb-2">ABOUT US</h2>
+      <p class="font-italic mb-4 text-center" id="text">QuantuMoonLight Managers & Members</p>
+  </div><br>
   <div class="row pb-5 mb-4">
     <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
       <!-- Card-->
@@ -31,7 +46,7 @@
           <div class="p-4">
             <h5 class="mb-0 font-weight-bold">Gennaro Alessio Robertazzi</h5>
             <p class="font-italic">Project Manager</p>
-            <a href="mailto:tua1@email.com"><img src="../static/images/icons/envelope.svg" height="30"></a>
+            <a href="mailto:g.robertazzi4@studenti.unisa.it"><img src="../static/images/icons/envelope.svg" height="30"></a>
           </div>
         </div>
       </div>
@@ -44,7 +59,7 @@
           <div class="p-4">
             <h5 class="mb-0 font-weight-bold">Gabriele Vassallo</h5>
             <p class="font-italic">Project Manager</p>
-              <a href="mailto:tua1@email.com"><img src="../static/images/icons/envelope.svg" height="30"></a>
+              <a href="mailto:g.vassallo13@studenti.unisa.it"><img src="../static/images/icons/envelope.svg" height="30"></a>
           </div>
         </div>
       </div>
@@ -56,7 +71,7 @@
           <div class="p-4">
             <h5 class="mb-0 font-weight-bold">Antonio La Marca</h5>
             <p class="font-italic">Team Member</p>
-            <a href="mailto:tua1@email.com"><img src="../static/images/icons/envelope.svg" height="30"></a>
+            <a href="mailto:a.lamarca24@studenti.unisa.it"><img src="../static/images/icons/envelope.svg" height="30"></a>
           </div>
         </div>
       </div>
@@ -69,7 +84,7 @@
           <div class="p-4">
             <h5 class="mb-0 font-weight-bold">Francesco Amato</h5>
             <p class="font-italic">Team Member</p>
-            <a href="mailto:tua1@email.com"><img src="../static/images/icons/envelope.svg" height="30"></a>
+            <a href="f.amato37@studenti.unisa.it"><img src="../static/images/icons/envelope.svg" height="30"></a>
           </div>
         </div>
       </div>
@@ -83,7 +98,7 @@
           <div class="p-4">
             <h5 class="mb-0 font-weight-bold">Fiorentino Tomeo</h5>
             <p class="font-italic">Team Member</p>
-            <a href="mailto:tua1@email.com"><img src="../static/images/icons/envelope.svg" height="30"></a>
+            <a href="mailto:f.tomeo5@studenti.unisa.it"><img src="../static/images/icons/envelope.svg" height="30"></a>
           </div>
         </div>
       </div>
@@ -96,7 +111,7 @@
           <div class="p-4">
             <h5 class="mb-0 font-weight-bold">Giacomo Cubicciotti</h5>
             <p class="font-italic">Team Member</p>
-            <a href="mailto:tua1@email.com"><img src="../static/images/icons/envelope.svg" height="30"></a>
+            <a href="mailto:g.cubicciotti@studenti.unisa.it"><img src="../static/images/icons/envelope.svg" height="30"></a>
           </div>
         </div>
       </div>
@@ -108,7 +123,7 @@
           <div class="p-4">
             <h5 class="mb-0 font-weight-bold">Gerardo D'Ambola</h5>
             <p class="font-italic">Team Member</p>
-            <a href="mailto:tua1@email.com"><img src="../static/images/icons/envelope.svg" height="30"></a>
+            <a href="mailto:g.dambola@studenti.unisa.it"><img src="../static/images/icons/envelope.svg" height="30"></a>
           </div>
         </div>
       </div>
@@ -121,7 +136,7 @@
           <div class="p-4">
             <h5 class="mb-0 font-weight-bold">Giuseppe Pagano</h5>
             <p class="font-italic">Team Member</p>
-            <a href="mailto:tua1@email.com"><img src="../static/images/icons/envelope.svg" height="30"></a>
+            <a href="mailto:g.pagano45@studenti.unisa.it"><img src="../static/images/icons/envelope.svg" height="30"></a>
           </div>
         </div>
       </div>
@@ -135,7 +150,7 @@
           <div class="p-4">
             <h5 class="mb-0 font-weight-bold">Luca Contrasto</h5>
             <p class="font-italic">Team Member</p>
-            <a href="mailto:tua1@email.com"><img src="../static/images/icons/envelope.svg" height="30"></a>
+            <a href="mailto:l.contrasto@studenti.unisa.it"><img src="../static/images/icons/envelope.svg" height="30"></a>
           </div>
         </div>
       </div>
@@ -148,7 +163,7 @@
           <div class="p-4">
             <h5 class="mb-0 font-weight-bold">Matteo Cicalese</h5>
             <p class="font-italic">Team Member</p>
-            <a href="mailto:tua1@email.com"><img src="../static/images/icons/envelope.svg" height="30"></a>
+            <a href="mailto:m.cicalese18@studenti.unisa.it"><img src="../static/images/icons/envelope.svg" height="30"></a>
           </div>
         </div>
       </div>

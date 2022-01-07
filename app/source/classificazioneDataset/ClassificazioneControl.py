@@ -40,7 +40,7 @@ def classificazioneControl():
         # if result==1 errore su server IBM (comunica errore tramite email)
         # if result["noBackend"]==True il backend selezionato non è attivo per il token oppure non ce ne sono disponibili di default quindi usa il simulatore
         # aggiungere controlli per result["noBackend"]==True e result==0 per mostrare gli errori tramite frontend
-    return "ciao"
+    return result
 
 def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSelected):
     start_time = time.time()

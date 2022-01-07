@@ -39,6 +39,10 @@ def registrationPage():
 def formPage():
     return render_template('formDataset.html')
 
+@app.route('/preprocessingPage')
+def preprocessingPage():
+    return render_template('preprocessing.html')
+
 
 @app.route('/aboutUs')
 def aboutUs():
@@ -143,7 +147,7 @@ def upload(file, file1, file2):
         return 'Il file è troppo grande!'
 
     # Dataset to Predict from form
-    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction1.csv'
+    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction.csv'
     temp = file2.filename
     print("TempDataToPredict: ", temp)
     print("file2: ", file2)
