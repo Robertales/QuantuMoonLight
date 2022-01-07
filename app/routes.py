@@ -143,7 +143,7 @@ def upload(file, file1, file2):
         return 'Il file è troppo grande!'
 
     # Dataset to Predict from form
-    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction1.csv'
+    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction.csv'
     temp = file2.filename
     print("TempDataToPredict: ", temp)
     print("file2: ", file2)
