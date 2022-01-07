@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <title> QUASAR - Quantum Computing and Smart Systems </title>
     <!-- Stylesheets -->
-    <link href="../static/styles/css/bootstrap.css" rel="stylesheet">
     <link href="../static/styles/css/revolution-slider.css" rel="stylesheet">
     <link href="../static/styles/css/style.css" rel="stylesheet">
     <!-- Responsive -->
@@ -118,7 +117,7 @@ h1:before {
                                 <input type="file" id="inputFileTrain" name="userfile" style="display: none">
                                 <input type="text" value="Training Set to upload" class="form-control" id="inputFakeFileTrain" readonly>
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" id="inputFakeBrowseFileTrain">Choose File</button>
+                                    <button class="btn btn-primary" type="button" id="inputFakeBrowseFileTrain">Choose File</button>
                                 </span>
                               </div>
                             </div>
@@ -128,7 +127,7 @@ h1:before {
                                     <input type="file" id="inputFileTest" name="userfile1" style="display: none">
                                     <input type="text" value="Test Set to Upload" class="form-control checkSplitted" id="inputFakeFileTest" readonly>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default checkSplitted" type="button" id="inputFakeBrowseFileTest">Choose File</button>
+                                        <button class="btn btn-primary" type="button" id="inputFakeBrowseFileTest">Choose File</button>
                                     </span>
                                   </div>
                                 </div>
@@ -138,7 +137,7 @@ h1:before {
                                     <input type="file" id="inputFilePrediction" name="userfile2" style="display: none">
                                     <input type="text" value="Prediction Set to Upload" class="form-control checkSplitted" id="inputFakeFilePrediction" readonly>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default checkSplitted" type="button" id="inputFakeBrowseFilePrediction">Choose File</button>
+                                        <button class="btn btn-primary" type="button" id="inputFakeBrowseFilePrediction">Choose File</button>
                                     </span>
                                   </div>
                                 </div>
@@ -160,11 +159,43 @@ h1:before {
                                             <input type="checkbox" id="checkPrototypeSelection" name="reduce1" value="reduceProtypeSelection" > Reduce rows with Prototype Selection
                                         </label>
                                     </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" id="checkQSVM" name="reduce2" value="reduceQSVM"> QSVM
+                                        </label>
+                                    </li>
                                 </ul>
                             <br>
-                                <button type="submit" name="submit"  onclick="openpage()" class="theme-btn btn-style-one mainred hvr-bounce-to-right"><span class="fa fa-database"></span>Upload</button>
+                                <button type="submit" name="submit"  onclick="openpage()" class="btn btn-primary"><span class="fa fa-database"> </span> Upload</button>
+                            <p>
+                                <br><a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    Advanced Options
+                                </a>
+                            </p>
+                            <div class="collapse" id="collapseExample">
+                                <div class="card card-body">
+                                     <ul>
+                                    <li>
+                                           <label><input type="radio" id="checkKFold" class="AdvancedOption" name="gp1" value="testKFold" >  K-fold Cross Validation </label>
+                                            <input type="number" max="10000" value="10" id="kFoldValue" maxlength="2em"><label>Insert k parameter</label>
 
+                                        <!-- i radio button non funzionano -->
+                                        <!-- controllare i mockup, advanced option, segui quello + chiedere a giacomo per il menu AdvancedOption -->
 
+                                            <label>
+                                                <input type="radio" class="AdvancedOption" id="checkSimpleTrainTest" name="gp2" value="testKFold" >  Simple Train-Test Split
+                                            </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" id="checkAutoDetectNR" name="autoDetect" value="autoDetect">  Autodetect nr variable reduction
+                                        </label> <br>
+                                        <input type="number" max="10000" value="10" id="nrColumns"><label> insert nr of columns to reduce</label><br>
+                                        <input type="number" max="10000" value="10" id="nrRows"><label> insert nr of rows to reduce</label>
+                                    </li>
+                                </ul>
+                                </div>
+                            </div>
                         </form>
 
                             <script>
