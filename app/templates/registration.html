@@ -19,18 +19,18 @@
       <a href={{url_for("homepage")}}><img src="../static/images/logos/Logo_SenzaScritta.png" id="icon" alt="Logo"></a>
     </div>
 
-    <!-- Login Form -->
+    <!-- Registration Form -->
       <form action="/signup" method="post">
-      <input type="text" id="login" class="fadeIn second" name="email" placeholder="E-mail">
-      <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password">
-      <input type="text" id="username" class="fadeIn second" name="username" placeholder="Username">
+      <input type="text" id="login" class="fadeIn second" name="email" placeholder="E-mail" required>
+      <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password" required>
+      <input type="text" id="username" class="fadeIn second" name="username" placeholder="Username" required>
       <input type="text" id="nome" class="fadeIn third" name="nome" placeholder="Name">
       <input type="text" id="cognome" class="fadeIn second" name="cognome" placeholder="Surname">
       <input type="text" id="token" class="fadeIn third" name="token" placeholder="Token IBM">
       <input type="submit" class="fadeIn fourth" value="Sign In">
     </form>
 
-    <!-- Registration -->
+    <!-- Return to Log In page -->
     <div id="formFooter">
       <a class="underlineHover" href={{url_for("loginPage")}}>Login Here</a>
       <br>
