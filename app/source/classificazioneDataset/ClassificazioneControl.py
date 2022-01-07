@@ -1,3 +1,4 @@
+import os.path
 import time
 import csv
 import pathlib
@@ -16,6 +17,7 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.utils import formatdate
 from email import encoders
+from app.source.utils import utils
 from sklearn.metrics import recall_score, precision_score
 from flask_login import current_user
 
@@ -49,14 +51,16 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     seed = 8192
     shots = 1024
     aqua_globals.random_seed = seed
-    feature_dim = len(features)  # number of quibits
     # creating dataset
     training_input, test_input = loadDataset(pathTrain, pathTest, features, label='labels')
     pathDoPrediction = pathlib.Path(__file__).cwd()
-    pathDoPrediction = pathDoPrediction / userpathToPredict
+    if(os.path.exists("doPredictionFE.csv")):
+        pathDoPrediction = pathDoPrediction / "doPredictionFE.csv"
+    else:
+        pathDoPrediction = pathDoPrediction / userpathToPredict
     predizione = np.array(list(csv.reader(open(pathDoPrediction.__str__(), "r"), delimiter=","))).astype("float")
 
-    feature_map = ZZFeatureMap(feature_dimension=feature_dim, reps=2, entanglement='linear')
+    feature_map = ZZFeatureMap(feature_dimension=qubit, reps=2, entanglement='linear')
     print(feature_map)
 
     qsvm = QSVM(feature_map, training_input, test_input, predizione, multiclass_extension=AllPairs())
@@ -79,13 +83,12 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
         print("{} : {}".format(k, v))
 
     predicted_labels = result["predicted_labels"]
-    predicted_classes = result["predicted_classes"]
 
-    classifiedFile = open("upload_dataset\\classifiedFile.csv", "w")
-    predictionFile = open("app\\source\\classificazioneDataset\\doPrediction1.csv", "r")
+    classifiedFile = open( pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv", "w")
+    predictionFile = open(userpathToPredict, "r")
     rows = predictionFile.readlines()
 
-    for j in range(1, qubit):
+    for j in range(1, utils.numberOfColumns(userpathToPredict)+1):
         classifiedFile.write("feature" + str(j) + ",")
     classifiedFile.write("label\n")
     i = 0
@@ -102,7 +105,7 @@ def plot(dataset_classificato):
     return dataset_classificato
 
 
-def loadDataset(training_path, testing_path, features, label, gaussian=True, minmax=False):
+def loadDataset(training_path, testing_path, features, label):
     """
     Loads the data, normalizes it and returns it in the following format:
     {class_0: points_0, class_1:points_1, ...}
@@ -146,7 +149,7 @@ def getClassifiedDataset(result):
         msg.attach(MIMEText("Success ratio: " + "{:.2%}".format(successRatio) + "\n"))
         msg.attach(MIMEText("Total time elapsed:" + result.get("totalTime") + "s"))
 
-        file = "upload_dataset\\classifiedFile.csv"
+        file = pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv"
         attach_file = open(file, "rb")
         payload = MIMEBase('application', "octet-stream")
         payload.set_payload(attach_file.read())

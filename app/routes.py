@@ -117,7 +117,7 @@ def smista():
     kFold = False
     k = 10
     # doQSVM= request.form.get('QSVM') da inserire nel form
-    doQSVM = False
+    doQSVM = True
     # token= request.form.get('token') da inserire nel form
     token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
     # assert isinstance(current_user, User)
@@ -134,7 +134,7 @@ def smista():
     features = utils.createFeatureList(numCols - 1)
 
     valida(userpath, userpathTest, autosplit, kFold, k)
-    pathTrain = 'Data_training.csv'
+    pathTrain = 'Data_training.csv' #dataset risultanti dalla validazione
     pathTest = 'Data_testing.csv'
     if kFold:
         return "ora scarica e procedi dalla home specificando quali usare"
@@ -153,7 +153,7 @@ def smista():
     if doQSVM:
         if featureExtraction:
             features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
-            userpathToPredict = "doPredictionFE.csv"
+            #userpathToPredict = "doPredictionFE.csv"
         result: dict = classify(pathTrain, pathTest, userpathToPredict, features, token, backend)
         if result != 0:
             getClassifiedDataset(result)
