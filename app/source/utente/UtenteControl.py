@@ -17,10 +17,12 @@ Reads the user credentials from a http request and adds him to the project datab
     password = request.form.get('password')
     hashed_password = hashlib.sha512(password.encode()).hexdigest()
     token = request.form.get('token')
+    if token.__eq__(""):
+        token = None
     username = request.form.get('username')
-    nome = request.form.get('nome')
+    Name = request.form.get('nome')
     cognome = request.form.get('cognome')
-    utente = User(email=email, password=hashed_password, token=token, username=username, name=nome, surname=cognome)
+    utente = User(email=email, password=hashed_password, token=token, username=username, name=Name, surname=cognome)
     db.session.add(utente)
     db.session.commit()
     path = Path(__file__).parents[3] / 'upload_dataset' / email
