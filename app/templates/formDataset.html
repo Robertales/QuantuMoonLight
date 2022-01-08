@@ -13,7 +13,8 @@
     <link href="../static/styles/css/responsive.css" rel="stylesheet">
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <!--[if lt IE 9]>
-    <script src="../../static/js/respond.js"></script><![endif]-->
+    <script src="../../static/js/respond.js"></script>
+    <script src="../static/js/script.js"></script><![endif]-->
     <link href="../static/styles/css/nav.css" rel="stylesheet">
 </head>
 
@@ -114,8 +115,9 @@ h1:before {
                             <br>
                             <div class="form-group">
                               <div class="input-group">
-                                <input type="file" id="inputFileTrain" name="userfile" style="display: none">
+                                <input type="file" id="inputFileTrain" name="userfile" style="display: none" required>
                                 <input type="text" value="Training Set to upload" class="form-control" id="inputFakeFileTrain" readonly>
+
                                 <span class="input-group-btn">
                                     <button class="btn btn-primary" type="button" id="inputFakeBrowseFileTrain">Choose File</button>
                                 </span>
@@ -166,7 +168,7 @@ h1:before {
                                     </li>
                                 </ul>
                             <br>
-                                <button type="submit" name="submit"  onclick="openpage()" class="btn btn-primary"><span class="fa fa-database"> </span> Upload</button>
+                                <button type="submit" name="submitForm"  onclick="btnValidation()" class="btn btn-primary" id="submitForm"><span class="fa fa-database"> </span> Upload</button>
                             <p>
                                 <br><a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                                     Advanced Options
@@ -197,13 +199,6 @@ h1:before {
                                 </div>
                             </div>
                         </form>
-
-                            <script>
-                            function openpage() {
-                              window.open("");
-                            }
-                            </script>
-
                             <br>
                     </div>
                     <!--result form-->
