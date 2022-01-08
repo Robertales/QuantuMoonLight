@@ -24,6 +24,7 @@ from flask import request
 from sklearn.metrics import recall_score, precision_score
 
 @app.route('/classificazioneControl', methods=['POST'])
+#@login_required
 def classificazioneControl():
     """
 
