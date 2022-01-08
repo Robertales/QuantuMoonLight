@@ -1,11 +1,45 @@
 import os
-import pathlib
+from flask import request
+from app import app
 from app.source.utils import utils, addAttribute
 from app.source.preprocessingDataset import addClass, callPS, aggId, featureExtractionPCA
 
 
-def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict:str, featureExtraction: bool, numRawsPS: int, numColsFE: int,
-                  doQSVM: bool):
+@app.route('/preprocessingControl', methods=['POST'])
+def preprocessingControl():
+    userpath = request.form.get("userpath")
+    userpathToPredict = request.form.get("userpathToPredict")
+    prototypeSelection = bool(request.form.get("prototypeSelection"))
+    featureExtraction = bool(request.form.get("featureExtraction"))
+    numRawsPS = int(request.form.get("numRawsPS"))
+    numColsFE = int(request.form.get("numColsFE"))
+    doQSVM = bool(request.form.get("doQSVM"))
+
+    if not featureExtraction and not prototypeSelection and doQSVM:
+        # Se l'utente non vuole preprocessare il dataset ma vuole fare QSVM,
+        # allora qui creo i dataset da classificare aggiungendo la colonna ID
+        aggId.addId('Data_training.csv', 'DataSetTrainPreprocessato.csv')
+        aggId.addId('Data_testing.csv', 'DataSetTestPreprocessato.csv')
+        print("Exiting from preprocessingControl with NoPS and NoFE")
+        return 'DataSetTrainPreprocessato.csv', 'DataSetTestPreprocessato.csv'
+
+    preprocessing(userpath, userpathToPredict, prototypeSelection, featureExtraction, numRawsPS, numColsFE, doQSVM)
+
+    # Cancello i file di supporto al preprocessing
+    if os.path.exists("TestPS_500_0.15_0.8_5.txt"):
+        os.remove("TestPS_500_0.15_0.8_5.txt")
+    if os.path.exists("TestPS_500_0.15_0.8_5.xlsx"):
+        os.remove("TestPS_500_0.15_0.8_5.xlsx")
+    if os.path.exists("IdPCADataset.csv"):
+        os.remove("IdPCADataset.csv")
+    if os.path.exists("IdPCADatasetTrain.csv"):
+        os.remove("IdPCADatasetTrain.csv")
+
+    return "Exiting from preprocessingControl"
+
+
+def preprocessing(userpath: str, userpathToPredict: str, prototypeSelection: bool, featureExtraction: bool,
+                  numRawsPS: int, numColsFE: int, doQSVM: bool):
     """
     This function is going to preprocess a given Dataset with prototypeSelection or featureExtraction
 
@@ -30,9 +64,9 @@ def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict:str
         print("I'm doing Prototype Selection ...")
 
         callPS.callPrototypeSelection('Data_training.csv', numRawsPS)  # crea 'reducedTrainingPS.csv'
-        # addAttribute.addAttribute('reducedTrainingPS.csv', 'featureDataset.csv')  # modifica 'featureDataset.csv'
+        addAttribute.addAttribute('reducedTrainingPS.csv', 'featureDataset.csv')  # modifica 'featureDataset.csv'
         # con le istanze create da 'reducedTrainingPS.csv'
-        aggId.addId('reducedTrainingPS.csv', 'DataSetTrainPreprocessato.csv')
+        aggId.addId('featureDataset.csv', 'DataSetTrainPreprocessato.csv')
         aggId.addId('Data_testing.csv', 'DataSetTestPreprocessato.csv')
 
     # FE with PCA
@@ -89,11 +123,5 @@ def preprocessing(userpath: str, prototypeSelection: bool, userpathToPredict:str
 
         featureExtractionPCA.extractFeatureForPrediction("doPredictionFeatured.csv", 'doPredictionFE.csv', numColsFE)
         os.remove("doPredictionFeatured.csv")
-
-    if os.path.exists("TestPS_500_0.15_0.8_5.txt"):
-        os.remove("TestPS_500_0.15_0.8_5.txt")
-    if os.path.exists("TestPS_500_0.15_0.8_5.xlsx"):
-        os.remove("TestPS_500_0.15_0.8_5.xlsx")
-
 
     return 'DataSetTrainPreprocessato.csv', 'DataSetTestPreprocessato.csv'

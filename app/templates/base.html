@@ -5,13 +5,13 @@
     <title>QuantuMoonLight</title>
     <link href="../static/styles/css/style.css" rel="stylesheet">
     <link href="../static/styles/css/nav.css" rel="stylesheet">
+    <link href="../static/styles/css/revolution-slider.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="../static/styles/css/style.css" rel="stylesheet">
 </head>
 <body>
   <header>
     <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-grad bg-dark">
+<nav class="navbar navbar-expand-lg navbar-grad navbar-dark bg-dark">
   <!-- Container wrapper -->
   <div class="container-fluid">
     <!-- Navbar brand -->
@@ -33,10 +33,10 @@
           <a class="nav-link" href={{url_for("homepage")}}>HOME</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href={{url_for("formPage")}}>PREPROCESSING</a>
+          <a class="nav-link" href={{url_for("formPage")}}>QUANTUM ML</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">QUANTUM ML</a>
+          <a class="nav-link" href="{{url_for("preprocessingPage")}}">PREPROCESSING</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">BLOG</a>
@@ -88,7 +88,7 @@
                         <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="400ms" data-wow-duration="1500ms">
                             <div class="footer-widget support-widget">
                                 <h3>Useful Links</h3>
-                                <ul class="links">
+                                <ul>
                                     <li><a href="https://www.unisa.it/" target="_blank">University of Salerno</a></li>
                                     <li><a href={{url_for("aboutUs")}}>About us</a></li>
                                 </ul>

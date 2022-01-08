@@ -1,21 +1,7 @@
 import pathlib
-from datetime import datetime
-from pathlib import Path
-
-from flask_login import current_user
-
-from app import models
 from flask import render_template, request
-import subprocess as sp
-from app import app, db
+from app import app
 from app.source.utils import utils
-from app.models import Dataset
-from app.models import User
-from app.source.utils import getlog as log
-from app.source.validazioneDataset.ValidazioneControl import valida
-from app.source.preprocessingDataset.PreprocessingControl import preprocessing
-from app.source.classificazioneDataset.ClassificazioneControl import classify
-from app.source.classificazioneDataset.ClassificazioneControl import getClassifiedDataset
 
 
 @app.route('/')
@@ -39,6 +25,11 @@ def formPage():
     return render_template('formDataset.html')
 
 
+@app.route('/preprocessingPage')
+def preprocessingPage():
+    return render_template('preprocessing.html')
+
+
 @app.route('/aboutUs')
 def aboutUs():
     return render_template('aboutus.html')
@@ -46,13 +37,88 @@ def aboutUs():
 
 @app.route('/formcontrol', methods=['GET', 'POST'])
 def smista():
+    print("\nIn smista carico le richieste dal form...")
+    dataset_train = request.files.get('userfile')
+    dataset_test = request.files.get('userfile1')
+    dataset_prediction = request.files.get('userfile2')
+    paths = upload(dataset_train, dataset_test, dataset_prediction)
+    userpath = paths[0]
+    userpathTest = paths[1]
+    userpathToPredict = paths[2]
+    autosplit = request.form.get('test')
+    print("AutoSplit: ", autosplit)
+    prototypeSelection = request.form.get('reduce1')
+    print("Prototype Selection: ", prototypeSelection)
+    featureExtraction = request.form.get('reduce')
+    print("Feature Extraction: ", featureExtraction)
+    numRawsPS = 10  # numero di righe dopo la Prototype Selection con GA da inserire nel form
+    print("numRawsPS:  ", numRawsPS)
+    numColsFE = 2  # numero di colonne dopo la Feature Extraction con PCA da inserire nel form
+    print("numColsFE: ", numColsFE)
+    # kFold= request.form.get('kFold') da inserire nel form
+    kFold = None
+    print("kFold: ", kFold)
+    k = 10
+    print("k: ", k)
+    # doQSVM= request.form.get('QSVM') da inserire nel form
+    # Se si vuole forzare a non eseguire classificazione allora settare a None (non a False, che diventerebbe True)
+    doQSVM = True
+    print("doQSVM: ", doQSVM)
+
+    # assert isinstance(current_user, User)
+    # salvataggiodatabase = Dataset(email_user=current_user.email, name=file.filename, upload_date=datetime.now(),
+    #                               path=userpath, simple_split=bool(autosplit), ps=bool(prototypeSelection),
+    #                               fe=bool(featureExtraction), k_fold=bool(kFold), doQSVM=bool(doQSVM))
+    # db.session.add(salvataggiodatabase)
+    # db.session.commit()
+    # path = Path.cwd()/ 'upload_dataset' / current_user.email / str(salvataggiodatabase.id)
+    # if not path.exists():
+    #     path.mkdir()
+
+    # Validazione
+    print("\nIn validazione...")
+    app.test_client().post("/validazioneControl", data=dict(userpath=userpath, userpathTest=userpathTest,
+                                                            autosplit=autosplit, kFold=kFold, k=k))
+    if kFold:
+        return "ora scarica e procedi dalla home specificando quali usare"
+
+    # Preprocessing
+    print("\nIn preprocessing...")
+    app.test_client().post("/preprocessingControl", data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
+                                                              prototypeSelection=prototypeSelection,
+                                                              featureExtraction=featureExtraction,
+                                                              numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+    pathTrain = 'DataSetTrainPreprocessato.csv'  # DataSet Train ready to be classified
+    pathTest = 'DataSetTestPreprocessato.csv'  # DataSet Test ready to be classified
+
+    # Classificazione
+    if doQSVM:
+        print("\nIn classificazione...")
+        backend = request.form.get("backend")
+        backend = "ibmq_qasm_simulator"
+        # token= request.form.get('token') da inserire nel form
+        token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
+        if featureExtraction:
+            features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
+        else:
+            features = utils.createFeatureList(utils.numberOfColumns(userpath) - 1)
+        app.test_client().post("/classificazioneControl", data=dict(pathTrain=pathTrain, pathTest=pathTest,
+                                                                    userpathToPredict=userpathToPredict,
+                                                                    features=features, token=token, backend=backend))
+
+    print("\n\nSmista ha finito! To the Moon!")
+
+    return "ora classifica"
+
+
+def upload(file, file1, file2):
     print('Request send on ')
     ROOT_DIR = pathlib.Path(__file__).cwd()
     ext_ok = ['txt', 'csv', 'data']
     # log.log()
 
     # Dataset Train from form
-    file = request.files.get('userfile')
+
     temp = file.filename
     extension = temp.split('.')[-1]
     if not ext_ok.__contains__(extension):
@@ -67,12 +133,11 @@ def smista():
         return 'Il file è troppo grande!'
 
     # Dataset Test from form
-    file1 = request.files.get('userfile1')
     temp = file1.filename
     extension = temp.split('.')[-1]
     userpathTest = ''
     if file1.filename != "" and not ext_ok.__contains__(extension):
-        print(file1.filename)
+        # print(file1.filename)
         return 'Il file Dataset Test ha un estensione non ammessa!'
     if file1.filename != "":
         userpathTest = uploaddir / file1.filename
@@ -81,11 +146,10 @@ def smista():
         return 'Il file è troppo grande!'
 
     # Dataset to Predict from form
-    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction1.csv'
-    file2 = request.files.get('userfile2')
+    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction.csv'
     temp = file2.filename
-    print("TempDataToPredict: ", temp)
-    print("file2: ", file2)
+    # print("TempDataToPredict: ", temp)
+    # print("file2: ", file2)
     extension = temp.split('.')[-1]
     userpathToPredict = ''
     if file2.filename != "" and not ext_ok.__contains__(extension):
@@ -95,72 +159,11 @@ def smista():
         file2.save(userpathToPredict)
     if file2.content_length > 80000000:
         return 'Il file è troppo grande!'
-
-    prototypeSelection = request.form.get('reduce1')
-    featureExtraction = request.form.get('reduce')
-    autosplit = request.form.get('test')
-
-    print("Userpath: ", userpath)
-    print("Dataset: ", file.filename)
+    print("UserpathTrain: ", userpath)
+    # print("DatasetTrain: ", file.filename)
     print("UserpathTest: ", userpathTest)
-    print("DatasetTest: ", file1.filename)
+    # print("DatasetTest: ", file1.filename)
     print("UserpathToPredict: ", userpathToPredict)
-    print("DatasetToPredict: ", file2.filename)
-    # Recupero le impostazioni dell'utente, cioè
-    # quali operazioni vuole effettuare e, in caso di QSVM, anche il token
-    print("AutoSplit: ", autosplit)
-    numRawsPS = 50  # numero di righe dopo la Prototype Selection con GA
-    print("Prototype Selection: ", prototypeSelection)
-    numColsFE = 3  # numero di colonne dopo la Feature Extraction con PCA
-    print("Feature Extraction: ", featureExtraction)
-    # kFold= request.form.get('kFold') da inserire nel form
-    kFold = False
-    k = 10
-    # doQSVM= request.form.get('QSVM') da inserire nel form
-    doQSVM = True
-    # token= request.form.get('token') da inserire nel form
-    token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
-    # assert isinstance(current_user, User)
-    # salvataggiodatabase = Dataset(email_user=current_user.email, name=file.filename, upload_date=datetime.now(),
-    #                               path=userpath, simple_split=bool(autosplit), ps=bool(prototypeSelection),
-    #                               fe=bool(featureExtraction), k_fold=bool(kFold), doQSVM=bool(doQSVM))
-    # db.session.add(salvataggiodatabase)
-    # db.session.commit()
-    # path = Path.cwd()/ 'upload_dataset' / current_user.email / str(salvataggiodatabase.id)
-    # if not path.exists():
-    #     path.mkdir()
-
-    numCols = utils.numberOfColumns(userpath)
-    features = utils.createFeatureList(numCols - 1)
-
-    valida(userpath, userpathTest, autosplit, kFold, k)
-    pathTrain = 'Data_training.csv'  # dataset risultanti dalla validazione
-    pathTest = 'Data_testing.csv'
-    if kFold:
-        return "ora scarica e procedi dalla home specificando quali usare"
-
-    # Preprocessing
-    if prototypeSelection or featureExtraction:
-        preprocessing(userpath, prototypeSelection, userpathToPredict, featureExtraction, numRawsPS, numColsFE, doQSVM)
-        pathTrain = 'DataSetTrainPreprocessato.csv'
-        pathTest = 'DataSetTestPreprocessato.csv'
-
-    # Classificazione
-    # backend = request.form.get("backend")
-    backend = 'ibmq_jakarta'
-    backend = 'ibmq_qasm_simulator'
-
-    if doQSVM:
-        if featureExtraction:
-            features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
-            # userpathToPredict = "doPredictionFE.csv"
-        result: dict = classify(pathTrain, pathTest, userpathToPredict, features, token, backend)
-        if result != 0:
-            getClassifiedDataset(result)
-
-        # if result==0 il token non è valido
-        # if result==1 errore su server IBM (comunica errore tramite email)
-        # if result["noBackend"]==True il backend selezionato non è attivo per il token oppure non ce ne sono disponibili di default quindi usa il simulatore
-        # aggiungere controlli per result["noBackend"]==True e result==0 per mostrare gli errori tramite frontend
-
-    return "ora classifica"
+    # print("DatasetToPredict: ", file2.filename)
+    paths = [userpath, userpathTest, userpathToPredict]
+    return paths
