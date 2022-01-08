@@ -4,7 +4,6 @@ import csv
 import pathlib
 import numpy as np
 import pandas as pd
-from flask_login import current_user
 from qiskit import IBMQ
 from qiskit.providers.ibmq import least_busy
 from qiskit.aqua import QuantumInstance, aqua_globals
@@ -22,13 +21,10 @@ from app.source.utils import utils
 from app import app
 from flask import request
 from sklearn.metrics import recall_score, precision_score
+from flask_login import current_user
 
 @app.route('/classificazioneControl', methods=['POST'])
 def classificazioneControl():
-    """
-
-    :return:
-    """
     pathTrain=request.form.get("pathTrain")
     pathTest = request.form.get("pathTest")
     userpathToPredict=request.form.get("userpathToPredict")
@@ -44,21 +40,9 @@ def classificazioneControl():
         # if result==1 errore su server IBM (comunica errore tramite email)
         # if result["noBackend"]==True il backend selezionato non è attivo per il token oppure non ce ne sono disponibili di default quindi usa il simulatore
         # aggiungere controlli per result["noBackend"]==True e result==0 per mostrare gli errori tramite frontend
-    return "result"
+    return result
 
 def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSelected):
-
-    """
-
-    :param pathTrain: path del file di training output delle fasi precedenti
-    :param pathTest: path del file di testing output delle fasi precedenti
-    :param userpathToPredict: path del file di predizione output delle fasi precedenti
-    :param features: lista di features per qsvm
-    :param token: token dell'utente
-    :param backendSelected: backend selezionato dal form(se vuoto utilizza backend di default)
-    :return: dict contenente informazioni relative alla classificazione
-    """
-
     start_time = time.time()
     noBackend = False
 
@@ -90,7 +74,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     seed = 8192
     shots = 1024
     aqua_globals.random_seed = seed
-
+    # creating dataset
     training_input, test_input = loadDataset(pathTrain, pathTest, features, label='labels')
     pathDoPrediction = pathlib.Path(__file__).cwd()
     if(os.path.exists("doPredictionFE.csv")):
@@ -98,7 +82,6 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     else:
         pathDoPrediction = pathDoPrediction / userpathToPredict
     predizione = np.array(list(csv.reader(open(pathDoPrediction.__str__(), "r"), delimiter=","))).astype("float")
-    #predizione= np.array(list(csv.reader(open(pathlib.Path(__file__).cwd() / "testingFiles" / "doPredictionFE.csv", "r"), delimiter=","))).astype("float")   TESTING
 
     feature_map = ZZFeatureMap(feature_dimension=qubit, reps=2, entanglement='linear')
     print(feature_map)
@@ -125,7 +108,6 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     predicted_labels = result["predicted_labels"]
 
     classifiedFile = open( pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv", "w")
-    #classifiedFile = open("C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv", "w")  TESTING
     predictionFile = open(userpathToPredict, "r")
     rows = predictionFile.readlines()
 
@@ -168,8 +150,7 @@ def loadDataset(training_path, testing_path, features, label):
 def getClassifiedDataset(result):
     """
 
-    :param result: dict risultante dalla funzione classify dal quale si prendono i dati da inviare per email
-    :return:
+    :type result: dict
     """
     msg = MIMEMultipart()
     # assert isinstance(current_user, User)
@@ -192,7 +173,6 @@ def getClassifiedDataset(result):
         msg.attach(MIMEText("Total time elapsed:" + result.get("totalTime") + "s"))
 
         file = pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv"
-        #file = "C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv"    TESTING
         attach_file = open(file, "rb")
         payload = MIMEBase('application', "octet-stream")
         payload.set_payload(attach_file.read())
@@ -205,4 +185,3 @@ def getClassifiedDataset(result):
     server.login("quantumoonlight@gmail.com", "Quantum123?")
     server.send_message(msg)
     server.close()
-    return "email inviata"
