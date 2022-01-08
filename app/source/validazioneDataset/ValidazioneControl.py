@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, Response
 from app import app
 from app.source.utils import addAttribute
 from app.source.validazioneDataset import train_testSplit
@@ -21,17 +21,20 @@ def validazioneControl():
     if kFold and k < 2:
         # si dovrebbe anche controllare che k non sia maggiore nel numero di righe del dataset;
         # il design goal della robustezza ha priorità basse, dunque evitiamo il controllo
-        return "impossibile eseguire kfold validation se k<2!"
+        print("impossibile eseguire kfold validation se k<2!")
+        return Response(status=400)
 
     if simpleSplit and kFold:
-        return "impossibile eseguirle entrambe!"
+        print("impossibile eseguirle entrambe!")
+        return Response(status=400)
 
     if not simpleSplit and not kFold:
         if not userpathTest:
-            return "Inserire dataset di Test"
+            print("Inserire dataset di Test")
+            return Response(status=400)
         addAttribute.addAttribute(userpath, 'Data_training.csv')
         addAttribute.addAttribute(userpathTest, 'Data_testing.csv')
-        return 'Data_training.csv', 'Data_testing.csv'
+        return Response(status=200)
 
     valida(userpath, simpleSplit, kFold, k)
 
