@@ -112,10 +112,10 @@ h1:before {
                         <form enctype="multipart/form-data" action="/formcontrol" target="_blank" method="POST">
                             <input type="hidden" name="MAX_FILE_SIZE" value="300000000000000000000">
                             <h2>Load your Dataset for Quantum Classification</h2>
-                            <br>
+                            <br> <!-- Train dataset -->
                             <div class="form-group">
                               <div class="input-group">
-                                <input type="file" id="inputFileTrain" name="userfile" style="display: none" required>
+                                <input type="file" id="inputFileTrain" name="dataset_train" style="display: none" required>
                                 <input type="text" value="Training Set to upload" class="form-control" id="inputFakeFileTrain" readonly>
 
                                 <span class="input-group-btn">
@@ -123,20 +123,20 @@ h1:before {
                                 </span>
                               </div>
                             </div>
-                                <br>
+                                <br> <!-- Test dataset -->
                                 <div class="form-group">
                                   <div class="input-group">
-                                    <input type="file" id="inputFileTest" name="userfile1" style="display: none">
+                                    <input type="file" id="inputFileTest" name="dataset_test" style="display: none">
                                     <input type="text" value="Test Set to Upload" class="form-control checkSplitted" id="inputFakeFileTest" readonly>
                                     <span class="input-group-btn">
                                         <button class="btn btn-primary" type="button" id="inputFakeBrowseFileTest">Choose File</button>
                                     </span>
                                   </div>
                                 </div>
-                                <br> <!-- Prediction -->
+                                <br> <!-- Prediction dataset -->
                                 <div class="form-group">
                                   <div class="input-group">
-                                    <input type="file" id="inputFilePrediction" name="userfile2" style="display: none">
+                                    <input type="file" id="inputFilePrediction" name="dataset_prediction" style="display: none">
                                     <input type="text" value="Prediction Set to Upload" class="form-control checkSplitted" id="inputFakeFilePrediction" readonly>
                                     <span class="input-group-btn">
                                         <button class="btn btn-primary" type="button" id="inputFakeBrowseFilePrediction">Choose File</button>
@@ -148,42 +148,43 @@ h1:before {
                                 <ul class="dropmenudata">
                                     <li>
                                         <label>
-                                            <input type="checkbox" id="checkSplitTrain" name="test" value="testDataset" >  Automatically Split the Training Set
+                                            <input type="checkbox" id="checkSplitTrain" name="splitDataset" value="splitDataset" >  Automatically Split the Training Set
                                         </label>
                                     </li>
                                     <li>
                                         <label>
-                                          <input type="checkbox" id="checkFeatureExtraction" name="reduce" value="reduceFeatureExtraction" >  Reduce coloums with Feature Extraction
+                                          <input type="checkbox" id="checkFeatureExtraction" name="reduceFE" value="reduceFE" >  Reduce coloums with Feature Extraction
                                         </label>
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="checkbox" id="checkPrototypeSelection" name="reduce1" value="reduceProtypeSelection" > Reduce rows with Prototype Selection
+                                            <input type="checkbox" id="checkPrototypeSelection" name="reducePS" value="reducePS" > Reduce rows with Prototype Selection
                                         </label>
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="checkbox" id="checkQSVM" name="reduce2" value="reduceQSVM"> QSVM
+                                            <input type="checkbox" id="checkQSVM" name="doQSVM" value="doQSVM"> QSVM
                                         </label>
                                     </li>
                                 </ul>
-                            <br>
-                                <button type="submit" name="submitForm"  onclick="btnValidation()" class="btn btn-primary" id="submitForm"><span class="fa fa-database"> </span> Upload</button>
-                            <p>
-                                <br><a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <p><br> <!-- Advanced Options -->
+                                <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                                     Advanced Options
                                 </a>
                             </p>
                             <div class="collapse" id="collapseExample">
                                 <div class="card card-body">
-                                      <label><input type="radio" class="AdvancedOption" name="gp1" value="testKFold">  K-fold Cross Validation </label>
-                                            <label>Insert k parameter:   <input type="number" max="10000" value="10" id="kFoldValue" style="border: 0.1em solid grey"></label>
-                                            <label><input type="radio" class="AdvancedOption" id="checkSimpleTrainTest" name="gp1" value="testKFold" >   Simple Train-Test Split</label>
-                                            <label><input type="checkbox" id="checkAutoDetectNR" name="autoDetect" value="autoDetect">  Autodetect nr variable reduction</label>
-                                            <label>Insert nr of columns to reduce:   <input type="number" max="10000" value="10" id="nrColumns" style="border: 0.1em solid grey"></label><br>
-                                            <label>Insert nr of rows to reduce:    <input type="number" max="10000" value="10" id="nrRows" style="border: 0.1em solid grey"></label>
+                                    <label><input type="radio" class="AdvancedOption" id="checkSimpleSplit" name="simpleSplit" value="simpleSplit" checked>   Simple Train-Test Split</label>
+                                    <label><input type="radio" class="AdvancedOption" id="checkKFold" name="kFold" value="kFold">  K-fold Cross Validation </label>
+                                    <label>Insert k parameter:   <input type="number" max="10000" value="10" id="kFoldValue" name="kFoldValue" style="border: 0.1em solid grey"></label>
+                                    <label><input type="checkbox" id="checkAutoDetectNR" name="autoDetect" value="autoDetect">  Autodetect nr variable reduction</label>
+                                    <label>Insert nr of columns to reduce:   <input type="number" max="10000" value="2" id="nrColumns" name="nrColumns" style="border: 0.1em solid grey"></label><br>
+                                    <label>Insert nr of rows to reduce:    <input type="number" max="10000" value="100" id="nrRows" name="nrRows" style="border: 0.1em solid grey"></label>
                                 </div>
                             </div>
+                            <br>
+                            <button type="submit" name="submitForm"  onclick="btnValidation()" class="btn btn-primary" id="submitForm"><span class="fa fa-database"> </span> Upload</button>
+
                         </form>
                             <br>
                     </div>

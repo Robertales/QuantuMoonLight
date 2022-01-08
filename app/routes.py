@@ -2,6 +2,7 @@ import pathlib
 from flask import render_template, request
 from app import app
 from app.source.utils import utils
+from distutils.util import strtobool
 from flask_login import current_user
 
 
@@ -40,36 +41,38 @@ def aboutUs():
 def smista():
 
 
-    #if not current_user.is_authenticated:
-    #    return render_template('login.html')
+    # if not current_user.is_authenticated:
+    #     return render_template('login.html')
 
     print("\nIn smista carico le richieste dal form...")
-    dataset_train = request.files.get('userfile')
-    dataset_test = request.files.get('userfile1')
-    dataset_prediction = request.files.get('userfile2')
+    dataset_train = request.files.get('dataset_train')
+    dataset_test = request.files.get('dataset_test')
+    dataset_prediction = request.files.get('dataset_prediction')
     paths = upload(dataset_train, dataset_test, dataset_prediction)
     userpath = paths[0]
     userpathTest = paths[1]
     userpathToPredict = paths[2]
-    autosplit = request.form.get('test')
+    autosplit = request.form.get('splitDataset')
     print("AutoSplit: ", autosplit)
-    prototypeSelection = request.form.get('reduce1')
+    prototypeSelection = request.form.get('reducePS')
     print("Prototype Selection: ", prototypeSelection)
-    featureExtraction = request.form.get('reduce')
+    featureExtraction = request.form.get('reduceFE')
     print("Feature Extraction: ", featureExtraction)
-    numRawsPS = 10  # numero di righe dopo la Prototype Selection con GA da inserire nel form
-    print("numRawsPS:  ", numRawsPS)
-    numColsFE = 2  # numero di colonne dopo la Feature Extraction con PCA da inserire nel form
-    print("numColsFE: ", numColsFE)
-    # kFold= request.form.get('kFold') da inserire nel form
-    kFold = None
-    print("kFold: ", kFold)
-    k = 10
-    print("k: ", k)
-    # doQSVM= request.form.get('QSVM') da inserire nel form
-    # Se si vuole forzare a non eseguire classificazione allora settare a None (non a False, che diventerebbe True)
-    doQSVM = True
+    doQSVM = request.form.get('doQSVM')
     print("doQSVM: ", doQSVM)
+
+    # Advanced option
+    simpleSplit = request.form.get('simpleSplit')
+    print("simpleSplit: ", simpleSplit)
+    kFold = request.form.get('kFold')
+    print("kFold: ", kFold)
+    k = request.form.get('kFoldValue', type=int)
+    print("kFoldValue: ", k)
+    numRawsPS = request.form.get('nrRows', type=int)  # numero di righe dopo la Prototype Selection con GA
+    print("numRawsPS:  ", numRawsPS)
+    numColsFE = request.form.get('nrColumns', type=int)  # numero di colonne dopo la Feature Extraction con PCA
+    print("numColsFE: ", numColsFE)
+
 
     # assert isinstance(current_user, User)
     # salvataggiodatabase = Dataset(email_user=current_user.email, name=file.filename, upload_date=datetime.now(),
@@ -83,8 +86,14 @@ def smista():
 
     # Validazione
     print("\nIn validazione...")
+    if autosplit and not kFold and not simpleSplit:
+        # se l'utente vuole fare autosplit ma non seleziona opzioni avanzate, di dafault faccio simpleSplit
+        simpleSplit = True
+    if not autosplit:
+        kFold = None
+        simpleSplit = None
     app.test_client().post("/validazioneControl", data=dict(userpath=userpath, userpathTest=userpathTest,
-                                                            autosplit=autosplit, kFold=kFold, k=k))
+                                                            simpleSplit=simpleSplit, kFold=kFold, k=k))
     if kFold:
         return "ora scarica e procedi dalla home specificando quali usare"
 

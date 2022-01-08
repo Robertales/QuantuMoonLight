@@ -9,11 +9,15 @@ from app.source.preprocessingDataset import addClass, callPS, aggId, featureExtr
 def preprocessingControl():
     userpath = request.form.get("userpath")
     userpathToPredict = request.form.get("userpathToPredict")
-    prototypeSelection = bool(request.form.get("prototypeSelection"))
-    featureExtraction = bool(request.form.get("featureExtraction"))
-    numRawsPS = int(request.form.get("numRawsPS"))
-    numColsFE = int(request.form.get("numColsFE"))
-    doQSVM = bool(request.form.get("doQSVM"))
+    prototypeSelection = request.form.get("prototypeSelection")
+    featureExtraction = request.form.get("featureExtraction")
+    numRawsPS = request.form.get("numRawsPS", type=int)
+    numColsFE = request.form.get("numColsFE", type=int)
+    doQSVM = request.form.get("doQSVM")
+
+    print("Prototype Selection in Preprocessing: ", prototypeSelection)
+    print("Feature Extraction in Preprocessing: ", featureExtraction)
+    print("doQSVM in Preprocessing: ", doQSVM)
 
     if not featureExtraction and not prototypeSelection and doQSVM:
         # Se l'utente non vuole preprocessare il dataset ma vuole fare QSVM,
