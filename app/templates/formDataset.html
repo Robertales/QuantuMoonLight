@@ -176,26 +176,12 @@ h1:before {
                             </p>
                             <div class="collapse" id="collapseExample">
                                 <div class="card card-body">
-                                     <ul>
-                                    <li>
-                                           <label><input type="radio" id="checkKFold" class="AdvancedOption" name="gp1" value="testKFold" >  K-fold Cross Validation </label>
-                                            <input type="number" max="10000" value="10" id="kFoldValue" maxlength="2em"><label>Insert k parameter</label>
-
-                                        <!-- i radio button non funzionano -->
-                                        <!-- controllare i mockup, advanced option, segui quello + chiedere a giacomo per il menu AdvancedOption -->
-
-                                            <label>
-                                                <input type="radio" class="AdvancedOption" id="checkSimpleTrainTest" name="gp2" value="testKFold" >  Simple Train-Test Split
-                                            </label>
-                                    </li>
-                                    <li>
-                                        <label>
-                                            <input type="checkbox" id="checkAutoDetectNR" name="autoDetect" value="autoDetect">  Autodetect nr variable reduction
-                                        </label> <br>
-                                        <input type="number" max="10000" value="10" id="nrColumns"><label> insert nr of columns to reduce</label><br>
-                                        <input type="number" max="10000" value="10" id="nrRows"><label> insert nr of rows to reduce</label>
-                                    </li>
-                                </ul>
+                                      <label><input type="radio" class="AdvancedOption" name="gp1" value="testKFold">  K-fold Cross Validation </label>
+                                            <label>Insert k parameter:   <input type="number" max="10000" value="10" id="kFoldValue" style="border: 0.1em solid grey"></label>
+                                            <label><input type="radio" class="AdvancedOption" id="checkSimpleTrainTest" name="gp1" value="testKFold" >   Simple Train-Test Split</label>
+                                            <label><input type="checkbox" id="checkAutoDetectNR" name="autoDetect" value="autoDetect">  Autodetect nr variable reduction</label>
+                                            <label>Insert nr of columns to reduce:   <input type="number" max="10000" value="10" id="nrColumns" style="border: 0.1em solid grey"></label><br>
+                                            <label>Insert nr of rows to reduce:    <input type="number" max="10000" value="10" id="nrRows" style="border: 0.1em solid grey"></label>
                                 </div>
                             </div>
                         </form>
