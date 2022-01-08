@@ -93,12 +93,12 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
 
     training_input, test_input = loadDataset(pathTrain, pathTest, features, label='labels')
     pathDoPrediction = pathlib.Path(__file__).cwd()
-    if(os.path.exists("doPrediction.csv")):
-        pathDoPrediction = pathDoPrediction / "doPrediction.csv"
+    if(os.path.exists("doPredictionFE.csv")):
+        pathDoPrediction = pathDoPrediction / "doPredictionFE.csv"
     else:
         pathDoPrediction = pathDoPrediction / userpathToPredict
-    #predizione = np.array(list(csv.reader(open(pathDoPrediction.__str__(), "r"), delimiter=","))).astype("float")
-    predizione= np.array(list(csv.reader(open(pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv", "r"), delimiter=","))).astype("float")   #TESTING
+    predizione = np.array(list(csv.reader(open(pathDoPrediction.__str__(), "r"), delimiter=","))).astype("float")
+    #predizione= np.array(list(csv.reader(open(pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv", "r"), delimiter=","))).astype("float")   #TESTING
 
     feature_map = ZZFeatureMap(feature_dimension=qubit, reps=2, entanglement='linear')
     print(feature_map)
@@ -126,8 +126,8 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
 
     #dataset=request.form.get("dataset")
     #classifiedFile=open( root path / current_user.email / dataset.id, "w")
-    #classifiedFile = open( pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv", "w")
-    classifiedFile = open("C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv", "w")  #TESTING
+    classifiedFile = open( pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv", "w")
+    #classifiedFile = open("C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv", "w")  #TESTING
     predictionFile = open(userpathToPredict, "r")
     rows = predictionFile.readlines()
 
@@ -193,8 +193,8 @@ def getClassifiedDataset(result):
         msg.attach(MIMEText("Success ratio: " + "{:.2%}".format(successRatio) + "\n"))
         msg.attach(MIMEText("Total time elapsed:" + result.get("totalTime") + "s"))
 
-        #file = pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv"
-        file = "C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv"    #TESTING
+        file = pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv"
+        #file = "C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv"    #TESTING
         attach_file = open(file, "rb")
         payload = MIMEBase('application', "octet-stream")
         payload.set_payload(attach_file.read())
