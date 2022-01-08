@@ -98,7 +98,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     else:
         pathDoPrediction = pathDoPrediction / userpathToPredict
     predizione = np.array(list(csv.reader(open(pathDoPrediction.__str__(), "r"), delimiter=","))).astype("float")
-    #predizione= np.array(list(csv.reader(open(pathlib.Path(__file__).cwd() / "testingFiles" / "doPredictionFE.csv", "r"), delimiter=","))).astype("float")   TESTING
+    #predizione= np.array(list(csv.reader(open(pathlib.Path(__file__).cwd() / "testingFiles" / "doPredictionFE.csv", "r"), delimiter=","))).astype("float")   #TESTING
 
     feature_map = ZZFeatureMap(feature_dimension=qubit, reps=2, entanglement='linear')
     print(feature_map)
@@ -124,8 +124,10 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
 
     predicted_labels = result["predicted_labels"]
 
+    #dataset=request.form.get("dataset")
+    #classifiedFile=open( root path / current_user.email / dataset.id, "w")
     classifiedFile = open( pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv", "w")
-    #classifiedFile = open("C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv", "w")  TESTING
+    #classifiedFile = open("C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv", "w")  #TESTING
     predictionFile = open(userpathToPredict, "r")
     rows = predictionFile.readlines()
 
@@ -192,7 +194,7 @@ def getClassifiedDataset(result):
         msg.attach(MIMEText("Total time elapsed:" + result.get("totalTime") + "s"))
 
         file = pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv"
-        #file = "C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv"    TESTING
+        #file = "C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv"    #TESTING
         attach_file = open(file, "rb")
         payload = MIMEBase('application', "octet-stream")
         payload.set_payload(attach_file.read())
