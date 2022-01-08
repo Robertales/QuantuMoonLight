@@ -39,6 +39,7 @@ def aboutUs():
 @app.route('/formcontrol', methods=['GET', 'POST'])
 def smista():
 
+
     #if not current_user.is_authenticated:
     #    return render_template('login.html')
 
