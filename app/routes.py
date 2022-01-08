@@ -2,7 +2,7 @@ import pathlib
 from flask import render_template, request
 from app import app
 from app.source.utils import utils
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 
 @app.route('/')
@@ -37,12 +37,8 @@ def aboutUs():
 
 
 @app.route('/formcontrol', methods=['GET', 'POST'])
+#@login_required
 def smista():
-
-
-    #if not current_user.is_authenticated:
-    #    return render_template('login.html')
-
     print("\nIn smista carico le richieste dal form...")
     dataset_train = request.files.get('userfile')
     dataset_test = request.files.get('userfile1')

@@ -6,6 +6,7 @@ from app.source.validazioneDataset import kFoldValidation
 
 
 @app.route('/validazioneControl', methods=['POST'])
+#@login_required
 def validazioneControl():
     userpath = request.form.get('userpath')
     userpathTest = request.form.get('userpathTest')

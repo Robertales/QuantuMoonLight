@@ -6,6 +6,7 @@ from app.source.preprocessingDataset import addClass, callPS, aggId, featureExtr
 
 
 @app.route('/preprocessingControl', methods=['POST'])
+#@login_required
 def preprocessingControl():
     userpath = request.form.get("userpath")
     userpathToPredict = request.form.get("userpathToPredict")
