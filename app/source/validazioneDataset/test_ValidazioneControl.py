@@ -1,3 +1,4 @@
+import os
 import pathlib
 import unittest
 from os.path import exists
@@ -49,10 +50,9 @@ class TestValidazioneControl(unittest.TestCase):
         self.assertEqual(statuscode, 200)
         pathData = pathlib.Path(__file__).cwd()
 
-
         for x in range(k):
-            StringaTrain = 'training_fold_{}.csv'.format(x+1)
-            StringaTest = 'testing_fold_{}.csv'.format(x+1)
+            StringaTrain = 'training_fold_{}.csv'.format(x + 1)
+            StringaTest = 'testing_fold_{}.csv'.format(x + 1)
             self.assertTrue(exists(pathData / StringaTrain))
             self.assertTrue(exists(pathData / StringaTest))
 
@@ -91,8 +91,8 @@ class TestValidazioneControl(unittest.TestCase):
         pathData = pathlib.Path(__file__).cwd()
 
         for x in range(k):
-            StringaTrain = 'training_fold_{}.csv'.format(x+1)
-            StringaTest = 'testing_fold_{}.csv'.format(x+1)
+            StringaTrain = 'training_fold_{}.csv'.format(x + 1)
+            StringaTest = 'testing_fold_{}.csv'.format(x + 1)
             self.assertFalse(exists(pathData / StringaTrain))
             self.assertFalse(exists(pathData / StringaTest))
 
@@ -134,3 +134,11 @@ class TestValidazioneControl(unittest.TestCase):
 
         self.assertFalse(exists(pathData / "Data_training.csv"))
         self.assertFalse(exists(pathData / "Data_testing.csv"))
+
+    def tearDown(self):
+        directory = pathlib.Path(__file__).cwd()
+        allFiles = os.listdir(directory)
+        csvFiles = [file for file in allFiles if file.endswith(".csv")]
+        for file in csvFiles:
+            path = os.path.join(directory, file)
+            os.remove(path)
