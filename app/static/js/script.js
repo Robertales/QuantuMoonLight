@@ -60,6 +60,9 @@
 	});
 
 
+
+
+
 	//Submenu Dropdown Toggle
 	if($('.main-header li.dropdown .submenu').length){
 		$('.main-header li.dropdown').append('<div class="dropdown-btn"></div>');
@@ -400,3 +403,51 @@
 
 
 })(window.jQuery);
+
+/* =====================================================================
+							Validazione form
+	====================================================================
+ */
+function getExtension(filename)
+{
+	var parts = filename.split('.');
+	return parts[parts.length-1];
+}
+/* Se nel form non viene inserito nessun file non succede nulla*/
+$(document).ready(function () {
+    $('#submitForm').click(function(e) {
+		var filenameTraining = $('#inputFakeFileTrain').val();
+		var splitTrain = getExtension(filenameTraining);
+		var filenameTest = $('#inputFakeFileTest').val();
+		var splitTest = getExtension(filenameTest);
+		var filenamePrediction = $('#inputFakeFilePrediction').val();
+		var splitPrediction = getExtension(filenamePrediction);
+
+
+
+		/*TestTrain Required+csv extension*/
+		if((splitTrain !="csv"))
+		{
+			alert("Training set non inserito e/o non valido");
+			e.preventDefault();
+            e.stopPropagation();
+			return false;
+		}
+		/*Prediction csv extension */
+		if((splitPrediction !="csv") && filenamePrediction!="Prediction Set to Upload" && filenamePrediction!="")
+		{
+			alert("Prediction test non valido");
+			e.preventDefault();
+            e.stopPropagation();
+			return false;
+		}
+		/*Test csv extension */
+		if((splitTest !="csv") && filenameTest!="Test Set to Upload" && filenameTest!="" )
+		{
+			alert("Test set non valido");
+			e.preventDefault();
+            e.stopPropagation();
+			return false;
+		}
+            return true;
+    });})
