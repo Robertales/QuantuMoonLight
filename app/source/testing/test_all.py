@@ -130,7 +130,7 @@ class TestValidazioneControl(unittest.TestCase):
         self.assertTrue(exists(pathData / "Data_testing.csv"))
 
     def test_ValidazioneControl_NoSplit_Fail(self):
-        tester = app.test_client(self)
+        tester = app.test_client()
         userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = None
         simpleSplit = None
