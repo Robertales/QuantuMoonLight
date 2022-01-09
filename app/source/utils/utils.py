@@ -36,14 +36,6 @@ def classifier(number_of_training_instances):
     return c
 
 
-# fitness for scikit-learn knn pesato
-def test(x_train, x_test, list_of_instances):
-    neigh = classifier(len(list_of_instances))
-    neigh.fit(x_train[list_of_instances, :-2], x_train[list_of_instances, -1])
-    accuracy = neigh.score(x_test[:, :-2], x_test[:, -1])
-    return accuracy
-
-
 def prepareData(databasePath):
     # READ dataset
 
@@ -75,12 +67,6 @@ def prepareData(databasePath):
     number_of_total_instances = len(x_train)
 
     return x_train, x_test, number_of_features, number_of_classes, number_of_total_instances
-
-
-def printRunResults(indexR, pop, stats, hof, logbook):
-    resultString = "Run " + indexR + "\n" + "Number of evaluations " + logbook.select('nevals')[
-        -1] + "\nBest fitness " + hof[0].fitness.values[0] + "\nBest individual " + hof[0]
-    return resultString
 
 
 def writeTxt(fileName, list_values):
