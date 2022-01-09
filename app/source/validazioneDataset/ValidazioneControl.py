@@ -3,7 +3,6 @@ from app import app
 from app.source.utils import addAttribute
 from app.source.validazioneDataset import train_testSplit
 from app.source.validazioneDataset import kFoldValidation
-from distutils.util import strtobool
 
 
 @app.route('/validazioneControl', methods=['POST'])
@@ -56,7 +55,7 @@ def valida(userpath: str, simpleSplit: bool, kFold: bool, k: int):
     if simpleSplit:
         addAttribute.addAttribute(userpath, 'featureDataset.csv')
         train_testSplit.splitDataset('featureDataset.csv')  # crea 'Data_training.csv' e 'Data_testing.csv'
-    elif kFold:
+        return 'Data_training.csv', 'Data_testing.csv'
+    elif kFold:  # pragma: no branch
         kFoldValidation.cross_fold_validation(userpath, k)
-
-    return 'Data_training.csv', 'Data_testing.csv'
+        return 'Data_training.csv', 'Data_testing.csv'

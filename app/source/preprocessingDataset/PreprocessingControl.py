@@ -102,7 +102,7 @@ def preprocessing(userpath: str, userpathToPredict: str, prototypeSelection: boo
         addClass.addClassPCAtesting(pathPC / 'Data_testing.csv', pathPC / 'DataSetTestPreprocessato.csv', numColsFE)
 
     # FE and PS:
-    elif prototypeSelection and featureExtraction:
+    elif prototypeSelection and featureExtraction:  # pragma: no branch
         print("I'm doing Protype Selection and feature extraction ")
 
         # ps

@@ -4,6 +4,9 @@ import unittest
 from os.path import exists
 from app.models import User
 from app import app
+from app.source.utils import utils
+from app.source.validazioneDataset import kFoldValidation
+from app.source.validazioneDataset import train_testSplit
 
 
 class TestValidazioneControl(unittest.TestCase):
@@ -138,3 +141,44 @@ class TestValidazioneControl(unittest.TestCase):
         for file in csvFiles:
             path = os.path.join(directory, file)
             os.remove(path)
+
+
+class TestKFold(unittest.TestCase):
+
+    def test_KFold(self):
+        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        k = 10
+
+        kFoldValidation.cross_fold_validation(userpath, k)
+        pathData = pathlib.Path(__file__).parents[0]
+
+        for x in range(k):
+            StringaTrain = 'training_fold_{}.csv'.format(x + 1)
+            StringaTest = 'testing_fold_{}.csv'.format(x + 1)
+            self.assertTrue(exists(pathData / StringaTrain))
+            self.assertTrue(exists(pathData / StringaTest))
+
+    def tearDown(self):
+        directory = pathlib.Path(__file__).parents[0]
+        allFiles = os.listdir(directory)
+        csvFiles = [file for file in allFiles if file.endswith(".csv")]
+        for file in csvFiles:
+            path = os.path.join(directory, file)
+            os.remove(path)
+
+
+class TestSimpleSplit(unittest.TestCase):
+
+    def test_simpleSplit(self):
+        filename = pathlib.Path(__file__).parents[0] / 'testingFiles' / 'bupa.csv'
+        numRaws = utils.numberOfRaws(filename.__str__())
+
+        train_testSplit.splitDataset(filename.__str__())
+        self.assertEqual(20, utils.numberOfRaws('Data_testing.csv'))
+        self.assertEqual(numRaws - 20, utils.numberOfRaws('Data_training.csv'))
+        self.assertTrue(exists(pathlib.Path(__file__).parents[0] / "Data_testing.csv"))
+        self.assertTrue(exists(pathlib.Path(__file__).parents[0] / "Data_training.csv"))
+
+    def tearDown(self):
+        os.remove('Data_testing.csv')
+        os.remove('Data_training.csv')
