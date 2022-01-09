@@ -2,12 +2,8 @@ import os
 import pathlib
 import unittest
 from os.path import exists
-
-from flask_login import current_user
 from app.models import User
 from app import app
-from app.source.utils import utils
-from pathlib import Path
 
 
 class TestValidazioneControl(unittest.TestCase):
