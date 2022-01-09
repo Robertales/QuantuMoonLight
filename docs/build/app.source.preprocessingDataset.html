@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>app.source.preprocessingDataset package &#8212; QuantuMoonLight  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">QuantuMoonLight  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">app.source.preprocessingDataset package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="app-source-preprocessingdataset-package">
+<h1>app.source.preprocessingDataset package<a class="headerlink" href="#app-source-preprocessingdataset-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-app.source.preprocessingDataset.FIAmodule">
+<span id="app-source-preprocessingdataset-fiamodule-module"></span><h2>app.source.preprocessingDataset.FIAmodule module<a class="headerlink" href="#module-app.source.preprocessingDataset.FIAmodule" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.FIAmodule.featureExtractionAI">
+<span class="sig-name descname"><span class="pre">featureExtractionAI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/FIAmodule.html#featureExtractionAI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.FIAmodule.featureExtractionAI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.FIAmodule.prototypeSelectionAI">
+<span class="sig-name descname"><span class="pre">prototypeSelectionAI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/FIAmodule.html#prototypeSelectionAI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.FIAmodule.prototypeSelectionAI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.source.preprocessingDataset.PreprocessingControl">
+<span id="app-source-preprocessingdataset-preprocessingcontrol-module"></span><h2>app.source.preprocessingDataset.PreprocessingControl module<a class="headerlink" href="#module-app.source.preprocessingDataset.PreprocessingControl" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.PreprocessingControl.preprocessing">
+<span class="sig-name descname"><span class="pre">preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userpathToPredict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prototypeSelection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">featureExtraction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numRawsPS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numColsFE</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doQSVM</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/PreprocessingControl.html#preprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.PreprocessingControl.preprocessing" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is going to preprocess a given Dataset with prototypeSelection or featureExtraction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>userpath</strong> – string that points to the location of the dataset to be preprocessed</p></li>
+<li><p><strong>prototypeSelection</strong> – boolean flag that indicated whether the user wants to execute a prototypeSelection or not</p></li>
+<li><p><strong>userpathToPredict</strong> – string that points to the location of the dataset to be predicted</p></li>
+<li><p><strong>featureExtraction</strong> – boolean flag that indicated whether the user wants to execute a feature Extraction or not</p></li>
+<li><p><strong>numRawsPS</strong> – number of rows the prototype selection should reduce the dataset to</p></li>
+<li><p><strong>numColsFE</strong> – number of columns the feature extraction should reduce the dataset to</p></li>
+<li><p><strong>doQSVM</strong> – boolean flag that indicated whether the user wants to execute classification or not</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>two preprocessed dataset: ‘DataSetTrainPreprocessato.csv’, ‘DataSetTestPreprocessato.csv’</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(str, str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.PreprocessingControl.preprocessingControl">
+<span class="sig-name descname"><span class="pre">preprocessingControl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/PreprocessingControl.html#preprocessingControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.PreprocessingControl.preprocessingControl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.source.preprocessingDataset.PrototypeSelectionProblem">
+<span id="app-source-preprocessingdataset-prototypeselectionproblem-module"></span><h2>app.source.preprocessingDataset.PrototypeSelectionProblem module<a class="headerlink" href="#module-app.source.preprocessingDataset.PrototypeSelectionProblem" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.PrototypeSelectionProblem.fitness_knn">
+<span class="sig-name descname"><span class="pre">fitness_knn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chromosome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_train</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/PrototypeSelectionProblem.html#fitness_knn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.PrototypeSelectionProblem.fitness_knn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.PrototypeSelectionProblem.runGeneticAlgorithXPS">
+<span class="sig-name descname"><span class="pre">runGeneticAlgorithXPS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_of_solutions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_reduced_training_instances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/PrototypeSelectionProblem.html#runGeneticAlgorithXPS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.PrototypeSelectionProblem.runGeneticAlgorithXPS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.source.preprocessingDataset.addClass">
+<span id="app-source-preprocessingdataset-addclass-module"></span><h2>app.source.preprocessingDataset.addClass module<a class="headerlink" href="#module-app.source.preprocessingDataset.addClass" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.addClass.addClassPCAtesting">
+<span class="sig-name descname"><span class="pre">addClassPCAtesting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filenameOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numColsFE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/addClass.html#addClassPCAtesting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.addClass.addClassPCAtesting" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function generate a new dataset test with ID and labels columns, and string
+“ID,feature1,feature2,…,featuren,labels” on top of the file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – data set input, with just the attribute raws</p></li>
+<li><p><strong>filenameOut</strong> – data set output</p></li>
+<li><p><strong>numColsFE</strong> – number of columns for the Feature Extraction</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file name out, ready to be downloaded or classified</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.addClass.addClassPCAtraining">
+<span class="sig-name descname"><span class="pre">addClassPCAtraining</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filenameOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numColsFE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/addClass.html#addClassPCAtraining"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.addClass.addClassPCAtraining" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function generate a new dataset train with ID and labels columns, and string
+“ID,feature1,feature2,…,featuren,labels” on top of the file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – data set input, with just the attribute raws</p></li>
+<li><p><strong>filenameOut</strong> – data set output</p></li>
+<li><p><strong>numColsFE</strong> – number of columns for the Feature Extraction</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file name out, ready to be downloaded or classified</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-app.source.preprocessingDataset.aggId">
+<span id="app-source-preprocessingdataset-aggid-module"></span><h2>app.source.preprocessingDataset.aggId module<a class="headerlink" href="#module-app.source.preprocessingDataset.aggId" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.aggId.addId">
+<span class="sig-name descname"><span class="pre">addId</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filenameOut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'IdFeatureDataset.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/aggId.html#addId"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.aggId.addId" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function adds the colomumn ID as the first column of the given dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – string that points to the location of the dataset</p></li>
+<li><p><strong>filenameOut</strong> – string that points to the location of new the dataset</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string that points to the location of new the dataset</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-app.source.preprocessingDataset.callPS">
+<span id="app-source-preprocessingdataset-callps-module"></span><h2>app.source.preprocessingDataset.callPS module<a class="headerlink" href="#module-app.source.preprocessingDataset.callPS" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.callPS.callPrototypeSelection">
+<span class="sig-name descname"><span class="pre">callPrototypeSelection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_reduced_training_instances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/callPS.html#callPrototypeSelection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.callPS.callPrototypeSelection" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function executes the prototype selection on the given dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – string that points to the location of the dataset that is going to be reduced with PS</p></li>
+<li><p><strong>number_of_reduced_training_instances</strong> – new number of raws</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string that points to the location of the dataset preprocessed with PS</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-app.source.preprocessingDataset.featureExtractionPCA">
+<span id="app-source-preprocessingdataset-featureextractionpca-module"></span><h2>app.source.preprocessingDataset.featureExtractionPCA module<a class="headerlink" href="#module-app.source.preprocessingDataset.featureExtractionPCA" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.featureExtractionPCA.callFeatureExtraction">
+<span class="sig-name descname"><span class="pre">callFeatureExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/featureExtractionPCA.html#callFeatureExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.featureExtractionPCA.callFeatureExtraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function executes the Feature Extraction on the given dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – string that points to the location of the dataset that is going to be reduced with FE</p></li>
+<li><p><strong>output</strong> – string that points to the location of the dataset preprocessed with FE</p></li>
+<li><p><strong>features</strong> – list that specify the labels of the dataset input</p></li>
+<li><p><strong>n_components</strong> – number of new columns</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string that points to the location of the dataset preprocessed with FE</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.featureExtractionPCA.extractFeatureForPrediction">
+<span class="sig-name descname"><span class="pre">extractFeatureForPrediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/featureExtractionPCA.html#extractFeatureForPrediction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.featureExtractionPCA.extractFeatureForPrediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function executes the Feature Extraction on the doPrediction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – string that points to the location of the dataset that is going to be reduced with FE</p></li>
+<li><p><strong>output</strong> – string that points to the location of the dataset preprocessed with FE</p></li>
+<li><p><strong>n_components</strong> – number of new columns</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string that points to the location of the dataset preprocessed with FE</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-app.source.preprocessingDataset.genetic_algorithm">
+<span id="app-source-preprocessingdataset-genetic-algorithm-module"></span><h2>app.source.preprocessingDataset.genetic_algorithm module<a class="headerlink" href="#module-app.source.preprocessingDataset.genetic_algorithm" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.preprocessingDataset.genetic_algorithm.deapGeneticAlgorithm">
+<span class="sig-name descname"><span class="pre">deapGeneticAlgorithm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">toolbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cxpb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutpb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_evals_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/preprocessingDataset/genetic_algorithm.html#deapGeneticAlgorithm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.preprocessingDataset.genetic_algorithm.deapGeneticAlgorithm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.source.preprocessingDataset">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app.source.preprocessingDataset" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">app.source.preprocessingDataset package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-app.source.preprocessingDataset.FIAmodule">app.source.preprocessingDataset.FIAmodule module</a></li>
+<li><a class="reference internal" href="#module-app.source.preprocessingDataset.PreprocessingControl">app.source.preprocessingDataset.PreprocessingControl module</a></li>
+<li><a class="reference internal" href="#module-app.source.preprocessingDataset.PrototypeSelectionProblem">app.source.preprocessingDataset.PrototypeSelectionProblem module</a></li>
+<li><a class="reference internal" href="#module-app.source.preprocessingDataset.addClass">app.source.preprocessingDataset.addClass module</a></li>
+<li><a class="reference internal" href="#module-app.source.preprocessingDataset.aggId">app.source.preprocessingDataset.aggId module</a></li>
+<li><a class="reference internal" href="#module-app.source.preprocessingDataset.callPS">app.source.preprocessingDataset.callPS module</a></li>
+<li><a class="reference internal" href="#module-app.source.preprocessingDataset.featureExtractionPCA">app.source.preprocessingDataset.featureExtractionPCA module</a></li>
+<li><a class="reference internal" href="#module-app.source.preprocessingDataset.genetic_algorithm">app.source.preprocessingDataset.genetic_algorithm module</a></li>
+<li><a class="reference internal" href="#module-app.source.preprocessingDataset">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/app.source.preprocessingDataset.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">QuantuMoonLight  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">app.source.preprocessingDataset package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, QML Team.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+    </div>
+  </body>
+</html>

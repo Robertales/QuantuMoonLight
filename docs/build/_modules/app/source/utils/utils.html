@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>app.source.utils.utils &#8212; QuantuMoonLight  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/groundwork.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">QuantuMoonLight  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">app.source.utils.utils</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for app.source.utils.utils</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!C:\Users\Gennaro\Miniconda3\envs\python\python.exe</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Content-Type: text/html</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">openpyxl</span> <span class="kn">import</span> <span class="n">Workbook</span>
+<span class="kn">from</span> <span class="nn">openpyxl.utils</span> <span class="kn">import</span> <span class="n">get_column_letter</span>
+
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+
+<span class="c1"># ritorna il numero di colonne di un dataset (di default conta anche la colonna dei labels)</span>
+<div class="viewcode-block" id="numberOfColumns"><a class="viewcode-back" href="../../../../app.source.utils.html#app.source.utils.utils.numberOfColumns">[docs]</a><span class="k">def</span> <span class="nf">numberOfColumns</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    <span class="n">numCols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">reader</span><span class="p">))</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">numCols</span>  <span class="c1"># Read first line and count columns</span></div>
+
+<span class="c1"># crea la Lista contenente le label delle feature</span>
+<div class="viewcode-block" id="createFeatureList"><a class="viewcode-back" href="../../../../app.source.utils.html#app.source.utils.utils.createFeatureList">[docs]</a><span class="k">def</span> <span class="nf">createFeatureList</span><span class="p">(</span><span class="n">numCols</span><span class="p">):</span>
+    <span class="n">featureList</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numCols</span><span class="p">):</span>
+        <span class="n">stringa</span> <span class="o">=</span> <span class="s2">&quot;feature</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">featureList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stringa</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">featureList</span></div>
+
+<div class="viewcode-block" id="classifier"><a class="viewcode-back" href="../../../../app.source.utils.html#app.source.utils.utils.classifier">[docs]</a><span class="k">def</span> <span class="nf">classifier</span><span class="p">(</span><span class="n">number_of_training_instances</span><span class="p">):</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">=</span><span class="n">number_of_training_instances</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">c</span></div>
+
+<span class="c1">### fitness for scikit-learn knn pesato #####</span>
+<div class="viewcode-block" id="test"><a class="viewcode-back" href="../../../../app.source.utils.html#app.source.utils.utils.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">list_of_instances</span><span class="p">):</span>
+    <span class="n">neigh</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">list_of_instances</span><span class="p">))</span>
+    <span class="n">neigh</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">list_of_instances</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">x_train</span><span class="p">[</span><span class="n">list_of_instances</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">accuracy</span><span class="o">=</span><span class="n">neigh</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">x_test</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">x_test</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">accuracy</span></div>
+
+
+<div class="viewcode-block" id="prepareData"><a class="viewcode-back" href="../../../../app.source.utils.html#app.source.utils.utils.prepareData">[docs]</a><span class="k">def</span> <span class="nf">prepareData</span><span class="p">(</span><span class="n">databasePath</span><span class="p">):</span>
+
+    <span class="c1">##### READ dataset ############################################################</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">databasePath</span><span class="p">)</span>
+
+    <span class="c1"># preprocessing</span>
+    <span class="c1"># replace categorical data</span>
+    <span class="c1"># da modificare</span>
+    <span class="c1">#dictionaryCat = {&quot;class&quot;: {&quot;Iris-setosa&quot;: 0, &quot;Iris-versicolor&quot;: 1, &quot;Iris-virginica&quot;: 2}}</span>
+    <span class="c1">#data.replace(dictionaryCat, inplace=True)</span>
+
+    <span class="c1"># print(data.head())</span>
+
+    <span class="c1"># detecting classes</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+    <span class="n">number_of_classes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
+    <span class="n">number_of_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="c1"># print(str(number_of_classes) + &quot; &quot; + str(number_of_features))</span>
+
+    <span class="c1"># split dei dati</span>
+    <span class="n">random_state_value</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state_value</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="c1"># split dei dati di training</span>
+    <span class="c1"># x_train ,x_valid = train_test_split(x_train,test_size=0.10)</span>
+
+    <span class="n">number_of_total_instances</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">number_of_features</span><span class="p">,</span> <span class="n">number_of_classes</span><span class="p">,</span> <span class="n">number_of_total_instances</span></div>
+
+
+<div class="viewcode-block" id="printRunResults"><a class="viewcode-back" href="../../../../app.source.utils.html#app.source.utils.utils.printRunResults">[docs]</a><span class="k">def</span> <span class="nf">printRunResults</span><span class="p">(</span><span class="n">indexR</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">stats</span><span class="p">,</span> <span class="n">hof</span><span class="p">,</span> <span class="n">logbook</span><span class="p">):</span>
+    <span class="n">resultString</span><span class="o">=</span><span class="s2">&quot;Run &quot;</span> <span class="o">+</span> <span class="n">indexR</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;Number of evaluations &quot;</span> <span class="o">+</span> <span class="n">logbook</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;nevals&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best fitness &quot;</span> <span class="o">+</span> <span class="n">hof</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fitness</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best individual &quot;</span> <span class="o">+</span> <span class="n">hof</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">resultString</span></div>
+
+
+<div class="viewcode-block" id="writeTxt"><a class="viewcode-back" href="../../../../app.source.utils.html#app.source.utils.utils.writeTxt">[docs]</a><span class="k">def</span> <span class="nf">writeTxt</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">list_values</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">list_values</span><span class="p">:</span>
+      <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="writeXls"><a class="viewcode-back" href="../../../../app.source.utils.html#app.source.utils.utils.writeXls">[docs]</a><span class="k">def</span> <span class="nf">writeXls</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">generations</span><span class="p">,</span> <span class="n">evaluations</span><span class="p">,</span> <span class="n">bestfits</span><span class="p">,</span> <span class="n">times</span><span class="p">):</span>
+    <span class="n">wb</span> <span class="o">=</span> <span class="n">Workbook</span><span class="p">()</span>
+    <span class="n">ws1</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">active</span>
+
+    <span class="n">ws1</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Number of Generations&quot;</span><span class="p">)</span>
+    <span class="n">ws1</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Number of Evaluations&quot;</span><span class="p">)</span>
+    <span class="n">ws1</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Best Fitness Value&quot;</span><span class="p">)</span>
+    <span class="n">ws1</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Time in seconds&quot;</span><span class="p">)</span>
+
+
+    <span class="n">row</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">generations</span><span class="p">:</span>
+        <span class="n">ws1</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">g</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">row</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">evaluations</span><span class="p">:</span>
+        <span class="n">ws1</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">g</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">row</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">bestfits</span><span class="p">:</span>
+        <span class="n">ws1</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">g</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">row</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">times</span><span class="p">:</span>
+        <span class="n">ws1</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">g</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="n">fileName</span><span class="p">)</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">QuantuMoonLight  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">app.source.utils.utils</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, QML Team.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+    </div>
+  </body>
+</html>

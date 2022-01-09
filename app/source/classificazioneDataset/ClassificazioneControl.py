@@ -4,7 +4,6 @@ import csv
 import pathlib
 import numpy as np
 import pandas as pd
-from flask_login import current_user
 from qiskit import IBMQ
 from qiskit.providers.ibmq import least_busy
 from qiskit.aqua import QuantumInstance, aqua_globals
@@ -12,7 +11,6 @@ from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.components.multiclass_extensions import AllPairs
 from qiskit.circuit.library import ZZFeatureMap
 import smtplib
-from flask import session
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
@@ -21,7 +19,6 @@ from email import encoders
 from app.source.utils import utils
 from app import app
 from flask import request
-from sklearn.metrics import recall_score, precision_score
 
 @app.route('/classificazioneControl', methods=['POST'])
 #@login_required

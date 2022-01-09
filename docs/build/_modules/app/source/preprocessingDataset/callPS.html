@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>app.source.preprocessingDataset.callPS &#8212; QuantuMoonLight  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/groundwork.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">QuantuMoonLight  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">app.source.preprocessingDataset.callPS</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for app.source.preprocessingDataset.callPS</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">app.source.utils</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">app.source.preprocessingDataset</span> <span class="kn">import</span> <span class="n">PrototypeSelectionProblem</span> <span class="k">as</span> <span class="n">ps</span>
+
+
+<div class="viewcode-block" id="callPrototypeSelection"><a class="viewcode-back" href="../../../../app.source.preprocessingDataset.html#app.source.preprocessingDataset.callPS.callPrototypeSelection">[docs]</a><span class="k">def</span> <span class="nf">callPrototypeSelection</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">number_of_reduced_training_instances</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function executes the prototype selection on the given dataset</span>
+
+<span class="sd">    :param path: string that points to the location of the dataset that is going to be reduced with PS</span>
+<span class="sd">    :param number_of_reduced_training_instances: new number of raws</span>
+<span class="sd">    :return: string that points to the location of the dataset preprocessed with PS</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">number_of_features</span><span class="p">,</span> <span class="n">number_of_classes</span><span class="p">,</span> <span class="n">number_of_total_instances</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">prepareData</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="n">number_of_solutions</span> <span class="o">=</span> <span class="mi">500</span>
+    <span class="n">chromosomeToEvaluate</span><span class="p">,</span> <span class="n">fitness</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">runGeneticAlgorithXPS</span><span class="p">(</span><span class="n">number_of_solutions</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span>
+                                                             <span class="n">number_of_reduced_training_instances</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">chromosomeToEvaluate</span><span class="p">)</span>
+    <span class="n">pathFileReducedTrainingPS</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">pathFileReducedTrainingPS</span> <span class="o">=</span> <span class="n">pathFileReducedTrainingPS</span> <span class="o">/</span> <span class="s1">&#39;reducedTrainingPS.csv&#39;</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">pathFileReducedTrainingPS</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="n">x_train</span><span class="p">[</span><span class="n">chromosomeToEvaluate</span><span class="p">,</span> <span class="p">:],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pathFileReducedTrainingPS</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">QuantuMoonLight  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">app.source.preprocessingDataset.callPS</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, QML Team.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+    </div>
+  </body>
+</html>

@@ -41,9 +41,6 @@ def aboutUs():
 def smista():
 
 
-    #if not current_user.is_authenticated:
-    #    return render_template('login.html')
-
     print("\nIn smista carico le richieste dal form...")
     dataset_train = request.files.get('dataset_train')
     dataset_test = request.files.get('dataset_test')
