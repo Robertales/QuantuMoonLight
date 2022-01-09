@@ -1,7 +1,6 @@
 #!C:\Users\Gennaro\Miniconda3\envs\python\python.exe
 #print("Content-Type: text/html\n")
 import random
-import utils
 import statistics
 
 def random_algorithm(x_train, x_test, number_of_total_instances, number_of_quantum_training_instances, number_of_evaluations=100):

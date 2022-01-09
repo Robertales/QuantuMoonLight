@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>app.source.classificazioneDataset package &#8212; QuantuMoonLight  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">QuantuMoonLight  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">app.source.classificazioneDataset package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="app-source-classificazionedataset-package">
+<h1>app.source.classificazioneDataset package<a class="headerlink" href="#app-source-classificazionedataset-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-app.source.classificazioneDataset.ClassificazioneControl">
+<span id="app-source-classificazionedataset-classificazionecontrol-module"></span><h2>app.source.classificazioneDataset.ClassificazioneControl module<a class="headerlink" href="#module-app.source.classificazioneDataset.ClassificazioneControl" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.classificazioneDataset.ClassificazioneControl.classificazioneControl">
+<span class="sig-name descname"><span class="pre">classificazioneControl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/classificazioneDataset/ClassificazioneControl.html#classificazioneControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.classificazioneDataset.ClassificazioneControl.classificazioneControl" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.classificazioneDataset.ClassificazioneControl.classify">
+<span class="sig-name descname"><span class="pre">classify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pathTrain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pathTest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userpathToPredict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backendSelected</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/classificazioneDataset/ClassificazioneControl.html#classify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.classificazioneDataset.ClassificazioneControl.classify" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pathTrain</strong> – path del file di training output delle fasi precedenti</p></li>
+<li><p><strong>pathTest</strong> – path del file di testing output delle fasi precedenti</p></li>
+<li><p><strong>userpathToPredict</strong> – path del file di predizione output delle fasi precedenti</p></li>
+<li><p><strong>features</strong> – lista di features per qsvm</p></li>
+<li><p><strong>token</strong> – token dell’utente</p></li>
+<li><p><strong>backendSelected</strong> – backend selezionato dal form(se vuoto utilizza backend di default)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dict contenente informazioni relative alla classificazione</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.classificazioneDataset.ClassificazioneControl.getClassifiedDataset">
+<span class="sig-name descname"><span class="pre">getClassifiedDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/classificazioneDataset/ClassificazioneControl.html#getClassifiedDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.classificazioneDataset.ClassificazioneControl.getClassifiedDataset" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>result</strong> – dict risultante dalla funzione classify dal quale si prendono i dati da inviare per email</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.classificazioneDataset.ClassificazioneControl.loadDataset">
+<span class="sig-name descname"><span class="pre">loadDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testing_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/classificazioneDataset/ClassificazioneControl.html#loadDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.classificazioneDataset.ClassificazioneControl.loadDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the data, normalizes it and returns it in the following format:
+{class_0: points_0, class_1:points_1, …}
+Where points_i corresponds to the points that belong to class_i as a numpy array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.classificazioneDataset.ClassificazioneControl.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_classificato</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/classificazioneDataset/ClassificazioneControl.html#plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.classificazioneDataset.ClassificazioneControl.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.source.classificazioneDataset.test_ClassificazioneControl">
+<span id="app-source-classificazionedataset-test-classificazionecontrol-module"></span><h2>app.source.classificazioneDataset.test_ClassificazioneControl module<a class="headerlink" href="#module-app.source.classificazioneDataset.test_ClassificazioneControl" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.source.classificazioneDataset.test_ClassificazioneControl.TestClassificazioneControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TestClassificazioneControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/classificazioneDataset/test_ClassificazioneControl.html#TestClassificazioneControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.classificazioneDataset.test_ClassificazioneControl.TestClassificazioneControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.classificazioneDataset.test_ClassificazioneControl.TestClassificazioneControl.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/classificazioneDataset/test_ClassificazioneControl.html#TestClassificazioneControl.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.classificazioneDataset.test_ClassificazioneControl.TestClassificazioneControl.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.classificazioneDataset.test_ClassificazioneControl.TestClassificazioneControl.test_ClassificazioneControl">
+<span class="sig-name descname"><span class="pre">test_ClassificazioneControl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/classificazioneDataset/test_ClassificazioneControl.html#TestClassificazioneControl.test_ClassificazioneControl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.classificazioneDataset.test_ClassificazioneControl.TestClassificazioneControl.test_ClassificazioneControl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-app.source.classificazioneDataset">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app.source.classificazioneDataset" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">app.source.classificazioneDataset package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-app.source.classificazioneDataset.ClassificazioneControl">app.source.classificazioneDataset.ClassificazioneControl module</a></li>
+<li><a class="reference internal" href="#module-app.source.classificazioneDataset.test_ClassificazioneControl">app.source.classificazioneDataset.test_ClassificazioneControl module</a></li>
+<li><a class="reference internal" href="#module-app.source.classificazioneDataset">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/app.source.classificazioneDataset.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">QuantuMoonLight  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">app.source.classificazioneDataset package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, QML Team.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+    </div>
+  </body>
+</html>

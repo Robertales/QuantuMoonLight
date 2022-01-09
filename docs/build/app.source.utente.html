@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>app.source.utente package &#8212; QuantuMoonLight  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/groundwork.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">QuantuMoonLight  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">app.source.utente package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="app-source-utente-package">
+<h1>app.source.utente package<a class="headerlink" href="#app-source-utente-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-app.source.utente.UserAuth">
+<span id="app-source-utente-userauth-module"></span><h2>app.source.utente.UserAuth module<a class="headerlink" href="#module-app.source.utente.UserAuth" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.source.utente.UserAuth.UserAuth">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UserAuth</span></span><a class="reference internal" href="_modules/app/source/utente/UserAuth.html#UserAuth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.UserAuth.UserAuth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">flask_login.mixins.UserMixin</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.utente.UserAuth.UserAuth.get_id">
+<span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/UserAuth.html#UserAuth.get_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.UserAuth.UserAuth.get_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.utente.UserAuth.load_user">
+<span class="sig-name descname"><span class="pre">load_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_email</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/UserAuth.html#load_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.UserAuth.load_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.source.utente.UtenteControl">
+<span id="app-source-utente-utentecontrol-module"></span><h2>app.source.utente.UtenteControl module<a class="headerlink" href="#module-app.source.utente.UtenteControl" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.utente.UtenteControl.login">
+<span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/UtenteControl.html#login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.UtenteControl.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads a user login credentials from a http request and if they are valid logs the user in with those same
+credentials,changing his state from anonymous  user to logged user
+:return: tbd</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.utente.UtenteControl.logout">
+<span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/UtenteControl.html#logout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.UtenteControl.logout" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>logs a user out, changing his state from logged user to anonymous user</dt><dd><p>:return:tbd</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.utente.UtenteControl.signup">
+<span class="sig-name descname"><span class="pre">signup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/UtenteControl.html#signup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.UtenteControl.signup" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Reads the user credentials from a http request and adds him to the project database</dt><dd><dl class="field-list simple">
+<dt class="field-odd">return</dt>
+<dd class="field-odd"><p>tbd</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.source.utente.UtenteControl.signup_newsletter">
+<span class="sig-name descname"><span class="pre">signup_newsletter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/UtenteControl.html#signup_newsletter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.UtenteControl.signup_newsletter" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>changes the User ,whose email was passed as a http request parameter ,newsletter flag to true</dt><dd><dl class="field-list simple">
+<dt class="field-odd">return</dt>
+<dd class="field-odd"><p>tbd</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-app.source.utente.test_UtenteControl">
+<span id="app-source-utente-test-utentecontrol-module"></span><h2>app.source.utente.test_UtenteControl module<a class="headerlink" href="#module-app.source.utente.test_UtenteControl" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_Login_Logout">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Test_Login_Logout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_Login_Logout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_Login_Logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_Login_Logout.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_Login_Logout.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_Login_Logout.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_Login_Logout.tearDown">
+<span class="sig-name descname"><span class="pre">tearDown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_Login_Logout.tearDown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_Login_Logout.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for deconstructing the test fixture after testing it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_Login_Logout.test_LoginLogout">
+<span class="sig-name descname"><span class="pre">test_LoginLogout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_Login_Logout.test_LoginLogout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_Login_Logout.test_LoginLogout" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the login functionality of the website,by trying to log in a predetermined and existing user account and
+then logging out</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_Login_Logout.test_Newsletter">
+<span class="sig-name descname"><span class="pre">test_Newsletter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_Login_Logout.test_Newsletter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_Login_Logout.test_Newsletter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_Login_Logout.test_loginUnregistered">
+<span class="sig-name descname"><span class="pre">test_loginUnregistered</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_Login_Logout.test_loginUnregistered"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_Login_Logout.test_loginUnregistered" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_Login_Logout.test_loginWrongPassword">
+<span class="sig-name descname"><span class="pre">test_loginWrongPassword</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_Login_Logout.test_loginWrongPassword"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_Login_Logout.test_loginWrongPassword" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_signup">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Test_signup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_signup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_signup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_signup.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_signup.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_signup.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_signup.tearDown">
+<span class="sig-name descname"><span class="pre">tearDown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_signup.tearDown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_signup.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for deconstructing the test fixture after testing it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_signup.test_signup">
+<span class="sig-name descname"><span class="pre">test_signup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_signup.test_signup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_signup.test_signup" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the sign-up functionality of the website, creating a dummy  account and verifying it was correctly
+registered as a user</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.source.utente.test_UtenteControl.Test_signup.test_signupEmptyToken">
+<span class="sig-name descname"><span class="pre">test_signupEmptyToken</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/source/utente/test_UtenteControl.html#Test_signup.test_signupEmptyToken"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.source.utente.test_UtenteControl.Test_signup.test_signupEmptyToken" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the sign-up functionality of the website, creating a dummy  account with an empty and verifying it was
+correctly registered as a user and the token was correctly parsed to Null</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-app.source.utente">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app.source.utente" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">app.source.utente package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-app.source.utente.UserAuth">app.source.utente.UserAuth module</a></li>
+<li><a class="reference internal" href="#module-app.source.utente.UtenteControl">app.source.utente.UtenteControl module</a></li>
+<li><a class="reference internal" href="#module-app.source.utente.test_UtenteControl">app.source.utente.test_UtenteControl module</a></li>
+<li><a class="reference internal" href="#module-app.source.utente">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/app.source.utente.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">QuantuMoonLight  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">app.source.utente package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, QML Team.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+    </div>
+  </body>
+</html>
