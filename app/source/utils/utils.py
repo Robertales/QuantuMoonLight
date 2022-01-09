@@ -1,14 +1,10 @@
-#!C:\Users\Gennaro\Miniconda3\envs\python\python.exe
-print("Content-Type: text/html\n")
-
 from openpyxl import Workbook
-from openpyxl.utils import get_column_letter
-
 import csv
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
+
 
 # ritorna il numero di colonne di un dataset (di default conta anche la colonna dei labels)
 def numberOfColumns(filename):
@@ -18,6 +14,14 @@ def numberOfColumns(filename):
     f.close()
     return numCols  # Read first line and count columns
 
+
+# ritorna il numero di righe di un dataset
+def numberOfRaws(filename):
+    results = pd.read_csv(filename)
+
+    return len(results)
+
+
 # crea la Lista contenente le label delle feature
 def createFeatureList(numCols):
     featureList = []
@@ -26,29 +30,30 @@ def createFeatureList(numCols):
         featureList.append(stringa)
     return featureList
 
+
 def classifier(number_of_training_instances):
-    c = KNeighborsClassifier(n_neighbors =number_of_training_instances, weights='distance')
+    c = KNeighborsClassifier(n_neighbors=number_of_training_instances, weights='distance')
     return c
 
-### fitness for scikit-learn knn pesato #####
+
+# fitness for scikit-learn knn pesato
 def test(x_train, x_test, list_of_instances):
     neigh = classifier(len(list_of_instances))
-    neigh.fit(x_train[list_of_instances, :-2], x_train[list_of_instances,-1])
-    accuracy=neigh.score(x_test[:, :-2], x_test[:,-1])
+    neigh.fit(x_train[list_of_instances, :-2], x_train[list_of_instances, -1])
+    accuracy = neigh.score(x_test[:, :-2], x_test[:, -1])
     return accuracy
 
 
 def prepareData(databasePath):
-
-    ##### READ dataset ############################################################
+    # READ dataset
 
     data = pd.read_csv(databasePath)
 
     # preprocessing
     # replace categorical data
     # da modificare
-    #dictionaryCat = {"class": {"Iris-setosa": 0, "Iris-versicolor": 1, "Iris-virginica": 2}}
-    #data.replace(dictionaryCat, inplace=True)
+    # dictionaryCat = {"class": {"Iris-setosa": 0, "Iris-versicolor": 1, "Iris-virginica": 2}}
+    # data.replace(dictionaryCat, inplace=True)
 
     # print(data.head())
 
@@ -73,14 +78,17 @@ def prepareData(databasePath):
 
 
 def printRunResults(indexR, pop, stats, hof, logbook):
-    resultString="Run " + indexR + "\n" + "Number of evaluations " + logbook.select('nevals')[-1] + "\nBest fitness " + hof[0].fitness.values[0] + "\nBest individual " + hof[0]
+    resultString = "Run " + indexR + "\n" + "Number of evaluations " + logbook.select('nevals')[
+        -1] + "\nBest fitness " + hof[0].fitness.values[0] + "\nBest individual " + hof[0]
     return resultString
 
 
 def writeTxt(fileName, list_values):
     f = open(fileName, "w+")
     for c in list_values:
-      f.write(str(c)+"\n")
+        f.write(str(c) + "\n")
+    f.close()
+
 
 def writeXls(fileName, generations, evaluations, bestfits, times):
     wb = Workbook()
@@ -90,7 +98,6 @@ def writeXls(fileName, generations, evaluations, bestfits, times):
     ws1.cell(column=2, row=1, value="Number of Evaluations")
     ws1.cell(column=3, row=1, value="Best Fitness Value")
     ws1.cell(column=4, row=1, value="Time in seconds")
-
 
     row = 2
     for g in generations:
@@ -112,4 +119,6 @@ def writeXls(fileName, generations, evaluations, bestfits, times):
         ws1.cell(column=4, row=row, value=g)
         row += 1
 
-    wb.save(filename = fileName)
+    wb.save(filename=fileName)
+    wb.close()
+

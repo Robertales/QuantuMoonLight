@@ -77,7 +77,7 @@ def smista():
     #                               fe=bool(featureExtraction), k_fold=bool(kFold), doQSVM=bool(doQSVM))
     # db.session.add(salvataggiodatabase)
     # db.session.commit()
-    # path = Path.cwd()/ 'upload_dataset' / current_user.email / str(salvataggiodatabase.id)
+    # path = Path.parents[0]/ 'upload_dataset' / current_user.email / str(salvataggiodatabase.id)
     # if not path.exists():
     #     path.mkdir()
 
@@ -125,7 +125,7 @@ def smista():
 
 def upload(file, file1, file2):
     print('Request send on ')
-    ROOT_DIR = pathlib.Path(__file__).cwd()
+    ROOT_DIR = pathlib.Path(__file__).parents[1]
     ext_ok = ['txt', 'csv', 'data']
     # log.log()
 

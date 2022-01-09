@@ -15,7 +15,7 @@ class TestValidazioneControl(unittest.TestCase):
 
     def test_ValidazioneControl_SimpleSplit(self):
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = None
         simpleSplit = True
         kFold = None
@@ -26,14 +26,14 @@ class TestValidazioneControl(unittest.TestCase):
                                          simpleSplit=simpleSplit, kFold=kFold, k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
-        pathData = pathlib.Path(__file__).cwd()
+        pathData = pathlib.Path(__file__).parents[0]
         self.assertTrue(exists(pathData / "Data_training.csv"))
         self.assertTrue(exists(pathData / "Data_testing.csv"))
         self.assertTrue(exists(pathData / "featureDataset.csv"))
 
     def test_ValidazioneControl_KFold(self):
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = None
         simpleSplit = None
         kFold = True
@@ -44,7 +44,7 @@ class TestValidazioneControl(unittest.TestCase):
                                          simpleSplit=simpleSplit, kFold=kFold, k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
-        pathData = pathlib.Path(__file__).cwd()
+        pathData = pathlib.Path(__file__).parents[0]
 
         for x in range(k):
             StringaTrain = 'training_fold_{}.csv'.format(x + 1)
@@ -54,7 +54,7 @@ class TestValidazioneControl(unittest.TestCase):
 
     def test_ValidazioneControl_kFold_Fail(self):
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = None
         simpleSplit = None
         kFold = True
@@ -65,7 +65,7 @@ class TestValidazioneControl(unittest.TestCase):
                                          simpleSplit=simpleSplit, kFold=kFold, k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
-        pathData = pathlib.Path(__file__).cwd()
+        pathData = pathlib.Path(__file__).parents[0]
         StringaTrain = 'training_fold_1.csv'
         StringaTest = 'testing_fold_1.csv'
         self.assertFalse(exists(pathData / StringaTrain))
@@ -73,7 +73,7 @@ class TestValidazioneControl(unittest.TestCase):
 
     def test_ValidazioneControl_KFold_SimpleSplit(self):
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = None
         simpleSplit = True
         kFold = True
@@ -84,7 +84,7 @@ class TestValidazioneControl(unittest.TestCase):
                                          simpleSplit=simpleSplit, kFold=kFold, k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
-        pathData = pathlib.Path(__file__).cwd()
+        pathData = pathlib.Path(__file__).parents[0]
 
         for x in range(k):
             StringaTrain = 'training_fold_{}.csv'.format(x + 1)
@@ -98,8 +98,8 @@ class TestValidazioneControl(unittest.TestCase):
 
     def test_ValidazioneControl_NoSplit(self):
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
-        userpathTest = pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpathTest = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         simpleSplit = None
         kFold = None
         k = 10
@@ -109,13 +109,13 @@ class TestValidazioneControl(unittest.TestCase):
                                          simpleSplit=simpleSplit, kFold=kFold, k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
-        pathData = pathlib.Path(__file__).cwd()
+        pathData = pathlib.Path(__file__).parents[0]
         self.assertTrue(exists(pathData / "Data_training.csv"))
         self.assertTrue(exists(pathData / "Data_testing.csv"))
 
     def test_ValidazioneControl_NoSplit_Fail(self):
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = None
         simpleSplit = None
         kFold = None
@@ -126,13 +126,13 @@ class TestValidazioneControl(unittest.TestCase):
                                          simpleSplit=simpleSplit, kFold=kFold, k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
-        pathData = pathlib.Path(__file__).cwd()
+        pathData = pathlib.Path(__file__).parents[0]
 
         self.assertFalse(exists(pathData / "Data_training.csv"))
         self.assertFalse(exists(pathData / "Data_testing.csv"))
 
     def tearDown(self):
-        directory = pathlib.Path(__file__).cwd()
+        directory = pathlib.Path(__file__).parents[0]
         allFiles = os.listdir(directory)
         csvFiles = [file for file in allFiles if file.endswith(".csv")]
         for file in csvFiles:

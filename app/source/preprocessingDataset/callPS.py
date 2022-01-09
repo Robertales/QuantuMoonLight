@@ -4,7 +4,7 @@ from app.source.utils import utils
 from app.source.preprocessingDataset import PrototypeSelectionProblem as ps
 
 
-def callPrototypeSelection(path: str, number_of_reduced_training_instances=10):
+def callPrototypeSelection(path: pathlib.Path, number_of_reduced_training_instances=10):
     """
     This function executes the prototype selection on the given dataset
 
@@ -20,7 +20,7 @@ def callPrototypeSelection(path: str, number_of_reduced_training_instances=10):
                                                              number_of_reduced_training_instances)
 
     print(chromosomeToEvaluate)
-    pathFileReducedTrainingPS = pathlib.Path(__file__).parents[3]
+    pathFileReducedTrainingPS = pathlib.Path(path).parent
     pathFileReducedTrainingPS = pathFileReducedTrainingPS / 'reducedTrainingPS.csv'
 
     np.savetxt(pathFileReducedTrainingPS.__str__(), x_train[chromosomeToEvaluate, :], delimiter=",", fmt='%s')
