@@ -3,6 +3,7 @@ from flask import render_template, request, Response
 from app import app
 from app.source.utils import utils
 from flask_login import current_user, login_required
+from flask import session
 
 
 @app.route('/')
@@ -108,14 +109,22 @@ def smista():
         print("\nIn classificazione...")
         backend = request.form.get("backend")
         backend = "ibmq_qasm_simulator"
-        # token= request.form.get('token') da inserire nel form
+    #     if request.form.get('token'):
+    #         token=request.form.get('token')
+    #     else:
+    #         token=current_user.token
+    # #   session["datasetPath"]=path
+    #     if request["email"]:
+    #         email=request["email"]
+    #     else:
+    #         email=current_user.email
         token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
         if featureExtraction:
             features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
         else:
             features = utils.createFeatureList(utils.numberOfColumns(userpath) - 1)
         app.test_client().post("/classificazioneControl",
-                               data=dict(pathTrain=pathTrain, pathTest=pathTest,  # dataset=salvataggiodatabase,
+                               data=dict(pathTrain=pathTrain, pathTest=pathTest, #email=email,
                                          userpathToPredict=userpathToPredict,
                                          features=features, token=token, backend=backend))
 

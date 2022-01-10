@@ -39,6 +39,7 @@ def classificazioneControl():
     token=request.form.get("token")
     backend = request.form.get("backend")
 
+
     result: dict = classify(pathTrain, pathTest, pathPrediction, features, token, backend)
     if result != 0:
         getClassifiedDataset(result)
@@ -97,6 +98,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     aqua_globals.random_seed = seed
 
     training_input, test_input = loadDataset(pathTrain, pathTest, features, label='labels')
+
     pathDoPrediction = pathlib.Path(__file__).parents[3]
     if(os.path.exists("doPredictionFE.csv")):
         pathDoPrediction = pathDoPrediction / "doPredictionFE.csv"
@@ -130,8 +132,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
 
     predicted_labels = result["predicted_labels"]
 
-    #dataset=request.form.get("dataset")
-    #classifiedFile=open( root path / current_user.email / dataset.id, "w")
+    # classifiedFile = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
     classifiedFile = open( pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv", "w")
     predictionFile = open(userpathToPredict, "r")
     rows = predictionFile.readlines()
@@ -181,11 +182,9 @@ def getClassifiedDataset(result):
     :return:
     """
     msg = MIMEMultipart()
-    # assert isinstance(current_user, User)
-    # user = current_user
-    # dataset=session["currentDataset"]
     msg['From'] = "quantumoonlight@gmail.com"
     msg['To'] = "quantumoonlight@gmail.com"
+    #msg['To'] = request["email"]
     msg['Date'] = formatdate(localtime=True)
     msg['Subject'] = "Classification Result of "  # + dataset.name + " " + dataset.upload_date
 
@@ -200,6 +199,7 @@ def getClassifiedDataset(result):
         msg.attach(MIMEText("Success ratio: " + "{:.2%}".format(successRatio) + "\n"))
         msg.attach(MIMEText("Total time elapsed:" + result.get("totalTime") + "s"))
 
+        #file = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
         file = pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv"
         attach_file = open(file, "rb")
         payload = MIMEBase('application', "octet-stream")
