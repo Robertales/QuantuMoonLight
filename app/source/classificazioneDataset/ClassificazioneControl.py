@@ -102,7 +102,8 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
         pathDoPrediction = pathDoPrediction / "doPredictionFE.csv"
     else:
         pathDoPrediction = pathDoPrediction / userpathToPredict
-    predizione = np.array(list(csv.reader(open(pathDoPrediction.__str__(), "r"), delimiter=","))).astype("float")
+    filetoPredict=open(pathDoPrediction.__str__(), "r")
+    predizione = np.array(list(csv.reader(filetoPredict, delimiter=","))).astype("float")
 
     feature_map = ZZFeatureMap(feature_dimension=qubit, reps=2, entanglement='linear')
     print(feature_map)
@@ -142,7 +143,9 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     for row in rows:
         classifiedFile.write(row.rstrip("\n") + "," + str(predicted_labels[i]) + "\n")
         i += 1
-
+    classifiedFile.close()
+    predictionFile.close()
+    filetoPredict.close()
     if noBackend:
         result["noBackend"] = True
     return result
@@ -211,6 +214,7 @@ def getClassifiedDataset(result):
         server.login("quantumoonlight@gmail.com", "Quantum123?")
         server.send_message(msg)
         server.close()
+        attach_file.close()
     except:
         return 0
     return 1

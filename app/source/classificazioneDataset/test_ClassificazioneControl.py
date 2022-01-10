@@ -30,7 +30,7 @@ class TestClassificazioneControl(unittest.TestCase):
         response = tester.post(
             '/classificazioneControl',
             data=dict(pathTrain=pathTrain, pathTest=pathTest,
-                      userpathToPredict=pathPrediction, features=features,
+                      pathPrediction=pathPrediction, features=features,
                       token=token, backend=backend))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
@@ -87,9 +87,9 @@ class TestClassificazioneControl(unittest.TestCase):
         result["testing_accuracy"]=0.55687446747
         result["test_success_ratio"] =0.4765984595
         result["totalTime"]=str(90.7)
+        open( pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv", "w")
 
         value = ClassificazioneControl.getClassifiedDataset(result)
-        classifiedFile = open( pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv", "w")
         self.assertEqual(value, 1)
 
 
