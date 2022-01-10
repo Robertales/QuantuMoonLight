@@ -130,6 +130,7 @@ class TestRoutes(unittest.TestCase):
                                          reduceFE=featureExtraction, doQSVM=doQSVM,
                                          nrColumns=numColsFE))
         statuscode = response.status_code
+        print(statuscode)
         self.assertEqual(statuscode, 400)
 
     def tearDown(self):

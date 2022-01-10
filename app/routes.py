@@ -37,16 +37,15 @@ def aboutUs():
 
 
 @app.route('/formcontrol', methods=['GET', 'POST'])
-#@login_required
+# @login_required
 def smista():
-
-
     print("\nIn smista carico le richieste dal form...")
     dataset_train = request.files.get('dataset_train')
     dataset_test = request.files.get('dataset_test')
     dataset_prediction = request.files.get('dataset_prediction')
     paths = upload(dataset_train, dataset_test, dataset_prediction)
-    if paths.__eq__(-1):
+    if paths == (-1):
+        print("Estensione non valida")
         return Response(status=400)
     userpath = paths[0]
     userpathTest = paths[1]
@@ -71,7 +70,6 @@ def smista():
     print("numRawsPS:  ", numRawsPS)
     numColsFE = request.form.get('nrColumns', type=int)  # numero di colonne dopo la Feature Extraction con PCA
     print("numColsFE: ", numColsFE)
-
 
     # assert isinstance(current_user, User)
     # salvataggiodatabase = Dataset(email_user=current_user.email, name=file.filename, upload_date=datetime.now(),
@@ -116,9 +114,10 @@ def smista():
             features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
         else:
             features = utils.createFeatureList(utils.numberOfColumns(userpath) - 1)
-        app.test_client().post("/classificazioneControl", data=dict(pathTrain=pathTrain, pathTest=pathTest, #dataset=salvataggiodatabase,
-                                                                    userpathToPredict=userpathToPredict,
-                                                                    features=features, token=token, backend=backend))
+        app.test_client().post("/classificazioneControl",
+                               data=dict(pathTrain=pathTrain, pathTest=pathTest,  # dataset=salvataggiodatabase,
+                                         userpathToPredict=userpathToPredict,
+                                         features=features, token=token, backend=backend))
 
     print("\n\nSmista ha finito! To the Moon!")
 
@@ -136,9 +135,9 @@ def upload(file, file1, file2):
     temp = file.filename
     extension = temp.split('.')[-1]
     if not ext_ok.__contains__(extension):
-        return 'Il file Dataset Train ha un estensione non ammessa!'
+        return -1
     if file is None:
-        return 'No Train set uploaded'
+        return -1
     uploaddir = ROOT_DIR / 'upload_dataset/'
     userfile_name = file.filename
     userpath = uploaddir / userfile_name
