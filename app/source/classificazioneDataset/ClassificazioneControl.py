@@ -2,6 +2,8 @@ import os.path
 import time
 import csv
 import pathlib
+import warnings
+
 import numpy as np
 import pandas as pd
 from qiskit import IBMQ
@@ -20,6 +22,9 @@ from app.source.utils import utils
 from app import app
 from flask import request
 
+warnings.simplefilter(action='ignore', category=DeprecationWarning)
+
+
 @app.route('/classificazioneControl', methods=['POST'])
 #@login_required
 def classificazioneControl():
@@ -29,12 +34,12 @@ def classificazioneControl():
     """
     pathTrain=request.form.get("pathTrain")
     pathTest = request.form.get("pathTest")
-    userpathToPredict=request.form.get("userpathToPredict")
+    pathPrediction=request.form.get("pathPrediction")
     features=request.form.getlist("features")
     token=request.form.get("token")
     backend = request.form.get("backend")
 
-    result: dict = classify(pathTrain, pathTest, userpathToPredict , features, token, backend)
+    result: dict = classify(pathTrain, pathTest, pathPrediction, features, token, backend)
     if result != 0:
         getClassifiedDataset(result)
 
@@ -60,6 +65,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     start_time = time.time()
     noBackend = False
 
+    #print("token: "+token)
     try:
         IBMQ.enable_account(token)
     except:
@@ -80,6 +86,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
             print("least busy backend: ", backend)
             print("backend qubit:" + str(provider.get_backend(backend).configuration().n_qubits))
     except:
+        #when selected backend has not enough qubit, or no backends has enough qubits, or the user token has no privileges to use the selected backend
         noBackend = True
         backend = provider.get_backend('ibmq_qasm_simulator')
         print("backend selected: simulator")
@@ -90,13 +97,12 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     aqua_globals.random_seed = seed
 
     training_input, test_input = loadDataset(pathTrain, pathTest, features, label='labels')
-    pathDoPrediction = pathlib.Path(__file__).cwd()
+    pathDoPrediction = pathlib.Path(__file__).parents[3]
     if(os.path.exists("doPredictionFE.csv")):
         pathDoPrediction = pathDoPrediction / "doPredictionFE.csv"
     else:
         pathDoPrediction = pathDoPrediction / userpathToPredict
     predizione = np.array(list(csv.reader(open(pathDoPrediction.__str__(), "r"), delimiter=","))).astype("float")
-    #predizione= np.array(list(csv.reader(open(pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv", "r"), delimiter=","))).astype("float")   #TESTING
 
     feature_map = ZZFeatureMap(feature_dimension=qubit, reps=2, entanglement='linear')
     print(feature_map)
@@ -108,6 +114,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     print('Running....\n')
     try:
         result = qsvm.run(quantum_instance)
+        IBMQ.disable_account()
     except:
         print("Errore su server ibm")
         result = 1
@@ -124,8 +131,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
 
     #dataset=request.form.get("dataset")
     #classifiedFile=open( root path / current_user.email / dataset.id, "w")
-    classifiedFile = open( pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv", "w")
-    #classifiedFile = open("C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv", "w")  #TESTING
+    classifiedFile = open( pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv", "w")
     predictionFile = open(userpathToPredict, "r")
     rows = predictionFile.readlines()
 
@@ -191,8 +197,7 @@ def getClassifiedDataset(result):
         msg.attach(MIMEText("Success ratio: " + "{:.2%}".format(successRatio) + "\n"))
         msg.attach(MIMEText("Total time elapsed:" + result.get("totalTime") + "s"))
 
-        file = pathlib.Path(__file__).cwd() / "upload_dataset" / "classifiedFile.csv"
-        #file = "C:\\Users\\lucac\\PycharmProjects\\QuantuMoonLight\\upload_dataset\\classifiedFile.csv"    #TESTING
+        file = pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv"
         attach_file = open(file, "rb")
         payload = MIMEBase('application', "octet-stream")
         payload.set_payload(attach_file.read())
@@ -200,9 +205,12 @@ def getClassifiedDataset(result):
         payload.add_header('Content-Disposition', 'attachment', filename="ClassifiedDataset.csv")
         msg.attach(payload)
 
-    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-    server.ehlo()
-    server.login("quantumoonlight@gmail.com", "Quantum123?")
-    server.send_message(msg)
-    server.close()
-    return "email inviata"
+    try:
+        server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+        server.ehlo()
+        server.login("quantumoonlight@gmail.com", "Quantum123?")
+        server.send_message(msg)
+        server.close()
+    except:
+        return 0
+    return 1
