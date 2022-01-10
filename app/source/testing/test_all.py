@@ -450,6 +450,39 @@ class Test_signup(TestCase):
         self.assertIsNone(user.token)
         db.session.commit()
 
+    def test_signupInvalidUsername(self):
+        """
+        test the sign-up functionality of the website, creating a dummy  account with an empty username and verifying
+        it wasn't correctly registered as a user
+        """
+        user = User.query.filter_by(email='mariorossi12@gmail.com').first()
+        self.assertIsNone(user)
+        tester = app.test_client()
+        response = tester.post(
+            '/signup',
+            data=dict(email="mariorossi12@gmail.com", password="prosopagnosia",
+                      nome="Antonio", cognome="De Curtis"))
+        user = User.query.filter_by(email='mariorossi12@gmail.com').first()
+        self.assertIsNone(user)
+        db.session.commit()
+
+
+    def test_signupInvalidEmail(self):
+        """
+        test the sign-up functionality of the website, creating a dummy  account with an empty email and verifying it
+        wasn't correctly registered as a user.
+        """
+        user = User.query.filter_by(email='mariorossi12@gmail.com').first()
+        self.assertIsNone(user)
+        tester = app.test_client()
+        response = tester.post(
+            '/signup',
+            data=dict(password="prosopagnosia", username="Antonio de Curtis ",
+                      nome="Antonio", cognome="De Curtis"))
+        user = User.query.filter_by(email='mariorossi12@gmail.com').first()
+        self.assertIsNone(user)
+        db.session.commit()
+
     def tearDown(self):
         with app.app_context():
             db.drop_all()

@@ -1,5 +1,5 @@
 import pathlib
-from flask import render_template, request
+from flask import render_template, request, Response
 from app import app
 from app.source.utils import utils
 from flask_login import current_user, login_required
@@ -46,6 +46,8 @@ def smista():
     dataset_test = request.files.get('dataset_test')
     dataset_prediction = request.files.get('dataset_prediction')
     paths = upload(dataset_train, dataset_test, dataset_prediction)
+    if paths.__eq__(-1):
+        return Response(status=400)
     userpath = paths[0]
     userpathTest = paths[1]
     userpathToPredict = paths[2]
@@ -142,7 +144,7 @@ def upload(file, file1, file2):
     userpath = uploaddir / userfile_name
     file.save(userpath)
     if file.content_length > 80000000:
-        return 'Il file è troppo grande!'
+        return -1
 
     # Dataset Test from form
     temp = file1.filename
@@ -150,12 +152,12 @@ def upload(file, file1, file2):
     userpathTest = ''
     if file1.filename != "" and not ext_ok.__contains__(extension):
         # print(file1.filename)
-        return 'Il file Dataset Test ha un estensione non ammessa!'
+        return -1
     if file1.filename != "":
         userpathTest = uploaddir / file1.filename
         file1.save(userpathTest)
     if file1.content_length > 80000000:
-        return 'Il file è troppo grande!'
+        return -1
 
     # Dataset to Predict from form
     # userpathToPredict = 'app/source/classificazioneDataset/doPrediction.csv'
@@ -165,12 +167,12 @@ def upload(file, file1, file2):
     extension = temp.split('.')[-1]
     userpathToPredict = ''
     if file2.filename != "" and not ext_ok.__contains__(extension):
-        return 'Il file to Predict ha un estensione non ammessa!'
+        return -1
     if file2.filename != "" != 0:
         userpathToPredict = uploaddir / file2.filename
         file2.save(userpathToPredict)
     if file2.content_length > 80000000:
-        return 'Il file è troppo grande!'
+        return -1
     print("UserpathTrain: ", userpath)
     # print("DatasetTrain: ", file.filename)
     print("UserpathTest: ", userpathTest)
