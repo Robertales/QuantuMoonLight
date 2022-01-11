@@ -2,6 +2,7 @@ from app import app, db
 from app.models import User, Article
 from flask import request, render_template
 
+
 @app.route('/gestione/', methods=['GET', 'POST'])
 def getList():
     """
@@ -15,12 +16,13 @@ def getList():
     if scelta == "listArticlesData":
         firstData = request.form.get('firstData')
         secondData = request.form.get('secondData')
-        list = getListaArticlesData(firstData,secondData)
-    if scelta=="listArticlesUser":
+        list = getListaArticlesData(firstData, secondData)
+    if scelta == "listArticlesUser":
         email = request.form.get('email')
         list = getListaArticlesUser(email)
 
-    return "sei in gestione";
+    return "sei in gestione"
+
 
 @app.route('/removeUser/', methods=['GET', 'POST'])
 def removeUser():
@@ -35,6 +37,7 @@ def removeUser():
     db.session.delete(user)
     db.session.commit()
     return render_template('index.html')
+
 
 @app.route('/ModifyUser/', methods=['GET', 'POST'])
 def modifyUserProfile():
@@ -60,6 +63,7 @@ def modifyUserProfile():
     db.session.commit()
     return render_template('index.html')
 
+
 def getListaUser():
     """
     the function returns the list of registered users
@@ -69,6 +73,7 @@ def getListaUser():
     """
     return User.query.all()
 
+
 def getListaArticlesData(data1, data2):
     """
     the function returns the list of Article
@@ -76,7 +81,8 @@ def getListaArticlesData(data1, data2):
     :return: article list filter by date
     :rtype: dict
     """
-    return Article.query.filter(Article.data.between(data1,data2))
+    return Article.query.filter(Article.data.between(data1, data2))
+
 
 def getListaArticlesUser(email):
     """
@@ -85,4 +91,4 @@ def getListaArticlesUser(email):
     :return: article list filter by user
     :rtype: dict
     """
-    return Article.query.filter_by(email_user = email).all()
+    return Article.query.filter_by(email_user=email).all()

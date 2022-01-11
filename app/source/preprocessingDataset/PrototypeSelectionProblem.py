@@ -21,7 +21,11 @@ def fitness_knn(chromosome, x_train):
     return accuracy,
 
 
-def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_training_instances,dataPath: Path):
+def runGeneticAlgorithXPS(
+        number_of_solutions,
+        x_train,
+        number_of_reduced_training_instances,
+        dataPath: Path):
     # PARAMETERS FOR THE  PROBLEM
     chromosome_size = number_of_reduced_training_instances
     reportName = "TestPS_"
@@ -50,7 +54,12 @@ def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_traini
     toolbox = base.Toolbox()
 
     toolbox.register("genes", random.randint, lowB, upB)
-    toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.genes, n=chromosome_size)
+    toolbox.register(
+        "individual",
+        tools.initRepeat,
+        creator.Individual,
+        toolbox.genes,
+        n=chromosome_size)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
     stats = tools.Statistics(key=lambda ind: ind.fitness.values)
@@ -59,12 +68,18 @@ def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_traini
     stats.register("min", np.min)
     stats.register("max", np.max)
 
-    reportName += str(num_evals_max) + "_" + str(indpb) + "_" + str(cxpb) + "_" + str(tournsize)
+    reportName += str(num_evals_max) + "_" + str(indpb) + \
+        "_" + str(cxpb) + "_" + str(tournsize)
     xlsFileName = reportName + ".xlsx"
     txtFileName = reportName + ".txt"
 
     toolbox.register("mate", tools.cxOnePoint)
-    toolbox.register("mutate", tools.mutUniformInt, low=lowB, up=upB, indpb=indpb)
+    toolbox.register(
+        "mutate",
+        tools.mutUniformInt,
+        low=lowB,
+        up=upB,
+        indpb=indpb)
     toolbox.register("select", tools.selTournament, tournsize=tournsize)
     toolbox.register("evaluate", fitness_knn, x_train=x_train)
 
@@ -85,8 +100,8 @@ def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_traini
         # To call the genetic algorithm
         time_Start = t.time()
 
-        best_population, logbook = ga.deapGeneticAlgorithm(toolbox, population, cxpb, mutpb, generations, num_evals_max,
-                                                           stats, hof)
+        best_population, logbook = ga.deapGeneticAlgorithm(
+            toolbox, population, cxpb, mutpb, generations, num_evals_max, stats, hof)
         time_End = t.time()
 
         time = time_End - time_Start
@@ -105,9 +120,15 @@ def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_traini
         bestfits.append(bestf)
         times.append(time)
 
-        utils.writeXls(dataPath/xlsFileName, gens, evaluations, bestfits, times)
+        utils.writeXls(
+            dataPath /
+            xlsFileName,
+            gens,
+            evaluations,
+            bestfits,
+            times)
 
-        utils.writeTxt(dataPath/txtFileName, bestInds)
+        utils.writeTxt(dataPath / txtFileName, bestInds)
 
     # print(bestfits)
     medianFitness = s.median_high(bestfits)

@@ -27,12 +27,18 @@ class Test_signup(TestCase):
         tester = app.test_client()
         response = tester.post(
             '/signup',
-            data=dict(email="mariorossi12@gmail.com", password="prosopagnosia", username="Antonio de Curtis ",
-                      token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2",
-                      nome="Antonio", cognome="De Curtis"))
+            data=dict(
+                email="mariorossi12@gmail.com",
+                password="prosopagnosia",
+                username="Antonio de Curtis ",
+                token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2",
+                nome="Antonio",
+                cognome="De Curtis"))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
-        self.assertTrue(User.query.filter_by(email='mariorossi12@gmail.com').first())
+        self.assertTrue(
+            User.query.filter_by(
+                email='mariorossi12@gmail.com').first())
         db.session.commit()
 
     def test_signupEmptyToken(self):
@@ -45,12 +51,16 @@ class Test_signup(TestCase):
         tester = app.test_client()
         response = tester.post(
             '/signup',
-            data=dict(email="mariorossi12@gmail.com", password="prosopagnosia", username="Antonio de Curtis ",
-                      token="",
-                      nome="Antonio", cognome="De Curtis"))
+            data=dict(
+                email="mariorossi12@gmail.com",
+                password="prosopagnosia",
+                username="Antonio de Curtis ",
+                token="",
+                nome="Antonio",
+                cognome="De Curtis"))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
-        user=User.query.filter_by(email='mariorossi12@gmail.com').first()
+        user = User.query.filter_by(email='mariorossi12@gmail.com').first()
         self.assertTrue(user)
         self.assertIsNone(user.token)
         db.session.commit()
@@ -70,7 +80,6 @@ class Test_signup(TestCase):
         user = User.query.filter_by(email='mariorossi12@gmail.com').first()
         self.assertIsNone(user)
         db.session.commit()
-
 
     def test_signupInvalidEmail(self):
         """
@@ -104,8 +113,12 @@ class Test_Login_Logout(TestCase):
             db.create_all()
             password = 'quercia'
             password = hashlib.sha512(password.encode()).hexdigest()
-            utente = User(email="boscoverde27@gmail.com", password=password, username="Antonio de Curtis",
-                          name="Antonio", surname="De Curtis")
+            utente = User(
+                email="boscoverde27@gmail.com",
+                password=password,
+                username="Antonio de Curtis",
+                name="Antonio",
+                surname="De Curtis")
             db.session.add(utente)
             db.session.commit()
 
@@ -135,7 +148,9 @@ class Test_Login_Logout(TestCase):
         with tester:
             response = tester.post(
                 '/login',
-                data=dict(email="emailsbagliata1234d@gmail.com", password='quercia'))
+                data=dict(
+                    email="emailsbagliata1234d@gmail.com",
+                    password='quercia'))
             statuscode = response.status_code
             self.assertEqual(statuscode, 200)
             self.assertNotIsInstance(current_user, UserMixin)
@@ -148,7 +163,9 @@ class Test_Login_Logout(TestCase):
         with tester:
             response = tester.post(
                 '/login',
-                data=dict(email="boscoverde27@gmail.com", password='passwordsbagliata'))
+                data=dict(
+                    email="boscoverde27@gmail.com",
+                    password='passwordsbagliata'))
             statuscode = response.status_code
             self.assertEqual(statuscode, 200)
             self.assertNotIsInstance(current_user, UserMixin)
