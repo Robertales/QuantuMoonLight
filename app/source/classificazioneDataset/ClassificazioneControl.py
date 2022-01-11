@@ -32,11 +32,11 @@ def classificazioneControl():
 
     :return:
     """
-    pathTrain=request.form.get("pathTrain")
+    pathTrain = request.form.get("pathTrain")
     pathTest = request.form.get("pathTest")
-    pathPrediction=request.form.get("userpathToPredict")
-    features=request.form.getlist("features")
-    token=request.form.get("token")
+    pathPrediction = request.form.get("userpathToPredict")
+    features = request.form.getlist("features")
+    token = request.form.get("token")
     backend = request.form.get("backend")
 
 
@@ -62,6 +62,10 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     :param backendSelected: backend selezionato dal form(se vuoto utilizza backend di default)
     :return: dict contenente informazioni relative alla classificazione
     """
+
+    print(pathTrain)
+    print(pathTest)
+    print(userpathToPredict)
 
     start_time = time.time()
     noBackend = False
@@ -99,12 +103,15 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
 
     training_input, test_input = loadDataset(pathTrain, pathTest, features, label='labels')
 
+    print(userpathToPredict)
     #pathDoPrediction = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
     pathDoPrediction = pathlib.Path(__file__).parents[3]
     if(os.path.exists( pathDoPrediction / "doPredictionFE.csv")):
         pathDoPrediction = pathDoPrediction / "doPredictionFE.csv"
+        print(pathDoPrediction.__str__())
     else:
         pathDoPrediction = userpathToPredict
+        print(pathDoPrediction.__str__())
         #pathDoPrediction = pathDoPrediction / userpathToPredict
     filetoPredict=open(pathDoPrediction.__str__(), "r")
     predizione = np.array(list(csv.reader(filetoPredict, delimiter=","))).astype("float")
@@ -120,8 +127,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     print('Running....\n')
     try:
         result = qsvm.run(quantum_instance)
-    except Exception as e:
-        print(e)
+    except:
         print("Errore su server ibm")
         result = 1
         return result
@@ -136,7 +142,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     predicted_labels = result["predicted_labels"]
 
     # classifiedFile = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
-    classifiedFile = open( pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv", "w")
+    classifiedFile = open(pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv", "w")
     predictionFile = open(userpathToPredict, "r")
     rows = predictionFile.readlines()
 

@@ -30,7 +30,7 @@ class TestClassificazioneControl(unittest.TestCase):
         response = tester.post(
             '/classificazioneControl',
             data=dict(pathTrain=pathTrain, pathTest=pathTest,
-                      pathPrediction=pathPrediction, features=features,
+                      userpathToPredict=pathPrediction, features=features,
                       token=token, backend=backend))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
@@ -96,6 +96,13 @@ class TestClassificazioneControl(unittest.TestCase):
     def tearDown(self):
         if(os.path.exists(pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv")):
             os.remove(pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv")
+        if (os.path.exists(pathlib.Path(__file__).parents[3] / "DataSetTrainPreprocessato.csv")):
+            os.remove(pathlib.Path(__file__).parents[3] / "DataSetTrainPreprocessato.csv")
+        if (os.path.exists(pathlib.Path(__file__).parents[3] / "DataSetTestPreprocessato.csv")):
+            os.remove(pathlib.Path(__file__).parents[3] / "DataSetTestPreprocessato.csv")
+        if (os.path.exists(pathlib.Path(__file__).parents[3] / "doPredictionFE.csv")):
+                os.remove(pathlib.Path(__file__).parents[3] / "doPredictionFE.csv")
+
 
 
 

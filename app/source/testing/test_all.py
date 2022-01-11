@@ -685,6 +685,7 @@ class TestList(TestCase):
         with app.app_context():
             db.drop_all();
 
+
 class TestClassificazioneControl(unittest.TestCase):
     def setUp(self):
        current_user = User(email="boscoverde27@gmail.com", password="prosopagnosia", username="Antonio de Curtis",
@@ -704,7 +705,7 @@ class TestClassificazioneControl(unittest.TestCase):
         response = tester.post(
             '/classificazioneControl',
             data=dict(pathTrain=pathTrain, pathTest=pathTest,
-                      pathPrediction=pathPrediction, features=features,
+                      userpathToPredict=pathPrediction, features=features,
                       token=token, backend=backend))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
@@ -712,6 +713,7 @@ class TestClassificazioneControl(unittest.TestCase):
 
 
     def test_classify(self):
+        #tester = app.test_client(self)
         pathTrain = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTrainPreprocessato.csv"
         pathTest = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTestPreprocessato.csv"
         pathPrediction = pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
@@ -722,10 +724,12 @@ class TestClassificazioneControl(unittest.TestCase):
         result = ClassificazioneControl.classify(pathTrain, pathTest, pathPrediction, features, token, backendSelected)
         self.assertNotEqual(result, 0)
         self.assertNotEqual(result, 1)
+        #self.assertTrue(isinstance(result, dict))
         self.assertTrue(exists(pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv"))
 
 
     def test_classify_tokenFail(self):
+        #tester = app.test_client(self)
         pathTrain = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTrainPreprocessato.csv"
         pathTest = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTestPreprocessato.csv"
         pathPrediction = pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
@@ -739,6 +743,7 @@ class TestClassificazioneControl(unittest.TestCase):
 
 
     def test_classify_ibmFail(self):
+        #tester = app.test_client(self)
         pathTrain = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTrainPreprocessato.csv"
         pathTest = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTestPreprocessato.csv"
         pathPrediction = pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
@@ -757,16 +762,21 @@ class TestClassificazioneControl(unittest.TestCase):
         result["testing_accuracy"]=0.55687446747
         result["test_success_ratio"] =0.4765984595
         result["totalTime"]=str(90.7)
-        classifiedFile=open( pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv", "w")
+        open( pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv", "w")
 
         value = ClassificazioneControl.getClassifiedDataset(result)
-        classifiedFile.close()
         self.assertEqual(value, 1)
+
 
     def tearDown(self):
         if(os.path.exists(pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv")):
             os.remove(pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv")
-
+        if (os.path.exists(pathlib.Path(__file__).parents[3] / "DataSetTrainPreprocessato.csv")):
+            os.remove(pathlib.Path(__file__).parents[3] / "DataSetTrainPreprocessato.csv")
+        if (os.path.exists(pathlib.Path(__file__).parents[3] / "DataSetTestPreprocessato.csv")):
+            os.remove(pathlib.Path(__file__).parents[3] / "DataSetTestPreprocessato.csv")
+        if (os.path.exists(pathlib.Path(__file__).parents[3] / "doPredictionFE.csv")):
+                os.remove(pathlib.Path(__file__).parents[3] / "doPredictionFE.csv")
 
 
 

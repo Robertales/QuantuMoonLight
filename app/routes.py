@@ -101,8 +101,8 @@ def smista():
                                                               prototypeSelection=prototypeSelection,
                                                               featureExtraction=featureExtraction,
                                                               numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
-    pathTrain = 'DataSetTrainPreprocessato.csv'  # DataSet Train ready to be classified
-    pathTest = 'DataSetTestPreprocessato.csv'  # DataSet Test ready to be classified
+    pathTrain = pathlib.Path(__file__).parents[1] / 'DataSetTrainPreprocessato.csv'  # DataSet Train ready to be classified
+    pathTest = pathlib.Path(__file__).parents[1] / 'DataSetTestPreprocessato.csv'  # DataSet Test ready to be classified
 
     # Classificazione
     if doQSVM:
@@ -150,6 +150,7 @@ def upload(file, file1, file2):
     uploaddir = ROOT_DIR / 'upload_dataset/'
     userfile_name = file.filename
     userpath = uploaddir / userfile_name
+    print(userpath)
     file.save(userpath)
     if file.content_length > 80000000:
         return -1
