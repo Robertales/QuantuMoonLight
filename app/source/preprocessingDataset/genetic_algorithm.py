@@ -5,10 +5,21 @@ import random
 
 # genetic algorithm with mutation probability on each individual and in each generation the population is replace
 # with offpring
-def deapGeneticAlgorithm(toolbox, pop_size, cxpb, mutpb, generations, num_evals_max, stats=None, hof=None,
-                         verbose=__debug__):
+def deapGeneticAlgorithm(
+    toolbox,
+    pop_size,
+    cxpb,
+    mutpb,
+    generations,
+    num_evals_max,
+    stats=None,
+    hof=None,
+    verbose=__debug__,
+):
     logbook = tools.Logbook()
-    logbook.header = ['gen', 'nevals_gen', 'nevals'] + (stats.fields if stats else [])
+    logbook.header = ["gen", "nevals_gen", "nevals"] + (
+        stats.fields if stats else []
+    )
 
     pop = toolbox.population(n=pop_size)
 
@@ -24,7 +35,9 @@ def deapGeneticAlgorithm(toolbox, pop_size, cxpb, mutpb, generations, num_evals_
         hof.update(pop)
 
     record = stats.compile(pop) if stats else {}
-    logbook.record(gen=0, nevals_gen=len(invalid_ind), nevals=len(invalid_ind), **record)
+    logbook.record(
+        gen=0, nevals_gen=len(invalid_ind), nevals=len(invalid_ind), **record
+    )
     if verbose:
         print(logbook.stream)
 
@@ -60,8 +73,12 @@ def deapGeneticAlgorithm(toolbox, pop_size, cxpb, mutpb, generations, num_evals_
             hof.update(offspring)
 
         record = stats.compile(offspring) if stats else {}
-        logbook.record(gen=g + 1, nevals_gen=len(invalid_ind), nevals=logbook.select("nevals")[-1] + len(invalid_ind),
-                       **record)
+        logbook.record(
+            gen=g + 1,
+            nevals_gen=len(invalid_ind),
+            nevals=logbook.select("nevals")[-1] + len(invalid_ind),
+            **record
+        )
         if verbose:
             print(logbook.stream)
 

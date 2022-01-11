@@ -4,10 +4,15 @@ import pathlib
 from flask import request, Response
 from app import app
 from app.source.utils import utils, addAttribute
-from app.source.preprocessingDataset import addClass, callPS, aggId, featureExtractionPCA
+from app.source.preprocessingDataset import (
+    addClass,
+    callPS,
+    aggId,
+    featureExtractionPCA,
+)
 
 
-@app.route('/preprocessingControl', methods=['POST'])
+@app.route("/preprocessingControl", methods=["POST"])
 # @login_required
 def preprocessingControl():
     userpath = request.form.get("userpath")
@@ -25,15 +30,13 @@ def preprocessingControl():
         # Se l'utente non vuole preprocessare il dataset ma vuole fare QSVM,
         # allora qui creo i dataset da classificare aggiungendo la colonna ID
         aggId.addId(
-            pathPC /
-            'Data_training.csv',
-            pathPC /
-            'DataSetTrainPreprocessato.csv')
+            pathPC / "Data_training.csv",
+            pathPC / "DataSetTrainPreprocessato.csv",
+        )
         aggId.addId(
-            pathPC /
-            'Data_testing.csv',
-            pathPC /
-            'DataSetTestPreprocessato.csv')
+            pathPC / "Data_testing.csv",
+            pathPC / "DataSetTestPreprocessato.csv",
+        )
         print("Exiting from preprocessingControl with NoPS and NoFE")
         return Response(status=200)
 
@@ -53,7 +56,8 @@ def preprocessingControl():
         featureExtraction,
         numRawsPS,
         numColsFE,
-        doQSVM)
+        doQSVM,
+    )
 
     # Cancello i file di supporto al preprocessing
     if os.path.exists(pathPC / "TestPS_500_0.15_0.8_5.txt"):
@@ -70,13 +74,14 @@ def preprocessingControl():
 
 
 def preprocessing(
-        userpath: str,
-        userpathToPredict: str,
-        prototypeSelection: bool,
-        featureExtraction: bool,
-        numRowsPS: int,
-        numColsFE: int,
-        doQSVM: bool):
+    userpath: str,
+    userpathToPredict: str,
+    prototypeSelection: bool,
+    featureExtraction: bool,
+    numRowsPS: int,
+    numColsFE: int,
+    doQSVM: bool,
+):
     """
     This function is going to preprocess a given Dataset with prototypeSelection or featureExtraction
 
@@ -103,48 +108,51 @@ def preprocessing(
         print("I'm doing Prototype Selection ...")
 
         callPS.callPrototypeSelection(
-            pathPC / 'Data_training.csv',
-            numRowsPS)  # crea 'reducedTrainingPS.csv'
+            pathPC / "Data_training.csv", numRowsPS
+        )  # crea 'reducedTrainingPS.csv'
         addAttribute.addAttribute(
-            pathPC / 'reducedTrainingPS.csv',
-            pathPC / 'featureDataset.csv')  # modifica 'featureDataset.csv'
+            pathPC / "reducedTrainingPS.csv",
+            pathPC / "featureDataset.csv",
+        )  # modifica 'featureDataset.csv'
         # con le istanze create da 'reducedTrainingPS.csv'
         aggId.addId(
-            pathPC /
-            'featureDataset.csv',
-            pathPC /
-            'DataSetTrainPreprocessato.csv')
+            pathPC / "featureDataset.csv",
+            pathPC / "DataSetTrainPreprocessato.csv",
+        )
         aggId.addId(
-            pathPC /
-            'Data_testing.csv',
-            pathPC /
-            'DataSetTestPreprocessato.csv')
+            pathPC / "Data_testing.csv",
+            pathPC / "DataSetTestPreprocessato.csv",
+        )
 
     # FE with PCA
     elif featureExtraction and not prototypeSelection:
         print("I'm doing Feature Extraction ...")
 
         featureExtractionPCA.callFeatureExtraction(
-            pathPC / 'Data_training.csv',
-            pathPC / 'yourPCA_Train.csv',
+            pathPC / "Data_training.csv",
+            pathPC / "yourPCA_Train.csv",
             featuresLabels,
-            numColsFE)  # effettua FE su Data_Training e genera yourPCA_Train.csv
+            numColsFE,
+        )  # effettua FE su Data_Training e genera yourPCA_Train.csv
         featureExtractionPCA.callFeatureExtraction(
-            pathPC / 'Data_testing.csv',
-            pathPC / 'yourPCA_Test.csv',
+            pathPC / "Data_testing.csv",
+            pathPC / "yourPCA_Test.csv",
             featuresLabels,
-            numColsFE)  # effettua FE su Data_testing e genera yourPCA_Test.csv
+            numColsFE,
+        )  # effettua FE su Data_testing e genera yourPCA_Test.csv
 
         # Aggiunge ID, features e label al Dataset Train
         addClass.addClassPCAtraining(
-            pathPC / 'Data_training.csv',
-            pathPC / 'DataSetTrainPreprocessato.csv',
-            numColsFE)
+            pathPC / "Data_training.csv",
+            pathPC / "DataSetTrainPreprocessato.csv",
+            numColsFE,
+        )
         # Aggiunge ID, features e label al Dataset Test
         addClass.addClassPCAtesting(
-            pathPC / 'Data_testing.csv',
-            pathPC / 'DataSetTestPreprocessato.csv',
-            numColsFE)
+            pathPC / "Data_testing.csv",
+            pathPC / "DataSetTestPreprocessato.csv",
+            numColsFE,
+        )
 
     # FE and PS:
     elif prototypeSelection and featureExtraction:  # pragma: no branch
@@ -152,41 +160,46 @@ def preprocessing(
 
         # ps
         callPS.callPrototypeSelection(
-            pathPC / 'Data_training.csv',
-            numRowsPS)  # crea 'reducedTrainingPS.csv'
+            pathPC / "Data_training.csv", numRowsPS
+        )  # crea 'reducedTrainingPS.csv'
         addAttribute.addAttribute(
-            pathPC / 'reducedTrainingPS.csv',
-            pathPC / 'reducedTrainingPS_attribute.csv')
+            pathPC / "reducedTrainingPS.csv",
+            pathPC / "reducedTrainingPS_attribute.csv",
+        )
 
         # pca
         featureExtractionPCA.callFeatureExtraction(
-            pathPC / 'reducedTrainingPS_attribute.csv',
-            pathPC / 'yourPCA_Train.csv',
+            pathPC / "reducedTrainingPS_attribute.csv",
+            pathPC / "yourPCA_Train.csv",
             featuresLabels,
-            numColsFE)  # effettua FE su Data_Training e genera yourPCA_Train.csv
+            numColsFE,
+        )  # effettua FE su Data_Training e genera yourPCA_Train.csv
         featureExtractionPCA.callFeatureExtraction(
-            pathPC / 'Data_testing.csv',
-            pathPC / 'yourPCA_Test.csv',
+            pathPC / "Data_testing.csv",
+            pathPC / "yourPCA_Test.csv",
             featuresLabels,
-            numColsFE)  # effettua FE su Data_testing e genera yourPCA_Test.csv
+            numColsFE,
+        )  # effettua FE su Data_testing e genera yourPCA_Test.csv
         # Aggiunge ID, features e label al Dataset Train
         addClass.addClassPCAtraining(
-            pathPC / 'Data_training.csv',
-            pathPC / 'DataSetTrainPreprocessato.csv',
-            numColsFE)
+            pathPC / "Data_training.csv",
+            pathPC / "DataSetTrainPreprocessato.csv",
+            numColsFE,
+        )
         # Aggiunge ID, features e label al Dataset Test
         addClass.addClassPCAtesting(
-            pathPC / 'Data_testing.csv',
-            pathPC / 'DataSetTestPreprocessato.csv',
-            numColsFE)
-        os.remove(pathPC / 'reducedTrainingPS_attribute.csv')
+            pathPC / "Data_testing.csv",
+            pathPC / "DataSetTestPreprocessato.csv",
+            numColsFE,
+        )
+        os.remove(pathPC / "reducedTrainingPS_attribute.csv")
 
     if doQSVM and featureExtraction:
         # effettua feature Extraction sul doPrediction e rigenera doPrediction
 
         # aggiungere riga delle feature al do Prediction
         h = open(pathPC / "doPredictionFeatured.csv", "a+")
-        featureString = ''
+        featureString = ""
         for x in range(1, utils.numberOfColumns(userpath)):
             stringa = "feature{},".format(x)
             featureString += stringa
@@ -199,8 +212,13 @@ def preprocessing(
         g.close()
 
         featureExtractionPCA.extractFeatureForPrediction(
-            pathPC / "doPredictionFeatured.csv", pathPC / 'doPredictionFE.csv', numColsFE)
+            pathPC / "doPredictionFeatured.csv",
+            pathPC / "doPredictionFE.csv",
+            numColsFE,
+        )
         os.remove(pathPC / "doPredictionFeatured.csv")
 
-    return pathPC / 'DataSetTrainPreprocessato.csv', pathPC / \
-        'DataSetTestPreprocessato.csv'
+    return (
+        pathPC / "DataSetTrainPreprocessato.csv",
+        pathPC / "DataSetTestPreprocessato.csv",
+    )

@@ -1,4 +1,3 @@
-
 def prototypeSelectionAI(path: str):
     return path
 

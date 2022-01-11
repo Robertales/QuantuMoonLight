@@ -7,10 +7,15 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import warnings
 
-warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action="ignore", category=FutureWarning)
 
 
-def callFeatureExtraction(path: pathlib.Path, output: pathlib.Path, features: list, n_components=2):
+def callFeatureExtraction(
+    path: pathlib.Path,
+    output: pathlib.Path,
+    features: list,
+    n_components=2,
+):
     """
     This function executes the Feature Extraction on the given dataset
 
@@ -26,18 +31,20 @@ def callFeatureExtraction(path: pathlib.Path, output: pathlib.Path, features: li
     f = pd.read_csv(path)
     keep_col = features
     new_f = f[keep_col]
-    new_f.to_csv(dataPath/"tempPCA.csv", index=False)
+    new_f.to_csv(dataPath / "tempPCA.csv", index=False)
 
-    dataset = pd.read_csv(dataPath/'tempPCA.csv')
+    dataset = pd.read_csv(dataPath / "tempPCA.csv")
 
-    X = dataset.drop('labels', 1)
+    X = dataset.drop("labels", 1)
 
-    y = dataset['labels']
+    y = dataset["labels"]
     # print(dataset.head())
     # print(y)
 
     # Splitting the dataset into the Training set and Test set
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=0
+    )
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
     X_test = sc.transform(X_test)
@@ -57,14 +64,16 @@ def callFeatureExtraction(path: pathlib.Path, output: pathlib.Path, features: li
     pathFileYourPCA = pathlib.Path(__file__).parent
     pathFileYourPCA = pathFileYourPCA / output
     # print("pathFileYourPCA :", pathFileYourPCA)
-    np.savetxt(pathFileYourPCA.__str__(), z, delimiter=",", fmt='%s')
+    np.savetxt(pathFileYourPCA.__str__(), z, delimiter=",", fmt="%s")
 
-    os.remove(dataPath/'tempPCA.csv')
+    os.remove(dataPath / "tempPCA.csv")
 
     return pathFileYourPCA.__str__()
 
 
-def extractFeatureForPrediction(path: pathlib.Path, output: pathlib.Path, n_components=2):
+def extractFeatureForPrediction(
+    path: pathlib.Path, output: pathlib.Path, n_components=2
+):
     """
     This function executes the Feature Extraction on the doPrediction
 
@@ -77,13 +86,15 @@ def extractFeatureForPrediction(path: pathlib.Path, output: pathlib.Path, n_comp
     dataPath = path.parent
     print("Into extractFeatureForPrediction...")
     f = pd.read_csv(path)
-    f.to_csv(dataPath/"tempPCA.csv", index=False)
-    dataset = pd.read_csv((dataPath/'tempPCA.csv').__str__())
-    X = dataset.drop('labels', 1)
-    y = dataset['labels']
+    f.to_csv(dataPath / "tempPCA.csv", index=False)
+    dataset = pd.read_csv((dataPath / "tempPCA.csv").__str__())
+    X = dataset.drop("labels", 1)
+    y = dataset["labels"]
 
     # Splitting the dataset into the Training set and Test set
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=0
+    )
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
     X_test = sc.transform(X_test)
@@ -98,8 +109,8 @@ def extractFeatureForPrediction(path: pathlib.Path, output: pathlib.Path, n_comp
     pathFileYourPCA = pathlib.Path(__file__).parent
     pathFileYourPCA = pathFileYourPCA / output
     # print("pathFileYourPCA :", pathFileYourPCA)
-    np.savetxt(pathFileYourPCA.__str__(), z, delimiter=",", fmt='%s')
+    np.savetxt(pathFileYourPCA.__str__(), z, delimiter=",", fmt="%s")
 
-    os.remove(dataPath/'tempPCA.csv')
+    os.remove(dataPath / "tempPCA.csv")
 
     return pathFileYourPCA.__str__()

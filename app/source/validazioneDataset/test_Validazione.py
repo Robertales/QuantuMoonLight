@@ -12,12 +12,12 @@ from app.source.validazioneDataset import train_testSplit
 class TestValidazioneControl(unittest.TestCase):
     def setUp(self):
         # path del dataset a disposizione del testing
-        pathOrigin = pathlib.Path(__file__).parents[0] / 'testingFiles'
+        pathOrigin = pathlib.Path(__file__).parents[0] / "testingFiles"
         # path della cartella dove scrivere i files che verranno letti dai test
         pathMock = pathlib.Path(__file__).parents[0]
 
-        f = open((pathMock / 'bupa.csv').__str__(), "a+")
-        g = open((pathOrigin / 'bupa.csv').__str__(), "r")
+        f = open((pathMock / "bupa.csv").__str__(), "a+")
+        g = open((pathOrigin / "bupa.csv").__str__(), "r")
         contents = g.read()
         f.write(contents)
         f.close()
@@ -37,13 +37,15 @@ class TestValidazioneControl(unittest.TestCase):
         k = 10
 
         response = tester.post(
-            '/validazioneControl',
+            "/validazioneControl",
             data=dict(
                 userpath=userpath,
                 userpathTest=userpathTest,
                 simpleSplit=simpleSplit,
                 kFold=kFold,
-                k=k))
+                k=k,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         pathData = pathlib.Path(__file__).parents[0]
@@ -63,20 +65,22 @@ class TestValidazioneControl(unittest.TestCase):
         k = 10
 
         response = tester.post(
-            '/validazioneControl',
+            "/validazioneControl",
             data=dict(
                 userpath=userpath,
                 userpathTest=userpathTest,
                 simpleSplit=simpleSplit,
                 kFold=kFold,
-                k=k))
+                k=k,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         pathData = pathlib.Path(__file__).parents[0]
 
         for x in range(k):
-            StringaTrain = 'training_fold_{}.csv'.format(x + 1)
-            StringaTest = 'testing_fold_{}.csv'.format(x + 1)
+            StringaTrain = "training_fold_{}.csv".format(x + 1)
+            StringaTest = "testing_fold_{}.csv".format(x + 1)
             self.assertTrue(exists(pathData / StringaTrain))
             self.assertTrue(exists(pathData / StringaTest))
 
@@ -93,18 +97,20 @@ class TestValidazioneControl(unittest.TestCase):
         k = 1
 
         response = tester.post(
-            '/validazioneControl',
+            "/validazioneControl",
             data=dict(
                 userpath=userpath,
                 userpathTest=userpathTest,
                 simpleSplit=simpleSplit,
                 kFold=kFold,
-                k=k))
+                k=k,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
         pathData = pathlib.Path(__file__).parents[0]
-        StringaTrain = 'training_fold_1.csv'
-        StringaTest = 'testing_fold_1.csv'
+        StringaTrain = "training_fold_1.csv"
+        StringaTest = "testing_fold_1.csv"
         self.assertFalse(exists(pathData / StringaTrain))
         self.assertFalse(exists(pathData / StringaTest))
 
@@ -122,20 +128,22 @@ class TestValidazioneControl(unittest.TestCase):
         k = 10
 
         response = tester.post(
-            '/validazioneControl',
+            "/validazioneControl",
             data=dict(
                 userpath=userpath,
                 userpathTest=userpathTest,
                 simpleSplit=simpleSplit,
                 kFold=kFold,
-                k=k))
+                k=k,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
         pathData = pathlib.Path(__file__).parents[0]
 
         for x in range(k):
-            StringaTrain = 'training_fold_{}.csv'.format(x + 1)
-            StringaTest = 'testing_fold_{}.csv'.format(x + 1)
+            StringaTrain = "training_fold_{}.csv".format(x + 1)
+            StringaTest = "testing_fold_{}.csv".format(x + 1)
             self.assertFalse(exists(pathData / StringaTrain))
             self.assertFalse(exists(pathData / StringaTest))
 
@@ -156,13 +164,15 @@ class TestValidazioneControl(unittest.TestCase):
         k = 10
 
         response = tester.post(
-            '/validazioneControl',
+            "/validazioneControl",
             data=dict(
                 userpath=userpath,
                 userpathTest=userpathTest,
                 simpleSplit=simpleSplit,
                 kFold=kFold,
-                k=k))
+                k=k,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         pathData = pathlib.Path(__file__).parents[0]
@@ -182,13 +192,15 @@ class TestValidazioneControl(unittest.TestCase):
         k = 10
 
         response = tester.post(
-            '/validazioneControl',
+            "/validazioneControl",
             data=dict(
                 userpath=userpath,
                 userpathTest=userpathTest,
                 simpleSplit=simpleSplit,
                 kFold=kFold,
-                k=k))
+                k=k,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
         pathData = pathlib.Path(__file__).parents[0]
@@ -206,15 +218,14 @@ class TestValidazioneControl(unittest.TestCase):
 
 
 class TestKFold(unittest.TestCase):
-
     def setUp(self):
         # path del dataset a disposizione del testing
-        pathOrigin = pathlib.Path(__file__).parents[0] / 'testingFiles'
+        pathOrigin = pathlib.Path(__file__).parents[0] / "testingFiles"
         # path della cartella dove scrivere i files che verranno letti dai test
         pathMock = pathlib.Path(__file__).parents[0]
 
-        f = open((pathMock / 'bupa.csv').__str__(), "a+")
-        g = open((pathOrigin / 'bupa.csv').__str__(), "r")
+        f = open((pathMock / "bupa.csv").__str__(), "a+")
+        g = open((pathOrigin / "bupa.csv").__str__(), "r")
         contents = g.read()
         f.write(contents)
         f.close()
@@ -233,8 +244,8 @@ class TestKFold(unittest.TestCase):
         pathData = pathlib.Path(__file__).parents[0]
 
         for x in range(k):
-            StringaTrain = 'training_fold_{}.csv'.format(x + 1)
-            StringaTest = 'testing_fold_{}.csv'.format(x + 1)
+            StringaTrain = "training_fold_{}.csv".format(x + 1)
+            StringaTest = "testing_fold_{}.csv".format(x + 1)
             self.assertTrue(exists(pathData / StringaTrain))
             self.assertTrue(exists(pathData / StringaTest))
 
@@ -248,15 +259,14 @@ class TestKFold(unittest.TestCase):
 
 
 class TestSimpleSplit(unittest.TestCase):
-
     def setUp(self):
         # path del dataset a disposizione del testing
-        pathOrigin = pathlib.Path(__file__).parents[0] / 'testingFiles'
+        pathOrigin = pathlib.Path(__file__).parents[0] / "testingFiles"
         # path della cartella dove scrivere i files che verranno letti dai test
         pathMock = pathlib.Path(__file__).parents[0]
 
-        f = open((pathMock / 'bupa.csv').__str__(), "a+")
-        g = open((pathOrigin / 'bupa.csv').__str__(), "r")
+        f = open((pathMock / "bupa.csv").__str__(), "a+")
+        g = open((pathOrigin / "bupa.csv").__str__(), "r")
         contents = g.read()
         f.write(contents)
         f.close()
@@ -270,23 +280,23 @@ class TestSimpleSplit(unittest.TestCase):
         Checks if the new datasets exist and the new datasets have the correct number of rows
         """
         path = pathlib.Path(__file__).parent
-        filename = path / 'bupa.csv'
+        filename = path / "bupa.csv"
         numRaws = utils.numberOfRows(filename.__str__())
 
         train_testSplit.splitDataset(filename.__str__())
-        self.assertEqual(20, utils.numberOfRows('Data_testing.csv'))
-        self.assertEqual(numRaws - 20, utils.numberOfRows('Data_training.csv'))
+        self.assertEqual(20, utils.numberOfRows("Data_testing.csv"))
+        self.assertEqual(
+            numRaws - 20, utils.numberOfRows("Data_training.csv")
+        )
         self.assertTrue(
-            exists(
-                pathlib.Path(__file__).parent /
-                "Data_testing.csv"))
+            exists(pathlib.Path(__file__).parent / "Data_testing.csv")
+        )
         self.assertTrue(
-            exists(
-                pathlib.Path(__file__).parent /
-                "Data_training.csv"))
+            exists(pathlib.Path(__file__).parent / "Data_training.csv")
+        )
 
     def tearDown(self):
         path = pathlib.Path(__file__).parent
-        os.remove(path / 'Data_testing.csv')
-        os.remove(path / 'Data_training.csv')
-        os.remove(path / 'bupa.csv')
+        os.remove(path / "Data_testing.csv")
+        os.remove(path / "Data_training.csv")
+        os.remove(path / "bupa.csv")

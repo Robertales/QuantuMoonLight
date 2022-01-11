@@ -17,4 +17,5 @@ def log():
     file1.write(dt_string + "\n")
     file1.close()
 
+
 # datetime object containing current date and time

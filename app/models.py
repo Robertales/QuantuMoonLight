@@ -16,7 +16,7 @@ class User(db.Model, UserAuth):
 
 class Dataset(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email_user = db.Column(db.VARCHAR(255), ForeignKey('user.email'))
+    email_user = db.Column(db.VARCHAR(255), ForeignKey("user.email"))
     name = db.Column(db.String(30), nullable=False)
     path = db.Column(db.String(150), nullable=True)
     upload_date = db.Column(db.DateTime, nullable=False)
@@ -29,7 +29,7 @@ class Dataset(db.Model):
 
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email_user = db.Column(db.VARCHAR(255), ForeignKey('user.email'))
+    email_user = db.Column(db.VARCHAR(255), ForeignKey("user.email"))
     title = db.Column(db.Text(length=200), nullable=False)
     body = db.Column(db.Text(length=1200), nullable=False)
     category = db.Column(db.String(20), nullable=True)
@@ -37,18 +37,18 @@ class Article(db.Model):
 
 
 class Comment(db.Model):
-    __table_args__ = (db.PrimaryKeyConstraint('email_user', 'id_article'),)
-    email_user = db.Column(db.VARCHAR(255), ForeignKey('user.email'))
-    id_article = db.Column(db.Integer, ForeignKey('article.id'))
+    __table_args__ = (db.PrimaryKeyConstraint("email_user", "id_article"),)
+    email_user = db.Column(db.VARCHAR(255), ForeignKey("user.email"))
+    id_article = db.Column(db.Integer, ForeignKey("article.id"))
     body = db.Column(db.Text(length=250), nullable=False)
     data = db.Column(db.Date, nullable=False)
 
 
 class Like(db.Model):
-    __table_args__ = (db.PrimaryKeyConstraint('email_user', 'id_article'),)
-    email_user = db.Column(db.VARCHAR(255), ForeignKey('user.email'))
-    id_article = db.Column(db.Integer, ForeignKey('article.id'))
+    __table_args__ = (db.PrimaryKeyConstraint("email_user", "id_article"),)
+    email_user = db.Column(db.VARCHAR(255), ForeignKey("user.email"))
+    id_article = db.Column(db.Integer, ForeignKey("article.id"))
 
 
 def __repr__(self):
-    return f'Item{self.name}'
+    return f"Item{self.name}"

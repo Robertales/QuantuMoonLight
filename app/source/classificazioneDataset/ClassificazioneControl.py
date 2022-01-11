@@ -24,10 +24,10 @@ from app.source.utils import utils
 from app import app
 from flask import request
 
-warnings.simplefilter(action='ignore', category=DeprecationWarning)
+warnings.simplefilter(action="ignore", category=DeprecationWarning)
 
 
-@app.route('/classificazioneControl', methods=['POST'])
+@app.route("/classificazioneControl", methods=["POST"])
 # @login_required
 def classificazioneControl():
     """
@@ -42,8 +42,9 @@ def classificazioneControl():
     backend = request.form.get("backend")
     email = request.form.get("email")
 
-    result: dict = classify(pathTrain, pathTest,
-                            pathPrediction, features, token, backend)
+    result: dict = classify(
+        pathTrain, pathTest, pathPrediction, features, token, backend
+    )
     if result != 0:
         getClassifiedDataset(result, pathPrediction, email)
 
@@ -56,12 +57,13 @@ def classificazioneControl():
 
 
 def classify(
-        pathTrain,
-        pathTest,
-        userpathToPredict,
-        features,
-        token,
-        backendSelected):
+    pathTrain,
+    pathTest,
+    userpathToPredict,
+    features,
+    token,
+    backendSelected,
+):
     """
 
     :param pathTrain: path del file di training output delle fasi precedenti
@@ -82,61 +84,98 @@ def classify(
         print("token non valido")
         return 0
 
-    provider = IBMQ.get_provider(hub='ibm-q')
+    provider = IBMQ.get_provider(hub="ibm-q")
     IBMQ.disable_account()
     qubit = len(features)
 
     try:
-        if backendSelected and provider.get_backend(
-                backendSelected).configuration().n_qubits >= qubit:
+        if (
+            backendSelected
+            and provider.get_backend(backendSelected).configuration().n_qubits
+            >= qubit
+        ):
             print("backend selected:" + str(backendSelected))
-            print("backend qubit:" +
-                  str(provider.get_backend(backendSelected).configuration().n_qubits))
+            print(
+                "backend qubit:"
+                + str(
+                    provider.get_backend(backendSelected)
+                    .configuration()
+                    .n_qubits
+                )
+            )
             backend = provider.get_backend(
-                backendSelected)  # Specifying Quantum System
+                backendSelected
+            )  # Specifying Quantum System
         else:
-            backend = least_busy(provider.backends(filters=lambda x: x.configuration(
-            ).n_qubits >= qubit and not x.configuration().simulator and x.status().operational))
+            backend = least_busy(
+                provider.backends(
+                    filters=lambda x: x.configuration().n_qubits >= qubit
+                    and not x.configuration().simulator
+                    and x.status().operational
+                )
+            )
             print("least busy backend: ", backend)
-            print("backend qubit:" +
-                  str(provider.get_backend(backend.name()).configuration().n_qubits))
+            print(
+                "backend qubit:"
+                + str(
+                    provider.get_backend(backend.name())
+                    .configuration()
+                    .n_qubits
+                )
+            )
     except BaseException:
         # when selected backend has not enough qubit, or no backends has enough
         # qubits, or the user token has no privileges to use the selected
         # backend
         noBackend = True
-        backend = provider.get_backend('ibmq_qasm_simulator')
+        backend = provider.get_backend("ibmq_qasm_simulator")
         print("backend selected: simulator")
-        print("backend qubit:" +
-              str(provider.get_backend(backend.name()).configuration().n_qubits))
+        print(
+            "backend qubit:"
+            + str(
+                provider.get_backend(backend.name()).configuration().n_qubits
+            )
+        )
 
     seed = 8192
     shots = 1024
     aqua_globals.random_seed = seed
 
     training_input, test_input = loadDataset(
-        pathTrain, pathTest, features, label='labels')
+        pathTrain, pathTest, features, label="labels"
+    )
 
     pathDoPrediction = pathlib.Path(userpathToPredict).parent
-    if (os.path.exists(pathDoPrediction / "doPredictionFE.csv")):
+    if os.path.exists(pathDoPrediction / "doPredictionFE.csv"):
         pathDoPrediction = pathDoPrediction / "doPredictionFE.csv"
     else:
         pathDoPrediction = userpathToPredict
     filetoPredict = open(pathDoPrediction.__str__(), "r")
     predizione = np.array(
-        list(csv.reader(filetoPredict, delimiter=","))).astype("float")
+        list(csv.reader(filetoPredict, delimiter=","))
+    ).astype("float")
 
     feature_map = ZZFeatureMap(
-        feature_dimension=qubit, reps=2, entanglement='linear')
+        feature_dimension=qubit, reps=2, entanglement="linear"
+    )
     print(feature_map)
 
-    qsvm = QSVM(feature_map, training_input, test_input,
-                predizione, multiclass_extension=AllPairs())
+    qsvm = QSVM(
+        feature_map,
+        training_input,
+        test_input,
+        predizione,
+        multiclass_extension=AllPairs(),
+    )
 
     quantum_instance = QuantumInstance(
-        backend, shots=shots, seed_simulator=seed, seed_transpiler=seed)
+        backend,
+        shots=shots,
+        seed_simulator=seed,
+        seed_transpiler=seed,
+    )
 
-    print('Running....\n')
+    print("Running....\n")
     try:
         result = qsvm.run(quantum_instance)
     except BaseException:
@@ -147,14 +186,16 @@ def classify(
     totalTime = time.time() - start_time
     result["totalTime"] = str(totalTime)[0:6]
 
-    print('Prediction from datapoints set:')
+    print("Prediction from datapoints set:")
     for k, v in result.items():
         print("{} : {}".format(k, v))
 
     predicted_labels = result["predicted_labels"]
 
-    classifiedFile = open(pathlib.Path(
-        userpathToPredict).parent / "classifiedFile.csv", "w")
+    classifiedFile = open(
+        pathlib.Path(userpathToPredict).parent / "classifiedFile.csv",
+        "w",
+    )
     predictionFile = open(userpathToPredict, "r")
     rows = predictionFile.readlines()
 
@@ -163,8 +204,9 @@ def classify(
     classifiedFile.write("label\n")
     i = 0
     for row in rows:
-        classifiedFile.write(row.rstrip("\n") + "," +
-                             str(predicted_labels[i]) + "\n")
+        classifiedFile.write(
+            row.rstrip("\n") + "," + str(predicted_labels[i]) + "\n"
+        )
         i += 1
     classifiedFile.close()
     predictionFile.close()
@@ -191,9 +233,12 @@ def loadDataset(training_path, testing_path, features, label):
 
     train_dict, test_dict = {}, {}
     for category in train[label].unique():
-        train_dict[category] = train[train['labels']
-                                     == category][features].values
-        test_dict[category] = test[test['labels'] == category][features].values
+        train_dict[category] = train[train["labels"] == category][
+            features
+        ].values
+        test_dict[category] = test[test["labels"] == category][
+            features
+        ].values
 
     return train_dict, test_dict
 
@@ -206,34 +251,43 @@ def getClassifiedDataset(result, userpathToPredict, email):
     """
 
     msg = MIMEMultipart()
-    msg['From'] = "quantumoonlight@gmail.com"
-    msg['To'] = "quantumoonlight@gmail.com, " + email
-    msg['Date'] = formatdate(localtime=True)
+    msg["From"] = "quantumoonlight@gmail.com"
+    msg["To"] = "quantumoonlight@gmail.com, " + email
+    msg["Date"] = formatdate(localtime=True)
     # + dataset.name + " " + dataset.upload_date
-    msg['Subject'] = "Classification Result "
+    msg["Subject"] = "Classification Result "
 
     if result == 1:
-        msg.attach(MIMEText(
-            "IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems \n\n"))
+        msg.attach(
+            MIMEText(
+                "IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems \n\n"
+            )
+        )
     else:
         msg.attach(MIMEText("This is your classification:\n\n"))
         accuracy = result.get("testing_accuracy")
         successRatio = result.get("test_success_ratio")
-        msg.attach(MIMEText("Testing accuracy: " +
-                   "{:.2%}".format(accuracy) + "\n"))
-        msg.attach(MIMEText("Success ratio: " +
-                   "{:.2%}".format(successRatio) + "\n"))
-        msg.attach(MIMEText("Total time elapsed:" +
-                   result.get("totalTime") + "s"))
+        msg.attach(
+            MIMEText("Testing accuracy: " + "{:.2%}".format(accuracy) + "\n")
+        )
+        msg.attach(
+            MIMEText("Success ratio: " + "{:.2%}".format(successRatio) + "\n")
+        )
+        msg.attach(
+            MIMEText("Total time elapsed:" + result.get("totalTime") + "s")
+        )
 
         # file = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
         file = pathlib.Path(userpathToPredict).parent / "classifiedFile.csv"
         attach_file = open(file, "rb")
-        payload = MIMEBase('application', "octet-stream")
+        payload = MIMEBase("application", "octet-stream")
         payload.set_payload(attach_file.read())
         encoders.encode_base64(payload)
-        payload.add_header('Content-Disposition', 'attachment',
-                           filename="ClassifiedDataset.csv")
+        payload.add_header(
+            "Content-Disposition",
+            "attachment",
+            filename="ClassifiedDataset.csv",
+        )
         msg.attach(payload)
         attach_file.close()
 

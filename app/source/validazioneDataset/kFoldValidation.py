@@ -28,19 +28,19 @@ def cross_fold_validation(userpath: str, k: int):
         x = x + 1
 
         with open(userpath) as csvfile:
-            readCSV = list(csv.reader(csvfile, delimiter=','))
+            readCSV = list(csv.reader(csvfile, delimiter=","))
 
             # create training folds
             for number in range(len(train_index)):
                 row_you_want = readCSV[train_index[number]]
-                with open(stringaTrain, 'a', newline='') as file:
+                with open(stringaTrain, "a", newline="") as file:
                     writer = csv.writer(file)
                     writer.writerow(row_you_want)
 
             # create testing folds
             for number in range(len(test_index)):
                 row_you_want = readCSV[test_index[number]]
-                with open(stringaTest, 'a', newline='') as file:
+                with open(stringaTest, "a", newline="") as file:
                     writer = csv.writer(file)
                     writer.writerow(row_you_want)
 

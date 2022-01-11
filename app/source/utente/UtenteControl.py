@@ -7,46 +7,47 @@ from app import app, db
 from app.models import User
 
 
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
     """
-Reads the user credentials from a http request and adds him to the project database
-    :return: tbd
+    Reads the user credentials from a http request and adds him to the project database
+        :return: tbd
     """
-    email = request.form.get('email')
-    password = request.form.get('password')
+    email = request.form.get("email")
+    password = request.form.get("password")
     hashed_password = hashlib.sha512(password.encode()).hexdigest()
-    token = request.form.get('token')
+    token = request.form.get("token")
     if token.__eq__(""):
         token = None
-    username = request.form.get('username')
-    Name = request.form.get('nome')
-    cognome = request.form.get('cognome')
+    username = request.form.get("username")
+    Name = request.form.get("nome")
+    cognome = request.form.get("cognome")
     utente = User(
         email=email,
         password=hashed_password,
         token=token,
         username=username,
         name=Name,
-        surname=cognome)
+        surname=cognome,
+    )
     db.session.add(utente)
     db.session.commit()
-    path = Path(__file__).parents[3] / 'upload_dataset' / email
+    path = Path(__file__).parents[3] / "upload_dataset" / email
     print(path.__str__())
     if not path.is_dir():
         path.mkdir()
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     """
     reads a user login credentials from a http request and if they are valid logs the user in with those same
     credentials,changing his state from anonymous  user to logged user
     :return: tbd
     """
-    email = request.form.get('email')
-    password = request.form.get('password')
+    email = request.form.get("email")
+    password = request.form.get("password")
     hashed_password = hashlib.sha512(password.encode()).hexdigest()
     attempted_user: User = User.query.filter_by(email=email).first()
     if not attempted_user:
@@ -57,28 +58,28 @@ def login():
         login_user(attempted_user)
     else:
         return "password errata"
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/logout', methods=['GET', 'POST'])
+@app.route("/logout", methods=["GET", "POST"])
 def logout():
     """
-logs a user out, changing his state from logged user to anonymous user
-    :return:tbd
+    logs a user out, changing his state from logged user to anonymous user
+        :return:tbd
     """
     logout_user()
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/newsletter', methods=['GET', 'POST'])
+@app.route("/newsletter", methods=["GET", "POST"])
 def signup_newsletter():
     """
-changes the User ,whose email was passed as a http request parameter ,newsletter flag to true
-    :return: tbd
+    changes the User ,whose email was passed as a http request parameter ,newsletter flag to true
+        :return: tbd
     """
-    email = request.form.get('email')
+    email = request.form.get("email")
     utente: User = User.query.filter_by(email=email).first()
     utente.newsletter = True
     db.session.commit()
 
-    return render_template('index.html')
+    return render_template("index.html")

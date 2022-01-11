@@ -14,8 +14,8 @@ def numberOfColumns(filename):
     :return: number of columns of the given dataset
     :rtype: int
     """
-    f = open(filename, 'r')
-    reader = csv.reader(f, delimiter=',')
+    f = open(filename, "r")
+    reader = csv.reader(f, delimiter=",")
     numCols = len(next(reader))
     f.close()
     return numCols  # Read first line and count columns
@@ -51,7 +51,9 @@ def createFeatureList(numCols: int):
 
 
 def classifier(number_of_training_instances):
-    c = KNeighborsClassifier(n_neighbors=number_of_training_instances, weights='distance')
+    c = KNeighborsClassifier(
+        n_neighbors=number_of_training_instances, weights="distance"
+    )
     return c
 
 
@@ -78,14 +80,25 @@ def prepareData(databasePath):
 
     # split dei dati
     random_state_value = 3
-    x_train, x_test = train_test_split(data.values, test_size=0.25, random_state=random_state_value, stratify=target)
+    x_train, x_test = train_test_split(
+        data.values,
+        test_size=0.25,
+        random_state=random_state_value,
+        stratify=target,
+    )
 
     # split dei dati di training
     # x_train ,x_valid = train_test_split(x_train,test_size=0.10)
 
     number_of_total_instances = len(x_train)
 
-    return x_train, x_test, number_of_features, number_of_classes, number_of_total_instances
+    return (
+        x_train,
+        x_test,
+        number_of_features,
+        number_of_classes,
+        number_of_total_instances,
+    )
 
 
 def writeTxt(fileName, list_values):
@@ -147,4 +160,3 @@ def writeXls(fileName, generations, evaluations, bestfits, times):
     wb.close()
 
     return fileName
-

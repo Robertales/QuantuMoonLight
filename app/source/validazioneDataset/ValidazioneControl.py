@@ -7,15 +7,15 @@ from app.source.validazioneDataset import train_testSplit
 from app.source.validazioneDataset import kFoldValidation
 
 
-@app.route('/validazioneControl', methods=['POST'])
+@app.route("/validazioneControl", methods=["POST"])
 # @login_required
 def validazioneControl():
-    userpathTrain = request.form.get('userpath')
-    userpathTest = request.form.get('userpathTest')
-    simpleSplit = request.form.get('simpleSplit')
+    userpathTrain = request.form.get("userpath")
+    userpathTest = request.form.get("userpathTest")
+    simpleSplit = request.form.get("simpleSplit")
     dataPath = Path(userpathTrain).parent
-    kFold = request.form.get('kFold')
-    k = request.form.get('k', type=int)
+    kFold = request.form.get("kFold")
+    k = request.form.get("k", type=int)
     print("simpleSplit in VC: ", simpleSplit)
     print("kFold in VC: ", kFold)
     print("k in VC: ", k)
@@ -34,8 +34,10 @@ def validazioneControl():
         if not userpathTest:
             print("Inserire dataset di Test")
             return Response(status=400)
-        addAttribute.addAttribute(userpathTrain, dataPath/'Data_training.csv')
-        addAttribute.addAttribute(userpathTest, dataPath/'Data_testing.csv')
+        addAttribute.addAttribute(
+            userpathTrain, dataPath / "Data_training.csv"
+        )
+        addAttribute.addAttribute(userpathTest, dataPath / "Data_testing.csv")
         return Response(status=200)
 
     valida(userpathTrain, simpleSplit, kFold, k)
@@ -56,9 +58,13 @@ def valida(userpathTrain: str, simpleSplit: bool, kFold: bool, k: int):
     """
     dataPath = Path(userpathTrain).parent
     if simpleSplit:
-        addAttribute.addAttribute(userpathTrain, dataPath/'featureDataset.csv')
-        train_testSplit.splitDataset(dataPath/'featureDataset.csv')  # crea 'Data_training.csv' e 'Data_testing.csv'
-        return 'Data_training.csv', 'Data_testing.csv'
+        addAttribute.addAttribute(
+            userpathTrain, dataPath / "featureDataset.csv"
+        )
+        train_testSplit.splitDataset(
+            dataPath / "featureDataset.csv"
+        )  # crea 'Data_training.csv' e 'Data_testing.csv'
+        return "Data_training.csv", "Data_testing.csv"
     elif kFold:  # pragma: no branch
         kFoldValidation.cross_fold_validation(userpathTrain, k)
-        return 'Data_training.csv', 'Data_testing.csv'
+        return "Data_training.csv", "Data_testing.csv"

@@ -26,6 +26,6 @@ def splitDataset(filename: str):
     print(X_test.head())
     print(X_test.shape)
 
-    return X_train.to_csv(pathData /
-                          'Data_training.csv', index=False), X_test.to_csv(pathData /
-                                                                           'Data_testing.csv', index=False)
+    return X_train.to_csv(
+        pathData / "Data_training.csv", index=False
+    ), X_test.to_csv(pathData / "Data_testing.csv", index=False)

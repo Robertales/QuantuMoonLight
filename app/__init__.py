@@ -11,17 +11,17 @@ from sqlalchemy_utils import database_exists, create_database
 from flask_login import LoginManager
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@127.0.0.1/quantumknn_db'
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root@127.0.0.1/quantumknn_db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config['SECRET_KEY'] = 'jshwifhjwieoajhf5847f5ae4eaws'
+app.config["SECRET_KEY"] = "jshwifhjwieoajhf5847f5ae4eaws"
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "loginPage"
 login_manager.login_message_category = "info"
 
 # Create database if it does not exist
-if not database_exists(app.config['SQLALCHEMY_DATABASE_URI']):
-    create_database(app.config['SQLALCHEMY_DATABASE_URI'])
+if not database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
+    create_database(app.config["SQLALCHEMY_DATABASE_URI"])
     with app.app_context():
         db.create_all()
 else:

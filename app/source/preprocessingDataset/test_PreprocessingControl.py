@@ -7,36 +7,35 @@ from app import app
 
 
 class TestPreprocessingControl(unittest.TestCase):
-
     def setUp(self):
         # path del dataset a disposizione del testing
-        pathOrigin = pathlib.Path(__file__).parents[0] / 'testingFiles'
+        pathOrigin = pathlib.Path(__file__).parents[0] / "testingFiles"
         # path della cartella dove scrivere i files che verranno letti dai test
         pathMock = pathlib.Path(__file__).parents[0]
 
-        f = open((pathMock / 'Data_testing.csv').__str__(), "a+")
-        g = open((pathOrigin / 'Data_testing.csv').__str__(), "r")
+        f = open((pathMock / "Data_testing.csv").__str__(), "a+")
+        g = open((pathOrigin / "Data_testing.csv").__str__(), "r")
         contents = g.read()
         f.write(contents)
         f.close()
         g.close()
 
-        f = open((pathMock / 'Data_training.csv').__str__(), "a+")
-        g = open((pathOrigin / 'Data_training.csv').__str__(), "r")
+        f = open((pathMock / "Data_training.csv").__str__(), "a+")
+        g = open((pathOrigin / "Data_training.csv").__str__(), "r")
         contents = g.read()
         f.write(contents)
         f.close()
         g.close()
 
-        f = open((pathMock / 'bupa.csv').__str__(), "a+")
-        g = open((pathOrigin / 'bupa.csv').__str__(), "r")
+        f = open((pathMock / "bupa.csv").__str__(), "a+")
+        g = open((pathOrigin / "bupa.csv").__str__(), "r")
         contents = g.read()
         f.write(contents)
         f.close()
         g.close()
 
-        f = open((pathMock / 'bupaToPredict.csv').__str__(), "a+")
-        g = open((pathOrigin / 'bupaToPredict.csv').__str__(), "r")
+        f = open((pathMock / "bupaToPredict.csv").__str__(), "a+")
+        g = open((pathOrigin / "bupaToPredict.csv").__str__(), "r")
         contents = g.read()
         f.write(contents)
         f.close()
@@ -54,24 +53,33 @@ class TestPreprocessingControl(unittest.TestCase):
         """
         tester = app.test_client(self)
         userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
-        userpathToPredict = pathlib.Path(__file__).parents[0] / "bupaToPredict.csv"
+        userpathToPredict = (
+            pathlib.Path(__file__).parents[0] / "bupaToPredict.csv"
+        )
         prototypeSelection = None
         featureExtraction = None
         numRowsPS = 10
         numColsFE = 2
         doQSVM = True
 
-        response = tester.post("/preprocessingControl",
-                               data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
-                                         prototypeSelection=prototypeSelection,
-                                         featureExtraction=featureExtraction,
-                                         numRawsPS=numRowsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+        response = tester.post(
+            "/preprocessingControl",
+            data=dict(
+                userpath=userpath,
+                userpathToPredict=userpathToPredict,
+                prototypeSelection=prototypeSelection,
+                featureExtraction=featureExtraction,
+                numRawsPS=numRowsPS,
+                numColsFE=numColsFE,
+                doQSVM=doQSVM,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
 
         pathMock = pathlib.Path(__file__).parents[0]
-        self.assertTrue(exists(pathMock / 'DataSetTrainPreprocessato.csv'))
-        self.assertTrue(exists(pathMock / 'DataSetTestPreprocessato.csv'))
+        self.assertTrue(exists(pathMock / "DataSetTrainPreprocessato.csv"))
+        self.assertTrue(exists(pathMock / "DataSetTestPreprocessato.csv"))
 
     def test_PreprocessingControl_onlyPS(self):
         """
@@ -87,18 +95,25 @@ class TestPreprocessingControl(unittest.TestCase):
         numColsFE = 2
         doQSVM = None
 
-        response = tester.post("/preprocessingControl",
-                               data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
-                                         prototypeSelection=prototypeSelection,
-                                         featureExtraction=featureExtraction,
-                                         numRawsPS=numRowsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+        response = tester.post(
+            "/preprocessingControl",
+            data=dict(
+                userpath=userpath,
+                userpathToPredict=userpathToPredict,
+                prototypeSelection=prototypeSelection,
+                featureExtraction=featureExtraction,
+                numRawsPS=numRowsPS,
+                numColsFE=numColsFE,
+                doQSVM=doQSVM,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
 
         pathMock = pathlib.Path(__file__).parents[0]
-        self.assertTrue(exists(pathMock / 'DataSetTrainPreprocessato.csv'))
-        self.assertTrue(exists(pathMock / 'DataSetTestPreprocessato.csv'))
-        self.assertTrue(exists(pathMock / 'reducedTrainingPS.csv'))
+        self.assertTrue(exists(pathMock / "DataSetTrainPreprocessato.csv"))
+        self.assertTrue(exists(pathMock / "DataSetTestPreprocessato.csv"))
+        self.assertTrue(exists(pathMock / "reducedTrainingPS.csv"))
 
     def test_PreprocessingControl_failPS(self):
         """
@@ -115,18 +130,25 @@ class TestPreprocessingControl(unittest.TestCase):
         numColsFE = 2
         doQSVM = None
 
-        response = tester.post("/preprocessingControl",
-                               data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
-                                         prototypeSelection=prototypeSelection,
-                                         featureExtraction=featureExtraction,
-                                         numRawsPS=numRowsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+        response = tester.post(
+            "/preprocessingControl",
+            data=dict(
+                userpath=userpath,
+                userpathToPredict=userpathToPredict,
+                prototypeSelection=prototypeSelection,
+                featureExtraction=featureExtraction,
+                numRawsPS=numRowsPS,
+                numColsFE=numColsFE,
+                doQSVM=doQSVM,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
 
         pathData = pathlib.Path(__file__).parents[0]
-        self.assertFalse(exists(pathData / 'DataSetTrainPreprocessato.csv'))
-        self.assertFalse(exists(pathData / 'DataSetTestPreprocessato.csv'))
-        self.assertFalse(exists(pathData / 'reducedTrainingPS.csv'))
+        self.assertFalse(exists(pathData / "DataSetTrainPreprocessato.csv"))
+        self.assertFalse(exists(pathData / "DataSetTestPreprocessato.csv"))
+        self.assertFalse(exists(pathData / "reducedTrainingPS.csv"))
 
     def test_PreprocessingControl_onlyFE(self):
         """
@@ -142,19 +164,26 @@ class TestPreprocessingControl(unittest.TestCase):
         numColsFE = 2
         doQSVM = None
 
-        response = tester.post("/preprocessingControl",
-                               data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
-                                         prototypeSelection=prototypeSelection,
-                                         featureExtraction=featureExtraction,
-                                         numRawsPS=numRowsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+        response = tester.post(
+            "/preprocessingControl",
+            data=dict(
+                userpath=userpath,
+                userpathToPredict=userpathToPredict,
+                prototypeSelection=prototypeSelection,
+                featureExtraction=featureExtraction,
+                numRawsPS=numRowsPS,
+                numColsFE=numColsFE,
+                doQSVM=doQSVM,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
 
         pathData = pathlib.Path(__file__).parents[0]
-        self.assertTrue(exists(pathData / 'DataSetTrainPreprocessato.csv'))
-        self.assertTrue(exists(pathData / 'DataSetTestPreprocessato.csv'))
-        self.assertTrue(exists(pathData / 'yourPCA_Train.csv'))
-        self.assertTrue(exists(pathData / 'yourPCA_Test.csv'))
+        self.assertTrue(exists(pathData / "DataSetTrainPreprocessato.csv"))
+        self.assertTrue(exists(pathData / "DataSetTestPreprocessato.csv"))
+        self.assertTrue(exists(pathData / "yourPCA_Train.csv"))
+        self.assertTrue(exists(pathData / "yourPCA_Test.csv"))
 
     def test_PreprocessingControl_failFE(self):
         """
@@ -171,19 +200,26 @@ class TestPreprocessingControl(unittest.TestCase):
         numColsFE = 15
         doQSVM = None
 
-        response = tester.post("/preprocessingControl",
-                               data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
-                                         prototypeSelection=prototypeSelection,
-                                         featureExtraction=featureExtraction,
-                                         numRawsPS=numRowsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+        response = tester.post(
+            "/preprocessingControl",
+            data=dict(
+                userpath=userpath,
+                userpathToPredict=userpathToPredict,
+                prototypeSelection=prototypeSelection,
+                featureExtraction=featureExtraction,
+                numRawsPS=numRowsPS,
+                numColsFE=numColsFE,
+                doQSVM=doQSVM,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
 
         pathData = pathlib.Path(__file__).parents[0]
-        self.assertFalse(exists(pathData / 'DataSetTrainPreprocessato.csv'))
-        self.assertFalse(exists(pathData / 'DataSetTestPreprocessato.csv'))
-        self.assertFalse(exists(pathData / 'yourPCA_Train.csv'))
-        self.assertFalse(exists(pathData / 'yourPCA_Test.csv'))
+        self.assertFalse(exists(pathData / "DataSetTrainPreprocessato.csv"))
+        self.assertFalse(exists(pathData / "DataSetTestPreprocessato.csv"))
+        self.assertFalse(exists(pathData / "yourPCA_Train.csv"))
+        self.assertFalse(exists(pathData / "yourPCA_Test.csv"))
 
     def test_PreprocessingControl_FE_PS(self):
         """
@@ -200,20 +236,27 @@ class TestPreprocessingControl(unittest.TestCase):
         numColsFE = 2
         doQSVM = None
 
-        response = tester.post("/preprocessingControl",
-                               data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
-                                         prototypeSelection=prototypeSelection,
-                                         featureExtraction=featureExtraction,
-                                         numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+        response = tester.post(
+            "/preprocessingControl",
+            data=dict(
+                userpath=userpath,
+                userpathToPredict=userpathToPredict,
+                prototypeSelection=prototypeSelection,
+                featureExtraction=featureExtraction,
+                numRawsPS=numRawsPS,
+                numColsFE=numColsFE,
+                doQSVM=doQSVM,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
 
         pathData = pathlib.Path(__file__).parents[0]
-        self.assertTrue(exists(pathData / 'DataSetTrainPreprocessato.csv'))
-        self.assertTrue(exists(pathData / 'DataSetTestPreprocessato.csv'))
-        self.assertTrue(exists(pathData / 'reducedTrainingPS.csv'))
-        self.assertTrue(exists(pathData / 'yourPCA_Train.csv'))
-        self.assertTrue(exists(pathData / 'yourPCA_Test.csv'))
+        self.assertTrue(exists(pathData / "DataSetTrainPreprocessato.csv"))
+        self.assertTrue(exists(pathData / "DataSetTestPreprocessato.csv"))
+        self.assertTrue(exists(pathData / "reducedTrainingPS.csv"))
+        self.assertTrue(exists(pathData / "yourPCA_Train.csv"))
+        self.assertTrue(exists(pathData / "yourPCA_Test.csv"))
 
     def test_PreprocessingControl_FE_QSVM(self):
         """
@@ -224,27 +267,36 @@ class TestPreprocessingControl(unittest.TestCase):
         """
         tester = app.test_client(self)
         userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
-        userpathToPredict = pathlib.Path(__file__).parents[0] / "bupaToPredict.csv"
+        userpathToPredict = (
+            pathlib.Path(__file__).parents[0] / "bupaToPredict.csv"
+        )
         prototypeSelection = None
         featureExtraction = True
         numRawsPS = 10
         numColsFE = 2
         doQSVM = True
 
-        response = tester.post("/preprocessingControl",
-                               data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
-                                         prototypeSelection=prototypeSelection,
-                                         featureExtraction=featureExtraction,
-                                         numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+        response = tester.post(
+            "/preprocessingControl",
+            data=dict(
+                userpath=userpath,
+                userpathToPredict=userpathToPredict,
+                prototypeSelection=prototypeSelection,
+                featureExtraction=featureExtraction,
+                numRawsPS=numRawsPS,
+                numColsFE=numColsFE,
+                doQSVM=doQSVM,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
 
         pathData = pathlib.Path(__file__).parents[0]
-        self.assertTrue(exists(pathData / 'DataSetTrainPreprocessato.csv'))
-        self.assertTrue(exists(pathData / 'DataSetTestPreprocessato.csv'))
-        self.assertTrue(exists(pathData / 'yourPCA_Train.csv'))
-        self.assertTrue(exists(pathData / 'yourPCA_Test.csv'))
-        self.assertTrue(exists(pathData / 'doPredictionFE.csv'))
+        self.assertTrue(exists(pathData / "DataSetTrainPreprocessato.csv"))
+        self.assertTrue(exists(pathData / "DataSetTestPreprocessato.csv"))
+        self.assertTrue(exists(pathData / "yourPCA_Train.csv"))
+        self.assertTrue(exists(pathData / "yourPCA_Test.csv"))
+        self.assertTrue(exists(pathData / "doPredictionFE.csv"))
 
     def tearDown(self):
         """

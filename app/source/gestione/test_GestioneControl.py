@@ -7,14 +7,15 @@ from datetime import datetime
 
 
 class TestUser(TestCase):
-
     def setUp(self):
         super().setUp()
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@127.0.0.1/test_db'
+        app.config[
+            "SQLALCHEMY_DATABASE_URI"
+        ] = "mysql://root@127.0.0.1/test_db"
         app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
         tester = app.test_client(self)
-        if not database_exists(app.config['SQLALCHEMY_DATABASE_URI']):
-            create_database(app.config['SQLALCHEMY_DATABASE_URI'])
+        if not database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
+            create_database(app.config["SQLALCHEMY_DATABASE_URI"])
         with app.app_context():
             db.create_all()
             user = User(
@@ -22,7 +23,8 @@ class TestUser(TestCase):
                 password="prosopagnosia",
                 username="Antonio de Curtis ",
                 name="Antonio",
-                surname="De Curtis")
+                surname="De Curtis",
+            )
             db.session.add(user)
             db.session.commit()
 
@@ -31,16 +33,17 @@ class TestUser(TestCase):
         with app.app_context():
             db.create_all()
             self.assertTrue(
-                User.query.filter_by(
-                    email='mariorossi12@gmail.com').first())
+                User.query.filter_by(email="mariorossi12@gmail.com").first()
+            )
             response = tester.post(
-                '/removeUser/',
-                data=dict(email="mariorossi12@gmail.com"))
+                "/removeUser/",
+                data=dict(email="mariorossi12@gmail.com"),
+            )
             statuscode = response.status_code
             self.assertEqual(statuscode, 200)
             self.assertFalse(
-                User.query.filter_by(
-                    email="mariorossi12@gmail.com").first())
+                User.query.filter_by(email="mariorossi12@gmail.com").first()
+            )
             db.session.commit()
 
     def test_modifyUser(self):
@@ -48,22 +51,25 @@ class TestUser(TestCase):
         with app.app_context():
             db.create_all()
         self.assertTrue(
-            User.query.filter_by(
-                email='mariorossi12@gmail.com').first())
+            User.query.filter_by(email="mariorossi12@gmail.com").first()
+        )
         response = tester.post(
-            '/ModifyUser/',
+            "/ModifyUser/",
             data=dict(
                 email="mariorossi12@gmail.com",
                 password="newPassword",
                 username="newUsername ",
                 nome="newName",
-                cognome="newSurname"))
+                cognome="newSurname",
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         self.assertTrue(
             User.query.filter_by(
-                email='mariorossi12@gmail.com',
-                username='newUsername').first())
+                email="mariorossi12@gmail.com", username="newUsername"
+            ).first()
+        )
         db.session.commit()
 
     def tearDown(self):
@@ -74,11 +80,13 @@ class TestUser(TestCase):
 class TestList(TestCase):
     def setUp(self):
         super().setUp()
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@127.0.0.1/test_db'
+        app.config[
+            "SQLALCHEMY_DATABASE_URI"
+        ] = "mysql://root@127.0.0.1/test_db"
         app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
         tester = app.test_client(self)
-        if not database_exists(app.config['SQLALCHEMY_DATABASE_URI']):
-            create_database(app.config['SQLALCHEMY_DATABASE_URI'])
+        if not database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
+            create_database(app.config["SQLALCHEMY_DATABASE_URI"])
         with app.app_context():
             db.create_all()
             user1 = User(
@@ -86,31 +94,29 @@ class TestList(TestCase):
                 password="prosopagnosia",
                 username="Antonio de Curtis ",
                 name="Antonio",
-                surname="De Curtis")
+                surname="De Curtis",
+            )
             user2 = User(
                 email="giuseppeverdi@gmail.com",
                 password="asperger",
                 username="giuVerdiProXX",
                 name="Giuseppe",
-                surname="Verdi")
+                surname="Verdi",
+            )
             art1 = Article(
                 email_user="mariorossi12@gmail.com",
                 title="BuonNatale",
                 body="primobody",
                 category="primaCat",
-                data=datetime(
-                    2021,
-                    12,
-                    25))
+                data=datetime(2021, 12, 25),
+            )
             art2 = Article(
                 email_user="mariorossi12@gmail.com",
                 title="BuonCapodanno",
                 body="secondoBody",
                 category="secondaCat",
-                data=datetime(
-                    2022,
-                    1,
-                    1))
+                data=datetime(2022, 1, 1),
+            )
             db.session.add(user1)
             db.session.add(user2)
             db.session.commit()
@@ -123,19 +129,20 @@ class TestList(TestCase):
         with app.app_context():
             db.create_all()
         self.assertTrue(
-            User.query.filter_by(
-                email='mariorossi12@gmail.com').first())
+            User.query.filter_by(email="mariorossi12@gmail.com").first()
+        )
         response = tester.post(
-            '/gestione/',
-            data=dict(scelta="listUser", email="mariorossi12@gmail.com"))
+            "/gestione/",
+            data=dict(scelta="listUser", email="mariorossi12@gmail.com"),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         self.assertTrue(
-            User.query.filter_by(
-                email='mariorossi12@gmail.com').first())
+            User.query.filter_by(email="mariorossi12@gmail.com").first()
+        )
         self.assertTrue(
-            User.query.filter_by(
-                email='giuseppeverdi@gmail.com').first())
+            User.query.filter_by(email="giuseppeverdi@gmail.com").first()
+        )
         db.session.commit()
 
     def test_listArticlesUser(self):
@@ -143,15 +150,19 @@ class TestList(TestCase):
         with app.app_context():
             db.create_all()
         response = tester.post(
-            '/gestione/',
+            "/gestione/",
             data=dict(
                 scelta="listArticlesUser",
-                email="mariorossi12@gmail.com"))
+                email="mariorossi12@gmail.com",
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         self.assertTrue(
             Article.query.filter_by(
-                email_user='mariorossi12@gmail.com').limit(2))
+                email_user="mariorossi12@gmail.com"
+            ).limit(2)
+        )
         db.session.commit()
 
     def test_listArticlesData(self):
@@ -159,18 +170,20 @@ class TestList(TestCase):
         with app.app_context():
             db.create_all()
         response = tester.post(
-            '/gestione/',
+            "/gestione/",
             data=dict(
                 scelta="listArticlesData",
-                firstData='2021-12-20',
-                secondData='2021-12-30'))
+                firstData="2021-12-20",
+                secondData="2021-12-30",
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         self.assertTrue(
             Article.query.filter(
-                Article.data.between(
-                    '2021-12-20',
-                    '2021-12-30')).first())
+                Article.data.between("2021-12-20", "2021-12-30")
+            ).first()
+        )
         db.session.commit()
 
     def tearDown(self):

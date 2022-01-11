@@ -9,7 +9,6 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
 class TestRoutes(unittest.TestCase):
-
     def testSmista_NoOp(self):
         tester = app.test_client(self)
 
@@ -18,10 +17,14 @@ class TestRoutes(unittest.TestCase):
         pathtest = path / "testingFiles" / "bupaTest.csv"
         pathpred = path / "testingFiles" / "bupaToPredict.csv"
 
-        response = tester.post('/formcontrol',
-                               data=dict(dataset_train=open(pathtrain.__str__(), 'rb'),
-                                         dataset_test=open(pathtest.__str__(), 'rb'),
-                                         dataset_prediction=open(pathpred.__str__(), 'rb'),))
+        response = tester.post(
+            "/formcontrol",
+            data=dict(
+                dataset_train=open(pathtrain.__str__(), "rb"),
+                dataset_test=open(pathtest.__str__(), "rb"),
+                dataset_prediction=open(pathpred.__str__(), "rb"),
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
 
@@ -34,11 +37,15 @@ class TestRoutes(unittest.TestCase):
         pathpred = path / "testingFiles" / "bupaToPredict.csv"
         autosplit = "doAutosplit"
 
-        response = tester.post('/formcontrol',
-                               data=dict(dataset_train=open(pathtrain.__str__(), 'rb'),
-                                         dataset_test=open(pathtest.__str__(), 'rb'),
-                                         dataset_prediction=open(pathpred.__str__(), 'rb'),
-                                         splitDataset=autosplit))
+        response = tester.post(
+            "/formcontrol",
+            data=dict(
+                dataset_train=open(pathtrain.__str__(), "rb"),
+                dataset_test=open(pathtest.__str__(), "rb"),
+                dataset_prediction=open(pathpred.__str__(), "rb"),
+                splitDataset=autosplit,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         self.assertFalse(exists(path / "Data_training.csv"))
@@ -57,17 +64,22 @@ class TestRoutes(unittest.TestCase):
         # Advanced option
         k = 10
 
-        response = tester.post('/formcontrol',
-                               data=dict(dataset_train=open(pathtrain.__str__(), 'rb'),
-                                         dataset_test=open(pathtest.__str__(), 'rb'),
-                                         dataset_prediction=open(pathpred.__str__(), 'rb'),
-                                         splitDataset=autosplit,
-                                         kFold=kFold, kFoldValue=k))
+        response = tester.post(
+            "/formcontrol",
+            data=dict(
+                dataset_train=open(pathtrain.__str__(), "rb"),
+                dataset_test=open(pathtest.__str__(), "rb"),
+                dataset_prediction=open(pathpred.__str__(), "rb"),
+                splitDataset=autosplit,
+                kFold=kFold,
+                kFoldValue=k,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         for x in range(k):
-            StringaTrain = 'training_fold_{}.csv'.format(x + 1)
-            StringaTest = 'testing_fold_{}.csv'.format(x + 1)
+            StringaTrain = "training_fold_{}.csv".format(x + 1)
+            StringaTest = "testing_fold_{}.csv".format(x + 1)
             self.assertTrue(exists(path / StringaTrain))
             self.assertTrue(exists(path / StringaTest))
 
@@ -80,11 +92,15 @@ class TestRoutes(unittest.TestCase):
         pathtest = path / "testingFiles" / "bupaTest.csv"
         pathpred = path / "testingFiles" / "bupaToPredict.csv"
         doQSVM = "doQSVM"
-        response = tester.post('/formcontrol',
-                               data=dict(dataset_train=open(pathtrain.__str__(), 'rb'),
-                                         dataset_test=open(pathtest.__str__(), 'rb'),
-                                         dataset_prediction=open(pathpred.__str__(), 'rb'),
-                                         doQSVM=doQSVM))
+        response = tester.post(
+            "/formcontrol",
+            data=dict(
+                dataset_train=open(pathtrain.__str__(), "rb"),
+                dataset_test=open(pathtest.__str__(), "rb"),
+                dataset_prediction=open(pathpred.__str__(), "rb"),
+                doQSVM=doQSVM,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
 
@@ -101,12 +117,17 @@ class TestRoutes(unittest.TestCase):
         # Advanced option
         numColsFE = 2
 
-        response = tester.post('/formcontrol',
-                               data=dict(dataset_train=open(pathtrain.__str__(), 'rb'),
-                                         dataset_test=open(pathtest.__str__(), 'rb'),
-                                         dataset_prediction=open(pathpred.__str__(), 'rb'),
-                                         reduceFE=featureExtraction, doQSVM=doQSVM,
-                                         nrColumns=numColsFE))
+        response = tester.post(
+            "/formcontrol",
+            data=dict(
+                dataset_train=open(pathtrain.__str__(), "rb"),
+                dataset_test=open(pathtest.__str__(), "rb"),
+                dataset_prediction=open(pathpred.__str__(), "rb"),
+                reduceFE=featureExtraction,
+                doQSVM=doQSVM,
+                nrColumns=numColsFE,
+            ),
+        )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
 
@@ -123,12 +144,17 @@ class TestRoutes(unittest.TestCase):
         # Advanced option
         numColsFE = 2
 
-        response = tester.post('/formcontrol',
-                               data=dict(dataset_train=open(pathtrain.__str__(), 'rb'),
-                                         dataset_test=open(pathtest.__str__(), 'rb'),
-                                         dataset_prediction=open(pathpred.__str__(), 'rb'),
-                                         reduceFE=featureExtraction, doQSVM=doQSVM,
-                                         nrColumns=numColsFE))
+        response = tester.post(
+            "/formcontrol",
+            data=dict(
+                dataset_train=open(pathtrain.__str__(), "rb"),
+                dataset_test=open(pathtest.__str__(), "rb"),
+                dataset_prediction=open(pathpred.__str__(), "rb"),
+                reduceFE=featureExtraction,
+                doQSVM=doQSVM,
+                nrColumns=numColsFE,
+            ),
+        )
         statuscode = response.status_code
         print(statuscode)
         self.assertEqual(statuscode, 400)

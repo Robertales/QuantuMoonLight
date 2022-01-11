@@ -1,10 +1,14 @@
 import pathlib
 import numpy as np
 from app.source.utils import utils
-from app.source.preprocessingDataset import PrototypeSelectionProblem as ps
+from app.source.preprocessingDataset import (
+    PrototypeSelectionProblem as ps,
+)
 
 
-def callPrototypeSelection(path: pathlib.Path, number_of_reduced_training_instances=10):
+def callPrototypeSelection(
+    path: pathlib.Path, number_of_reduced_training_instances=10
+):
     """
     This function executes the prototype selection on the given dataset
 
@@ -13,16 +17,33 @@ def callPrototypeSelection(path: pathlib.Path, number_of_reduced_training_instan
     :return: string that points to the location of the dataset preprocessed with PS
     :rtype: str
     """
-    x_train, x_test, number_of_features, number_of_classes, number_of_total_instances = utils.prepareData(path)
+    (
+        x_train,
+        x_test,
+        number_of_features,
+        number_of_classes,
+        number_of_total_instances,
+    ) = utils.prepareData(path)
 
     number_of_solutions = 500
-    chromosomeToEvaluate, fitness = ps.runGeneticAlgorithXPS(number_of_solutions, x_train,
-                                                             number_of_reduced_training_instances,path.parent)
+    chromosomeToEvaluate, fitness = ps.runGeneticAlgorithXPS(
+        number_of_solutions,
+        x_train,
+        number_of_reduced_training_instances,
+        path.parent,
+    )
 
     print(chromosomeToEvaluate)
     pathFileReducedTrainingPS = pathlib.Path(path).parent
-    pathFileReducedTrainingPS = pathFileReducedTrainingPS / 'reducedTrainingPS.csv'
+    pathFileReducedTrainingPS = (
+        pathFileReducedTrainingPS / "reducedTrainingPS.csv"
+    )
 
-    np.savetxt(pathFileReducedTrainingPS.__str__(), x_train[chromosomeToEvaluate, :], delimiter=",", fmt='%s')
+    np.savetxt(
+        pathFileReducedTrainingPS.__str__(),
+        x_train[chromosomeToEvaluate, :],
+        delimiter=",",
+        fmt="%s",
+    )
 
     return pathFileReducedTrainingPS.__str__()

@@ -8,13 +8,14 @@ from flask import request, send_file, send_from_directory
 cartella_download = os.pardir + "\\uploads\\"
 
 
-@app.route('/download')
+@app.route("/download")
 def download():
-    filename = request.form.get('filename')
+    filename = request.form.get("filename")
 
     if filename:
-        filepath = '/uploads/' + filename
-        return send_from_directory(filepath, filename="Classification_results.csv",
-                                   as_attachment=True)
-
-
+        filepath = "/uploads/" + filename
+        return send_from_directory(
+            filepath,
+            filename="Classification_results.csv",
+            as_attachment=True,
+        )
