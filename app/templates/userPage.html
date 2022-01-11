@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <title> QuantuMoonLight </title>
+
+    <!-- Stylesheets -->
+    <link href="../static/styles/css/revolution-slider.css" rel="stylesheet">
+    <link href="../static/styles/css/style.css" rel="stylesheet">
+    <link href="../static/styles/css/nav.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/styles/css/logIn.css">
+
+    <!-- Responsive -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link href="../static/styles/css/responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <!--[if lt IE 9]>
+    <script src="../../static/js/respond.js"></script><![endif]-->
+
+
+</head>
+
+<body>
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<div class="page-wrapper">
+{% extends "base.html" %}
+{% block content %}
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+      <!-- Logo -->
+    <div class="fadeIn first">
+        <img src="../static/images/logos/Logo_SenzaScritta.png" id="icon" alt="Logo">
+    </div>
+
+    <!-- User Page -->
+
+      <h6 class="text-uppercase font-weight-bold">E-mail:</h6><h5>{{current_user.email}}</h5><br>
+      <h6 class="text-uppercase font-weight-bold">Username:</h6><h5>{{current_user.username}}</h5><br>
+      <h6 class="text-uppercase font-weight-bold">Name:</h6><h5>{{current_user.name}}</h5><br>
+      <h6 class="text-uppercase font-weight-bold">Surname:</h6><h5>{{current_user.surname}}</h5><br>
+      <h6 class="text-uppercase font-weight-bold">IBM Token:</h6><h5>{{current_user.token}}</h5><br>
+    <form action="#">
+        <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-bar-chart"></span>  Storico Dataset</button>
+        <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Edit Profile</button>
+    </form><br>
+      <form action="{{url_for("adminPage")}}">
+          <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Admin Page</button>
+      </form><br>
+
+      <form action="/logout" method="post">
+          <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-sign-out"></span> Log-Out</button>
+      </form><br>
+
+    <!-- Return to Log In page -->
+    <div id="formFooter">
+      <a class="underlineHover" href={{url_for("homepage")}}>Back to homepage</a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+</body>
+</html>

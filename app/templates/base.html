@@ -41,13 +41,12 @@
         <li class="nav-item">
           <a class="nav-link" href="#">BLOG</a>
         </li>
-          {% if current_user.is_authenticated %}
-           <li class="nav-item">
-          <a class="nav-link" href="#">Ciao,{{current_user.username}}</a>
-          {% endif %}
       </ul>
       <!-- Left links -->
     </div>
+      {% if current_user.is_authenticated %}
+      <label class="nav-item"><a class="nav-link" href="{{url_for("userPage")}}">Ciao, {{current_user.username}}</a></label>
+      {% endif %}
   </div>
     <a href={{url_for("loginPage")}}><img src="../static/images/icons/person-circle.svg" class="user" height="50px" alt="User page"></a>
   <!-- Container wrapper -->

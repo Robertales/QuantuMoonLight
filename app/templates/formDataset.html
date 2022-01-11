@@ -174,13 +174,14 @@ h1:before {
                             </p>
                             <div class="collapse" id="collapseExample">
                                 <div class="card card-body">
-                                    <label><input type="radio" class="AdvancedOption" id="checkSimpleSplit" name="Radio" value="simpleSplit" checked>   Simple Train-Test Split</label>
+                                    <label><input type="radio" class="AdvancedOption" id="checkSimpleSplit" name="Radio" value="simpleSplit">   Simple Train-Test Split</label>
                                     <label><input type="radio" class="AdvancedOption" id="checkKFold" name="Radio" value="kFold">  K-fold Cross Validation </label>
                                     <label>Insert k parameter:   <input type="number" max="10000" value="10" id="kFoldValue" name="kFoldValue" style="border: 0.1em solid grey"></label>
                                     <label><input type="checkbox" id="checkAutoDetectNR" name="autoDetect" value="autoDetect">  Autodetect nr variable reduction</label>
                                     <label>Insert nr of columns to reduce:   <input type="number" max="10000" value="2" id="nrColumns" name="nrColumns" style="border: 0.1em solid grey"></label><br>
                                     <label>Insert nr of rows to reduce:    <input type="number" max="10000" value="100" id="nrRows" name="nrRows" style="border: 0.1em solid grey"></label>
                                     <label>Select one: <select name="backend" id="backend" style="border: 0.1em solid grey">
+                                                                <option value="backend">Default </option>
                                                                 <option value="backend">IBM Washington; Processor type: Eagle R1; Qubit: 127 </option>
                                                                 <option value="backend">IBMQ Brooklyn; Processor type: Hammingbird R1; Qubit: 65 </option>
                                                                 <option value="backend">IBMQ Kolkata; Processor type: Falcon r5.11; Qubit: 27 </option>
@@ -192,7 +193,6 @@ h1:before {
                                 </div>
                             </div>
                             <br>
-                            <button type="submit" name="submitForm"  onclick="btnValidation()" class="btn btn-primary" id="submitForm"><span class="fa fa-database"> </span> Upload</button>
 
                         </form>
                             <br>
@@ -213,12 +213,13 @@ h1:before {
                                 <font size=2>Create an IMBid account</font>
                             </a></div>
                             <br><br>
-                            <button type="submit" name="submit" class="theme-btn btn-style-one mainred hvr-bounce-to-right"><span class="fa fa-play"></span>SEND</button>
+                            <!-- <button type="submit" name="submit" class="theme-btn btn-style-one mainred hvr-bounce-to-right"><span class="fa fa-play"></span>SEND</button> -->
                             <br><br>
                         </form>
                         <br>
                     </div>
                 </div>
+                <br><button type="submit" name="submitForm"  onclick="btnValidation()" class="btn btn-primary" id="submitForm"><span class="fa fa-rocket"> </span> Upload</button>
             </div>
         </section>
     {% endblock %}
