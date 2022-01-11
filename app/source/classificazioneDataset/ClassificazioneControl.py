@@ -34,7 +34,7 @@ def classificazioneControl():
     """
     pathTrain=request.form.get("pathTrain")
     pathTest = request.form.get("pathTest")
-    pathPrediction=request.form.get("pathPrediction")
+    pathPrediction=request.form.get("userpathToPredict")
     features=request.form.getlist("features")
     token=request.form.get("token")
     backend = request.form.get("backend")
@@ -66,7 +66,6 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     start_time = time.time()
     noBackend = False
 
-    #print("token: "+token)
     try:
         IBMQ.enable_account(token)
     except:
@@ -74,6 +73,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
         return 0
 
     provider = IBMQ.get_provider(hub='ibm-q')
+    IBMQ.disable_account()
     qubit = len(features)
 
     try:
@@ -85,13 +85,13 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
             backend = least_busy(provider.backends(filters=lambda
                 x: x.configuration().n_qubits >= qubit and not x.configuration().simulator and x.status().operational == True))
             print("least busy backend: ", backend)
-            print("backend qubit:" + str(provider.get_backend(backend).configuration().n_qubits))
-    except:
+            print("backend qubit:" + str(provider.get_backend(backend.name()).configuration().n_qubits))
+    except Exception as e:
         #when selected backend has not enough qubit, or no backends has enough qubits, or the user token has no privileges to use the selected backend
         noBackend = True
         backend = provider.get_backend('ibmq_qasm_simulator')
         print("backend selected: simulator")
-        print("backend qubit:" + str(provider.get_backend(backend).configuration().n_qubits))
+        print("backend qubit:" + str(provider.get_backend(backend.name()).configuration().n_qubits))
 
     seed = 8192
     shots = 1024
@@ -99,17 +99,20 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
 
     training_input, test_input = loadDataset(pathTrain, pathTest, features, label='labels')
 
+    #pathDoPrediction = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
     pathDoPrediction = pathlib.Path(__file__).parents[3]
-    if(os.path.exists("doPredictionFE.csv")):
+    if(os.path.exists( pathDoPrediction / "doPredictionFE.csv")):
         pathDoPrediction = pathDoPrediction / "doPredictionFE.csv"
     else:
-        pathDoPrediction = pathDoPrediction / userpathToPredict
+        pathDoPrediction = userpathToPredict
+        #pathDoPrediction = pathDoPrediction / userpathToPredict
     filetoPredict=open(pathDoPrediction.__str__(), "r")
     predizione = np.array(list(csv.reader(filetoPredict, delimiter=","))).astype("float")
 
     feature_map = ZZFeatureMap(feature_dimension=qubit, reps=2, entanglement='linear')
     print(feature_map)
 
+    print(pathTrain.__str__() + pathTest.__str__() + pathDoPrediction.__str__())
     qsvm = QSVM(feature_map, training_input, test_input, predizione, multiclass_extension=AllPairs())
 
     quantum_instance = QuantumInstance(backend, shots=shots, seed_simulator=seed, seed_transpiler=seed)
@@ -117,8 +120,8 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     print('Running....\n')
     try:
         result = qsvm.run(quantum_instance)
-        IBMQ.disable_account()
-    except:
+    except Exception as e:
+        print(e)
         print("Errore su server ibm")
         result = 1
         return result
@@ -179,12 +182,12 @@ def getClassifiedDataset(result):
     """
 
     :param result: dict risultante dalla funzione classify dal quale si prendono i dati da inviare per email
-    :return:
+    :return: 0 error, 1 done
     """
     msg = MIMEMultipart()
     msg['From'] = "quantumoonlight@gmail.com"
     msg['To'] = "quantumoonlight@gmail.com"
-    #msg['To'] = request["email"]
+    #msg['To'] = request.form.get("email")
     msg['Date'] = formatdate(localtime=True)
     msg['Subject'] = "Classification Result of "  # + dataset.name + " " + dataset.upload_date
 
@@ -207,6 +210,7 @@ def getClassifiedDataset(result):
         encoders.encode_base64(payload)
         payload.add_header('Content-Disposition', 'attachment', filename="ClassifiedDataset.csv")
         msg.attach(payload)
+        attach_file.close()
 
     try:
         server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
@@ -214,7 +218,6 @@ def getClassifiedDataset(result):
         server.login("quantumoonlight@gmail.com", "Quantum123?")
         server.send_message(msg)
         server.close()
-        attach_file.close()
     except:
         return 0
     return 1
