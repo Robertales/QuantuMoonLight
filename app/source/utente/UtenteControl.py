@@ -22,7 +22,13 @@ Reads the user credentials from a http request and adds him to the project datab
     username = request.form.get('username')
     Name = request.form.get('nome')
     cognome = request.form.get('cognome')
-    utente = User(email=email, password=hashed_password, token=token, username=username, name=Name, surname=cognome)
+    utente = User(
+        email=email,
+        password=hashed_password,
+        token=token,
+        username=username,
+        name=Name,
+        surname=cognome)
     db.session.add(utente)
     db.session.commit()
     path = Path(__file__).parents[3] / 'upload_dataset' / email
@@ -72,7 +78,7 @@ changes the User ,whose email was passed as a http request parameter ,newsletter
     """
     email = request.form.get('email')
     utente: User = User.query.filter_by(email=email).first()
-    utente.newsletter = True;
+    utente.newsletter = True
     db.session.commit()
 
     return render_template('index.html')

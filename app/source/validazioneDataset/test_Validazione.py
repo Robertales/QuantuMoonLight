@@ -36,9 +36,14 @@ class TestValidazioneControl(unittest.TestCase):
         kFold = None
         k = 10
 
-        response = tester.post('/validazioneControl',
-                               data=dict(userpath=userpath, userpathTest=userpathTest,
-                                         simpleSplit=simpleSplit, kFold=kFold, k=k))
+        response = tester.post(
+            '/validazioneControl',
+            data=dict(
+                userpath=userpath,
+                userpathTest=userpathTest,
+                simpleSplit=simpleSplit,
+                kFold=kFold,
+                k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         pathData = pathlib.Path(__file__).parents[0]
@@ -57,9 +62,14 @@ class TestValidazioneControl(unittest.TestCase):
         kFold = True
         k = 10
 
-        response = tester.post('/validazioneControl',
-                               data=dict(userpath=userpath, userpathTest=userpathTest,
-                                         simpleSplit=simpleSplit, kFold=kFold, k=k))
+        response = tester.post(
+            '/validazioneControl',
+            data=dict(
+                userpath=userpath,
+                userpathTest=userpathTest,
+                simpleSplit=simpleSplit,
+                kFold=kFold,
+                k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         pathData = pathlib.Path(__file__).parents[0]
@@ -82,9 +92,14 @@ class TestValidazioneControl(unittest.TestCase):
         kFold = True
         k = 1
 
-        response = tester.post('/validazioneControl',
-                               data=dict(userpath=userpath, userpathTest=userpathTest,
-                                         simpleSplit=simpleSplit, kFold=kFold, k=k))
+        response = tester.post(
+            '/validazioneControl',
+            data=dict(
+                userpath=userpath,
+                userpathTest=userpathTest,
+                simpleSplit=simpleSplit,
+                kFold=kFold,
+                k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
         pathData = pathlib.Path(__file__).parents[0]
@@ -106,9 +121,14 @@ class TestValidazioneControl(unittest.TestCase):
         kFold = True
         k = 10
 
-        response = tester.post('/validazioneControl',
-                               data=dict(userpath=userpath, userpathTest=userpathTest,
-                                         simpleSplit=simpleSplit, kFold=kFold, k=k))
+        response = tester.post(
+            '/validazioneControl',
+            data=dict(
+                userpath=userpath,
+                userpathTest=userpathTest,
+                simpleSplit=simpleSplit,
+                kFold=kFold,
+                k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
         pathData = pathlib.Path(__file__).parents[0]
@@ -135,9 +155,14 @@ class TestValidazioneControl(unittest.TestCase):
         kFold = None
         k = 10
 
-        response = tester.post('/validazioneControl',
-                               data=dict(userpath=userpath, userpathTest=userpathTest,
-                                         simpleSplit=simpleSplit, kFold=kFold, k=k))
+        response = tester.post(
+            '/validazioneControl',
+            data=dict(
+                userpath=userpath,
+                userpathTest=userpathTest,
+                simpleSplit=simpleSplit,
+                kFold=kFold,
+                k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         pathData = pathlib.Path(__file__).parents[0]
@@ -156,9 +181,14 @@ class TestValidazioneControl(unittest.TestCase):
         kFold = None
         k = 10
 
-        response = tester.post('/validazioneControl',
-                               data=dict(userpath=userpath, userpathTest=userpathTest,
-                                         simpleSplit=simpleSplit, kFold=kFold, k=k))
+        response = tester.post(
+            '/validazioneControl',
+            data=dict(
+                userpath=userpath,
+                userpathTest=userpathTest,
+                simpleSplit=simpleSplit,
+                kFold=kFold,
+                k=k))
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
         pathData = pathlib.Path(__file__).parents[0]
@@ -246,8 +276,14 @@ class TestSimpleSplit(unittest.TestCase):
         train_testSplit.splitDataset(filename.__str__())
         self.assertEqual(20, utils.numberOfRows('Data_testing.csv'))
         self.assertEqual(numRaws - 20, utils.numberOfRows('Data_training.csv'))
-        self.assertTrue(exists(pathlib.Path(__file__).parent / "Data_testing.csv"))
-        self.assertTrue(exists(pathlib.Path(__file__).parent / "Data_training.csv"))
+        self.assertTrue(
+            exists(
+                pathlib.Path(__file__).parent /
+                "Data_testing.csv"))
+        self.assertTrue(
+            exists(
+                pathlib.Path(__file__).parent /
+                "Data_training.csv"))
 
     def tearDown(self):
         path = pathlib.Path(__file__).parent

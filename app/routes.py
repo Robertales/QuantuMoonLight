@@ -64,19 +64,27 @@ def smista():
     print("kFold: ", kFold)
     k = request.form.get('kFoldValue', type=int)
     print("kFoldValue: ", k)
-    numRawsPS = request.form.get('nrRows', type=int)  # numero di righe dopo la Prototype Selection con GA
+    # numero di righe dopo la Prototype Selection con GA
+    numRawsPS = request.form.get('nrRows', type=int)
     print("numRawsPS:  ", numRawsPS)
-    numColsFE = request.form.get('nrColumns', type=int)  # numero di colonne dopo la Feature Extraction con PCA
+    # numero di colonne dopo la Feature Extraction con PCA
+    numColsFE = request.form.get('nrColumns', type=int)
     print("numColsFE: ", numColsFE)
 
     assert isinstance(current_user, User)
-    salvataggiodatabase = Dataset(email_user=current_user.email, name=dataset_train.filename,
-                                  upload_date=datetime.now(),
-                                  simple_split=bool(autosplit), ps=bool(prototypeSelection),
-                                  fe=bool(featureExtraction), k_fold=bool(kFold), doQSVM=bool(doQSVM))
+    salvataggiodatabase = Dataset(
+        email_user=current_user.email,
+        name=dataset_train.filename,
+        upload_date=datetime.now(),
+        simple_split=bool(autosplit),
+        ps=bool(prototypeSelection),
+        fe=bool(featureExtraction),
+        k_fold=bool(kFold),
+        doQSVM=bool(doQSVM))
     db.session.add(salvataggiodatabase)
     db.session.commit()
-    paths = upload(dataset_train, dataset_test, dataset_prediction, str(salvataggiodatabase.id))
+    paths = upload(dataset_train, dataset_test,
+                   dataset_prediction, str(salvataggiodatabase.id))
     if paths == (-1):
         print("Estensione non valida")
         return Response(status=400)
@@ -88,25 +96,39 @@ def smista():
     # Validazione
     print("\nIn validazione...")
     if autosplit and not kFold and not simpleSplit:
-        # se l'utente vuole fare autosplit ma non seleziona opzioni avanzate, di dafault faccio simpleSplit
+        # se l'utente vuole fare autosplit ma non seleziona opzioni avanzate,
+        # di dafault faccio simpleSplit
         simpleSplit = True
     if not autosplit:
         kFold = None
         simpleSplit = None
-    app.test_client().post("/validazioneControl", data=dict(userpath=userpathTrain, userpathTest=userpathTest,
-                                                            simpleSplit=simpleSplit, kFold=kFold, k=k))
+    app.test_client().post(
+        "/validazioneControl",
+        data=dict(
+            userpath=userpathTrain,
+            userpathTest=userpathTest,
+            simpleSplit=simpleSplit,
+            kFold=kFold,
+            k=k))
     if kFold:
         return "ora scarica e procedi dalla home specificando quali usare"
 
     # Preprocessing
     print("\nIn preprocessing...")
-    app.test_client().post("/preprocessingControl",
-                           data=dict(userpath=userpathTrain, userpathToPredict=userpathToPredict,
-                                     prototypeSelection=prototypeSelection,
-                                     featureExtraction=featureExtraction,
-                                     numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
-    pathTrain = dataPath/'DataSetTrainPreprocessato.csv'  # DataSet Train ready to be classified
-    pathTest = dataPath/'DataSetTestPreprocessato.csv'  # DataSet Test ready to be classified
+    app.test_client().post(
+        "/preprocessingControl",
+        data=dict(
+            userpath=userpathTrain,
+            userpathToPredict=userpathToPredict,
+            prototypeSelection=prototypeSelection,
+            featureExtraction=featureExtraction,
+            numRawsPS=numRawsPS,
+            numColsFE=numColsFE,
+            doQSVM=doQSVM))
+    # DataSet Train ready to be classified
+    pathTrain = dataPath / 'DataSetTrainPreprocessato.csv'
+    # DataSet Test ready to be classified
+    pathTest = dataPath / 'DataSetTestPreprocessato.csv'
 
     # Classificazione
     if doQSVM:
@@ -114,22 +136,30 @@ def smista():
         backend = request.form.get("backend")
         #backend = "ibmq_qasm_simulator"
         if request.form.get('token'):
-            token=request.form.get('token')
+            token = request.form.get('token')
         else:
-            token=current_user.token
+            token = current_user.token
         if request.form.get('email'):
-            email=request.form.get('email')
+            email = request.form.get('email')
         else:
-            email=current_user.email
+            email = current_user.email
 
         if featureExtraction:
-            features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
+            features = utils.createFeatureList(
+                numColsFE)  # lista di features per la qsvm
         else:
-            features = utils.createFeatureList(utils.numberOfColumns(userpathTrain) - 1)
-        app.test_client().post("/classificazioneControl",
-                               data=dict(pathTrain=pathTrain, pathTest=pathTest, email=email,
-                                         userpathToPredict=userpathToPredict,
-                                         features=features, token=token, backend=backend))
+            features = utils.createFeatureList(
+                utils.numberOfColumns(userpathTrain) - 1)
+        app.test_client().post(
+            "/classificazioneControl",
+            data=dict(
+                pathTrain=pathTrain,
+                pathTest=pathTest,
+                email=email,
+                userpathToPredict=userpathToPredict,
+                features=features,
+                token=token,
+                backend=backend))
 
     print("\n\nSmista ha finito! To the Moon!")
 
@@ -149,7 +179,8 @@ def upload(file, file1, file2, idTrainSet):
         return -1
     if file is None:
         return -1
-    uploaddir = pathlib.Path(__file__).parents[1] / 'upload_dataset' / current_user.email / str(idTrainSet)
+    uploaddir = pathlib.Path(
+        __file__).parents[1] / 'upload_dataset' / current_user.email / str(idTrainSet)
     if not uploaddir.exists():
         uploaddir.mkdir()
     userfile_name = file.filename

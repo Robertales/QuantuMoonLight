@@ -24,7 +24,7 @@ class Dataset(db.Model):
     k_fold = db.Column(db.Boolean, nullable=True)
     ps = db.Column(db.Boolean, nullable=True)
     fe = db.Column(db.Boolean, nullable=True)
-    doQSVM =db.Column(db.Boolean,nullable=True)
+    doQSVM = db.Column(db.Boolean, nullable=True)
 
 
 class Article(db.Model):
@@ -48,8 +48,6 @@ class Like(db.Model):
     __table_args__ = (db.PrimaryKeyConstraint('email_user', 'id_article'),)
     email_user = db.Column(db.VARCHAR(255), ForeignKey('user.email'))
     id_article = db.Column(db.Integer, ForeignKey('article.id'))
-
-
 
 
 def __repr__(self):
