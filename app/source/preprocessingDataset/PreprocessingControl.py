@@ -19,7 +19,7 @@ def preprocessingControl():
     doQSVM = request.form.get("doQSVM")
 
     # Cartella dell'utente dove scrivere tutti i risultati
-    pathPC = pathlib.Path(userpath).parents[1]
+    pathPC = pathlib.Path(userpath).parents[0]
     print("path in PC: ", pathPC)
     if not featureExtraction and not prototypeSelection and doQSVM:
         # Se l'utente non vuole preprocessare il dataset ma vuole fare QSVM,
@@ -29,7 +29,7 @@ def preprocessingControl():
         print("Exiting from preprocessingControl with NoPS and NoFE")
         return Response(status=200)
 
-    numRaws = utils.numberOfRaws(userpath)
+    numRaws = utils.numberOfRows(userpath)
     numCols = utils.numberOfColumns(userpath)
     if featureExtraction and numColsFE > numCols:
         print("Impossibile ridurre le colonne: numColsFE > numColsData")
@@ -41,21 +41,21 @@ def preprocessingControl():
     preprocessing(userpath, userpathToPredict, prototypeSelection, featureExtraction, numRawsPS, numColsFE, doQSVM)
 
     # Cancello i file di supporto al preprocessing
-    if os.path.exists("TestPS_500_0.15_0.8_5.txt"):
-        os.remove("TestPS_500_0.15_0.8_5.txt")
-    if os.path.exists("TestPS_500_0.15_0.8_5.xlsx"):
-        os.remove("TestPS_500_0.15_0.8_5.xlsx")
-    if os.path.exists("IdPCADataset.csv"):
-        os.remove("IdPCADataset.csv")
-    if os.path.exists("IdPCADatasetTrain.csv"):
-        os.remove("IdPCADatasetTrain.csv")
+    if os.path.exists(pathPC/"TestPS_500_0.15_0.8_5.txt"):
+        os.remove(pathPC/"TestPS_500_0.15_0.8_5.txt")
+    if os.path.exists(pathPC/"TestPS_500_0.15_0.8_5.xlsx"):
+        os.remove(pathPC/"TestPS_500_0.15_0.8_5.xlsx")
+    if os.path.exists(pathPC/"IdPCADataset.csv"):
+        os.remove(pathPC/"IdPCADataset.csv")
+    if os.path.exists(pathPC/"IdPCADatasetTrain.csv"):
+        os.remove(pathPC/"IdPCADatasetTrain.csv")
 
     print("Exiting from preprocessingControl")
     return Response(status=200)
 
 
 def preprocessing(userpath: str, userpathToPredict: str, prototypeSelection: bool, featureExtraction: bool,
-                  numRawsPS: int, numColsFE: int, doQSVM: bool):
+                  numRowsPS: int, numColsFE: int, doQSVM: bool):
     """
     This function is going to preprocess a given Dataset with prototypeSelection or featureExtraction
 
@@ -63,25 +63,25 @@ def preprocessing(userpath: str, userpathToPredict: str, prototypeSelection: boo
     :param prototypeSelection: boolean flag that indicated whether the user wants to execute a prototypeSelection or not
     :param userpathToPredict: string that points to the location of the dataset to be predicted
     :param featureExtraction: boolean flag that indicated whether the user wants to execute a feature Extraction or not
-    :param numRawsPS: number of rows the prototype selection should reduce the dataset to
+    :param numRowsPS: number of rows the prototype selection should reduce the dataset to
     :param numColsFE: number of columns the feature extraction should reduce the dataset to
     :param doQSVM: boolean flag that indicated whether the user wants to execute classification or not
     :return: two preprocessed dataset: 'DataSetTrainPreprocessato.csv', 'DataSetTestPreprocessato.csv'
     :rtype: (str, str)
     """
 
-    numRaws = utils.numberOfRaws(userpath)
+    numRows = utils.numberOfRows(userpath)
     numCols = utils.numberOfColumns(userpath)
     features = utils.createFeatureList(numCols - 1)
     featuresLabels = features.copy()
     featuresLabels.append("labels")
-    pathPC = pathlib.Path(userpath).parents[1]
+    pathPC = pathlib.Path(userpath).parents[0]
 
     # PS with GA
     if prototypeSelection and not featureExtraction:
         print("I'm doing Prototype Selection ...")
 
-        callPS.callPrototypeSelection(pathPC / 'Data_training.csv', numRawsPS)  # crea 'reducedTrainingPS.csv'
+        callPS.callPrototypeSelection(pathPC / 'Data_training.csv', numRowsPS)  # crea 'reducedTrainingPS.csv'
         addAttribute.addAttribute(pathPC / 'reducedTrainingPS.csv', pathPC / 'featureDataset.csv')  # modifica 'featureDataset.csv'
         # con le istanze create da 'reducedTrainingPS.csv'
         aggId.addId(pathPC / 'featureDataset.csv', pathPC / 'DataSetTrainPreprocessato.csv')
@@ -106,7 +106,7 @@ def preprocessing(userpath: str, userpathToPredict: str, prototypeSelection: boo
         print("I'm doing Protype Selection and feature extraction ")
 
         # ps
-        callPS.callPrototypeSelection(pathPC / 'Data_training.csv', numRawsPS)  # crea 'reducedTrainingPS.csv'
+        callPS.callPrototypeSelection(pathPC / 'Data_training.csv', numRowsPS)  # crea 'reducedTrainingPS.csv'
         addAttribute.addAttribute(pathPC / 'reducedTrainingPS.csv', pathPC / 'reducedTrainingPS_attribute.csv')
 
         # pca

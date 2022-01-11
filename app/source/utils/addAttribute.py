@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from app.source.utils import utils
 
 
@@ -21,7 +23,7 @@ def createFeatureString(numCols: int):
     return featureString
 
 
-def addAttribute(filename: str, outputName="featureDataset.csv"):
+def addAttribute(filename: Path, outputName="featureDataset.csv"):
     """
     This function add into the output file the features string and all the raws contained in the input file
 

@@ -6,28 +6,29 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import warnings
+
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
-def callFeatureExtraction(path: str, output: str, features: list, n_components=2):
+def callFeatureExtraction(path: pathlib.Path, output: pathlib.Path, features: list, n_components=2):
     """
     This function executes the Feature Extraction on the given dataset
 
-    :param path: string that points to the location of the dataset that is going to be reduced with FE
-    :param output: string that points to the location of the dataset preprocessed with FE
+    :param path: path to the location of the dataset that is going to be reduced with FE
+    :param output: path to the location of the dataset preprocessed with FE
     :param features: list that specify the labels of the dataset input
     :param n_components: number of new columns
     :return: string that points to the location of the dataset preprocessed with FE
     :rtype: str
     """
-
+    dataPath = path.parent
     print("Into callFeatureExtraction...")
     f = pd.read_csv(path)
     keep_col = features
     new_f = f[keep_col]
-    new_f.to_csv("tempPCA.csv", index=False)
+    new_f.to_csv(dataPath/"tempPCA.csv", index=False)
 
-    dataset = pd.read_csv('tempPCA.csv')
+    dataset = pd.read_csv(dataPath/'tempPCA.csv')
 
     X = dataset.drop('labels', 1)
 
@@ -53,30 +54,31 @@ def callFeatureExtraction(path: str, output: str, features: list, n_components=2
     # write csv data
 
     # nuovo salvataggio, da testare
-    pathFileYourPCA = pathlib.Path(__file__).parents[3]
+    pathFileYourPCA = pathlib.Path(__file__).parent
     pathFileYourPCA = pathFileYourPCA / output
     # print("pathFileYourPCA :", pathFileYourPCA)
     np.savetxt(pathFileYourPCA.__str__(), z, delimiter=",", fmt='%s')
 
-    os.remove('tempPCA.csv')
+    os.remove(dataPath/'tempPCA.csv')
 
     return pathFileYourPCA.__str__()
 
 
-def extractFeatureForPrediction(path: str, output: str, n_components=2):
+def extractFeatureForPrediction(path: pathlib.Path, output: pathlib.Path, n_components=2):
     """
     This function executes the Feature Extraction on the doPrediction
 
-    :param path: string that points to the location of the dataset that is going to be reduced with FE
-    :param output: string that points to the location of the dataset preprocessed with FE
+    :param path: path to the location of the dataset that is going to be reduced with FE
+    :param output: path to the location of the dataset preprocessed with FE
     :param n_components: number of new columns
     :return: string that points to the location of the dataset preprocessed with FE
     :rtype: str
     """
+    dataPath = path.parent
     print("Into extractFeatureForPrediction...")
     f = pd.read_csv(path)
-    f.to_csv("tempPCA.csv", index=False)
-    dataset = pd.read_csv('tempPCA.csv')
+    f.to_csv(dataPath/"tempPCA.csv", index=False)
+    dataset = pd.read_csv((dataPath/'tempPCA.csv').__str__())
     X = dataset.drop('labels', 1)
     y = dataset['labels']
 
@@ -93,11 +95,11 @@ def extractFeatureForPrediction(path: str, output: str, n_components=2):
     z = np.concatenate((X_train, X_test))
 
     # salvataggio
-    pathFileYourPCA = pathlib.Path(__file__).parents[3]
+    pathFileYourPCA = pathlib.Path(__file__).parent
     pathFileYourPCA = pathFileYourPCA / output
     # print("pathFileYourPCA :", pathFileYourPCA)
     np.savetxt(pathFileYourPCA.__str__(), z, delimiter=",", fmt='%s')
 
-    os.remove('tempPCA.csv')
+    os.remove(dataPath/'tempPCA.csv')
 
     return pathFileYourPCA.__str__()

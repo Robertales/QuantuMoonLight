@@ -1,17 +1,19 @@
 import csv
 import os
+from pathlib import Path
 
 
-def addId(filename: str, filenameOut='IdFeatureDataset.csv'):
+def addId(filename: Path, filenameOut: Path):
     """
     This function adds the colomumn ID as the first column of the given dataset
 
-    :param filename: string that points to the location of the dataset
-    :param filenameOut: string that points to the location of new the dataset
+    :param filename: path to to the location of the dataset
+    :param filenameOut: path to the location of new the dataset
     :return: string that points to the location of new the dataset
     :rtype: str
     """
-    with open(filename, 'r') as input, open('DatasetTEMP.csv', 'w') as output:
+    dataPath = filename.parent
+    with open(filename, 'r') as input, open(dataPath/'DatasetTEMP.csv', 'w') as output:
         reader = csv.reader(input, delimiter=',')
         writer = csv.writer(output, delimiter=',')
 
@@ -28,13 +30,13 @@ def addId(filename: str, filenameOut='IdFeatureDataset.csv'):
         input.close()
         output.close()
 
-    with open('DatasetTEMP.csv') as input, open(filenameOut, 'w', newline='') as output:
+    with open(dataPath/'DatasetTEMP.csv') as input, open(filenameOut, 'w', newline='') as output:
         writer = csv.writer(output)
         for row in csv.reader(input):
             if any(field.strip() for field in row):
                 writer.writerow(row)
     input.close()
     output.close()
-    os.remove('DatasetTEMP.csv')
+    os.remove(dataPath/'DatasetTEMP.csv')
 
     return filenameOut

@@ -1,5 +1,7 @@
 import random
 import time as t
+from pathlib import Path
+
 import numpy as np
 import statistics as s
 from deap import base
@@ -19,7 +21,7 @@ def fitness_knn(chromosome, x_train):
     return accuracy,
 
 
-def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_training_instances):
+def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_training_instances,dataPath: Path):
     # PARAMETERS FOR THE  PROBLEM
     chromosome_size = number_of_reduced_training_instances
     reportName = "TestPS_"
@@ -103,9 +105,9 @@ def runGeneticAlgorithXPS(number_of_solutions, x_train, number_of_reduced_traini
         bestfits.append(bestf)
         times.append(time)
 
-        utils.writeXls(xlsFileName, gens, evaluations, bestfits, times)
+        utils.writeXls(dataPath/xlsFileName, gens, evaluations, bestfits, times)
 
-        utils.writeTxt(txtFileName, bestInds)
+        utils.writeTxt(dataPath/txtFileName, bestInds)
 
     # print(bestfits)
     medianFitness = s.median_high(bestfits)

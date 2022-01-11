@@ -17,7 +17,7 @@ def callPrototypeSelection(path: pathlib.Path, number_of_reduced_training_instan
 
     number_of_solutions = 500
     chromosomeToEvaluate, fitness = ps.runGeneticAlgorithXPS(number_of_solutions, x_train,
-                                                             number_of_reduced_training_instances)
+                                                             number_of_reduced_training_instances,path.parent)
 
     print(chromosomeToEvaluate)
     pathFileReducedTrainingPS = pathlib.Path(path).parent

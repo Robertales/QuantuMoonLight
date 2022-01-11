@@ -6,6 +6,7 @@ import warnings
 
 import numpy as np
 import pandas as pd
+from flask_login import login_required
 from qiskit import IBMQ
 from qiskit.providers.ibmq import least_busy
 from qiskit.aqua import QuantumInstance, aqua_globals
@@ -39,10 +40,9 @@ def classificazioneControl():
     token = request.form.get("token")
     backend = request.form.get("backend")
 
-
     result: dict = classify(pathTrain, pathTest, pathPrediction, features, token, backend)
     if result != 0:
-        getClassifiedDataset(result)
+        getClassifiedDataset(result, pathPrediction)
 
         # if result==0 il token non è valido
         # if result==1 errore su server IBM (comunica errore tramite email)
@@ -50,8 +50,8 @@ def classificazioneControl():
         # aggiungere controlli per result["noBackend"]==True e result==0 per mostrare gli errori tramite frontend
     return "result"
 
-def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSelected):
 
+def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSelected):
     """
 
     :param pathTrain: path del file di training output delle fasi precedenti
@@ -91,7 +91,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
             print("least busy backend: ", backend)
             print("backend qubit:" + str(provider.get_backend(backend.name()).configuration().n_qubits))
     except Exception as e:
-        #when selected backend has not enough qubit, or no backends has enough qubits, or the user token has no privileges to use the selected backend
+        # when selected backend has not enough qubit, or no backends has enough qubits, or the user token has no privileges to use the selected backend
         noBackend = True
         backend = provider.get_backend('ibmq_qasm_simulator')
         print("backend selected: simulator")
@@ -104,16 +104,16 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     training_input, test_input = loadDataset(pathTrain, pathTest, features, label='labels')
 
     print(userpathToPredict)
-    #pathDoPrediction = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
-    pathDoPrediction = pathlib.Path(__file__).parents[3]
-    if(os.path.exists( pathDoPrediction / "doPredictionFE.csv")):
+    # pathDoPrediction = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
+    pathDoPrediction = pathlib.Path(userpathToPredict).parent
+    if (os.path.exists(pathDoPrediction / "doPredictionFE.csv")):
         pathDoPrediction = pathDoPrediction / "doPredictionFE.csv"
         print(pathDoPrediction.__str__())
     else:
         pathDoPrediction = userpathToPredict
         print(pathDoPrediction.__str__())
-        #pathDoPrediction = pathDoPrediction / userpathToPredict
-    filetoPredict=open(pathDoPrediction.__str__(), "r")
+        # pathDoPrediction = pathDoPrediction / userpathToPredict
+    filetoPredict = open(pathDoPrediction.__str__(), "r")
     predizione = np.array(list(csv.reader(filetoPredict, delimiter=","))).astype("float")
 
     feature_map = ZZFeatureMap(feature_dimension=qubit, reps=2, entanglement='linear')
@@ -142,11 +142,11 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     predicted_labels = result["predicted_labels"]
 
     # classifiedFile = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
-    classifiedFile = open(pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv", "w")
+    classifiedFile = open(pathlib.Path(userpathToPredict).parent / "classifiedFile.csv", "w")
     predictionFile = open(userpathToPredict, "r")
     rows = predictionFile.readlines()
 
-    for j in range(1, utils.numberOfColumns(userpathToPredict)+1):
+    for j in range(1, utils.numberOfColumns(userpathToPredict) + 1):
         classifiedFile.write("feature" + str(j) + ",")
     classifiedFile.write("label\n")
     i = 0
@@ -184,7 +184,7 @@ def loadDataset(training_path, testing_path, features, label):
     return train_dict, test_dict
 
 
-def getClassifiedDataset(result):
+def getClassifiedDataset(result, userpathToPredict):
     """
 
     :param result: dict risultante dalla funzione classify dal quale si prendono i dati da inviare per email
@@ -193,7 +193,7 @@ def getClassifiedDataset(result):
     msg = MIMEMultipart()
     msg['From'] = "quantumoonlight@gmail.com"
     msg['To'] = "quantumoonlight@gmail.com"
-    #msg['To'] = request.form.get("email")
+    # msg['To'] = request.form.get("email")
     msg['Date'] = formatdate(localtime=True)
     msg['Subject'] = "Classification Result of "  # + dataset.name + " " + dataset.upload_date
 
@@ -208,8 +208,8 @@ def getClassifiedDataset(result):
         msg.attach(MIMEText("Success ratio: " + "{:.2%}".format(successRatio) + "\n"))
         msg.attach(MIMEText("Total time elapsed:" + result.get("totalTime") + "s"))
 
-        #file = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
-        file = pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv"
+        # file = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
+        file = pathlib.Path(userpathToPredict).parent / "classifiedFile.csv"
         attach_file = open(file, "rb")
         payload = MIMEBase('application', "octet-stream")
         payload.set_payload(attach_file.read())

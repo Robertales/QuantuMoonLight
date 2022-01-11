@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
@@ -15,7 +17,7 @@ def splitDataset(filename: str):
     X = data
 
     X_train, X_test = train_test_split(X, test_size=20)
-
+    pathData = Path(filename).parent
     print("\nX_train:\n")
     print(X_train.head())
     print(X_train.shape)
@@ -24,4 +26,4 @@ def splitDataset(filename: str):
     print(X_test.head())
     print(X_test.shape)
 
-    return X_train.to_csv('Data_training.csv', index=False), X_test.to_csv('Data_testing.csv', index=False)
+    return X_train.to_csv(pathData/'Data_training.csv', index=False), X_test.to_csv(pathData/'Data_testing.csv', index=False)

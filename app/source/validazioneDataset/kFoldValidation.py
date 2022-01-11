@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import csv
 from sklearn.model_selection import KFold
@@ -13,7 +15,7 @@ def cross_fold_validation(userpath: str, k: int):
     :return: to be decided
     """
     dataset = pd.read_csv(userpath)
-
+    dataPath = Path(userpath).parent
     kf = KFold(n_splits=k)
     kf.get_n_splits(dataset)
     x = 1
@@ -21,8 +23,8 @@ def cross_fold_validation(userpath: str, k: int):
         print("TRAIN:", train_index)
         print("TEST:", test_index)
         print(x)
-        stringaTrain = "training_fold_{}.csv".format(x)
-        stringaTest = "testing_fold_{}.csv".format(x)
+        stringaTrain = dataPath / ("training_fold_{}.csv".format(x))
+        stringaTest = dataPath / ("testing_fold_{}.csv".format(x))
         x = x + 1
 
         with open(userpath) as csvfile:

@@ -1,6 +1,9 @@
 import pathlib
+from datetime import datetime
+
 from flask import render_template, request, Response
-from app import app
+from app import app, db
+from app.models import User, Dataset
 from app.source.utils import utils
 from flask_login import current_user, login_required
 from flask import session
@@ -38,19 +41,13 @@ def aboutUs():
 
 
 @app.route('/formcontrol', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def smista():
     print("\nIn smista carico le richieste dal form...")
     dataset_train = request.files.get('dataset_train')
     dataset_test = request.files.get('dataset_test')
     dataset_prediction = request.files.get('dataset_prediction')
-    paths = upload(dataset_train, dataset_test, dataset_prediction)
-    if paths == (-1):
-        print("Estensione non valida")
-        return Response(status=400)
-    userpath = paths[0]
-    userpathTest = paths[1]
-    userpathToPredict = paths[2]
+
     autosplit = request.form.get('splitDataset')
     print("AutoSplit: ", autosplit)
     prototypeSelection = request.form.get('reducePS')
@@ -72,15 +69,21 @@ def smista():
     numColsFE = request.form.get('nrColumns', type=int)  # numero di colonne dopo la Feature Extraction con PCA
     print("numColsFE: ", numColsFE)
 
-    # assert isinstance(current_user, User)
-    # salvataggiodatabase = Dataset(email_user=current_user.email, name=file.filename, upload_date=datetime.now(),
-    #                               path=userpath, simple_split=bool(autosplit), ps=bool(prototypeSelection),
-    #                               fe=bool(featureExtraction), k_fold=bool(kFold), doQSVM=bool(doQSVM))
-    # db.session.add(salvataggiodatabase)
-    # db.session.commit()
-    # path = Path.parents[0]/ 'upload_dataset' / current_user.email / str(salvataggiodatabase.id)
-    # if not path.exists():
-    #     path.mkdir()
+    assert isinstance(current_user, User)
+    salvataggiodatabase = Dataset(email_user=current_user.email, name=dataset_train.filename,
+                                  upload_date=datetime.now(),
+                                  simple_split=bool(autosplit), ps=bool(prototypeSelection),
+                                  fe=bool(featureExtraction), k_fold=bool(kFold), doQSVM=bool(doQSVM))
+    db.session.add(salvataggiodatabase)
+    db.session.commit()
+    paths = upload(dataset_train, dataset_test, dataset_prediction, str(salvataggiodatabase.id))
+    if paths == (-1):
+        print("Estensione non valida")
+        return Response(status=400)
+    userpathTrain = paths[0]
+    userpathTest = paths[1]
+    userpathToPredict = paths[2]
+    dataPath = userpathTrain.parent
 
     # Validazione
     print("\nIn validazione...")
@@ -90,41 +93,42 @@ def smista():
     if not autosplit:
         kFold = None
         simpleSplit = None
-    app.test_client().post("/validazioneControl", data=dict(userpath=userpath, userpathTest=userpathTest,
+    app.test_client().post("/validazioneControl", data=dict(userpath=userpathTrain, userpathTest=userpathTest,
                                                             simpleSplit=simpleSplit, kFold=kFold, k=k))
     if kFold:
         return "ora scarica e procedi dalla home specificando quali usare"
 
     # Preprocessing
     print("\nIn preprocessing...")
-    app.test_client().post("/preprocessingControl", data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
-                                                              prototypeSelection=prototypeSelection,
-                                                              featureExtraction=featureExtraction,
-                                                              numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
-    pathTrain = pathlib.Path(__file__).parents[1] / 'DataSetTrainPreprocessato.csv'  # DataSet Train ready to be classified
-    pathTest = pathlib.Path(__file__).parents[1] / 'DataSetTestPreprocessato.csv'  # DataSet Test ready to be classified
+    app.test_client().post("/preprocessingControl",
+                           data=dict(userpath=userpathTrain, userpathToPredict=userpathToPredict,
+                                     prototypeSelection=prototypeSelection,
+                                     featureExtraction=featureExtraction,
+                                     numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+    pathTrain = dataPath/'DataSetTrainPreprocessato.csv'  # DataSet Train ready to be classified
+    pathTest = dataPath/'DataSetTestPreprocessato.csv'  # DataSet Test ready to be classified
 
     # Classificazione
     if doQSVM:
         print("\nIn classificazione...")
         backend = request.form.get("backend")
-        backend= "ibmq_qasm_simulator"
-    #     if request.form.get('token'):
-    #         token=request.form.get('token')
-    #     else:
-    #         token=current_user.token
-    # #   session["datasetPath"]=path
-    #     if request.form.get('email'):
-    #         email=request.form.get('email')
-    #     else:
-    #         email=current_user.email
+        backend = "ibmq_qasm_simulator"
+        #     if request.form.get('token'):
+        #         token=request.form.get('token')
+        #     else:
+        #         token=current_user.token
+        # #   session["datasetPath"]=path
+        #     if request.form.get('email'):
+        #         email=request.form.get('email')
+        #     else:
+        #         email=current_user.email
         token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
         if featureExtraction:
             features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
         else:
-            features = utils.createFeatureList(utils.numberOfColumns(userpath) - 1)
+            features = utils.createFeatureList(utils.numberOfColumns(userpathTrain) - 1)
         app.test_client().post("/classificazioneControl",
-                               data=dict(pathTrain=pathTrain, pathTest=pathTest, #email=email,
+                               data=dict(pathTrain=pathTrain, pathTest=pathTest,  # email=email,
                                          userpathToPredict=userpathToPredict,
                                          features=features, token=token, backend=backend))
 
@@ -133,9 +137,8 @@ def smista():
     return "ora classifica"
 
 
-def upload(file, file1, file2):
+def upload(file, file1, file2, idTrainSet):
     print('Request send on ')
-    ROOT_DIR = pathlib.Path(__file__).parents[1]
     ext_ok = ['txt', 'csv', 'data']
     # log.log()
 
@@ -147,10 +150,11 @@ def upload(file, file1, file2):
         return -1
     if file is None:
         return -1
-    uploaddir = ROOT_DIR / 'upload_dataset/'
+    uploaddir = pathlib.Path(__file__).parents[1] / 'upload_dataset' / current_user.email / str(idTrainSet)
+    if not uploaddir.exists():
+        uploaddir.mkdir()
     userfile_name = file.filename
     userpath = uploaddir / userfile_name
-    print(userpath)
     file.save(userpath)
     if file.content_length > 80000000:
         return -1

@@ -16,7 +16,7 @@ def numberOfColumns(filename):
 
 
 # ritorna il numero di righe di un dataset
-def numberOfRaws(filename):
+def numberOfRows(filename):
     results = pd.read_csv(filename)
 
     return len(results)
