@@ -1,10 +1,4 @@
-from app.source.classificazioneDataset import ClassificazioneControl
-from app.source.preprocessingDataset import PreprocessingControl
-from app.source.validazioneDataset import ValidazioneControl
-from app.source.gestione import GestioneControl
-from app.source.utente import UtenteControl
-from app import routes
-from app import models
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import database_exists, create_database
@@ -27,3 +21,12 @@ if not database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
 else:
     with app.app_context():
         db.create_all()
+
+
+from app.source.classificazioneDataset import ClassificazioneControl
+from app.source.preprocessingDataset import PreprocessingControl
+from app.source.validazioneDataset import ValidazioneControl
+from app.source.gestione import GestioneControl
+from app.source.utente import UtenteControl
+from app import routes
+from app import models
