@@ -6,6 +6,7 @@ import warnings
 
 import numpy as np
 import pandas as pd
+from flask_login import current_user
 from flask_login import login_required
 from qiskit import IBMQ
 from qiskit.providers.ibmq import least_busy
@@ -39,10 +40,11 @@ def classificazioneControl():
     features = request.form.getlist("features")
     token = request.form.get("token")
     backend = request.form.get("backend")
+    email=request.form.get("email")
 
     result: dict = classify(pathTrain, pathTest, pathPrediction, features, token, backend)
     if result != 0:
-        getClassifiedDataset(result, pathPrediction)
+        getClassifiedDataset(result, pathPrediction, email)
 
         # if result==0 il token non è valido
         # if result==1 errore su server IBM (comunica errore tramite email)
@@ -62,10 +64,6 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
     :param backendSelected: backend selezionato dal form(se vuoto utilizza backend di default)
     :return: dict contenente informazioni relative alla classificazione
     """
-
-    print(pathTrain)
-    print(pathTest)
-    print(userpathToPredict)
 
     start_time = time.time()
     noBackend = False
@@ -90,7 +88,7 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
                 x: x.configuration().n_qubits >= qubit and not x.configuration().simulator and x.status().operational == True))
             print("least busy backend: ", backend)
             print("backend qubit:" + str(provider.get_backend(backend.name()).configuration().n_qubits))
-    except Exception as e:
+    except:
         # when selected backend has not enough qubit, or no backends has enough qubits, or the user token has no privileges to use the selected backend
         noBackend = True
         backend = provider.get_backend('ibmq_qasm_simulator')
@@ -103,23 +101,17 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
 
     training_input, test_input = loadDataset(pathTrain, pathTest, features, label='labels')
 
-    print(userpathToPredict)
-    # pathDoPrediction = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
     pathDoPrediction = pathlib.Path(userpathToPredict).parent
     if (os.path.exists(pathDoPrediction / "doPredictionFE.csv")):
         pathDoPrediction = pathDoPrediction / "doPredictionFE.csv"
-        print(pathDoPrediction.__str__())
     else:
         pathDoPrediction = userpathToPredict
-        print(pathDoPrediction.__str__())
-        # pathDoPrediction = pathDoPrediction / userpathToPredict
     filetoPredict = open(pathDoPrediction.__str__(), "r")
     predizione = np.array(list(csv.reader(filetoPredict, delimiter=","))).astype("float")
 
     feature_map = ZZFeatureMap(feature_dimension=qubit, reps=2, entanglement='linear')
     print(feature_map)
 
-    print(pathTrain.__str__() + pathTest.__str__() + pathDoPrediction.__str__())
     qsvm = QSVM(feature_map, training_input, test_input, predizione, multiclass_extension=AllPairs())
 
     quantum_instance = QuantumInstance(backend, shots=shots, seed_simulator=seed, seed_transpiler=seed)
@@ -141,7 +133,6 @@ def classify(pathTrain, pathTest, userpathToPredict, features, token, backendSel
 
     predicted_labels = result["predicted_labels"]
 
-    # classifiedFile = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
     classifiedFile = open(pathlib.Path(userpathToPredict).parent / "classifiedFile.csv", "w")
     predictionFile = open(userpathToPredict, "r")
     rows = predictionFile.readlines()
@@ -184,18 +175,18 @@ def loadDataset(training_path, testing_path, features, label):
     return train_dict, test_dict
 
 
-def getClassifiedDataset(result, userpathToPredict):
+def getClassifiedDataset(result, userpathToPredict, email):
     """
 
     :param result: dict risultante dalla funzione classify dal quale si prendono i dati da inviare per email
     :return: 0 error, 1 done
     """
+
     msg = MIMEMultipart()
     msg['From'] = "quantumoonlight@gmail.com"
-    msg['To'] = "quantumoonlight@gmail.com"
-    # msg['To'] = request.form.get("email")
+    msg['To'] = "quantumoonlight@gmail.com, "+email
     msg['Date'] = formatdate(localtime=True)
-    msg['Subject'] = "Classification Result of "  # + dataset.name + " " + dataset.upload_date
+    msg['Subject'] = "Classification Result "  # + dataset.name + " " + dataset.upload_date
 
     if result == 1:
         msg.attach(MIMEText(

@@ -38,7 +38,6 @@ class TestClassificazioneControl(unittest.TestCase):
 
 
     def test_classify(self):
-        #tester = app.test_client(self)
         pathTrain = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTrainPreprocessato.csv"
         pathTest = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTestPreprocessato.csv"
         pathPrediction = pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
@@ -54,7 +53,6 @@ class TestClassificazioneControl(unittest.TestCase):
 
 
     def test_classify_tokenFail(self):
-        #tester = app.test_client(self)
         pathTrain = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTrainPreprocessato.csv"
         pathTest = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTestPreprocessato.csv"
         pathPrediction = pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
@@ -68,7 +66,6 @@ class TestClassificazioneControl(unittest.TestCase):
 
 
     def test_classify_ibmFail(self):
-        #tester = app.test_client(self)
         pathTrain = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTrainPreprocessato.csv"
         pathTest = pathlib.Path(__file__).cwd() / "testingFiles" / "DataSetTestPreprocessato.csv"
         pathPrediction = pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
@@ -91,7 +88,6 @@ class TestClassificazioneControl(unittest.TestCase):
 
         value = ClassificazioneControl.getClassifiedDataset(result)
         self.assertEqual(value, 1)
-
 
     def tearDown(self):
         if(os.path.exists(pathlib.Path(__file__).parents[3] / "upload_dataset" / "classifiedFile.csv")):

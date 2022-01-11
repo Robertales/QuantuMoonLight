@@ -112,23 +112,22 @@ def smista():
     if doQSVM:
         print("\nIn classificazione...")
         backend = request.form.get("backend")
-        backend = "ibmq_qasm_simulator"
-        #     if request.form.get('token'):
-        #         token=request.form.get('token')
-        #     else:
-        #         token=current_user.token
-        # #   session["datasetPath"]=path
-        #     if request.form.get('email'):
-        #         email=request.form.get('email')
-        #     else:
-        #         email=current_user.email
-        token = '43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2'
+        #backend = "ibmq_qasm_simulator"
+        if request.form.get('token'):
+            token=request.form.get('token')
+        else:
+            token=current_user.token
+        if request.form.get('email'):
+            email=request.form.get('email')
+        else:
+            email=current_user.email
+
         if featureExtraction:
             features = utils.createFeatureList(numColsFE)  # lista di features per la qsvm
         else:
             features = utils.createFeatureList(utils.numberOfColumns(userpathTrain) - 1)
         app.test_client().post("/classificazioneControl",
-                               data=dict(pathTrain=pathTrain, pathTest=pathTest,  # email=email,
+                               data=dict(pathTrain=pathTrain, pathTest=pathTest, email=email,
                                          userpathToPredict=userpathToPredict,
                                          features=features, token=token, backend=backend))
 
