@@ -11,17 +11,26 @@ from app.source.validazioneDataset import train_testSplit
 
 class TestValidazioneControl(unittest.TestCase):
     def setUp(self):
-        current_user = User(email="boscoverde27@gmail.com", password="prosopagnosia", username="Antonio de Curtis",
-                            name="Antonio", surname="De Curtis",
-                            token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2")
-        self.assertTrue(current_user.is_authenticated)
+        # path del dataset a disposizione del testing
+        pathOrigin = pathlib.Path(__file__).parents[0] / 'testingFiles'
+        # path della cartella dove scrivere i files che verranno letti dai test
+        pathMock = pathlib.Path(__file__).parents[0]
+
+        f = open((pathMock / 'bupa.csv').__str__(), "a+")
+        g = open((pathOrigin / 'bupa.csv').__str__(), "r")
+        contents = g.read()
+        f.write(contents)
+        f.close()
+        g.close()
+
+        self.assertTrue(exists(pathMock / "bupa.csv"))
 
     def test_ValidazioneControl_SimpleSplit(self):
         """
         Tests when the user wants to validate a dataset with SimpleSplit and checks if the new datasets exist
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathTest = None
         simpleSplit = True
         kFold = None
@@ -42,7 +51,7 @@ class TestValidazioneControl(unittest.TestCase):
         Tests when the user wants to validate a dataset with kFold and checks if the new datasets exist
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathTest = None
         simpleSplit = None
         kFold = True
@@ -67,7 +76,7 @@ class TestValidazioneControl(unittest.TestCase):
         and checks if no new datasets exist
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathTest = None
         simpleSplit = None
         kFold = True
@@ -91,7 +100,7 @@ class TestValidazioneControl(unittest.TestCase):
         and SimpleSplit
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathTest = None
         simpleSplit = True
         kFold = True
@@ -120,8 +129,8 @@ class TestValidazioneControl(unittest.TestCase):
         dataset and checks if the new name of the loaded datasets are Data_training.csv and Data_testing.csv
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
-        userpathTest = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
+        userpathTest = pathlib.Path(__file__).parents[0] / "bupa.csv"
         simpleSplit = None
         kFold = None
         k = 10
@@ -141,7 +150,7 @@ class TestValidazioneControl(unittest.TestCase):
          and checks if no new datasets exist
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathTest = None
         simpleSplit = None
         kFold = None
@@ -168,11 +177,26 @@ class TestValidazioneControl(unittest.TestCase):
 
 class TestKFold(unittest.TestCase):
 
+    def setUp(self):
+        # path del dataset a disposizione del testing
+        pathOrigin = pathlib.Path(__file__).parents[0] / 'testingFiles'
+        # path della cartella dove scrivere i files che verranno letti dai test
+        pathMock = pathlib.Path(__file__).parents[0]
+
+        f = open((pathMock / 'bupa.csv').__str__(), "a+")
+        g = open((pathOrigin / 'bupa.csv').__str__(), "r")
+        contents = g.read()
+        f.write(contents)
+        f.close()
+        g.close()
+
+        self.assertTrue(exists(pathMock / "bupa.csv"))
+
     def test_KFold(self):
         """
         Tests when the user wants to validate a dataset with kFold and checks if the new datasets exist
         """
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         k = 10
 
         kFoldValidation.cross_fold_validation(userpath, k)
@@ -195,19 +219,38 @@ class TestKFold(unittest.TestCase):
 
 class TestSimpleSplit(unittest.TestCase):
 
+    def setUp(self):
+        # path del dataset a disposizione del testing
+        pathOrigin = pathlib.Path(__file__).parents[0] / 'testingFiles'
+        # path della cartella dove scrivere i files che verranno letti dai test
+        pathMock = pathlib.Path(__file__).parents[0]
+
+        f = open((pathMock / 'bupa.csv').__str__(), "a+")
+        g = open((pathOrigin / 'bupa.csv').__str__(), "r")
+        contents = g.read()
+        f.write(contents)
+        f.close()
+        g.close()
+
+        self.assertTrue(exists(pathMock / "bupa.csv"))
+
     def test_simpleSplit(self):
         """
-        Tests when the user wants to validate a dataset with SimpleSplit and checks if the new datasets exist
+        Tests when the user wants to validate a dataset with SimpleSplit.
+        Checks if the new datasets exist and the new datasets have the correct number of rows
         """
-        filename = pathlib.Path(__file__).parents[0] / 'testingFiles' / 'bupa.csv'
-        numRaws = utils.numberOfRaws(filename.__str__())
+        path = pathlib.Path(__file__).parent
+        filename = path / 'bupa.csv'
+        numRaws = utils.numberOfRows(filename.__str__())
 
         train_testSplit.splitDataset(filename.__str__())
-        self.assertEqual(20, utils.numberOfRaws('Data_testing.csv'))
-        self.assertEqual(numRaws - 20, utils.numberOfRaws('Data_training.csv'))
-        self.assertTrue(exists(pathlib.Path(__file__).parents[0] / "Data_testing.csv"))
-        self.assertTrue(exists(pathlib.Path(__file__).parents[0] / "Data_training.csv"))
+        self.assertEqual(20, utils.numberOfRows('Data_testing.csv'))
+        self.assertEqual(numRaws - 20, utils.numberOfRows('Data_training.csv'))
+        self.assertTrue(exists(pathlib.Path(__file__).parent / "Data_testing.csv"))
+        self.assertTrue(exists(pathlib.Path(__file__).parent / "Data_training.csv"))
 
     def tearDown(self):
-        os.remove('Data_testing.csv')
-        os.remove('Data_training.csv')
+        path = pathlib.Path(__file__).parent
+        os.remove(path / 'Data_testing.csv')
+        os.remove(path / 'Data_training.csv')
+        os.remove(path / 'bupa.csv')

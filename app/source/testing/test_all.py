@@ -26,17 +26,26 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 class TestValidazioneControl(unittest.TestCase):
     def setUp(self):
-        current_user = User(email="boscoverde27@gmail.com", password="prosopagnosia", username="Antonio de Curtis",
-                            name="Antonio", surname="De Curtis",
-                            token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2")
-        self.assertTrue(current_user.is_authenticated)
+        # path del dataset a disposizione del testing
+        pathOrigin = pathlib.Path(__file__).parents[0] / 'testingFiles'
+        # path della cartella dove scrivere i files che verranno letti dai test
+        pathMock = pathlib.Path(__file__).parents[0]
+
+        f = open((pathMock / 'bupa.csv').__str__(), "a+")
+        g = open((pathOrigin / 'bupa.csv').__str__(), "r")
+        contents = g.read()
+        f.write(contents)
+        f.close()
+        g.close()
+
+        self.assertTrue(exists(pathMock / "bupa.csv"))
 
     def test_ValidazioneControl_SimpleSplit(self):
         """
         Tests when the user wants to validate a dataset with SimpleSplit and checks if the new datasets exist
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathTest = None
         simpleSplit = True
         kFold = None
@@ -57,7 +66,7 @@ class TestValidazioneControl(unittest.TestCase):
         Tests when the user wants to validate a dataset with kFold and checks if the new datasets exist
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathTest = None
         simpleSplit = None
         kFold = True
@@ -82,7 +91,7 @@ class TestValidazioneControl(unittest.TestCase):
         and checks if no new datasets exist
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathTest = None
         simpleSplit = None
         kFold = True
@@ -106,7 +115,7 @@ class TestValidazioneControl(unittest.TestCase):
         and SimpleSplit
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathTest = None
         simpleSplit = True
         kFold = True
@@ -135,8 +144,8 @@ class TestValidazioneControl(unittest.TestCase):
         dataset and checks if the new name of the loaded datasets are Data_training.csv and Data_testing.csv
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
-        userpathTest = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
+        userpathTest = pathlib.Path(__file__).parents[0] / "bupa.csv"
         simpleSplit = None
         kFold = None
         k = 10
@@ -156,7 +165,7 @@ class TestValidazioneControl(unittest.TestCase):
          and checks if no new datasets exist
         """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathTest = None
         simpleSplit = None
         kFold = None
@@ -183,11 +192,26 @@ class TestValidazioneControl(unittest.TestCase):
 
 class TestKFold(unittest.TestCase):
 
+    def setUp(self):
+        # path del dataset a disposizione del testing
+        pathOrigin = pathlib.Path(__file__).parents[0] / 'testingFiles'
+        # path della cartella dove scrivere i files che verranno letti dai test
+        pathMock = pathlib.Path(__file__).parents[0]
+
+        f = open((pathMock / 'bupa.csv').__str__(), "a+")
+        g = open((pathOrigin / 'bupa.csv').__str__(), "r")
+        contents = g.read()
+        f.write(contents)
+        f.close()
+        g.close()
+
+        self.assertTrue(exists(pathMock / "bupa.csv"))
+
     def test_KFold(self):
         """
         Tests when the user wants to validate a dataset with kFold and checks if the new datasets exist
         """
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         k = 10
 
         kFoldValidation.cross_fold_validation(userpath, k)
@@ -210,36 +234,49 @@ class TestKFold(unittest.TestCase):
 
 class TestSimpleSplit(unittest.TestCase):
 
+    def setUp(self):
+        # path del dataset a disposizione del testing
+        pathOrigin = pathlib.Path(__file__).parents[0] / 'testingFiles'
+        # path della cartella dove scrivere i files che verranno letti dai test
+        pathMock = pathlib.Path(__file__).parents[0]
+
+        f = open((pathMock / 'bupa.csv').__str__(), "a+")
+        g = open((pathOrigin / 'bupa.csv').__str__(), "r")
+        contents = g.read()
+        f.write(contents)
+        f.close()
+        g.close()
+
+        self.assertTrue(exists(pathMock / "bupa.csv"))
+
     def test_simpleSplit(self):
         """
-        Tests when the user wants to validate a dataset with SimpleSplit and checks if the new datasets exist
+        Tests when the user wants to validate a dataset with SimpleSplit.
+        Checks if the new datasets exist and the new datasets have the correct number of rows
         """
-        filename = pathlib.Path(__file__).parents[0] / 'testingFiles' / 'bupa.csv'
-        numRaws = utils.numberOfRaws(filename.__str__())
+        path = pathlib.Path(__file__).parent
+        filename = path / 'bupa.csv'
+        numRaws = utils.numberOfRows(filename.__str__())
 
         train_testSplit.splitDataset(filename.__str__())
-        self.assertEqual(20, utils.numberOfRaws('Data_testing.csv'))
-        self.assertEqual(numRaws - 20, utils.numberOfRaws('Data_training.csv'))
-        self.assertTrue(exists(pathlib.Path(__file__).parents[0] / "Data_testing.csv"))
-        self.assertTrue(exists(pathlib.Path(__file__).parents[0] / "Data_training.csv"))
+        self.assertEqual(20, utils.numberOfRows('Data_testing.csv'))
+        self.assertEqual(numRaws - 20, utils.numberOfRows('Data_training.csv'))
+        self.assertTrue(exists(pathlib.Path(__file__).parent / "Data_testing.csv"))
+        self.assertTrue(exists(pathlib.Path(__file__).parent / "Data_training.csv"))
 
     def tearDown(self):
-        os.remove('Data_testing.csv')
-        os.remove('Data_training.csv')
+        path = pathlib.Path(__file__).parent
+        os.remove(path / 'Data_testing.csv')
+        os.remove(path / 'Data_training.csv')
+        os.remove(path / 'bupa.csv')
 
 
 class TestPreprocessingControl(unittest.TestCase):
 
     def setUp(self):
-        current_user = User(email="boscoverde27@gmail.com", password="prosopagnosia", username="Antonio de Curtis",
-                            name="Antonio", surname="De Curtis",
-                            token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2")
-        self.assertTrue(current_user.is_authenticated)
-
         # path del dataset a disposizione del testing
         pathOrigin = pathlib.Path(__file__).parents[0] / 'testingFiles'
-        # path della cartella dell'utente Totò, dove creare i files
-        # al momento è la directory del progetto
+        # path della cartella dove scrivere i files che verranno letti dai test
         pathMock = pathlib.Path(__file__).parents[0]
 
         f = open((pathMock / 'Data_testing.csv').__str__(), "a+")
@@ -256,16 +293,36 @@ class TestPreprocessingControl(unittest.TestCase):
         f.close()
         g.close()
 
+        f = open((pathMock / 'bupa.csv').__str__(), "a+")
+        g = open((pathOrigin / 'bupa.csv').__str__(), "r")
+        contents = g.read()
+        f.write(contents)
+        f.close()
+        g.close()
+
+        f = open((pathMock / 'bupaToPredict.csv').__str__(), "a+")
+        g = open((pathOrigin / 'bupaToPredict.csv').__str__(), "r")
+        contents = g.read()
+        f.write(contents)
+        f.close()
+        g.close()
+
         self.assertTrue(exists(pathMock / "Data_training.csv"))
         self.assertTrue(exists(pathMock / "Data_training.csv"))
+        self.assertTrue(exists(pathMock / "bupa.csv"))
+        self.assertTrue(exists(pathMock / "bupaToPredict.csv"))
 
     def test_PreprocessingControl_onlyQSVM(self):
+        """
+        Tests when the user wants to execute classification but no Preprocessing.
+        Check if exists the two dataset to classify
+        """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
-        userpathToPredict = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupaToPredict.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
+        userpathToPredict = pathlib.Path(__file__).parents[0] / "bupaToPredict.csv"
         prototypeSelection = None
         featureExtraction = None
-        numRawsPS = 10
+        numRowsPS = 10
         numColsFE = 2
         doQSVM = True
 
@@ -273,7 +330,7 @@ class TestPreprocessingControl(unittest.TestCase):
                                data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
                                          prototypeSelection=prototypeSelection,
                                          featureExtraction=featureExtraction,
-                                         numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+                                         numRawsPS=numRowsPS, numColsFE=numColsFE, doQSVM=doQSVM))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
 
@@ -282,12 +339,16 @@ class TestPreprocessingControl(unittest.TestCase):
         self.assertTrue(exists(pathMock / 'DataSetTestPreprocessato.csv'))
 
     def test_PreprocessingControl_onlyPS(self):
+        """
+        Test when the user wants to execute only Prototype Selection on the training dataset.
+        Check if exist the two dataset to classify and the reduced Train
+        """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathToPredict = None
         prototypeSelection = True
         featureExtraction = None
-        numRawsPS = 10
+        numRowsPS = 10
         numColsFE = 2
         doQSVM = None
 
@@ -295,7 +356,7 @@ class TestPreprocessingControl(unittest.TestCase):
                                data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
                                          prototypeSelection=prototypeSelection,
                                          featureExtraction=featureExtraction,
-                                         numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+                                         numRawsPS=numRowsPS, numColsFE=numColsFE, doQSVM=doQSVM))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
 
@@ -305,12 +366,17 @@ class TestPreprocessingControl(unittest.TestCase):
         self.assertTrue(exists(pathMock / 'reducedTrainingPS.csv'))
 
     def test_PreprocessingControl_failPS(self):
+        """
+        Test when the user wants to execute only Prototype Selection on the training dataset,
+        but try to reduce the rows whit more rows then the original DataSet
+        Check if the two dataset are not created
+        """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathToPredict = None
         prototypeSelection = True
         featureExtraction = None
-        numRawsPS = 100000
+        numRowsPS = 100000
         numColsFE = 2
         doQSVM = None
 
@@ -318,7 +384,7 @@ class TestPreprocessingControl(unittest.TestCase):
                                data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
                                          prototypeSelection=prototypeSelection,
                                          featureExtraction=featureExtraction,
-                                         numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+                                         numRawsPS=numRowsPS, numColsFE=numColsFE, doQSVM=doQSVM))
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
 
@@ -328,12 +394,16 @@ class TestPreprocessingControl(unittest.TestCase):
         self.assertFalse(exists(pathData / 'reducedTrainingPS.csv'))
 
     def test_PreprocessingControl_onlyFE(self):
+        """
+        Test when the user wants to execute only Feature Extraction on the training and testing dataset.
+        Check if exist the two dataset to classify and the reduced Train and Test
+        """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathToPredict = None
         prototypeSelection = None
         featureExtraction = True
-        numRawsPS = 10
+        numRowsPS = 10
         numColsFE = 2
         doQSVM = None
 
@@ -341,7 +411,7 @@ class TestPreprocessingControl(unittest.TestCase):
                                data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
                                          prototypeSelection=prototypeSelection,
                                          featureExtraction=featureExtraction,
-                                         numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+                                         numRawsPS=numRowsPS, numColsFE=numColsFE, doQSVM=doQSVM))
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
 
@@ -352,12 +422,17 @@ class TestPreprocessingControl(unittest.TestCase):
         self.assertTrue(exists(pathData / 'yourPCA_Test.csv'))
 
     def test_PreprocessingControl_failFE(self):
+        """
+        Test when the user wants to execute only Feature Extraction on the training and testing dataset,
+        but try to reduce the columns whit more columns then the original DataSet
+        Check if the two dataset are not created
+        """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathToPredict = None
         prototypeSelection = None
         featureExtraction = True
-        numRawsPS = 10
+        numRowsPS = 10
         numColsFE = 15
         doQSVM = None
 
@@ -365,7 +440,7 @@ class TestPreprocessingControl(unittest.TestCase):
                                data=dict(userpath=userpath, userpathToPredict=userpathToPredict,
                                          prototypeSelection=prototypeSelection,
                                          featureExtraction=featureExtraction,
-                                         numRawsPS=numRawsPS, numColsFE=numColsFE, doQSVM=doQSVM))
+                                         numRawsPS=numRowsPS, numColsFE=numColsFE, doQSVM=doQSVM))
         statuscode = response.status_code
         self.assertEqual(statuscode, 400)
 
@@ -376,8 +451,13 @@ class TestPreprocessingControl(unittest.TestCase):
         self.assertFalse(exists(pathData / 'yourPCA_Test.csv'))
 
     def test_PreprocessingControl_FE_PS(self):
+        """
+        Test when the user wants to execute Feature Extraction on the training and testing dataset
+        and Prototype Selection on the training dataset.
+        Check if exist the two dataset to classify and the reduced Train and Test
+        """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
         userpathToPredict = None
         prototypeSelection = True
         featureExtraction = True
@@ -401,9 +481,15 @@ class TestPreprocessingControl(unittest.TestCase):
         self.assertTrue(exists(pathData / 'yourPCA_Test.csv'))
 
     def test_PreprocessingControl_FE_QSVM(self):
+        """
+        Test when the user wants to execute Feature Extraction on the training and testing dataset
+        and classification.
+        Check if exist the two dataset to classify, the reduced Train and Test
+        and the reduced dataset to predict
+        """
         tester = app.test_client(self)
-        userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
-        userpathToPredict = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupaToPredict.csv"
+        userpath = pathlib.Path(__file__).parents[0] / "bupa.csv"
+        userpathToPredict = pathlib.Path(__file__).parents[0] / "bupaToPredict.csv"
         prototypeSelection = None
         featureExtraction = True
         numRawsPS = 10
@@ -426,6 +512,9 @@ class TestPreprocessingControl(unittest.TestCase):
         self.assertTrue(exists(pathData / 'doPredictionFE.csv'))
 
     def tearDown(self):
+        """
+        Remove all the files created
+        """
         directory = pathlib.Path(__file__).parents[0]
         allFiles = os.listdir(directory)
         csvFiles = [file for file in allFiles if file.endswith(".csv")]
