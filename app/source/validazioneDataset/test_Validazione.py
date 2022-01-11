@@ -17,6 +17,9 @@ class TestValidazioneControl(unittest.TestCase):
         self.assertTrue(current_user.is_authenticated)
 
     def test_ValidazioneControl_SimpleSplit(self):
+        """
+        Tests when the user wants to validate a dataset with SimpleSplit and checks if the new datasets exist
+        """
         tester = app.test_client(self)
         userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = None
@@ -35,6 +38,9 @@ class TestValidazioneControl(unittest.TestCase):
         self.assertTrue(exists(pathData / "featureDataset.csv"))
 
     def test_ValidazioneControl_KFold(self):
+        """
+        Tests when the user wants to validate a dataset with kFold and checks if the new datasets exist
+        """
         tester = app.test_client(self)
         userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = None
@@ -56,6 +62,10 @@ class TestValidazioneControl(unittest.TestCase):
             self.assertTrue(exists(pathData / StringaTest))
 
     def test_ValidazioneControl_kFold_Fail(self):
+        """
+        Tests when the user wants to validate a dataset with kFold and the "k" value is not correct
+        and checks if no new datasets exist
+        """
         tester = app.test_client(self)
         userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = None
@@ -75,6 +85,11 @@ class TestValidazioneControl(unittest.TestCase):
         self.assertFalse(exists(pathData / StringaTest))
 
     def test_ValidazioneControl_KFold_SimpleSplit(self):
+        """
+        Tests when the user wants to validate a dataset with kFold and SimpleSplit and
+        checks if no new datasets exist because you can not validate a dataset with both kFold
+        and SimpleSplit
+        """
         tester = app.test_client(self)
         userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = None
@@ -100,6 +115,10 @@ class TestValidazioneControl(unittest.TestCase):
         self.assertFalse(exists(pathData / "featureDataset.csv"))
 
     def test_ValidazioneControl_NoSplit(self):
+        """
+        Tests when the user wants not to validate the dataset and has to upload both training and testing
+        dataset and checks if the new name of the loaded datasets are Data_training.csv and Data_testing.csv
+        """
         tester = app.test_client(self)
         userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
@@ -117,6 +136,10 @@ class TestValidazioneControl(unittest.TestCase):
         self.assertTrue(exists(pathData / "Data_testing.csv"))
 
     def test_ValidazioneControl_NoSplit_Fail(self):
+        """
+        Tests when the user doesn't want to validate the dataset and has not uploaded the test Set
+         and checks if no new datasets exist
+        """
         tester = app.test_client(self)
         userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         userpathTest = None
@@ -146,6 +169,9 @@ class TestValidazioneControl(unittest.TestCase):
 class TestKFold(unittest.TestCase):
 
     def test_KFold(self):
+        """
+        Tests when the user wants to validate a dataset with kFold and checks if the new datasets exist
+        """
         userpath = pathlib.Path(__file__).parents[0] / "testingFiles" / "bupa.csv"
         k = 10
 
@@ -170,6 +196,9 @@ class TestKFold(unittest.TestCase):
 class TestSimpleSplit(unittest.TestCase):
 
     def test_simpleSplit(self):
+        """
+        Tests when the user wants to validate a dataset with SimpleSplit and checks if the new datasets exist
+        """
         filename = pathlib.Path(__file__).parents[0] / 'testingFiles' / 'bupa.csv'
         numRaws = utils.numberOfRaws(filename.__str__())
 
