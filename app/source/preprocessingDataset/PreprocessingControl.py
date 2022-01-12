@@ -16,7 +16,7 @@ from app.source.preprocessingDataset import (
 # @login_required
 def preprocessingControl():
     userpath = request.form.get("userpath")
-    userpathToPredict = request.form.get("userpathToPredict")
+    userpathToPredict = request.form.get("user_path_to_predict")
     prototypeSelection = request.form.get("prototypeSelection")
     featureExtraction = request.form.get("featureExtraction")
     numRawsPS = request.form.get("numRawsPS", type=int)

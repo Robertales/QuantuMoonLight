@@ -3,11 +3,8 @@ import pathlib
 import unittest
 from os.path import exists
 
-from flask_login import current_user
-from app.models import User
 from app import app
 from app.source.utils import utils
-from pathlib import Path
 from app.source.classificazioneDataset import ClassificazioneControl
 
 
@@ -15,17 +12,21 @@ class TestClassificazioneControl(unittest.TestCase):
     # def setUp(self):
 
     def test_ClassificazioneControl(self):
-        pathTrain = (
+        """
+        Test the input coming from the form and the status code returned, and check if the classification result
+        file is created
+        """
+        path_train = (
             pathlib.Path(__file__).cwd()
             / "testingFiles"
             / "DataSetTrainPreprocessato.csv"
         )
-        pathTest = (
+        path_test = (
             pathlib.Path(__file__).cwd()
             / "testingFiles"
             / "DataSetTestPreprocessato.csv"
         )
-        pathPrediction = (
+        path_prediction = (
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
         features = utils.createFeatureList(2)
@@ -36,10 +37,10 @@ class TestClassificazioneControl(unittest.TestCase):
         response = app.test_client(self).post(
             "/classificazioneControl",
             data=dict(
-                pathTrain=pathTrain,
-                pathTest=pathTest,
+                pathTrain=path_train,
+                pathTest=path_test,
                 email=email,
-                userpathToPredict=pathPrediction,
+                userpathToPredict=path_prediction,
                 features=features,
                 token=token,
                 backend=backend,
@@ -56,30 +57,34 @@ class TestClassificazioneControl(unittest.TestCase):
         )
 
     def test_classify(self):
-        pathTrain = (
+        """
+        Test the classify function with correct parameters and input files, and check if the classification result
+        file is created
+        """
+        path_train = (
             pathlib.Path(__file__).cwd()
             / "testingFiles"
             / "DataSetTrainPreprocessato.csv"
         )
-        pathTest = (
+        path_test = (
             pathlib.Path(__file__).cwd()
             / "testingFiles"
             / "DataSetTestPreprocessato.csv"
         )
-        pathPrediction = (
+        path_prediction = (
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
         features = utils.createFeatureList(2)
         token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
-        backendSelected = "ibmq_qasm_simulator"
+        backend_selected = "ibmq_qasm_simulator"
 
         result = ClassificazioneControl.classify(
-            pathTrain,
-            pathTest,
-            pathPrediction,
+            path_train,
+            path_test,
+            path_prediction,
             features,
             token,
-            backendSelected,
+            backend_selected,
         )
         self.assertNotEqual(result, 0)
         self.assertNotEqual(result, 1)
@@ -92,30 +97,33 @@ class TestClassificazioneControl(unittest.TestCase):
         )
 
     def test_classify_tokenFail(self):
-        pathTrain = (
+        """
+        Test the classify function giving a not existing token as parameter
+        """
+        path_train = (
             pathlib.Path(__file__).cwd()
             / "testingFiles"
             / "DataSetTrainPreprocessato.csv"
         )
-        pathTest = (
+        path_test = (
             pathlib.Path(__file__).cwd()
             / "testingFiles"
             / "DataSetTestPreprocessato.csv"
         )
-        pathPrediction = (
+        path_prediction = (
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
         features = utils.createFeatureList(2)
         token = "t0kenN0tV4l1d"
-        backendSelected = "ibmq_qasm_simulator"
+        backend_selected = "ibmq_qasm_simulator"
 
         result = ClassificazioneControl.classify(
-            pathTrain,
-            pathTest,
-            pathPrediction,
+            path_train,
+            path_test,
+            path_prediction,
             features,
             token,
-            backendSelected,
+            backend_selected,
         )
         self.assertEqual(result, 0)
         self.assertNotEqual(result, 1)
@@ -128,30 +136,33 @@ class TestClassificazioneControl(unittest.TestCase):
         )
 
     def test_classify_ibmFail(self):
-        pathTrain = (
+        """
+        Test the classify function with not valid train and test datasets, to make the IBM backend fail on purpose
+        """
+        path_train = (
             pathlib.Path(__file__).cwd()
             / "testingFiles"
             / "DataSetTrainPreprocessato.csv"
         )
-        pathTest = (
+        path_test = (
             pathlib.Path(__file__).cwd()
             / "testingFiles"
             / "DataSetTestPreprocessato.csv"
         )
-        pathPrediction = (
+        path_prediction = (
             pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
         )
         features = utils.createFeatureList(2)
         token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
-        backendSelected = "ibmq_qasm_simulator"
+        backend_selected = "ibmq_qasm_simulator"
 
         result = ClassificazioneControl.classify(
-            pathTrain,
-            pathTest,
-            pathPrediction,
+            path_train,
+            path_test,
+            path_prediction,
             features,
             token,
-            backendSelected,
+            backend_selected,
         )
         self.assertEqual(result, 1)
         self.assertNotEqual(result, 0)
@@ -164,6 +175,9 @@ class TestClassificazioneControl(unittest.TestCase):
         )
 
     def test_getClassifiedDataset(self):
+        """
+        Test the function that send the email, with fixed parameters as input
+        """
         result = {
             "testing_accuracy": 0.55687446747,
             "test_success_ratio": 0.4765984595,
@@ -175,12 +189,12 @@ class TestClassificazioneControl(unittest.TestCase):
             / "classifiedFile.csv",
             "w",
         )
-        userpathtopredict = (
+        user_path_to_predict = (
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
 
-        value = ClassificazioneControl.getClassifiedDataset(
-            result, userpathtopredict, "quantumoonlight@gmail.com"
+        value = ClassificazioneControl.get_classified_dataset(
+            result, user_path_to_predict, "quantumoonlight@gmail.com"
         )
         self.assertEqual(value, 1)
 

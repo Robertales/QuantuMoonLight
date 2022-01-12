@@ -1180,7 +1180,7 @@ class TestClassificazioneControl(unittest.TestCase):
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
 
-        value = ClassificazioneControl.getClassifiedDataset(
+        value = ClassificazioneControl.get_classified_dataset(
             result, userpathtopredict, "quantumoonlight@gmail.com"
         )
         self.assertEqual(value, 1)

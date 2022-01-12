@@ -6,8 +6,6 @@ import warnings
 
 import numpy as np
 import pandas as pd
-from flask_login import current_user
-from flask_login import login_required
 from qiskit import IBMQ
 from qiskit.providers.ibmq import least_busy
 from qiskit.aqua import QuantumInstance, aqua_globals
@@ -27,61 +25,61 @@ from flask import request
 warnings.simplefilter(action="ignore", category=DeprecationWarning)
 
 
-@app.route("/classificazioneControl", methods=["POST"])
+@app.route("/classify_control", methods=["POST"])
 # @login_required
-def classificazioneControl():
+def classify_control():
     """
 
     :return:
     """
-    pathTrain = request.form.get("pathTrain")
-    pathTest = request.form.get("pathTest")
-    pathPrediction = request.form.get("userpathToPredict")
+    path_train = request.form.get("pathTrain")
+    path_test = request.form.get("pathTest")
+    path_prediction = request.form.get("userpathToPredict")
     features = request.form.getlist("features")
     token = request.form.get("token")
     backend = request.form.get("backend")
     email = request.form.get("email")
 
     result: dict = classify(
-        pathTrain, pathTest, pathPrediction, features, token, backend
+        path_train, path_test, path_prediction, features, token, backend
     )
     if result != 0:
-        getClassifiedDataset(result, pathPrediction, email)
+        get_classified_dataset(result, path_prediction, email)
 
-        # if result==0 il token non è valido
-        # if result==1 errore su server IBM (comunica errore tramite email)
-        # if result["noBackend"]==True il backend selezionato non è attivo per il token oppure non ce ne sono disponibili di default quindi usa il simulatore
+        # if result==0 token is not valid
+        # if result==1 error on IBM server (error reported through email)
+        # if result["noBackend"]==True selected backend is not active for the token or the are no active by default, and simulator is used
         # aggiungere controlli per result["noBackend"]==True e result==0 per
         # mostrare gli errori tramite frontend
     return "result"
 
 
 def classify(
-    pathTrain,
-    pathTest,
-    userpathToPredict,
+    path_train,
+    path_test,
+    user_path_to_predict,
     features,
     token,
-    backendSelected,
+    backend_selected,
 ):
     """
 
-    :param pathTrain: path del file di training output delle fasi precedenti
-    :param pathTest: path del file di testing output delle fasi precedenti
-    :param userpathToPredict: path del file di predizione output delle fasi precedenti
+    :param path_train: path del file di training output delle fasi precedenti
+    :param path_test: path del file di testing output delle fasi precedenti
+    :param user_path_to_predict: path del file di prediction output delle fasi precedenti
     :param features: lista di features per qsvm
     :param token: token dell'utente
-    :param backendSelected: backend selezionato dal form(se vuoto utilizza backend di default)
+    :param backend_selected: backend selezionato dal form(se vuoto utilizza backend di default)
     :return: dict contenente informazioni relative alla classificazione
     """
 
     start_time = time.time()
-    noBackend = False
+    no_backend = False
 
     try:
         IBMQ.enable_account(token)
     except BaseException:
-        print("token non valido")
+        print("Token not valid")
         return 0
 
     provider = IBMQ.get_provider(hub="ibm-q")
@@ -90,21 +88,21 @@ def classify(
 
     try:
         if (
-            backendSelected
-            and provider.get_backend(backendSelected).configuration().n_qubits
+            backend_selected
+            and provider.get_backend(backend_selected).configuration().n_qubits
             >= qubit
         ):
-            print("backend selected:" + str(backendSelected))
+            print("backend selected:" + str(backend_selected))
             print(
                 "backend qubit:"
                 + str(
-                    provider.get_backend(backendSelected)
+                    provider.get_backend(backend_selected)
                     .configuration()
                     .n_qubits
                 )
             )
             backend = provider.get_backend(
-                backendSelected
+                backend_selected
             )  # Specifying Quantum System
         else:
             backend = least_busy(
@@ -127,7 +125,7 @@ def classify(
         # when selected backend has not enough qubit, or no backends has enough
         # qubits, or the user token has no privileges to use the selected
         # backend
-        noBackend = True
+        no_backend = True
         backend = provider.get_backend("ibmq_qasm_simulator")
         print("backend selected: simulator")
         print(
@@ -141,18 +139,18 @@ def classify(
     shots = 1024
     aqua_globals.random_seed = seed
 
-    training_input, test_input = loadDataset(
-        pathTrain, pathTest, features, label="labels"
+    training_input, test_input = load_dataset(
+        path_train, path_test, features, label="labels"
     )
 
-    pathDoPrediction = pathlib.Path(userpathToPredict).parent
-    if os.path.exists(pathDoPrediction / "doPredictionFE.csv"):
-        pathDoPrediction = pathDoPrediction / "doPredictionFE.csv"
+    path_do_prediction = pathlib.Path(user_path_to_predict).parent
+    if os.path.exists(path_do_prediction / "doPredictionFE.csv"):
+        path_do_prediction = path_do_prediction / "doPredictionFE.csv"
     else:
-        pathDoPrediction = userpathToPredict
-    filetoPredict = open(pathDoPrediction.__str__(), "r")
-    predizione = np.array(
-        list(csv.reader(filetoPredict, delimiter=","))
+        path_do_prediction = user_path_to_predict
+    file_to_predict = open(path_do_prediction.__str__(), "r")
+    prediction = np.array(
+        list(csv.reader(file_to_predict, delimiter=","))
     ).astype("float")
 
     feature_map = ZZFeatureMap(
@@ -164,7 +162,7 @@ def classify(
         feature_map,
         training_input,
         test_input,
-        predizione,
+        prediction,
         multiclass_extension=AllPairs(),
     )
 
@@ -179,12 +177,12 @@ def classify(
     try:
         result = qsvm.run(quantum_instance)
     except BaseException:
-        print("Errore su server ibm")
+        print("Error on IBM server")
         result = 1
         return result
 
-    totalTime = time.time() - start_time
-    result["totalTime"] = str(totalTime)[0:6]
+    total_time = time.time() - start_time
+    result["total_time"] = str(total_time)[0:6]
 
     print("Prediction from datapoints set:")
     for k, v in result.items():
@@ -192,35 +190,35 @@ def classify(
 
     predicted_labels = result["predicted_labels"]
 
-    classifiedFile = open(
-        pathlib.Path(userpathToPredict).parent / "classifiedFile.csv",
+    classified_file = open(
+        pathlib.Path(user_path_to_predict).parent / "classifiedFile.csv",
         "w",
     )
-    predictionFile = open(userpathToPredict, "r")
-    rows = predictionFile.readlines()
+    prediction_file = open(user_path_to_predict, "r")
+    rows = prediction_file.readlines()
 
-    for j in range(1, utils.numberOfColumns(userpathToPredict) + 1):
-        classifiedFile.write("feature" + str(j) + ",")
-    classifiedFile.write("label\n")
+    for j in range(1, utils.numberOfColumns(user_path_to_predict) + 1):
+        classified_file.write("feature" + str(j) + ",")
+    classified_file.write("label\n")
     i = 0
     for row in rows:
-        classifiedFile.write(
+        classified_file.write(
             row.rstrip("\n") + "," + str(predicted_labels[i]) + "\n"
         )
         i += 1
-    classifiedFile.close()
-    predictionFile.close()
-    filetoPredict.close()
-    if noBackend:
-        result["noBackend"] = True
+    classified_file.close()
+    prediction_file.close()
+    file_to_predict.close()
+    if no_backend:
+        result["no_backend"] = True
     return result
 
 
-def plot(dataset_classificato):
-    return dataset_classificato
+def plot(classified_dataset):
+    return classified_dataset
 
 
-def loadDataset(training_path, testing_path, features, label):
+def load_dataset(training_path, testing_path, features, label):
     """
     Loads the data, normalizes it and returns it in the following format:
     {class_0: points_0, class_1:points_1, ...}
@@ -243,7 +241,7 @@ def loadDataset(training_path, testing_path, features, label):
     return train_dict, test_dict
 
 
-def getClassifiedDataset(result, userpathToPredict, email):
+def get_classified_dataset(result, userpathToPredict, email):
     """
 
     :param result: dict risultante dalla funzione classify dal quale si prendono i dati da inviare per email
@@ -260,18 +258,18 @@ def getClassifiedDataset(result, userpathToPredict, email):
     if result == 1:
         msg.attach(
             MIMEText(
-                "IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems \n\n"
+                "IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems\n"
             )
         )
     else:
         msg.attach(MIMEText("This is your classification:\n\n"))
         accuracy = result.get("testing_accuracy")
-        successRatio = result.get("test_success_ratio")
+        success_ratio = result.get("test_success_ratio")
         msg.attach(
             MIMEText("Testing accuracy: " + "{:.2%}".format(accuracy) + "\n")
         )
         msg.attach(
-            MIMEText("Success ratio: " + "{:.2%}".format(successRatio) + "\n")
+            MIMEText("Success ratio: " + "{:.2%}".format(success_ratio) + "\n")
         )
         msg.attach(
             MIMEText("Total time elapsed:" + result.get("totalTime") + "s")

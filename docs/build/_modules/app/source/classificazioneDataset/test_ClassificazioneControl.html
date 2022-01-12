@@ -62,7 +62,7 @@
         <span class="n">backend</span> <span class="o">=</span> <span class="s2">&quot;ibmq_qasm_simulator&quot;</span>
 
         <span class="n">response</span> <span class="o">=</span> <span class="n">tester</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-            <span class="s1">&#39;/classificazioneControl&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;/classify_control&#39;</span><span class="p">,</span>
             <span class="n">data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pathTrain</span><span class="o">=</span><span class="n">pathTrain</span><span class="p">,</span> <span class="n">pathTest</span><span class="o">=</span><span class="n">pathTest</span><span class="p">,</span>
                       <span class="n">userpathToPredict</span><span class="o">=</span><span class="n">pathPrediction</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
                       <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">))</span>

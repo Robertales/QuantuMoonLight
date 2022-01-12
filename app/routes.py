@@ -141,7 +141,7 @@ def smista():
 
     # Classificazione
     if doQSVM:
-        print("\nIn classificazione...")
+        print("\nIn classification...")
         backend = request.form.get("backend")
         # backend = "ibmq_qasm_simulator"
         if request.form.get("token"):
@@ -162,7 +162,7 @@ def smista():
                 utils.numberOfColumns(userpathTrain) - 1
             )
         app.test_client().post(
-            "/classificazioneControl",
+            "/classify_control",
             data=dict(
                 pathTrain=pathTrain,
                 pathTest=pathTest,
@@ -176,7 +176,7 @@ def smista():
 
     print("\n\nSmista ha finito! To the Moon!")
 
-    return "ora classifica"
+    return "is classifying"
 
 
 def upload(file, file1, file2, idTrainSet):
@@ -220,7 +220,7 @@ def upload(file, file1, file2, idTrainSet):
         return -1
 
     # Dataset to Predict from form
-    # userpathToPredict = 'app/source/classificazioneDataset/doPrediction.csv'
+    # user_path_to_predict = 'app/source/classificazioneDataset/doPrediction.csv'
     temp = file2.filename
     # print("TempDataToPredict: ", temp)
     # print("file2: ", file2)
