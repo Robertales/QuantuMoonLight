@@ -6,7 +6,7 @@ from flask import request, render_template
 @app.route("/gestione/", methods=["GET", "POST"])
 def getList():
     """
-    what function do
+    The function returns a list of users or administrators requested by an admin
 
     :return: tbd
     """
@@ -14,14 +14,14 @@ def getList():
     if scelta == "listUser":
         list = getListaUser()
     if scelta == "listArticlesData":
-        firstData = request.form.get("firstData")
-        secondData = request.form.get("secondData")
-        list = getListaArticlesData(firstData, secondData)
+        first_data = request.form.get("firstData")
+        second_data = request.form.get("secondData")
+        list = getListaArticlesData(first_data, second_data)
     if scelta == "listArticlesUser":
         email = request.form.get("email")
         list = getListaArticlesUser(email)
 
-    return "sei in gestione"
+    return "List of User or article"
 
 
 @app.route("/removeUser/", methods=["GET", "POST"])
@@ -49,17 +49,17 @@ def modifyUserProfile():
     email = request.form.get("email")
     user = User.query.get(email)
 
-    newPassword = request.form.get("password")
-    newToken = request.form.get("token")
-    newUsername = request.form.get("username")
-    newNome = request.form.get("nome")
-    newCognome = request.form.get("cognome")
+    new_password = request.form.get("password")
+    new_token = request.form.get("token")
+    new_username = request.form.get("username")
+    new_nome = request.form.get("nome")
+    new_cognome = request.form.get("cognome")
 
-    setattr(user, "token", newToken)
-    setattr(user, "password", newPassword)
-    setattr(user, "username", newUsername)
-    setattr(user, "nome", newNome)
-    setattr(user, "cognome", newCognome)
+    setattr(user, "token", new_token)
+    setattr(user, "password", new_password)
+    setattr(user, "username", new_username)
+    setattr(user, "nome", new_nome)
+    setattr(user, "cognome", new_cognome)
     db.session.commit()
     return render_template("index.html")
 
