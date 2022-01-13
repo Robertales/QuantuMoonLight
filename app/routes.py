@@ -25,6 +25,13 @@ def registrationPage():
     return render_template("registration.html")
 
 
+
+@app.route("/adminPage")
+def adminPage():
+    return render_template("adminPage")
+
+
+
 @app.route("/userPage")
 def userPage():
     return render_template("userPage.html")
