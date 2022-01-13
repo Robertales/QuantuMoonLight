@@ -13,6 +13,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = "loginPage"
 login_manager.login_message_category = "info"
 
+from app import models
 # Create database if it does not exist
 if not database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
     create_database(app.config["SQLALCHEMY_DATABASE_URI"])
@@ -29,4 +30,4 @@ from app.source.validazioneDataset import ValidazioneControl
 from app.source.gestione import GestioneControl
 from app.source.utente import UtenteControl
 from app import routes
-from app import models
+
