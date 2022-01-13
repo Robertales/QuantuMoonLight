@@ -451,3 +451,17 @@ $(document).ready(function () {
 		}
             return true;
     });})
+/* Funzione controllo checkbox QSVM*/
+function disable_check()
+{
+	var filenamePrediction = $('#inputFakeFilePrediction').val();
+	var splitPrediction = getExtension(filenamePrediction);
+
+
+	if(filenamePrediction=="Prediction Set to Upload" || filenamePrediction=="" )
+	{
+		alert("inserire file Prediction");
+		document.getElementById("checkQSVM").checked = false;
+	}else document.getElementById("checkQSVM").disabled=false;
+
+}
