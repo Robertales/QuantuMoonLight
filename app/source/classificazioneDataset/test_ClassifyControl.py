@@ -5,13 +5,13 @@ from os.path import exists
 
 from app import app
 from app.source.utils import utils
-from app.source.classificazioneDataset import ClassificazioneControl
+from app.source.classificazioneDataset import ClassifyControl
 
 
-class TestClassificazioneControl(unittest.TestCase):
+class TestClassifyControl(unittest.TestCase):
     # def setUp(self):
 
-    def test_ClassificazioneControl(self):
+    def test_classify_control(self):
         """
         Test the input coming from the form and the status code returned, and check if the classification result
         file is created
@@ -35,7 +35,7 @@ class TestClassificazioneControl(unittest.TestCase):
         email = "quantumoonlight@gmail.com"
 
         response = app.test_client(self).post(
-            "/classificazioneControl",
+            "/classify_control",
             data=dict(
                 pathTrain=path_train,
                 pathTest=path_test,
@@ -47,7 +47,7 @@ class TestClassificazioneControl(unittest.TestCase):
             ),
         )
         statuscode = response.status_code
-        self.assertEqual(statuscode, 200)
+        self.assertEqual(200, statuscode)
         self.assertTrue(
             exists(
                 pathlib.Path(__file__).parent
@@ -78,7 +78,7 @@ class TestClassificazioneControl(unittest.TestCase):
         token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
         backend_selected = "ibmq_qasm_simulator"
 
-        result = ClassificazioneControl.classify(
+        result = ClassifyControl.classify(
             path_train,
             path_test,
             path_prediction,
@@ -117,7 +117,7 @@ class TestClassificazioneControl(unittest.TestCase):
         token = "t0kenN0tV4l1d"
         backend_selected = "ibmq_qasm_simulator"
 
-        result = ClassificazioneControl.classify(
+        result = ClassifyControl.classify(
             path_train,
             path_test,
             path_prediction,
@@ -156,7 +156,7 @@ class TestClassificazioneControl(unittest.TestCase):
         token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
         backend_selected = "ibmq_qasm_simulator"
 
-        result = ClassificazioneControl.classify(
+        result = ClassifyControl.classify(
             path_train,
             path_test,
             path_prediction,
@@ -181,7 +181,7 @@ class TestClassificazioneControl(unittest.TestCase):
         result = {
             "testing_accuracy": 0.55687446747,
             "test_success_ratio": 0.4765984595,
-            "totalTime": str(90.7),
+            "total_time": str(90.7),
         }
         open(
             pathlib.Path(__file__).parent
@@ -193,7 +193,7 @@ class TestClassificazioneControl(unittest.TestCase):
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
 
-        value = ClassificazioneControl.get_classified_dataset(
+        value = ClassifyControl.get_classified_dataset(
             result, user_path_to_predict, "quantumoonlight@gmail.com"
         )
         self.assertEqual(value, 1)

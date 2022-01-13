@@ -23,7 +23,7 @@ else:
         db.create_all()
 
 
-from app.source.classificazioneDataset import ClassificazioneControl
+from app.source.classificazioneDataset import ClassifyControl
 from app.source.preprocessingDataset import PreprocessingControl
 from app.source.validazioneDataset import ValidazioneControl
 from app.source.gestione import GestioneControl

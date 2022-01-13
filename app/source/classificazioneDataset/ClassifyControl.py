@@ -272,7 +272,7 @@ def get_classified_dataset(result, userpathToPredict, email):
             MIMEText("Success ratio: " + "{:.2%}".format(success_ratio) + "\n")
         )
         msg.attach(
-            MIMEText("Total time elapsed:" + result.get("totalTime") + "s")
+            MIMEText("Total time elapsed:" + result.get("total_time") + "s")
         )
 
         # file = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
