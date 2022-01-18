@@ -3,9 +3,11 @@ import time
 import csv
 import pathlib
 import warnings
+from email.mime.image import MIMEImage
 
 import numpy as np
 import pandas as pd
+from jinja2 import Environment
 from qiskit import IBMQ
 from qiskit.providers.ibmq import least_busy
 from qiskit.aqua import QuantumInstance, aqua_globals
@@ -13,6 +15,8 @@ from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.components.multiclass_extensions import AllPairs
 from qiskit.circuit.library import ZZFeatureMap
 import smtplib
+from email.message import EmailMessage
+
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
@@ -89,6 +93,7 @@ def classify(
     try:
         if (
             backend_selected
+            and backend_selected != "backend"
             and provider.get_backend(backend_selected).configuration().n_qubits
             >= qubit
         ):
@@ -255,24 +260,29 @@ def get_classified_dataset(result, userpathToPredict, email):
     # + dataset.name + " " + dataset.upload_date
     msg["Subject"] = "Classification Result "
 
+    msg.attach(MIMEText('<td><center><img style="width:25%;" src="cid:image"></center></td>', 'html'))
+    img_path = open(pathlib.Path(__file__).parents[2] / "static" / "images" / "logos" / "Logo_SenzaScritta.png", "rb")
+    #img_path = pathlib.Path(__file__).parents[2] / "static" / "images" / "logos" / "Logo_SenzaScritta.png"
+    #msg.attach(MIMEText('<center><img style="width:25%;" src="'+ img_path.__str__() +'"></center>', 'html'))
+    #msg.attach(MIMEText('<center><img style="width:25%;" src="data:image/jpg;base64,AAABAAEAAAAAAAEAIACYGgEAFgAAAIlQTkcNChoKAAAADUlIRFIAAAEAAAABAAgGAAAAXHKoZgAA AAFvck5UAc+id5oAAIAASURBVHja7P0FeCRpci0Mq3uahmeHmZoZ1OqWWsxSiZmZmZm5xcxSMw8z 9TDT7iza9362r+1rZtr17s5Mx39OZJamd+21r//ra6x8nngyK6sqq1TKc+JEvPHGa2dn22ybbbNt ts222TbbZttsm22zbbbNttk222bbbJtts222zbbZNttm22ybbbNtts222TbbZttsm22zbbbNttk2 22bbbJtts222zbbZNttm22ybbbNtts222TbbZttsm22zbbbNttk222bbbJtts222zbbZNttm22yb bbNtts222TbbZttsm22zbbbNttk222bbbJtts222zbbZNttm22ybbbNtts222TbbZttsm22zbbbN ttk222bbbJtts222zbbZNttm22ybbbNtts222TbbZttsm22zbbbtF7cddoG/YLbNttm2/0KA/n9p ts222bb/HEBf9Uu2+qr9L9svv9ZGCrbNtv17b9sBrl+2rXbBAJ3fPwZ0Avka2FrYerx2w3a7gOth N2618795q53ft0y7dYud321b7Hythse+t+D8zdvs/G/YZrznWtgGXGedeb01v0gUAXZ4rd1OO4uN FGybbfvX2rYqwA3bZtqjsI3fEADAZwEQLQTkegDxOgCRAL8VAL4L9gBsE2wnALx/5yqL055rgj33 rQvz278+3HJgQ0SI/YaIMIfroiIOXR8d6XB9dMTB66LCsA/Gc35714R47lwV5IL3HcL79+HaO3Gt zSAIXvdO2C04B4LgZysxrAYJ/LOqwbbZNtv2j2ybAQ6rbYE33aLgt8CzBquHhTdeBRJYDcCtwfF6 AP1GeO87sH8QtmOnXeChPQDtgfXhoYdviEl0viUhz+vOtCr/+3Nagh7O7wvdWDQRsaV0KXZn1am" /></center>', 'html'))
+    img = MIMEImage(img_path.read())
+    img.add_header('Content-ID', '<image>')
+    msg.attach(img)
+
     if result == 1:
-        msg.attach(
-            MIMEText(
-                "IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems\n"
-            )
-        )
+        msg.attach(MIMEText("<center><h1>IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems</center></h1>", 'html'))
     else:
-        msg.attach(MIMEText("This is your classification:\n\n"))
+        msg.attach(MIMEText("<center><h1>Classification details:</h1></center>", 'html'))
         accuracy = result.get("testing_accuracy")
         success_ratio = result.get("test_success_ratio")
         msg.attach(
-            MIMEText("Testing accuracy: " + "{:.2%}".format(accuracy) + "\n")
+            MIMEText("<center><h3>Testing accuracy: " + "{:.2%}".format(accuracy) + "</h3></center>", 'html')
         )
         msg.attach(
-            MIMEText("Success ratio: " + "{:.2%}".format(success_ratio) + "\n")
+            MIMEText("<center><h3>Success ratio: " + "{:.2%}".format(success_ratio) + "</h3></center>", 'html')
         )
         msg.attach(
-            MIMEText("Total time elapsed:" + result.get("total_time") + "s")
+            MIMEText("<center><h3>Total time elapsed: " + result.get("total_time") + "s</h3></center>", 'html')
         )
 
         # file = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
