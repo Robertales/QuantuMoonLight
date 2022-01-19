@@ -465,3 +465,28 @@ function disable_check()
 	}else document.getElementById("checkQSVM").disabled=false;
 
 }
+//DA FINIRE, se l'utente inserisce il test set non puo' scegliere ne kfold ne simple train test
+function k_fold_check()
+{
+
+	var kFold = $('#kFold');
+	var btnTest = $('#inputFakeBrowseFileTest') //pulsante test
+	var btnPrediction = $('#inputFakeBrowseFilePrediction') //pulsante prediction
+
+
+	if(document.getElementById('checkKFold').checked)
+	{
+
+	}
+}
+//Se il test set non è uplodato split check = true
+$(document).ready(function () {
+
+		var filenameTest = $('#inputFakeFileTest').val();
+
+
+
+		if (filenameTest == "Test Set to Upload" || filenameTest == "") {
+			document.getElementById("checkSplitTrain").checked = true;
+		}
+})
