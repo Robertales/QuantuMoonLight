@@ -4,6 +4,7 @@ import csv
 import pathlib
 import warnings
 from email.mime.image import MIMEImage
+from threading import Thread
 
 import numpy as np
 import pandas as pd
@@ -44,11 +45,10 @@ def classify_control():
     backend = request.form.get("backend")
     email = request.form.get("email")
 
-    result: dict = classify(
-        path_train, path_test, path_prediction, features, token, backend
-    )
-    if result != 0:
-        get_classified_dataset(result, path_prediction, email)
+    heavy_thread = Thread(target=my_thread,
+                          args=(path_train, path_test, path_prediction, features, token, backend, email))
+    heavy_thread.setDaemon(True)
+    heavy_thread.start()
 
         # if result==0 token is not valid
         # if result==1 error on IBM server (error reported through email)
@@ -57,6 +57,12 @@ def classify_control():
         # mostrare gli errori tramite frontend
     return "result"
 
+def my_thread(path_train, path_test, path_prediction, features, token, backend, email):
+    result: dict = classify(
+        path_train, path_test, path_prediction, features, token, backend
+    )
+    if result != 0:
+        get_classified_dataset(result, path_prediction, email)
 
 def classify(
     path_train,
