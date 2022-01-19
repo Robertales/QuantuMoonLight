@@ -27,9 +27,9 @@ def signup():
     if 0 < username.__len__() < 30 and re.fullmatch(
             '^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,10}$',
             email) and password.__len__() >= 8 and re.fullmatch(
-        '^[A-zÀ-ù ‘-]{0,30}$',
+        '^[A-zÀ-ù ‘-]{2,30}$',
         Name) and re.fullmatch(
-        '^[A-zÀ-ù ‘-]{0,30}$',
+        '^[A-zÀ-ù ‘-]{2,30}$',
             cognome):
         utente = User(
             email=email,
@@ -46,7 +46,8 @@ def signup():
         if not path.is_dir():
             path.mkdir()
         login_user(utente)
-        return render_template("index.html")
+
+    return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
