@@ -131,7 +131,6 @@ def smista():
     )
     if kFold:
         return "ora scarica e procedi dalla home specificando quali usare"
-
     # Preprocessing
     print("\nIn preprocessing...")
     app.test_client().post(

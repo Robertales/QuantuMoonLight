@@ -5,6 +5,7 @@ import hashlib
 from flask_login import login_user, current_user, logout_user
 from app import app, db
 from app.models import User
+import re
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -22,21 +23,25 @@ def signup():
     username = request.form.get("username")
     Name = request.form.get("nome")
     cognome = request.form.get("cognome")
-    utente = User(
-        email=email,
-        password=hashed_password,
-        token=token,
-        username=username,
-        name=Name,
-        surname=cognome,
-    )
-    db.session.add(utente)
-    db.session.commit()
-    path = Path(__file__).parents[3] / "upload_dataset" / email
-    print(path.__str__())
-    if not path.is_dir():
-        path.mkdir()
-    return render_template("index.html")
+    if 0 < username.__len__() < 30 and re.fullmatch('^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,10}$',email) \
+            and password.__len__() >= 8 and re.fullmatch('^[A-zÀ-ù ‘-]{0,30}$' ,Name)\
+            and re.fullmatch('^[A-zÀ-ù ‘-]{0,30}$',cognome):
+        utente = User(
+            email=email,
+            password=hashed_password,
+            token=token,
+            username=username,
+            name=Name,
+            surname=cognome,
+        )
+        db.session.add(utente)
+        db.session.commit()
+        path = Path(__file__).parents[3] / "upload_dataset" / email
+        print(path.__str__())
+        if not path.is_dir():
+            path.mkdir()
+        login_user(utente)
+        return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])

@@ -693,10 +693,11 @@ class Test_signup(TestCase):
         response = tester.post(
             "/signup",
             data=dict(
-                email="mariorossi12@gmail.com",
-                password="prosopagnosia",
+                email="ADeCurtis123@gmail.com ",
+                password="Password123",
                 nome="Antonio",
                 cognome="De Curtis",
+                token='0e906980a743e9313c848becb8810b2667535e188365e8db829e1c206421d1ec02360127de06b13013782ca87efc3b7487853aba99061df220b825adee92e316'
             ),
         )
         user = User.query.filter_by(email="mariorossi12@gmail.com").first()
