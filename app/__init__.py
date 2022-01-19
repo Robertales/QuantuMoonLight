@@ -1,8 +1,8 @@
 
 from flask import Flask
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import database_exists, create_database
-from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root@127.0.0.1/quantumknn_db"
@@ -30,4 +30,3 @@ from app.source.validazioneDataset import ValidazioneControl
 from app.source.gestione import GestioneControl
 from app.source.utente import UtenteControl
 from app import routes
-

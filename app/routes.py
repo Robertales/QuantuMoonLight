@@ -2,6 +2,8 @@ import pathlib
 from datetime import datetime
 
 from flask import render_template, request, Response
+from flask_login import current_user, login_required
+
 from app import app, db
 from app.models import User, Dataset
 from app.source.utils import utils
@@ -208,10 +210,10 @@ def upload(file, file1, file2, idTrainSet):
     if file is None:
         return -1
     uploaddir = (
-        pathlib.Path(__file__).parents[1]
-        / "upload_dataset"
-        / current_user.email
-        / str(idTrainSet)
+            pathlib.Path(__file__).parents[1]
+            / "upload_dataset"
+            / current_user.email
+            / str(idTrainSet)
     )
     if not uploaddir.exists():
         uploaddir.mkdir()
