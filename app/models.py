@@ -7,11 +7,12 @@ class User(db.Model, UserAuth):
     email = db.Column(db.VARCHAR(255), primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(150), nullable=False)
-    token = db.Column(db.String(128), nullable=True, unique=True)
+    token = db.Column(db.String(128), nullable=False, unique=True)
     isAdmin = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(30), nullable=False, unique=False)
     surname = db.Column(db.String(30), nullable=False, unique=False)
     newsletter = db.Column(db.Boolean, default=False)
+    isResearcher = db.Column(db.Boolean, default=False)
 
 
 class Dataset(db.Model):

@@ -1,3 +1,7 @@
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.utils import formatdate
+
 from app import app, db
 from app.models import User, Article
 from flask import request, render_template
@@ -8,7 +12,7 @@ def getList():
     """
     The function returns a list of users or administrators requested by an admin
 
-    :return: tbd
+    :return: redirect to index page
     """
     scelta = request.form.get("scelta")
     if scelta == "listUser":
@@ -29,7 +33,7 @@ def removeUser():
     """
     the function allows an administrator to delete a user from the database
 
-    :return: tbd
+    :return: redirect to index page
     """
     email = request.form.get("email")
 
@@ -92,3 +96,18 @@ def getListaArticlesUser(email):
     :rtype: dict
     """
     return Article.query.filter_by(email_user=email).all()
+
+
+def sendEmailNewsletter(email):
+    listautenti = User.query.filter_by(newsletter=True)
+    for utente in listautenti:
+        try:
+            email["To"] = utente.email
+            server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+            server.ehlo()
+            server.login("quantumoonlight@gmail.com", "Quantum123?")
+            server.send_message(email)
+            server.close()
+        except BaseException:
+            return 0
+    return 1

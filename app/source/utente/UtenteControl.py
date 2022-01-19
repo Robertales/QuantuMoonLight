@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from flask import request, render_template
+from flask import request, render_template, flash
 import hashlib
 from flask_login import login_user, current_user, logout_user
 from app import app, db
@@ -12,7 +12,7 @@ import re
 def signup():
     """
     Reads the user credentials from a http request and adds him to the project database
-        :return: tbd
+        :return: redirect to index page
     """
     email = request.form.get("email")
     password = request.form.get("password")
@@ -49,7 +49,7 @@ def login():
     """
     reads a user login credentials from a http request and if they are valid logs the user in with those same
     credentials,changing his state from anonymous  user to logged user
-    :return: tbd
+    :return: redirect to index page
     """
     email = request.form.get("email")
     password = request.form.get("password")
@@ -57,12 +57,14 @@ def login():
     attempted_user: User = User.query.filter_by(email=email).first()
     if not attempted_user:
         print(attempted_user.__class__)
-        return "Utente non registrato"
+        flash("Utente non registrato")
+        return render_template("login.html")
 
     if attempted_user.password == hashed_password:
         login_user(attempted_user)
     else:
-        return "password errata"
+        flash("password errata")
+        return render_template("login.html")
     return render_template("index.html")
 
 
@@ -70,7 +72,7 @@ def login():
 def logout():
     """
     logs a user out, changing his state from logged user to anonymous user
-        :return:tbd
+        :return:redirect to index page
     """
     logout_user()
     return render_template("index.html")
@@ -80,7 +82,7 @@ def logout():
 def signup_newsletter():
     """
     changes the User ,whose email was passed as a http request parameter ,newsletter flag to true
-        :return: tbd
+        :return: redirect to index page
     """
     email = request.form.get("email")
     utente: User = User.query.filter_by(email=email).first()
