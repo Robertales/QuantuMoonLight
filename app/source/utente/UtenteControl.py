@@ -17,9 +17,12 @@ def signup():
     """
     email = request.form.get("email")
     password = request.form.get("password")
+    cpassword = request.form.get("confirmPassword")
     hashed_password = hashlib.sha512(password.encode()).hexdigest()
     token = request.form.get("token")
-    if token.__eq__(""):
+    print(token)
+    isResearcher = request.form.get("isResearcher")
+    if token == "":
         token = None
     username = request.form.get("username")
     Name = request.form.get("nome")
@@ -30,7 +33,8 @@ def signup():
         '^[A-zÀ-ù ‘-]{2,30}$',
         Name) and re.fullmatch(
         '^[A-zÀ-ù ‘-]{2,30}$',
-            cognome):
+        cognome) \
+            and password.__eq__(cpassword) and ((token is None) or token.__len__() == 128):
         utente = User(
             email=email,
             password=hashed_password,
@@ -38,6 +42,7 @@ def signup():
             username=username,
             name=Name,
             surname=cognome,
+            isResearcher=bool(isResearcher)
         )
         db.session.add(utente)
         db.session.commit()
@@ -47,7 +52,7 @@ def signup():
             path.mkdir()
         login_user(utente)
     else:
-        flash("credenziali non valide","error")
+        flash("credenziali non valide", "error")
         return render_template("registration.html")
 
     return render_template("index.html")

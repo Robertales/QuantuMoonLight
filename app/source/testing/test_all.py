@@ -1,26 +1,25 @@
-import os
-
-from app.source.classificazioneDataset import ClassifyControl
-from app.source.validazioneDataset import kFoldValidation
-from app.source.validazioneDataset import train_testSplit
-import hashlib
-from flask_login import UserMixin, AnonymousUserMixin
 import datetime
-from unittest import TestCase
-from sqlalchemy_utils import database_exists, create_database
-from app import db
-from app.models import Article
-from datetime import datetime
+import hashlib
+import os
 import pathlib
 import unittest
-from os.path import exists
-
-from flask_login import current_user
-from app.models import User
-from app import app
-from app.source.utils import utils
-
 import warnings
+from datetime import datetime
+from os.path import exists
+from unittest import TestCase
+
+from flask_login import UserMixin, AnonymousUserMixin
+from flask_login import current_user
+from sqlalchemy_utils import database_exists, create_database
+
+from app import app
+from app import db
+from app.models import Article
+from app.models import User
+from app.source.classificazioneDataset import ClassifyControl
+from app.source.utils import utils
+from app.source.validazioneDataset import kFoldValidation
+from app.source.validazioneDataset import train_testSplit
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -644,7 +643,8 @@ class Test_signup(TestCase):
             "/signup",
             data=dict(
                 email="mariorossi12@gmail.com",
-                password="prosopagnosia",
+                password="Password123",
+                confirmPassword="Password123",
                 username="Antonio de Curtis ",
                 token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2",
                 nome="Antonio",
@@ -658,27 +658,29 @@ class Test_signup(TestCase):
         )
         db.session.commit()
 
-    def test_signupEmptyToken(self):
+    def test_signupInvalidToken(self):
         """
         test the sign-up functionality of the website, creating a dummy  account with an empty and verifying it was
         correctly registered as a user and the token was correctly parsed to Null
         """
+
         tester = app.test_client()
         response = tester.post(
             "/signup",
             data=dict(
                 email="mariorossi12@gmail.com",
-                password="prosopagnosia",
+                password="Password123",
+                confirmPassword="Password123",
                 username="Antonio de Curtis ",
-                token="",
+                token="0e906980a743e9313c848becb8810b2667535e188365e8db829e1c206421d1ec02360127de06b13013782ca87efc3b7487853aba99061df220b825adee92e316a57ef7a<f689eafea5",
                 nome="Antonio",
                 cognome="De Curtis",
             ),
         )
+        print(response.get_data())
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         user = User.query.filter_by(email="mariorossi12@gmail.com").first()
-        self.assertTrue(user)
         self.assertIsNone(user.token)
         db.session.commit()
 
@@ -695,6 +697,7 @@ class Test_signup(TestCase):
             data=dict(
                 email="ADeCurtis123@gmail.com ",
                 password="Password123",
+                confirmPassword="Password123",
                 nome="Antonio",
                 cognome="De Curtis",
                 token='0e906980a743e9313c848becb8810b2667535e188365e8db829e1c206421d1ec02360127de06b13013782ca87efc3b7487853aba99061df220b825adee92e316'
@@ -715,7 +718,9 @@ class Test_signup(TestCase):
         response = tester.post(
             "/signup",
             data=dict(
-                password="prosopagnosia",
+                email="ADeCurtis123cfsdil.com ",
+                password="Password123",
+                confirmPassword="Password123",
                 username="Antonio de Curtis ",
                 nome="Antonio",
                 cognome="De Curtis",
@@ -724,6 +729,122 @@ class Test_signup(TestCase):
         user = User.query.filter_by(email="mariorossi12@gmail.com").first()
         self.assertIsNone(user)
         db.session.commit()
+
+    def test_signupInvalidPassword(self):
+        """
+        test the sign-up functionality of the website, creating a dummy  account with an empty email and verifying it
+        wasn't correctly registered as a user.
+        """
+        user = User.query.filter_by(email="mariorossi12@gmail.com").first()
+        self.assertIsNone(user)
+        tester = app.test_client()
+        response = tester.post(
+            "/signup",
+            data=dict(
+                email="ADeCurtis123@gmail.com ",
+                password="123456",
+                confirmPassword="Password123",
+                username="Antonio de Curtis ",
+                nome="Antonio",
+                cognome="De Curtis",
+            ),
+        )
+        user = User.query.filter_by(email="mariorossi12@gmail.com").first()
+        self.assertIsNone(user)
+        db.session.commit()
+
+    def test_signupInvalidConfirmPassword(self):
+        """
+        test the sign-up functionality of the website, creating a dummy  account with an empty email and verifying it
+        wasn't correctly registered as a user.
+        """
+        user = User.query.filter_by(email="mariorossi12@gmail.com").first()
+        self.assertIsNone(user)
+        tester = app.test_client()
+        response = tester.post(
+            "/signup",
+            data=dict(
+                email="ADeCurtis123@gmail.com ",
+                password="123456",
+                confirmPassword="efkjhjefwikefji",
+                username="Antonio de Curtis ",
+                nome="Antonio",
+                cognome="De Curtis",
+            ),
+        )
+        user = User.query.filter_by(email="mariorossi12@gmail.com").first()
+        self.assertIsNone(user)
+        db.session.commit()
+
+    def test_signupInvalidName(self):
+        """
+        test the sign-up functionality of the website, creating a dummy  account with an empty username and verifying
+        it wasn't correctly registered as a user
+        """
+        user = User.query.filter_by(email="mariorossi12@gmail.com").first()
+        self.assertIsNone(user)
+        tester = app.test_client()
+        response = tester.post(
+            "/signup",
+            data=dict(
+                email="ADeCurtis123@gmail.com ",
+                password="Password123",
+                confirmPassword="Password123",
+                nome="Antonio",
+                cognome="",
+                token='0e906980a743e9313c848becb8810b2667535e188365e8db829e1c206421d1ec02360127de06b13013782ca87efc3b7487853aba99061df220b825adee92e316'
+            ),
+        )
+        user = User.query.filter_by(email="mariorossi12@gmail.com").first()
+        self.assertIsNone(user)
+        db.session.commit()
+
+    def test_signupInvalidSurName(self):
+        """
+        test the sign-up functionality of the website, creating a dummy  account with an empty username and verifying
+        it wasn't correctly registered as a user
+        """
+        user = User.query.filter_by(email="mariorossi12@gmail.com").first()
+        self.assertIsNone(user)
+        tester = app.test_client()
+        response = tester.post(
+            "/signup",
+            data=dict(
+                email="ADeCurtis123@gmail.com ",
+                password="Password123",
+                confirmPassword="Password123",
+                nome="",
+                cognome="De Curtis",
+                token='0e906980a743e9313c848becb8810b2667535e188365e8db829e1c206421d1ec02360127de06b13013782ca87efc3b7487853aba99061df220b825adee92e316'
+            ),
+        )
+        user = User.query.filter_by(email="mariorossi12@gmail.com").first()
+        self.assertIsNone(user)
+        db.session.commit()
+
+    def test_signupInvalidToken(self):
+        """
+        test the sign-up functionality of the website, creating a dummy  account with an empty username and verifying
+        it wasn't correctly registered as a user
+        """
+        user = User.query.filter_by(email="mariorossi12@gmail.com").first()
+        self.assertIsNone(user)
+        tester = app.test_client()
+        response = tester.post(
+            "/signup",
+            data=dict(
+                email="ADeCurtis123@gmail.com ",
+                password="Password123",
+                confirmPassword="Password123",
+                nome="",
+                cognome="De Curtis",
+                token='0e906980a743e9313c848becb8810b2667535e188365e8db829e1c206421d1ec02360127de06b13013782ca87efc3b7487853aba99061df220b825adee92e316a57ef7a<f689eafea5 '
+            ),
+        )
+        user = User.query.filter_by(email="mariorossi12@gmail.com").first()
+        self.assertIsNone(user)
+        db.session.commit()
+
 
     def tearDown(self):
         with app.app_context():
@@ -749,6 +870,8 @@ class Test_Login_Logout(TestCase):
                 username="Antonio de Curtis",
                 name="Antonio",
                 surname="De Curtis",
+                token="",
+                isResearcher=False
             )
             db.session.add(utente)
             db.session.commit()
@@ -847,6 +970,7 @@ class TestUser(TestCase):
                 password="prosopagnosia",
                 username="Antonio de Curtis ",
                 name="Antonio",
+                token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2",
                 surname="De Curtis",
             )
             db.session.add(user)
@@ -918,6 +1042,7 @@ class TestList(TestCase):
                 password="prosopagnosia",
                 username="Antonio de Curtis ",
                 name="Antonio",
+                token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2",
                 surname="De Curtis",
             )
             user2 = User(
