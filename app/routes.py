@@ -1,7 +1,9 @@
 import pathlib
 from datetime import datetime
 
-from flask import render_template, request, Response
+from flask import render_template, request, Response, flash
+from qiskit import IBMQ
+
 from app import app, db
 from app.models import User, Dataset
 from app.source.utils import utils
@@ -157,12 +159,21 @@ def smista():
     # Classificazione
     if doQSVM:
         print("\nIn classification...")
+
         backend = request.form.get("backend")
         # backend = "ibmq_qasm_simulator"
         if request.form.get("token"):
             token = request.form.get("token")
         else:
             token = current_user.token
+
+        # check if the token is valid
+        try:
+            IBMQ.enable_account(token)
+            IBMQ.disable_account()
+        except:
+            flash("Token not valid, the classification will not occur", "error")
+
         if request.form.get("email"):
             email = request.form.get("email")
         else:

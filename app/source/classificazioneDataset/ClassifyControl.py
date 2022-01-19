@@ -45,24 +45,36 @@ def classify_control():
     backend = request.form.get("backend")
     email = request.form.get("email")
 
-    heavy_thread = Thread(target=my_thread,
-                          args=(path_train, path_test, path_prediction, features, token, backend, email))
-    heavy_thread.setDaemon(True)
-    heavy_thread.start()
+    thread = Thread(target=classification_thread,
+                    args=(path_train, path_test, path_prediction, features, token, backend, email))
+    thread.setDaemon(True)
+    thread.start()
 
         # if result==0 token is not valid
         # if result==1 error on IBM server (error reported through email)
         # if result["noBackend"]==True selected backend is not active for the token or the are no active by default, and simulator is used
         # aggiungere controlli per result["noBackend"]==True e result==0 per
         # mostrare gli errori tramite frontend
-    return "result"
+    return "Classification started"
 
-def my_thread(path_train, path_test, path_prediction, features, token, backend, email):
+def classification_thread(path_train, path_test, path_prediction, features, token, backend, email):
+    """
+
+    :param path_train: path del file di training output delle fasi precedenti
+    :param path_test: path del file di testing output delle fasi precedenti
+    :param user_path_to_predict: path del file di prediction output delle fasi precedenti
+    :param features: lista di features per qsvm
+    :param token: token dell'utente
+    :param backend_selected: backend selezionato dal form(se vuoto utilizza backend di default)
+    :param email: email used to send the classification result
+    :return: dict contenente informazioni relative alla classificazione
+    """
     result: dict = classify(
         path_train, path_test, path_prediction, features, token, backend
     )
     if result != 0:
         get_classified_dataset(result, path_prediction, email)
+    return result
 
 def classify(
     path_train,
@@ -88,12 +100,11 @@ def classify(
 
     try:
         IBMQ.enable_account(token)
-    except BaseException:
-        print("Token not valid")
-        return 0
+        provider = IBMQ.get_provider(hub="ibm-q")
+        IBMQ.disable_account()
+    except:
+        print("Errore activating/deactivating IBM account")
 
-    provider = IBMQ.get_provider(hub="ibm-q")
-    IBMQ.disable_account()
     qubit = len(features)
 
     try:
@@ -220,8 +231,8 @@ def classify(
     classified_file.close()
     prediction_file.close()
     file_to_predict.close()
-    if no_backend:
-        result["no_backend"] = True
+
+    result["no_backend"] = no_backend
     return result
 
 
@@ -270,13 +281,13 @@ def get_classified_dataset(result, userpathToPredict, email):
     img_path = open(pathlib.Path(__file__).parents[2] / "static" / "images" / "logos" / "Logo_SenzaScritta.png", "rb")
     #img_path = pathlib.Path(__file__).parents[2] / "static" / "images" / "logos" / "Logo_SenzaScritta.png"
     #msg.attach(MIMEText('<center><img style="width:25%;" src="'+ img_path.__str__() +'"></center>', 'html'))
-    #msg.attach(MIMEText('<center><img style="width:25%;" src="data:image/jpg;base64,AAABAAEAAAAAAAEAIACYGgEAFgAAAIlQTkcNChoKAAAADUlIRFIAAAEAAAABAAgGAAAAXHKoZgAA AAFvck5UAc+id5oAAIAASURBVHja7P0FeCRpci0Mq3uahmeHmZoZ1OqWWsxSiZmZmZm5xcxSMw8z 9TDT7iza9362r+1rZtr17s5Mx39OZJamd+21r//ra6x8nngyK6sqq1TKc+JEvPHGa2dn22ybbbNt ts222TbbZttsm22zbbbNttk222bbbJtts222zbbZNttm22ybbbNtts222TbbZttsm22zbbbNttk2 22bbbJtts222zbbZNttm22ybbbNtts222TbbZttsm22zbbbNttk222bbbJtts222zbbZNttm22yb bbNtts222TbbZttsm22zbbbNttk222bbbJtts222zbbZNttm22ybbbNtts222TbbZttsm22zbbbN ttk222bbbJtts222zbbZNttm22ybbbNtts222TbbZttsm22zbbbtF7cddoG/YLbNttm2/0KA/n9p ts222bb/HEBf9Uu2+qr9L9svv9ZGCrbNtv17b9sBrl+2rXbBAJ3fPwZ0Avka2FrYerx2w3a7gOth N2618795q53ft0y7dYud321b7Hythse+t+D8zdvs/G/YZrznWtgGXGedeb01v0gUAXZ4rd1OO4uN FGybbfvX2rYqwA3bZtqjsI3fEADAZwEQLQTkegDxOgCRAL8VAL4L9gBsE2wnALx/5yqL055rgj33 rQvz278+3HJgQ0SI/YaIMIfroiIOXR8d6XB9dMTB66LCsA/Gc35714R47lwV5IL3HcL79+HaO3Gt zSAIXvdO2C04B4LgZysxrAYJ/LOqwbbZNtv2j2ybAQ6rbYE33aLgt8CzBquHhTdeBRJYDcCtwfF6 AP1GeO87sH8QtmOnXeChPQDtgfXhoYdviEl0viUhz+vOtCr/+3Nagh7O7wvdWDQRsaV0KXZn1am" /></center>', 'html'))
     img = MIMEImage(img_path.read())
     img.add_header('Content-ID', '<image>')
     msg.attach(img)
 
     if result == 1:
-        msg.attach(MIMEText("<center><h1>IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems</center></h1>", 'html'))
+        msg.attach(MIMEText("<center><h3>IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems</center></h3>", 'html'))
+
     else:
         msg.attach(MIMEText("<center><h1>Classification details:</h1></center>", 'html'))
         accuracy = result.get("testing_accuracy")
@@ -291,7 +302,14 @@ def get_classified_dataset(result, userpathToPredict, email):
             MIMEText("<center><h3>Total time elapsed: " + result.get("total_time") + "s</h3></center>", 'html')
         )
 
-        # file = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
+        if result["no_backend"] == True:
+            msg.attach(MIMEText("<center><h5>For this classification, a simulated quantum backend has been used due to the following reason:<br></h5>"
+                                "<h6>- The selected backend has not enough qubits to process all the dataset features<br>"
+                                "- There are no backends with enough qubits available at the moment<br>"
+                                "- The used token has no privileges to use the selected backend<br>"
+                                "</center></h6>",
+                'html'))
+
         file = pathlib.Path(userpathToPredict).parent / "classifiedFile.csv"
         attach_file = open(file, "rb")
         payload = MIMEBase("application", "octet-stream")
