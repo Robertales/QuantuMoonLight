@@ -1,6 +1,9 @@
 import pathlib
 from datetime import datetime
 
+from flask import render_template, request, Response
+from flask_login import current_user, login_required
+
 from flask import render_template, request, Response, flash
 from qiskit import IBMQ
 
@@ -32,6 +35,10 @@ def registrationPage():
 def adminPage():
     return render_template("adminPage.html")
 
+
+@app.route("/blog")
+def blog():
+    return render_template("blog.html")
 
 
 @app.route("/userPage")
@@ -159,7 +166,6 @@ def smista():
     # Classificazione
     if doQSVM:
         print("\nIn classification...")
-
         backend = request.form.get("backend")
         # backend = "ibmq_qasm_simulator"
         if request.form.get("token"):

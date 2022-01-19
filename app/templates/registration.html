@@ -20,20 +20,30 @@
 
 <div class="wrapper fadeInDown">
   <div id="formContent">
+
     <!-- Tabs Titles -->
           <!-- Logo -->
     <div class="fadeIn first">
       <a href={{url_for("homepage")}}><img src="../static/images/logos/Logo_SenzaScritta.png" id="icon" alt="Logo"></a>
+          {% with messages = get_flashed_messages(category_filter = ["error"]) %}
+          {% if messages %}
+            {% for msg in messages %}
+                <p style="color:red;">{{msg}}</p>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
     </div>
 
     <!-- Registration Form -->
       <form action="/signup" method="post">
       <input type="email" id="login" class="fadeIn second" name="email" placeholder="E-mail" required>
       <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password" required>
+      <input type="password" id="confirmPassword" class="fadeIn third" name="confirmPassword" placeholder="Confirm Password" required>
       <input type="text" id="username" class="fadeIn second" name="username" placeholder="Username" required>
       <input type="text" id="nome" class="fadeIn third" name="nome" placeholder="Name">
       <input type="text" id="cognome" class="fadeIn second" name="cognome" placeholder="Surname">
-      <input type="text" id="token" class="fadeIn third" name="token" placeholder="Token IBM">
+      <input type="text" id="token" class="fadeIn third" name="token" placeholder="Token IBM"><br>
+      <input type="checkbox" id="researcher" name="researcher" value="isResearcher"><label>&nbsp Researcher</label><br>
       <input type="submit" class="fadeIn fourth" value="Sign In">
     </form>
 

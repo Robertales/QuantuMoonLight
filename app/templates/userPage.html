@@ -29,6 +29,22 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    function copy() {
+  /* Get the text field */
+  var copyText = document.getElementById("token");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+  /* Copy the text inside the text field */
+  navigator.clipboard.writeText(copyText.value);
+
+  /* Alert the copied text */
+  alert("Copied");
+}
+</script>
 
 <div class="page-wrapper">
 {% extends "base.html" %}
@@ -47,8 +63,11 @@
       <h6 class="text-uppercase font-weight-bold">Username:</h6><h5>{{current_user.username}}</h5><br>
       <h6 class="text-uppercase font-weight-bold">Name:</h6><h5>{{current_user.name}}</h5><br>
       <h6 class="text-uppercase font-weight-bold">Surname:</h6><h5>{{current_user.surname}}</h5><br>
-      <h6 class="text-uppercase font-weight-bold">IBM Token:</h6><h6>{{current_user.token}}</h6><br>
-    <form action="#">
+      <h6 class="text-uppercase font-weight-bold">IBM Token:</h6>
+        <input type="text" value="{{current_user.token}}" id="token" hidden>
+        <button class="fadeIn fourth btn btn-primary" onclick="copy()"><span class="fa fa-copy"></span> Copy</button>
+      <br>
+    <br><form action="#">
         <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-bar-chart"></span>  Storico Dataset</button>
         <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Edit Profile</button>
     </form><br>

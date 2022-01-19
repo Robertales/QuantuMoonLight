@@ -4,8 +4,8 @@ import unittest
 from os.path import exists
 
 from app import app
-from app.source.utils import utils
 from app.source.classificazioneDataset import ClassifyControl
+from app.source.utils import utils
 
 
 class TestClassifyControl(unittest.TestCase):
