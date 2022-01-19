@@ -5,10 +5,8 @@ import pathlib
 import warnings
 from email.mime.image import MIMEImage
 from threading import Thread
-
 import numpy as np
 import pandas as pd
-from jinja2 import Environment
 from qiskit import IBMQ
 from qiskit.providers.ibmq import least_busy
 from qiskit.aqua import QuantumInstance, aqua_globals
@@ -16,8 +14,6 @@ from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.components.multiclass_extensions import AllPairs
 from qiskit.circuit.library import ZZFeatureMap
 import smtplib
-from email.message import EmailMessage
-
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
@@ -50,22 +46,24 @@ def classify_control():
     thread.setDaemon(True)
     thread.start()
 
-        # if result==0 token is not valid
-        # if result==1 error on IBM server (error reported through email)
-        # if result["noBackend"]==True selected backend is not active for the token or the are no active by default, and simulator is used
-        # aggiungere controlli per result["noBackend"]==True e result==0 per
-        # mostrare gli errori tramite frontend
+    # if result==0 token is not valid
+    # if result==1 error on IBM server (error reported through email)
+    # if result["noBackend"]==True selected backend is not active for the token or the are no active by default,
+    # and simulator is used
+    # aggiungere controlli per result["noBackend"]==True e result==0 per
+    # mostrare gli errori tramite frontend
     return "Classification started"
+
 
 def classification_thread(path_train, path_test, path_prediction, features, token, backend, email):
     """
 
     :param path_train: path del file di training output delle fasi precedenti
     :param path_test: path del file di testing output delle fasi precedenti
-    :param user_path_to_predict: path del file di prediction output delle fasi precedenti
+    :param path_prediction: path del file di prediction output delle fasi precedenti
     :param features: lista di features per qsvm
     :param token: token dell'utente
-    :param backend_selected: backend selezionato dal form(se vuoto utilizza backend di default)
+    :param backend: backend selezionato dal form(se vuoto utilizza backend di default)
     :param email: email used to send the classification result
     :return: dict contenente informazioni relative alla classificazione
     """
@@ -76,13 +74,14 @@ def classification_thread(path_train, path_test, path_prediction, features, toke
         get_classified_dataset(result, path_prediction, email)
     return result
 
+
 def classify(
-    path_train,
-    path_test,
-    user_path_to_predict,
-    features,
-    token,
-    backend_selected,
+        path_train,
+        path_test,
+        user_path_to_predict,
+        features,
+        token,
+        backend_selected,
 ):
     """
 
@@ -97,7 +96,7 @@ def classify(
 
     start_time = time.time()
     no_backend = False
-
+    provider = ""
     try:
         IBMQ.enable_account(token)
         provider = IBMQ.get_provider(hub="ibm-q")
@@ -109,18 +108,16 @@ def classify(
 
     try:
         if (
-            backend_selected
-            and backend_selected != "backend"
-            and provider.get_backend(backend_selected).configuration().n_qubits
-            >= qubit
+                backend_selected
+                and backend_selected != "backend"
+                and provider.get_backend(backend_selected).configuration().n_qubits
+                >= qubit
         ):
             print("backend selected:" + str(backend_selected))
             print(
                 "backend qubit:"
                 + str(
-                    provider.get_backend(backend_selected)
-                    .configuration()
-                    .n_qubits
+                    provider.get_backend(backend_selected).configuration().n_qubits
                 )
             )
             backend = provider.get_backend(
@@ -130,8 +127,8 @@ def classify(
             backend = least_busy(
                 provider.backends(
                     filters=lambda x: x.configuration().n_qubits >= qubit
-                    and not x.configuration().simulator
-                    and x.status().operational
+                                      and not x.configuration().simulator
+                                      and x.status().operational
                 )
             )
             print("least busy backend: ", backend)
@@ -139,8 +136,8 @@ def classify(
                 "backend qubit:"
                 + str(
                     provider.get_backend(backend.name())
-                    .configuration()
-                    .n_qubits
+                        .configuration()
+                        .n_qubits
                 )
             )
     except BaseException:
@@ -279,14 +276,17 @@ def get_classified_dataset(result, userpathToPredict, email):
 
     msg.attach(MIMEText('<td><center><img style="width:25%;" src="cid:image"></center></td>', 'html'))
     img_path = open(pathlib.Path(__file__).parents[2] / "static" / "images" / "logos" / "Logo_SenzaScritta.png", "rb")
-    #img_path = pathlib.Path(__file__).parents[2] / "static" / "images" / "logos" / "Logo_SenzaScritta.png"
-    #msg.attach(MIMEText('<center><img style="width:25%;" src="'+ img_path.__str__() +'"></center>', 'html'))
+    # img_path = pathlib.Path(__file__).parents[2] / "static" / "images" / "logos" / "Logo_SenzaScritta.png"
+    # msg.attach(MIMEText('<center><img style="width:25%;" src="'+ img_path.__str__() +'"></center>', 'html'))
     img = MIMEImage(img_path.read())
     img.add_header('Content-ID', '<image>')
     msg.attach(img)
 
     if result == 1:
-        msg.attach(MIMEText("<center><h3>IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems</center></h3>", 'html'))
+        msg.attach(MIMEText(
+            "<center><h3>IBM Server error, please check status on https:"
+            "//quantum-computing.ibm.com/services?services=systems</center></h3>",
+            'html'))
 
     else:
         msg.attach(MIMEText("<center><h1>Classification details:</h1></center>", 'html'))
@@ -302,13 +302,15 @@ def get_classified_dataset(result, userpathToPredict, email):
             MIMEText("<center><h3>Total time elapsed: " + result.get("total_time") + "s</h3></center>", 'html')
         )
 
-        if result["no_backend"] == True:
-            msg.attach(MIMEText("<center><h5>For this classification, a simulated quantum backend has been used due to the following reason:<br></h5>"
-                                "<h6>- The selected backend has not enough qubits to process all the dataset features<br>"
+        if result["no_backend"]:
+            msg.attach(MIMEText("<center><h5>For this classification, a simulated quantum backend has been used"
+                                "due to the following reason:<br></h5>"
+                                "<h6>- The selected backend has not enough qubits"
+                                " to process all the dataset features<br>"
                                 "- There are no backends with enough qubits available at the moment<br>"
                                 "- The used token has no privileges to use the selected backend<br>"
                                 "</center></h6>",
-                'html'))
+                                'html'))
 
         file = pathlib.Path(userpathToPredict).parent / "classifiedFile.csv"
         attach_file = open(file, "rb")
