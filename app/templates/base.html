@@ -49,7 +49,12 @@
       <label class="nav-item"><a class="nav-link" href="{{url_for("userPage")}}">Ciao, {{current_user.username}}</a></label>
       {% endif %}
   </div>
-    <a href={{url_for("loginPage")}}><img src="../static/images/icons/person-circle.svg" class="user" height="50px" alt="User page"></a>
+    {% if current_user.is_authenticated %}
+        <a href={{url_for("userPage")}}><img src="../static/images/icons/person-circle.svg" class="user" height="50px" alt="User page"></a>
+
+    {% else %}
+        <a href={{url_for("loginPage")}}><img src="../static/images/icons/person-circle.svg" class="user" height="50px" alt="User page"></a>
+    {% endif %}
   <!-- Container wrapper -->
 </nav>
 <!-- End Navbar -->
