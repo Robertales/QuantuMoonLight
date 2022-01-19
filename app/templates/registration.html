@@ -20,10 +20,18 @@
 
 <div class="wrapper fadeInDown">
   <div id="formContent">
+
     <!-- Tabs Titles -->
           <!-- Logo -->
     <div class="fadeIn first">
       <a href={{url_for("homepage")}}><img src="../static/images/logos/Logo_SenzaScritta.png" id="icon" alt="Logo"></a>
+          {% with messages = get_flashed_messages(category_filter = ["error"]) %}
+          {% if messages %}
+            {% for msg in messages %}
+                <p style="color:red;">{{msg}}</p>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
     </div>
 
     <!-- Registration Form -->

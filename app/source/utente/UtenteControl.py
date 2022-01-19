@@ -46,6 +46,9 @@ def signup():
         if not path.is_dir():
             path.mkdir()
         login_user(utente)
+    else:
+        flash("credenziali non valide","error")
+        return render_template("registration.html")
 
     return render_template("index.html")
 
