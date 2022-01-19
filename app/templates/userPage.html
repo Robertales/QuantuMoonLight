@@ -52,9 +52,11 @@
         <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-bar-chart"></span>  Storico Dataset</button>
         <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Edit Profile</button>
     </form><br>
+      {% if current_user.isAdmin %}
       <form action="{{url_for("adminPage")}}">
           <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Admin Page</button>
       </form><br>
+      {% endif %}
 
       <form action="/logout" method="post">
           <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-sign-out"></span> Log-Out</button>

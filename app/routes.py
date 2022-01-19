@@ -28,7 +28,7 @@ def registrationPage():
 
 @app.route("/adminPage")
 def adminPage():
-    return render_template("adminPage")
+    return render_template("adminPage.html")
 
 
 
