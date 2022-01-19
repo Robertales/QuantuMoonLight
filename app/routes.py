@@ -188,7 +188,7 @@ def smista():
 
     print("\n\nSmista ha finito! To the Moon!")
 
-    return "is classifying"
+    return render_template("index.html")
 
 
 def upload(file, file1, file2, idTrainSet):
