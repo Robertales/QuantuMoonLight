@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from flask import request, render_template
+from flask import request, render_template, flash
 import hashlib
 from flask_login import login_user, current_user, logout_user
 from app import app, db
@@ -56,13 +56,14 @@ def login():
     hashed_password = hashlib.sha512(password.encode()).hexdigest()
     attempted_user: User = User.query.filter_by(email=email).first()
     if not attempted_user:
-        print(attempted_user.__class__)
-        return "Utente non registrato"
+        flash("Email o Password errati", "error")
+        return render_template("login.html")
 
     if attempted_user.password == hashed_password:
         login_user(attempted_user)
     else:
-        return "password errata"
+        flash("Email o Password errati","error")
+        return render_template("login.html")
     return render_template("index.html")
 
 
