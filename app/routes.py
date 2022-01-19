@@ -31,6 +31,10 @@ def adminPage():
     return render_template("adminPage.html")
 
 
+@app.route("/blog")
+def blog():
+    return render_template("blog.html")
+
 
 @app.route("/userPage")
 def userPage():
