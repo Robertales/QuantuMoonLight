@@ -2,11 +2,11 @@ import pathlib
 from datetime import datetime
 
 from flask import render_template, request, Response
+from flask_login import current_user, login_required
+
 from app import app, db
 from app.models import User, Dataset
 from app.source.utils import utils
-from flask_login import current_user, login_required
-from flask import session
 
 
 @app.route("/")
@@ -25,11 +25,9 @@ def registrationPage():
     return render_template("registration.html")
 
 
-
 @app.route("/adminPage")
 def adminPage():
     return render_template("adminPage.html")
-
 
 
 @app.route("/userPage")
@@ -45,6 +43,7 @@ def formPage():
 @app.route("/preprocessingPage")
 def preprocessingPage():
     return render_template("preprocessing.html")
+
 
 @app.route("/blog")
 def blogPage():
@@ -208,10 +207,10 @@ def upload(file, file1, file2, idTrainSet):
     if file is None:
         return -1
     uploaddir = (
-        pathlib.Path(__file__).parents[1]
-        / "upload_dataset"
-        / current_user.email
-        / str(idTrainSet)
+            pathlib.Path(__file__).parents[1]
+            / "upload_dataset"
+            / current_user.email
+            / str(idTrainSet)
     )
     if not uploaddir.exists():
         uploaddir.mkdir()

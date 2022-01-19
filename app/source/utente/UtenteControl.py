@@ -1,11 +1,12 @@
+import hashlib
+import re
 from pathlib import Path
 
 from flask import request, render_template, flash
-import hashlib
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, logout_user
+
 from app import app, db
 from app.models import User
-import re
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -23,9 +24,13 @@ def signup():
     username = request.form.get("username")
     Name = request.form.get("nome")
     cognome = request.form.get("cognome")
-    if 0 < username.__len__() < 30 and re.fullmatch('^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,10}$',email) \
-            and password.__len__() >= 8 and re.fullmatch('^[A-zÀ-ù ‘-]{0,30}$' ,Name)\
-            and re.fullmatch('^[A-zÀ-ù ‘-]{0,30}$',cognome):
+    if 0 < username.__len__() < 30 and re.fullmatch(
+            '^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,10}$',
+            email) and password.__len__() >= 8 and re.fullmatch(
+        '^[A-zÀ-ù ‘-]{0,30}$',
+        Name) and re.fullmatch(
+        '^[A-zÀ-ù ‘-]{0,30}$',
+            cognome):
         utente = User(
             email=email,
             password=hashed_password,
