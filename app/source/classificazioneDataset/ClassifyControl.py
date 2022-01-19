@@ -1,29 +1,27 @@
-import csv
 import os.path
-import pathlib
-import smtplib
 import time
+import csv
+import pathlib
 import warnings
-from email import encoders
-from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.utils import formatdate
 from threading import Thread
-
 import numpy as np
 import pandas as pd
-from flask import request
 from qiskit import IBMQ
+from qiskit.providers.ibmq import least_busy
 from qiskit.aqua import QuantumInstance, aqua_globals
 from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.components.multiclass_extensions import AllPairs
 from qiskit.circuit.library import ZZFeatureMap
-from qiskit.providers.ibmq import least_busy
-
-from app import app
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
+from email.utils import formatdate
+from email import encoders
 from app.source.utils import utils
+from app import app
+from flask import request
 
 warnings.simplefilter(action="ignore", category=DeprecationWarning)
 
@@ -43,25 +41,38 @@ def classify_control():
     backend = request.form.get("backend")
     email = request.form.get("email")
 
-    heavy_thread = Thread(target=my_thread,
-                          args=(path_train, path_test, path_prediction, features, token, backend, email))
-    heavy_thread.setDaemon(True)
-    heavy_thread.start()
+    thread = Thread(target=classification_thread,
+                    args=(path_train, path_test, path_prediction, features, token, backend, email))
+    thread.setDaemon(True)
+    thread.start()
 
     # if result==0 token is not valid
     # if result==1 error on IBM server (error reported through email)
-    # if result["noBackend"]==True selected backend is not active for the token or the are no active by default, and simulator is used
+    # if result["noBackend"]==True selected backend is not active for the token or the are no active by default,
+    # and simulator is used
     # aggiungere controlli per result["noBackend"]==True e result==0 per
     # mostrare gli errori tramite frontend
-    return "result"
+    return "Classification started"
 
 
-def my_thread(path_train, path_test, path_prediction, features, token, backend, email):
+def classification_thread(path_train, path_test, path_prediction, features, token, backend, email):
+    """
+
+    :param path_train: path del file di training output delle fasi precedenti
+    :param path_test: path del file di testing output delle fasi precedenti
+    :param path_prediction: path del file di prediction output delle fasi precedenti
+    :param features: lista di features per qsvm
+    :param token: token dell'utente
+    :param backend: backend selezionato dal form(se vuoto utilizza backend di default)
+    :param email: email used to send the classification result
+    :return: dict contenente informazioni relative alla classificazione
+    """
     result: dict = classify(
         path_train, path_test, path_prediction, features, token, backend
     )
     if result != 0:
         get_classified_dataset(result, path_prediction, email)
+    return result
 
 
 def classify(
@@ -85,15 +96,14 @@ def classify(
 
     start_time = time.time()
     no_backend = False
-
+    provider = ""
     try:
         IBMQ.enable_account(token)
-    except BaseException:
-        print("Token not valid")
-        return 0
+        provider = IBMQ.get_provider(hub="ibm-q")
+        IBMQ.disable_account()
+    except:
+        print("Errore activating/deactivating IBM account")
 
-    provider = IBMQ.get_provider(hub="ibm-q")
-    IBMQ.disable_account()
     qubit = len(features)
 
     try:
@@ -107,9 +117,7 @@ def classify(
             print(
                 "backend qubit:"
                 + str(
-                    provider.get_backend(backend_selected)
-                    .configuration()
-                    .n_qubits
+                    provider.get_backend(backend_selected).configuration().n_qubits
                 )
             )
             backend = provider.get_backend(
@@ -119,8 +127,8 @@ def classify(
             backend = least_busy(
                 provider.backends(
                     filters=lambda x: x.configuration().n_qubits >= qubit
-                    and not x.configuration().simulator
-                    and x.status().operational
+                                      and not x.configuration().simulator
+                                      and x.status().operational
                 )
             )
             print("least busy backend: ", backend)
@@ -128,8 +136,8 @@ def classify(
                 "backend qubit:"
                 + str(
                     provider.get_backend(backend.name())
-                    .configuration()
-                    .n_qubits
+                        .configuration()
+                        .n_qubits
                 )
             )
     except BaseException:
@@ -220,8 +228,8 @@ def classify(
     classified_file.close()
     prediction_file.close()
     file_to_predict.close()
-    if no_backend:
-        result["no_backend"] = True
+
+    result["no_backend"] = no_backend
     return result
 
 
@@ -276,8 +284,10 @@ def get_classified_dataset(result, userpathToPredict, email):
 
     if result == 1:
         msg.attach(MIMEText(
-            "<center><h1>IBM Server error, please check status on https://quantum-computing.ibm.com/services?services=systems</center></h1>",
+            "<center><h3>IBM Server error, please check status on https:"
+            "//quantum-computing.ibm.com/services?services=systems</center></h3>",
             'html'))
+
     else:
         msg.attach(MIMEText("<center><h1>Classification details:</h1></center>", 'html'))
         accuracy = result.get("testing_accuracy")
@@ -292,7 +302,16 @@ def get_classified_dataset(result, userpathToPredict, email):
             MIMEText("<center><h3>Total time elapsed: " + result.get("total_time") + "s</h3></center>", 'html')
         )
 
-        # file = pathlib.Path(session["datasetPath"] / "classifiedFile.csv"
+        if result["no_backend"]:
+            msg.attach(MIMEText("<center><h5>For this classification, a simulated quantum backend has been used"
+                                "due to the following reason:<br></h5>"
+                                "<h6>- The selected backend has not enough qubits"
+                                " to process all the dataset features<br>"
+                                "- There are no backends with enough qubits available at the moment<br>"
+                                "- The used token has no privileges to use the selected backend<br>"
+                                "</center></h6>",
+                                'html'))
+
         file = pathlib.Path(userpathToPredict).parent / "classifiedFile.csv"
         attach_file = open(file, "rb")
         payload = MIMEBase("application", "octet-stream")

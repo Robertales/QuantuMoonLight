@@ -4,6 +4,9 @@ from datetime import datetime
 from flask import render_template, request, Response
 from flask_login import current_user, login_required
 
+from flask import render_template, request, Response, flash
+from qiskit import IBMQ
+
 from app import app, db
 from app.models import User, Dataset
 from app.source.utils import utils
@@ -51,6 +54,10 @@ def formPage():
 @app.route("/preprocessingPage")
 def preprocessingPage():
     return render_template("preprocessing.html")
+
+@app.route("/blog")
+def blogPage():
+    return render_template("blog.html")
 
 
 @app.route("/aboutUs")
@@ -165,6 +172,14 @@ def smista():
             token = request.form.get("token")
         else:
             token = current_user.token
+
+        # check if the token is valid
+        try:
+            IBMQ.enable_account(token)
+            IBMQ.disable_account()
+        except:
+            flash("Token not valid, the classification will not occur", "error")
+
         if request.form.get("email"):
             email = request.form.get("email")
         else:
@@ -210,10 +225,10 @@ def upload(file, file1, file2, idTrainSet):
     if file is None:
         return -1
     uploaddir = (
-            pathlib.Path(__file__).parents[1]
-            / "upload_dataset"
-            / current_user.email
-            / str(idTrainSet)
+        pathlib.Path(__file__).parents[1]
+        / "upload_dataset"
+        / current_user.email
+        / str(idTrainSet)
     )
     if not uploaddir.exists():
         uploaddir.mkdir()
