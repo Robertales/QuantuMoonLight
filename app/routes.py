@@ -46,6 +46,10 @@ def formPage():
 def preprocessingPage():
     return render_template("preprocessing.html")
 
+@app.route("/blog")
+def blogPage():
+    return render_template("blog.html")
+
 
 @app.route("/aboutUs")
 def aboutUs():
