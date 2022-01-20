@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 
 <head>
@@ -17,6 +16,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link href="../static/styles/css/responsive.css" rel="stylesheet">
+    <link href="../static/js/script.js">
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <!--[if lt IE 9]>
     <script src="../../static/js/respond.js"></script><![endif]-->
@@ -58,30 +58,18 @@
     </div>
 
     <!-- User Page -->
-
-      <h6 class="text-uppercase font-weight-bold">E-mail:</h6><h5>{{current_user.email}}</h5><br>
-      <h6 class="text-uppercase font-weight-bold">Username:</h6><h5>{{current_user.username}}</h5><br>
-      <h6 class="text-uppercase font-weight-bold">Name:</h6><h5>{{current_user.name}}</h5><br>
-      <h6 class="text-uppercase font-weight-bold">Surname:</h6><h5>{{current_user.surname}}</h5><br>
-      <h6 class="text-uppercase font-weight-bold">IBM Token:</h6>
-        <input type="text" value="{{current_user.token}}" id="token" hidden>
-        <button class="fadeIn fourth btn btn-primary" onclick="copy()"><span class="fa fa-copy"></span> Copy</button>
-      <br>
-    <br><form action="#">
-            <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-bar-chart"></span>  Storico Dataset</button>
-        </form><br>
-    <br><form action="{{url_for("modifyUser")}}">
-            <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Edit Profile</button>
-        </form><br>
-      {% if current_user.isAdmin %}
-      <form action="{{url_for("adminPage")}}">
-          <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Admin Page</button>
-      </form><br>
-      {% endif %}
-
-      <form action="/logout" method="post">
-          <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-sign-out"></span> Log-Out</button>
-      </form><br>
+      <h4>EDIT YOUR INFORMATIONS HERE</h4><br>
+      <form method="POST" action="{{url_for("modifyUserProfile")}}"
+      <input type="hidden" name="email" value="{{current_user.email}}">
+      <h6 class="text-uppercase font-weight-bold">New Username:</h6><input type="text" id="newUsername" class="fadeIn second" name="username" placeholder="{{current_user.username}}"><br>
+      <h6 class="text-uppercase font-weight-bold">New Name:</h6><input type="text" id="newName" class="fadeIn second" name="nome" placeholder="{{current_user.name}}"><br>
+      <h6 class="text-uppercase font-weight-bold">New Surname:</h6><input type="text" id="newSuname" class="fadeIn second" name="cognome" placeholder="{{current_user.surname}}"><br>
+      <h6 class="text-uppercase font-weight-bold">New Password:</h6><input type="password" id="newPassword" class="fadeIn third" name="password"><br>
+      <h6 class="text-uppercase font-weight-bold">Confirm Password:</h6><input type="password" id="newConfirmPassword" class="fadeIn fourth" name="confirmPassword"><br>
+      <h6 class="text-uppercase font-weight-bold">New IBM Token</h6><input type="text" id="newToken" class="fadeIn fourth" name="token"><br>
+      <br><br>
+        <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-save"></span>  Save</button>
+    </form>
 
     <!-- Return to Log In page -->
     <div id="formFooter">
