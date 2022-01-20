@@ -38,6 +38,9 @@ def modifyUserPage():
 def modifyUser():
     return render_template("modifyUser.html")
 
+@app.route("/sendEmail")
+def sendEmail():
+    return render_template("sendEmail.html")
 
 @app.route("/blog")
 def blog():

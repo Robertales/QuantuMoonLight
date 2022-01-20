@@ -1,4 +1,9 @@
+import pathlib
 import smtplib
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.utils import formatdate
 
 from flask import request, render_template
 
@@ -96,18 +101,33 @@ def getListaArticlesUser(email):
     """
     return Article.query.filter_by(email_user=email).all()
 
-
-def sendEmailNewsletter(email):
+@app.route("/sendEmailNewsletter/", methods=["GET", "POST"])
+def sendEmailNewsletter():
     """
       the function allows an administrator to send an email to users registered for the newsletter
 
        :return: state
        :rtype: int
        """
+    title = request.form.get("title")
+    body = request.form.get("body")
     listautenti = User.query.filter_by(newsletter=True)
     for utente in listautenti:
         try:
+            email = MIMEMultipart()
+            email["From"] = "quantumoonlight@gmail.com"
+            email["Date"] = formatdate(localtime=True)
             email["To"] = utente.email
+            email["Subject"] = title
+
+            email.attach(MIMEText('<tr><center><img style="width:15%;" src="cid:image"></center></tr>', 'html'))
+            img_path = open(pathlib.Path(__file__).parents[2] / "static" / "images" / "logos" / "Logo_SenzaScritta.png",
+                            "rb")
+            img = MIMEImage(img_path.read())
+            img.add_header('Content-ID', '<image>')
+            email.attach(img)
+            email.attach(MIMEText(body))
+
             server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
             server.ehlo()
             server.login("quantumoonlight@gmail.com", "Quantum123?")
@@ -115,4 +135,4 @@ def sendEmailNewsletter(email):
             server.close()
         except BaseException:
             return 0
-    return 1
+    return render_template("adminPage.html")
