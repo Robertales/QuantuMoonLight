@@ -1,9 +1,8 @@
 import os
-import urllib.request
-from os.path import exists
+
+from flask import request, send_from_directory
 
 from app import app
-from flask import request, send_file, send_from_directory
 
 cartella_download = os.pardir + "\\uploads\\"
 

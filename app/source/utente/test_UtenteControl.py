@@ -1,8 +1,10 @@
 import hashlib
 from unittest import TestCase
-from sqlalchemy_utils import database_exists, create_database
-from app import app, db
+
 from flask_login import current_user, UserMixin, AnonymousUserMixin
+from sqlalchemy_utils import database_exists, create_database
+
+from app import app, db
 from app.models import User
 
 

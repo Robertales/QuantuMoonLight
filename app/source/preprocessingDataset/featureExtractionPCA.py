@@ -1,11 +1,12 @@
-import numpy as np
 import os
-import pandas as pd
 import pathlib
+import warnings
+
+import numpy as np
+import pandas as pd
+from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-import warnings
 
 warnings.simplefilter(action="ignore", category=FutureWarning)
 

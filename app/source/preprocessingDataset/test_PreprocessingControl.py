@@ -2,7 +2,7 @@ import os
 import pathlib
 import unittest
 from os.path import exists
-from app.models import User
+
 from app import app
 
 

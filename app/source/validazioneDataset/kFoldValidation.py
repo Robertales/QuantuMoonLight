@@ -1,7 +1,7 @@
+import csv
 from pathlib import Path
 
 import pandas as pd
-import csv
 from sklearn.model_selection import KFold
 
 

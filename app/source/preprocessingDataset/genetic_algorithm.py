@@ -1,6 +1,8 @@
 from __future__ import division
-from deap import tools
+
 import random
+
+from deap import tools
 
 
 # genetic algorithm with mutation probability on each individual and in each generation the population is replace

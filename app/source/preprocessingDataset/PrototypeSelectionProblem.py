@@ -1,12 +1,13 @@
 import random
+import statistics as s
 import time as t
 from pathlib import Path
 
 import numpy as np
-import statistics as s
 from deap import base
 from deap import creator
 from deap import tools
+
 from app.source.preprocessingDataset import genetic_algorithm as ga
 from app.source.utils import utils
 

@@ -1,5 +1,6 @@
 from sqlalchemy import ForeignKey
-from app import db, login_manager
+
+from app import db
 from app.source.utente.UserAuth import UserAuth
 
 

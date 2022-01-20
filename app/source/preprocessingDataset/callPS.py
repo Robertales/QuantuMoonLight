@@ -1,9 +1,11 @@
 import pathlib
+
 import numpy as np
-from app.source.utils import utils
+
 from app.source.preprocessingDataset import (
     PrototypeSelectionProblem as ps,
 )
+from app.source.utils import utils
 
 
 def callPrototypeSelection(

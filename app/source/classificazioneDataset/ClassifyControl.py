@@ -1,27 +1,29 @@
-import os.path
-import time
 import csv
+import os.path
 import pathlib
+import smtplib
+import time
 import warnings
+from email import encoders
+from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.utils import formatdate
 from threading import Thread
+
 import numpy as np
 import pandas as pd
+from flask import request
 from qiskit import IBMQ
-from qiskit.providers.ibmq import least_busy
 from qiskit.aqua import QuantumInstance, aqua_globals
 from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.components.multiclass_extensions import AllPairs
 from qiskit.circuit.library import ZZFeatureMap
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.base import MIMEBase
-from email.mime.text import MIMEText
-from email.utils import formatdate
-from email import encoders
-from app.source.utils import utils
+from qiskit.providers.ibmq import least_busy
+
 from app import app
-from flask import request
+from app.source.utils import utils
 
 warnings.simplefilter(action="ignore", category=DeprecationWarning)
 

@@ -1,9 +1,10 @@
 import os
 import pathlib
 import unittest
-from os.path import exists
-from app import app
 import warnings
+from os.path import exists
+
+from app import app
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 

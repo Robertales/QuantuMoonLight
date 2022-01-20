@@ -1,10 +1,11 @@
 from pathlib import Path
 
 from flask import request, Response
+
 from app import app
 from app.source.utils import addAttribute
-from app.source.validazioneDataset import train_testSplit
 from app.source.validazioneDataset import kFoldValidation
+from app.source.validazioneDataset import train_testSplit
 
 
 @app.route("/validazioneControl", methods=["POST"])

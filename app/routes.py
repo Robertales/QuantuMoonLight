@@ -1,17 +1,13 @@
 import pathlib
 from datetime import datetime
 
-from flask import render_template, request, Response
-from flask_login import current_user, login_required
-
 from flask import render_template, request, Response, flash
+from flask_login import current_user, login_required
 from qiskit import IBMQ
 
 from app import app, db
 from app.models import User, Dataset
 from app.source.utils import utils
-from flask_login import current_user, login_required
-from flask import session
 
 
 @app.route("/")

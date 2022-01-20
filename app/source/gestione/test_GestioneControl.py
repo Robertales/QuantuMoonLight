@@ -1,9 +1,11 @@
 import datetime
+from datetime import datetime
 from unittest import TestCase
+
 from sqlalchemy_utils import database_exists, create_database
+
 from app import app, db
 from app.models import User, Article
-from datetime import datetime
 
 
 class TestUser(TestCase):

@@ -1,10 +1,9 @@
 import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.utils import formatdate
+
+from flask import request, render_template
 
 from app import app, db
 from app.models import User, Article
-from flask import request, render_template
 
 
 @app.route("/gestione/", methods=["GET", "POST"])
