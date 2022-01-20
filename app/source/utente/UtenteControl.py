@@ -1,107 +1,112 @@
 import hashlib
 import re
 from pathlib import Path
-
 from flask import request, render_template, flash
 from flask_login import login_user, logout_user
-
 from app import app, db
 from app.models import User
 
+class UtenteControl:
+    @app.route("/signup", methods=["GET", "POST"])
+    def signup():
+        """
+        Reads the user credentials from a http request and adds him to the project database
+            :return: redirect to index page
+        """
+        email = request.form.get("email")
+        password = request.form.get("password")
+        cpassword = request.form.get("confirmPassword")
+        hashed_password = hashlib.sha512(password.encode()).hexdigest()
+        token = request.form.get("token")
+        print(token)
+        isResearcher = request.form.get("isResearcher")
+        if token == "":
+            token = None
+        username = request.form.get("username")
+        Name = request.form.get("nome")
+        cognome = request.form.get("cognome")
+        if 0 < username.__len__() < 30 and re.fullmatch(
+                '^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,10}$',
+                email) and password.__len__() >= 8 and re.fullmatch(
+            '^[A-zÀ-ù ‘-]{2,30}$',
+            Name) and re.fullmatch(
+            '^[A-zÀ-ù ‘-]{2,30}$',
+            cognome) \
+                and password.__eq__(cpassword) and ((token is None) or token.__len__() == 128):
+            utente = User(
+                email=email,
+                password=hashed_password,
+                token=token,
+                username=username,
+                name=Name,
+                surname=cognome,
+                isResearcher=bool(isResearcher)
+            )
+            db.session.add(utente)
+            db.session.commit()
 
-@app.route("/signup", methods=["GET", "POST"])
-def signup():
-    """
-    Reads the user credentials from a http request and adds him to the project database
+            path = Path(__file__).parents[3] / "upload_dataset" / email
+            print(path.__str__())
+            if not path.is_dir():
+                path.mkdir()
+            login_user(utente)
+        else:
+            flash("credenziali non valide", "error")
+            return render_template("registration.html")
+
+        return render_template("index.html")
+
+    @app.route("/login", methods=["GET", "POST"])
+    def login():
+        """
+        reads a user login credentials from a http request and if they are valid logs the user in with those same
+        credentials,changing his state from anonymous  user to logged user
         :return: redirect to index page
-    """
-    email = request.form.get("email")
-    password = request.form.get("password")
-    cpassword = request.form.get("confirmPassword")
-    hashed_password = hashlib.sha512(password.encode()).hexdigest()
-    token = request.form.get("token")
-    print(token)
-    isResearcher = request.form.get("isResearcher")
-    if token == "":
-        token = None
-    username = request.form.get("username")
-    Name = request.form.get("nome")
-    cognome = request.form.get("cognome")
-    if 0 < username.__len__() < 30 and re.fullmatch(
-            '^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,10}$',
-            email) and password.__len__() >= 8 and re.fullmatch(
-        '^[A-zÀ-ù ‘-]{2,30}$',
-        Name) and re.fullmatch(
-        '^[A-zÀ-ù ‘-]{2,30}$',
-        cognome) \
-            and password.__eq__(cpassword) and ((token is None) or token.__len__() == 128):
-        utente = User(
-            email=email,
-            password=hashed_password,
-            token=token,
-            username=username,
-            name=Name,
-            surname=cognome,
-            isResearcher=bool(isResearcher)
-        )
-        db.session.add(utente)
-        db.session.commit()
-        path = Path(__file__).parents[3] / "upload_dataset" / email
-        print(path.__str__())
-        if not path.is_dir():
-            path.mkdir()
-        login_user(utente)
-    else:
-        flash("credenziali non valide", "error")
-        return render_template("registration.html")
+        """
+        email = request.form.get("email")
+        password = request.form.get("password")
+        hashed_password = hashlib.sha512(password.encode()).hexdigest()
+        attempted_user: User = User.query.filter_by(email=email).first()
+        if not attempted_user:
+            print(attempted_user.__class__)
+            flash("Utente non registrato")
+            return render_template("login.html")
 
-    return render_template("index.html")
+        if attempted_user.password == hashed_password:
+            login_user(attempted_user)
+        else:
+            flash("password errata")
+            return render_template("login.html")
+        return render_template("index.html")
 
+    @app.route("/logout", methods=["GET", "POST"])
+    def logout():
+        """
+        logs a user out, changing his state from logged user to anonymous user
+            :return:redirect to index page
+        """
+        logout_user()
+        return render_template("index.html")
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    """
-    reads a user login credentials from a http request and if they are valid logs the user in with those same
-    credentials,changing his state from anonymous  user to logged user
-    :return: redirect to index page
-    """
-    email = request.form.get("email")
-    password = request.form.get("password")
-    hashed_password = hashlib.sha512(password.encode()).hexdigest()
-    attempted_user: User = User.query.filter_by(email=email).first()
-    if not attempted_user:
-        print(attempted_user.__class__)
-        flash("Utente non registrato")
-        return render_template("login.html")
+    @app.route("/newsletter", methods=["GET", "POST"])
+    def signup_newsletter():
 
-    if attempted_user.password == hashed_password:
-        login_user(attempted_user)
-    else:
-        flash("password errata")
-        return render_template("login.html")
-    return render_template("index.html")
+        """
+        changes the User ,whose email was passed as a http request parameter ,newsletter flag to true
+            :return: redirect to index page
+        """
+        email = request.form.get("email")
+        if re.fullmatch('^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,10}$',email):
+            utente: User = User.query.filter_by(email=email).first()
+            utente.newsletter = True
+            db.session.commit()
+            flash("Subscribed", "notifica")
+            return render_template("index.html")
+        else:
+            flash("Invalid email format", "notifica")
+            return render_template("index.html")
 
 
-@app.route("/logout", methods=["GET", "POST"])
-def logout():
-    """
-    logs a user out, changing his state from logged user to anonymous user
-        :return:redirect to index page
-    """
-    logout_user()
-    return render_template("index.html")
 
 
-@app.route("/newsletter", methods=["GET", "POST"])
-def signup_newsletter():
-    """
-    changes the User ,whose email was passed as a http request parameter ,newsletter flag to true
-        :return: redirect to index page
-    """
-    email = request.form.get("email")
-    utente: User = User.query.filter_by(email=email).first()
-    utente.newsletter = True
-    db.session.commit()
-    flash("Subscribed", "notifica")
 
-    return render_template("index.html")
