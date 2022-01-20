@@ -1,3 +1,4 @@
+import hashlib
 import pathlib
 import smtplib
 from email.mime.image import MIMEImage
@@ -58,13 +59,14 @@ def modifyUserProfile():
     user = User.query.get(email)
 
     new_password = request.form.get("password")
+    hashed_password = hashlib.sha512(new_password.encode()).hexdigest()
     new_token = request.form.get("token")
     new_username = request.form.get("username")
     new_nome = request.form.get("nome")
     new_cognome = request.form.get("cognome")
 
     setattr(user, "token", new_token)
-    setattr(user, "password", new_password)
+    setattr(user, "password", hashed_password)
     setattr(user, "username", new_username)
     setattr(user, "nome", new_nome)
     setattr(user, "cognome", new_cognome)
