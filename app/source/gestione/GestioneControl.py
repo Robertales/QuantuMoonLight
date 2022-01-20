@@ -128,8 +128,12 @@ def sendEmailNewsletter():
             img = MIMEImage(img_path.read())
             img.add_header('Content-ID', '<image>')
             email.attach(img)
+            email.attach(MIMEText("Hi " + utente.username+","))
+            email.attach(MIMEText('<br>', 'html'))
             email.attach(MIMEText(body))
-
+            email.attach(MIMEText('<h6><center>You received this email because you signed up to receive '
+                                  'communications from QML. This message was sent from QML, Italy.</center></h6>',
+                                  'html'))
             server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
             server.ehlo()
             server.login("quantumoonlight@gmail.com", "Quantum123?")
