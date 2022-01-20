@@ -30,6 +30,9 @@ def registrationPage():
 def adminPage():
     return render_template("adminPage.html")
 
+@app.route("/modifyUserPage")
+def modifyUserPage():
+    return render_template("modifyUserByAdmin.html")
 
 @app.route("/modifyUser")
 def modifyUser():

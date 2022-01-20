@@ -64,7 +64,7 @@ def modifyUserProfile():
     setattr(user, "nome", new_nome)
     setattr(user, "cognome", new_cognome)
     db.session.commit()
-    return render_template("index.html")
+    return render_template("adminPage.html")
 
 
 def getListaUser():
@@ -98,6 +98,12 @@ def getListaArticlesUser(email):
 
 
 def sendEmailNewsletter(email):
+    """
+      the function allows an administrator to send an email to users registered for the newsletter
+
+       :return: state
+       :rtype: int
+       """
     listautenti = User.query.filter_by(newsletter=True)
     for utente in listautenti:
         try:
