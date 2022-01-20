@@ -107,7 +107,14 @@
                                 <div class="text" style="-webkit-user-select: none; -moz-user-select: none; user-select:none;">Get QML News by using our newsletter</div>
 
                                 <div class="form">
-                                    <form method="post" action="../../../../../Desktop/fiorentino/fiorentino/templates/index.html">
+                                {% with messages = get_flashed_messages(category_filter = ["notifica"]) %}
+                                         {% if messages %}
+                                         {% for msg in messages %}
+                                                      <p style="color:red;">{{msg}}</p>
+                                                      {% endfor %}
+                                                      {% endif %}
+                                            {% endwith %}
+                                    <form method="POST" action="{{url_for("signup_newsletter")}}">
                                         <div class="form-group">
                                             <input type="email" name="email" value="" placeholder="Enter your email address" required autocomplete="off">
                                             <button type="submit" name="submit" class="hvr-bounce-to-right"><span class="fa fa-paper-plane"></span></button>
@@ -118,16 +125,6 @@
                                  <div class="text" style="-webkit-user-select: none; -moz-user-select: none; user-select:none;">
                                     Copryright 2021 by QML | All rights reserved
                                 </div>
-
-                                <!--
-                                <div class="social-links wow fadeInRight" data-wow-delay="1000ms" data-wow-duration="1500ms">
-                                    <a href="#"><span class="fa fa-facebook-f"></span></a>
-                                    <a href="#"><span class="fa fa-twitter"></span></a>
-                                    <a href="#"><span class="fa fa-google"></span></a>
-                                    <a href="#"><span class="fa fa-pinterest-p"></span></a>
-                                    <a href="#"><span class="fa fa-instagram"></span></a>
-                                </div> -->
-
                             </div>
                         </div>
 
@@ -136,14 +133,14 @@
             </div>
   </footer>
 
-    <script src="../../../static/js/jquery.js"></script>
-    <script src="../../../static/js/bootstrap.min.js"></script>
-    <script src="../../../static/js/revolution.min.js"></script>
-    <script src="../../../static/js/bxslider.js"></script>
-    <script src="../../../static/js/owl.carousel.min.js"></script>
-    <script src="../../../static/js/jquery.fancybox.pack.js"></script>
-    <script src="../../../static/js/wow.js"></script>
-    <script src="../../../static/js/script.js"></script>
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/revolution.min.js"></script>
+    <script src="../static/js/bxslider.js"></script>
+    <script src="../static/js/owl.carousel.min.js"></script>
+    <script src="../static/js/jquery.fancybox.pack.js"></script>
+    <script src="../static/js/wow.js"></script>
+    <script src="../static/js/script.js"></script>
 
 </body>
 </html>

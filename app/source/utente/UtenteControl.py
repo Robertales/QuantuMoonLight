@@ -102,5 +102,6 @@ def signup_newsletter():
     utente: User = User.query.filter_by(email=email).first()
     utente.newsletter = True
     db.session.commit()
+    flash("Subscribed", "notifica")
 
     return render_template("index.html")

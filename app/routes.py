@@ -11,7 +11,7 @@ from app.source.utils import utils
 
 
 @app.route("/")
-@app.route("/home")
+@app.route("/home", methods=["GET", "POST"])
 def homepage():  # put application's code here
     return render_template("index.html")
 
