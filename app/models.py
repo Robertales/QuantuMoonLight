@@ -5,6 +5,9 @@ from app.source.utente.UserAuth import UserAuth
 
 
 class User(db.Model, UserAuth):
+    """
+    code representation of the User table of the database
+    """
     email = db.Column(db.VARCHAR(255), primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(150), nullable=False)
@@ -17,6 +20,9 @@ class User(db.Model, UserAuth):
 
 
 class Dataset(db.Model):
+    """
+    code representation of the Dataset table of the database
+    """
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email_user = db.Column(db.VARCHAR(255), ForeignKey("user.email"))
     name = db.Column(db.String(30), nullable=False)
@@ -30,6 +36,9 @@ class Dataset(db.Model):
 
 
 class Article(db.Model):
+    """
+       code representation of the Article table of the database
+       """
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email_user = db.Column(db.VARCHAR(255), ForeignKey("user.email"))
     title = db.Column(db.Text(length=200), nullable=False)
@@ -39,6 +48,9 @@ class Article(db.Model):
 
 
 class Comment(db.Model):
+    """
+       code representation of the Comment table of the database
+       """
     __table_args__ = (db.PrimaryKeyConstraint("email_user", "id_article"),)
     email_user = db.Column(db.VARCHAR(255), ForeignKey("user.email"))
     id_article = db.Column(db.Integer, ForeignKey("article.id"))
@@ -47,6 +59,9 @@ class Comment(db.Model):
 
 
 class Like(db.Model):
+    """
+       code representation of the Like table of the database
+       """
     __table_args__ = (db.PrimaryKeyConstraint("email_user", "id_article"),)
     email_user = db.Column(db.VARCHAR(255), ForeignKey("user.email"))
     id_article = db.Column(db.Integer, ForeignKey("article.id"))
