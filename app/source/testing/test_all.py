@@ -16,10 +16,10 @@ from app import app
 from app import db
 from app.models import Article
 from app.models import User
-from app.source.classificazioneDataset import ClassifyControl
 from app.source.utils import utils
 from app.source.validazioneDataset import kFoldValidation
 from app.source.validazioneDataset import train_testSplit
+from app.source.classificazioneDataset.ClassifyControl import ClassificazioneControl
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -1202,8 +1202,8 @@ class TestClassifyControl(unittest.TestCase):
         token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
         backend_selected = "ibmq_qasm_simulator"
         email = "quantumoonlight@gmail.com"
-
-        result = ClassifyControl.classification_thread(path_train, path_test, path_prediction, features, token, backend_selected, email)
+        control = ClassificazioneControl()
+        result = control.classification_thread(path_train, path_test, path_prediction, features, token, backend_selected, email)
 
         self.assertNotEqual(result, 1)
         self.assertTrue(
@@ -1235,8 +1235,10 @@ class TestClassifyControl(unittest.TestCase):
         features = utils.createFeatureList(2)
         token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
         backend_selected = "ibmq_qasm_simulator"
-
-        result = ClassifyControl.classify(
+        control = ClassificazioneControl()
+        print(token)
+        print(backend_selected)
+        result = control.classify(
             path_train,
             path_test,
             path_prediction,
@@ -1273,8 +1275,8 @@ class TestClassifyControl(unittest.TestCase):
         user_path_to_predict = (
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
-
-        value = ClassifyControl.get_classified_dataset(
+        control = ClassificazioneControl()
+        value = control.get_classified_dataset(
             result, user_path_to_predict, "quantumoonlight@gmail.com"
         )
         self.assertEqual(value, 1)
@@ -1299,8 +1301,8 @@ class TestClassifyControl(unittest.TestCase):
         features = utils.createFeatureList(2)
         token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
         backend_selected = "ibmq_qasm_simulator"
-
-        result = ClassifyControl.classify(
+        control = ClassificazioneControl()
+        result = control.classify(
             path_train,
             path_test,
             path_prediction,
