@@ -25,6 +25,9 @@ def loginPage():
 def registrationPage():
     return render_template("registration.html")
 
+@app.route("/downloadPage")
+def downloadPage():
+    return render_template("downloadPage.html")
 
 @app.route("/adminPage")
 def adminPage():
@@ -214,7 +217,7 @@ def smista():
 
     print("\n\nSmista ha finito! To the Moon!")
 
-    return render_template("index.html")
+    return render_template("downloadPage.html")
 
 
 def upload(file, file1, file2, idTrainSet):
