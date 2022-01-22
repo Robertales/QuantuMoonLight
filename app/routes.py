@@ -36,6 +36,11 @@ def adminPage():
     return render_template("adminPage.html")
 
 
+@app.route("/adminDataset")
+def adminDataset():
+    return render_template("adminDataset.html")
+
+
 @app.route("/modifyUserPage")
 def modifyUserPage():
     return render_template("modifyUserByAdmin.html")

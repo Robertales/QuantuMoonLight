@@ -9,7 +9,7 @@ from email.utils import formatdate
 from flask import request, render_template
 
 from app import app, db
-from app.models import User, Article
+from app.models import User, Article, Dataset
 
 
 class GestioneControl:
@@ -81,6 +81,15 @@ class GestioneControl:
         :rtype: dict
         """
         return User.query.all()
+
+    def getListaDataset(self):
+        """
+        the function returns the list of uploaded datasets
+
+        :return: dataset list
+        :rtype: dict
+        """
+        return Dataset.query.all()
 
     def getListaArticlesData(data1, data2):
         """
