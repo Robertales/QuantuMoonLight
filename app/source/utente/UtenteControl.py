@@ -1,10 +1,11 @@
 import hashlib
 import re
 from pathlib import Path
-from flask import request, render_template, flash
-from flask_login import login_user, logout_user
+from flask import request, render_template, flash, send_from_directory
+from flask_login import login_user, logout_user, current_user
 from app import app, db
 from app.models import User
+
 
 
 class UtenteControl:
@@ -27,9 +28,13 @@ class UtenteControl:
         Name = request.form.get("nome")
         cognome = request.form.get("cognome")
         if not 0 < username.__len__() < 30:
-            flash("Lunghezza Username non valida (non compreso tra 0 e 30 caratteri)", "error")
+            flash(
+                "Lunghezza Username non valida (non compreso tra 0 e 30 caratteri)",
+                "error")
             return render_template("registration.html")
-        if not re.fullmatch('^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,10}$', email):
+        if not re.fullmatch(
+            '^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,10}$',
+                email):
             flash("Email non valida", "error")
             return render_template("registration.html")
         if not password.__len__() >= 8:
@@ -114,3 +119,22 @@ class UtenteControl:
         else:
             flash("Invalid email format", "notifica")
             return render_template("index.html")
+
+    @app.route("/download", methods=["GET", "POST"])
+    def download():
+        ID = request.form.get("id")
+        filename = request.form.get("filename")
+        filepath = Path(__file__).parents[3] / \
+            "upload_dataset" / current_user.email / ID
+        print(filepath)
+        if filename:
+            #Quando l'applicazione sarà hostata su un web server sostituire con un metodo di download fornito dal web server
+            return send_from_directory(
+                directory=filepath,
+                path=filename,
+            )
+        else:
+            flash(
+                "impossibile scaricare il file,riprova ad eseguire la validazione",
+                "error")
+            return render_template("downloadPage.html")

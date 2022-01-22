@@ -25,25 +25,31 @@ def loginPage():
 def registrationPage():
     return render_template("registration.html")
 
+
 @app.route("/downloadPage")
 def downloadPage():
     return render_template("downloadPage.html")
+
 
 @app.route("/adminPage")
 def adminPage():
     return render_template("adminPage.html")
 
+
 @app.route("/modifyUserPage")
 def modifyUserPage():
     return render_template("modifyUserByAdmin.html")
+
 
 @app.route("/modifyUser")
 def modifyUser():
     return render_template("modifyUser.html")
 
+
 @app.route("/sendEmail")
 def sendEmail():
     return render_template("sendEmail.html")
+
 
 @app.route("/blog")
 def blog():
@@ -63,6 +69,7 @@ def formPage():
 @app.route("/preprocessingPage")
 def preprocessingPage():
     return render_template("preprocessing.html")
+
 
 @app.route("/blog")
 def blogPage():
@@ -186,7 +193,7 @@ def smista():
         try:
             IBMQ.enable_account(token)
             IBMQ.disable_account()
-        except:
+        except BaseException:
             flash("Token not valid, the classification will not occur", "error")
 
         if request.form.get("email"):
@@ -217,7 +224,11 @@ def smista():
 
     print("\n\nSmista ha finito! To the Moon!")
 
-    return render_template("downloadPage.html")
+    return render_template(
+        "downloadPage.html",
+        ID=salvataggiodatabase.id,
+        ValidationName="Data_testing.csv",
+        PreprocessingName="DataSetTestPreprocessato.csv")
 
 
 def upload(file, file1, file2, idTrainSet):
