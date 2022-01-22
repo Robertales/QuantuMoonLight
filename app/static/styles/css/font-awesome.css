@@ -6,8 +6,8 @@
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../../../../../../../Desktop/fiorentino/fiorentino/static/styles/fonts/fontawesome-webfont.eot?v=4.3.0');
-  src: url('../../../../../../../Desktop/fiorentino/fiorentino/static/styles/fonts/fontawesome-webfont.eot?#iefix&v=4.3.0') format('embedded-opentype'), url('../../../../../../../Desktop/fiorentino/fiorentino/static/styles/fonts/fontawesome-webfont.woff2?v=4.3.0') format('woff2'), url('../../../../../../../Desktop/fiorentino/fiorentino/static/styles/fonts/fontawesome-webfont.woff?v=4.3.0') format('woff'), url('../../../../../../../Desktop/fiorentino/fiorentino/static/styles/fonts/fontawesome-webfont.ttf?v=4.3.0') format('truetype'), url('../../../../../../../Desktop/fiorentino/fiorentino/static/styles/fonts/fontawesome-webfont.svg?v=4.3.0#fontawesomeregular') format('svg');
+  src: url('../../../static/styles/fonts/fontawesome-webfont.eot?v=4.3.0');
+  src: url('../../../static/styles/fonts/fontawesome-webfont.eot?#iefix&v=4.3.0') format('embedded-opentype'), url('../../../static/styles/fonts/fontawesome-webfont.woff2?v=4.3.0') format('woff2'), url('../../../static/styles/fonts/fontawesome-webfont.woff?v=4.3.0') format('woff'), url('../../../static/styles/fonts/fontawesome-webfont.ttf?v=4.3.0') format('truetype'), url('../../../static/styles/fonts/fontawesome-webfont.svg?v=4.3.0#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
