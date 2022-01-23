@@ -9,8 +9,6 @@ from app.models import User
 from zipfile import ZipFile
 
 
-
-
 class UtenteControl:
     @app.route("/signup", methods=["GET", "POST"])
     def signup():
@@ -132,31 +130,60 @@ class UtenteControl:
         print(filename)
 
         if filename:
-            #Quando l'applicazione sarà hostata su un web server sostituire con un metodo di download fornito dal web server
+            # Quando l'applicazione sarà hostata su un web server sostituire
+            # con un metodo di download fornito dal web server
             zip_name = ''
             if(filename == "Validation"):
                 zip_path = filepath / 'ValidationResult.zip'
                 zip_name = 'ValidationResult.zip'
                 zip = ZipFile(zip_path, 'w')
-                if exists(filepath / "Data_training.csv") and exists(filepath / "Data_testing.csv"):
-                    zip.write(filepath / "Data_training.csv","data_training.csv")
-                    zip.write(filepath / 'Data_testing.csv',"data_testing.csv")
+                if exists(
+                        filepath /
+                        "Data_training.csv") and exists(
+                        filepath /
+                        "Data_testing.csv"):
+                    zip.write(
+                        filepath / "Data_training.csv",
+                        "data_training.csv")
+                    zip.write(
+                        filepath / 'Data_testing.csv',
+                        "data_testing.csv")
                 zip.close()
 
             else:
                 zip_path = filepath / 'PreprocessingResult.zip'
                 zip_name = 'PreprocessingResult.zip'
                 zip = ZipFile(zip_path, 'w')
-                if exists(filepath / "DataSetTestPreprocessato.csv") and exists(filepath / "DataSetTrainPreprocessato.csv"):
-                    zip.write(filepath / 'DataSetTestPreprocessato.csv','DataSetTestPreprocessato.csv')
-                    zip.write(filepath / 'DataSetTrainPreprocessato.csv','DataSetTrainPreprocessato.csv')
+                if exists(
+                        filepath /
+                        "DataSetTestPreprocessato.csv") and exists(
+                        filepath /
+                        "DataSetTrainPreprocessato.csv"):
+                    zip.write(
+                        filepath / 'DataSetTestPreprocessato.csv',
+                        'DataSetTestPreprocessato.csv')
+                    zip.write(
+                        filepath / 'DataSetTrainPreprocessato.csv',
+                        'DataSetTrainPreprocessato.csv')
                 if exists(filepath / "doPredictionFE.csv"):
-                    zip.write(filepath / 'doPredictionFE.csv','doPredictionFE.csv')
+                    zip.write(
+                        filepath / 'doPredictionFE.csv',
+                        'doPredictionFE.csv')
                 if exists(filepath / "reducedTrainingPS.csv"):
-                    zip.write(filepath / 'reducedTrainingPS.csv','reducedTrainingPS.csv')
-                if exists(filepath / "yourPCA_Test.csv") and exists(filepath / "yourPCA_Train.csv"):
-                    zip.write(filepath / 'yourPCA_Test.csv','yourPCA_Test.csv')
-                    zip.write(filepath / 'yourPCA_Train.csv','yourPCA_Train.csv')
+                    zip.write(
+                        filepath / 'reducedTrainingPS.csv',
+                        'reducedTrainingPS.csv')
+                if exists(
+                        filepath /
+                        "yourPCA_Test.csv") and exists(
+                        filepath /
+                        "yourPCA_Train.csv"):
+                    zip.write(
+                        filepath / 'yourPCA_Test.csv',
+                        'yourPCA_Test.csv')
+                    zip.write(
+                        filepath / 'yourPCA_Train.csv',
+                        'yourPCA_Train.csv')
                 zip.close()
 
             return send_from_directory(

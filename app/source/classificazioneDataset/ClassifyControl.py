@@ -44,8 +44,17 @@ class ClassificazioneControl:
         backend = request.form.get("backend")
         email = request.form.get("email")
 
-        thread = Thread(target=ClassificazioneControl.classification_thread, args=("classificazioneThread",
-            path_train, path_test, path_prediction, features, token, backend, email))
+        thread = Thread(
+            target=ClassificazioneControl.classification_thread,
+            args=(
+                "classificazioneThread",
+                path_train,
+                path_test,
+                path_prediction,
+                features,
+                token,
+                backend,
+                email))
         thread.setDaemon(True)
         thread.start()
 
@@ -78,22 +87,21 @@ class ClassificazioneControl:
         :return: dict contenente informazioni relative alla classificazione
         """
         result: dict = ClassificazioneControl.classify(
-            self,path_train, path_test, path_prediction, features, token, backend
-        )
+            self, path_train, path_test, path_prediction, features, token, backend)
         if result != 0:
-            ClassificazioneControl.get_classified_dataset(self,
-                result, path_prediction, email)
+            ClassificazioneControl.get_classified_dataset(
+                self, result, path_prediction, email)
         return result
 
     def classify(
-                self,
-                 path_train,
-                 path_test,
-                 user_path_to_predict,
-                 features,
-                 token,
-                 backend_selected,
-                 ):
+        self,
+        path_train,
+        path_test,
+        user_path_to_predict,
+        features,
+        token,
+        backend_selected,
+    ):
         """
 
         :param path_train: path del file di training output delle fasi precedenti

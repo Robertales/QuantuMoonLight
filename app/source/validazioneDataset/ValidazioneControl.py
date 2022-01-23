@@ -7,6 +7,7 @@ from app.source.utils import addAttribute
 from app.source.validazioneDataset import kFoldValidation
 from app.source.validazioneDataset import train_testSplit
 
+
 class ValidazioneControl:
     @app.route("/validazioneControl", methods=["POST"])
     # @login_required
@@ -23,7 +24,8 @@ class ValidazioneControl:
 
         if kFold and k < 2:
             # si dovrebbe anche controllare che k non sia maggiore nel numero di righe del dataset;
-            # il design goal della robustezza ha priorità basse, dunque evitiamo il controllo
+            # il design goal della robustezza ha priorità basse, dunque
+            # evitiamo il controllo
             print("impossibile eseguire kfold validation se k<2!")
             return Response(status=400)
 
@@ -38,7 +40,8 @@ class ValidazioneControl:
             addAttribute.addAttribute(
                 userpathTrain, dataPath / "Data_training.csv"
             )
-            addAttribute.addAttribute(userpathTest, dataPath / "Data_testing.csv")
+            addAttribute.addAttribute(
+                userpathTest, dataPath / "Data_testing.csv")
             return Response(status=200)
 
         ValidazioneControl.valida(userpathTrain, simpleSplit, kFold, k)
@@ -70,4 +73,3 @@ class ValidazioneControl:
         elif kFold:  # pragma: no branch
             kFoldValidation.cross_fold_validation(userpathTrain, k)
             return "Data_training.csv", "Data_testing.csv"
-
