@@ -82,7 +82,7 @@ class GestioneControl:
         """
         return User.query.all()
 
-    def getListaDataset(self):
+    def getListaDataset():
         """
         the function returns the list of uploaded datasets
 

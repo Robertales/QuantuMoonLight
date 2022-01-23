@@ -1,10 +1,13 @@
 import hashlib
 import re
+from os.path import exists
 from pathlib import Path
 from flask import request, render_template, flash, send_from_directory
 from flask_login import login_user, logout_user, current_user
 from app import app, db
 from app.models import User
+from zipfile import ZipFile
+
 
 
 
@@ -126,15 +129,42 @@ class UtenteControl:
         filename = request.form.get("filename")
         filepath = Path(__file__).parents[3] / \
             "upload_dataset" / current_user.email / ID
-        print(filepath)
+        print(filename)
+
         if filename:
             #Quando l'applicazione sarà hostata su un web server sostituire con un metodo di download fornito dal web server
+            zip_name = ''
+            if(filename == "Validation"):
+                zip_path = filepath / 'ValidationResult.zip'
+                zip_name = 'ValidationResult.zip'
+                zip = ZipFile(zip_path, 'w')
+                if exists(filepath / "Data_training.csv") and exists(filepath / "Data_testing.csv"):
+                    zip.write('Data_training.csv')
+                    zip.write('Data_testing.csv')
+                zip.close()
+
+            else:
+                zip_path = filepath / 'PreprocessingResult.zip'
+                zip_name = 'PreprocessingResult.zip'
+                zip = ZipFile(zip_path, 'w')
+                if exists(filepath / "DataSetTestPreprocessato.csv") and exists(filepath / "DataSetTrainPreprocessato.csv"):
+                    zip.write('DataSetTestPreprocessato.csv')
+                    zip.write('DataSetTrainPreprocessato.csv')
+                if exists(filepath / "doPredictionFE.csv"):
+                    zip.write('doPredictionFE.csv')
+                if exists(filepath / "reducedTrainingPS.csv"):
+                    zip.write('reducedTrainingPS.csv')
+                if exists(filepath / "yourPCA_Test.csv") and exists(filepath / "yourPCA_Train.csv"):
+                    zip.write('yourPCA_Test.csv')
+                    zip.write('yourPCA_Train.csv')
+                zip.close()
+
             return send_from_directory(
                 directory=filepath,
-                path=filename,
+                path=zip_name
             )
         else:
             flash(
-                "impossibile scaricare il file,riprova ad eseguire la validazione",
+                "Unable to download the file, try again",
                 "error")
             return render_template("downloadPage.html")
