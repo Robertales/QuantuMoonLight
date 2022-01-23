@@ -5,7 +5,7 @@ from flask_login import current_user, UserMixin, AnonymousUserMixin
 from sqlalchemy_utils import database_exists, create_database
 
 from app import app, db
-from app.models import User
+from app.source.model.models import User
 
 
 class Test_signup(TestCase):

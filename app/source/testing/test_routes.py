@@ -9,7 +9,7 @@ from sqlalchemy import desc
 from sqlalchemy_utils import create_database, database_exists
 
 from app import app, db
-from app.models import User, Dataset
+from app.source.model import User, Dataset
 
 
 class TestRoutes(unittest.TestCase):

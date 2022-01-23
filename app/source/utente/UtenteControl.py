@@ -5,7 +5,7 @@ from pathlib import Path
 from flask import request, render_template, flash, send_from_directory
 from flask_login import login_user, logout_user, current_user
 from app import app, db
-from app.models import User
+from app.source.model.models import User
 from zipfile import ZipFile
 
 

@@ -9,7 +9,7 @@ from email.utils import formatdate
 from flask import request, render_template
 
 from app import app, db
-from app.models import User, Article, Dataset
+from app.source.model.models import User, Article, Dataset
 
 
 class GestioneControl:

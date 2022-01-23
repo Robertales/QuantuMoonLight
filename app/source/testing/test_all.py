@@ -15,8 +15,8 @@ from sqlalchemy_utils import database_exists, create_database
 
 from app import app
 from app import db
-from app.models import Article, Dataset
-from app.models import User
+from app.source.model import Article, Dataset
+from app.source.model import User
 from app.source.utils import utils
 from app.source.validazioneDataset import kFoldValidation
 from app.source.validazioneDataset import train_testSplit

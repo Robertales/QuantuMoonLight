@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 from qiskit import IBMQ
 
 from app import app, db
-from app.models import User, Dataset
+from app.source.model.models import User, Dataset
 from app.source.utils import utils
 
 

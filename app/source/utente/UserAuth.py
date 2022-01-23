@@ -6,7 +6,7 @@ from app import login_manager
 
 @login_manager.user_loader
 def load_user(user_email):
-    from app.models import User
+    from app.source.model.models import User
 
     return User.query.get(str(user_email))
 

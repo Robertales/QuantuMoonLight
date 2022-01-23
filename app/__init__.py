@@ -13,7 +13,8 @@ login_manager = LoginManager(app)
 login_manager.login_view = "loginPage"
 login_manager.login_message_category = "info"
 
-from app import models
+from app.source.model import models
+
 # Create database if it does not exist
 if not database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
     create_database(app.config["SQLALCHEMY_DATABASE_URI"])
