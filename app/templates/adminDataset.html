@@ -6,8 +6,36 @@
 </head>
 <body>
     <table>
-      <tr>
-      </tr>
+          <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Email_user</th>
+             <th scope="col">name</th>
+             <th scope="col">upload_date</th>
+             <th scope="col">simple_split</th>
+             <th scope="col">k_fold</th>
+             <th scope="col">ps</th>
+             <th scope="col">fe</th>
+             <th scope="doQSVM">fe</th>
+
+        </tr>
+    </thead>
+         <tbody>
+      {% for item in datasets %}
+        <tr>
+            <td>{{ item.id}}</td>
+             <td>{{ item.email_user}}</td>
+             <td>{{ item.name}}</td>
+             <td>{{ item.upload_date}}</td>
+             <td>{{ item.simple_split}}</td>
+            <td>{{ item.k_fold}}</td>
+            <td>{{ item.ps}}</td>
+            <td>{{ item.fe}}</td>
+            <td>{{ item.doQSVM}}</td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
     </table>
 </body>
 </html>

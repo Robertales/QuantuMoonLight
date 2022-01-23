@@ -39,7 +39,14 @@ def adminPage():
 
 @app.route("/adminDataset")
 def adminDataset():
-    return render_template("adminDataset.html")
+    datasets = Dataset.query.all()
+    return render_template("adminDataset.html", datasets=datasets)
+
+
+@app.route("/userDataset")
+def userDataset():
+    datasets = Dataset.query.filter_by(email_user=current_user.email)
+    return render_template("adminDataset.html", datasets=datasets)
 
 
 @app.route("/modifyUserPage")
@@ -251,10 +258,10 @@ def upload(file, file1, file2, idTrainSet):
     if file is None:
         return -1
     uploaddir = (
-        pathlib.Path(__file__).parents[1]
-        / "upload_dataset"
-        / current_user.email
-        / str(idTrainSet)
+            pathlib.Path(__file__).parents[1]
+            / "upload_dataset"
+            / current_user.email
+            / str(idTrainSet)
     )
     if not uploaddir.exists():
         uploaddir.mkdir()
