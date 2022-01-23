@@ -56,11 +56,13 @@ class ValidazioneControl:
         :return: two validated dataset: 'Data_training.csv', 'Data_testing.csv'
         :rtype: (str,str)
         """
+
         dataPath = Path(userpathTrain).parent
         if simpleSplit:
             addAttribute.addAttribute(
                 userpathTrain, dataPath / "featureDataset.csv"
             )
+            print("ciao")
             train_testSplit.splitDataset(
                 dataPath / "featureDataset.csv"
             )  # crea 'Data_training.csv' e 'Data_testing.csv'

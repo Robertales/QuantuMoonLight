@@ -1,3 +1,4 @@
+import os.path
 import pathlib
 from datetime import datetime
 
@@ -257,8 +258,7 @@ def upload(file, file1, file2, idTrainSet):
     )
     if not uploaddir.exists():
         uploaddir.mkdir()
-    userfile_name = file.filename
-    userpath = uploaddir / userfile_name
+    userpath = uploaddir / os.path.basename(pathlib.Path(file.filename))
     file.save(userpath)
     if file.content_length > 80000000:
         return -1
@@ -271,7 +271,7 @@ def upload(file, file1, file2, idTrainSet):
         # print(file1.filename)
         return -1
     if file1.filename != "":
-        userpathTest = uploaddir / file1.filename
+        userpathTest = uploaddir / os.path.basename(pathlib.Path(file1.filename))
         file1.save(userpathTest)
     if file1.content_length > 80000000:
         return -1
@@ -286,7 +286,7 @@ def upload(file, file1, file2, idTrainSet):
     if file2.filename != "" and not ext_ok.__contains__(extension):
         return -1
     if file2.filename != "" != 0:
-        userpathToPredict = uploaddir / file2.filename
+        userpathToPredict = uploaddir / os.path.basename(pathlib.Path(file2.filename))
         file2.save(userpathToPredict)
     if file2.content_length > 80000000:
         return -1

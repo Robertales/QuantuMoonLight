@@ -1,15 +1,121 @@
+import hashlib
 import os
 import pathlib
 import unittest
-import warnings
 from os.path import exists
 
-from app import app
+from flask_login import current_user
+from sqlalchemy import desc
+from sqlalchemy_utils import create_database, database_exists
 
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+from app import app, db
+from app.models import User, Dataset
 
 
 class TestRoutes(unittest.TestCase):
+    def setUp(self):
+        super().setUp()
+        app.config[
+            "SQLALCHEMY_DATABASE_URI"
+        ] = "mysql://root@127.0.0.1/test_db"
+        app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+        if not database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
+            create_database(app.config["SQLALCHEMY_DATABASE_URI"])
+        with app.app_context():
+            db.create_all()
+            # Setup for login testing
+            password = "quercia"
+            password = hashlib.sha512(password.encode()).hexdigest()
+            utente = User(
+                email="boscoverde27@gmail.com",
+                password=password,
+                username="Antonio de Curtis",
+                name="Antonio",
+                surname="De Curtis",
+                token=""
+            )
+            db.session.add(utente)
+            db.session.commit()
+
+    def test_routes(self):
+        # Login User and test if that works
+        tester = app.test_client()
+        self.assertFalse(current_user)
+        with tester:
+            response = tester.post(
+                "/login",
+                data=dict(email="boscoverde27@gmail.com", password="quercia"),
+            )
+            statuscode = response.status_code
+            self.assertEqual(statuscode, 200)
+            assert isinstance(current_user, User)
+            self.assertTrue(current_user.is_authenticated)
+            print(current_user)
+            simpleSplit = True
+            prototypeSelection = True
+            featureExtraction = True
+            numRowsPS = 10
+            numColsFE = 2
+            doQSVM = True
+            token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
+            backend = "ibmq_qasm_simulator"
+            email = "quantumoonlight@gmail.com"
+
+            path = pathlib.Path(__file__).parent
+            pathpred = path / "testingFiles" / "bupaToPredict.csv"
+            pathtrain = path / "testingFiles" / "bupa.csv"
+
+            # Test smista with that the whole
+            # validation/preprocessing/classification process
+            response = tester.post(
+                "/formcontrol",
+                data=dict(
+                    dataset_train=open(pathtrain.__str__(), "rb"),
+                    dataset_test=open(pathpred.__str__(), "rb"),
+                    dataset_prediction=open(pathpred.__str__(), "rb"),
+                    splitDataset=True,
+                    reducePS=prototypeSelection,
+                    reduceFE=featureExtraction,
+                    doQSVM=doQSVM,
+                    simpleSplit=simpleSplit,
+                    nrRows=numRowsPS,
+                    nrColumns=numColsFE,
+                    backend=backend,
+                    token=token,
+                    email=email,
+
+                ),
+            )
+
+            statuscode = response.status_code
+            print(statuscode)
+            self.assertEqual(statuscode, 200)
+            pathData = pathlib.Path(__file__).parents[3] / "upload_dataset" / current_user.email / str(
+                Dataset.query.filter_by(
+                    email_user=current_user.email).order_by(
+                    desc(
+                        Dataset.id)).first().id)  # Find a way to get the id
+            self.assertTrue(exists(pathData / "Data_training.csv"))
+            self.assertTrue(exists(pathData / "Data_testing.csv"))
+            self.assertTrue(exists(pathData / "featureDataset.csv"))
+            self.assertTrue(exists(pathData / "DataSetTrainPreprocessato.csv"))
+            self.assertTrue(exists(pathData / "DataSetTestPreprocessato.csv"))
+            self.assertTrue(exists(pathData / "reducedTrainingPS.csv"))
+            self.assertTrue(exists(pathData / "yourPCA_Train.csv"))
+            self.assertTrue(exists(pathData / "yourPCA_Test.csv"))
+
+    def tearDown(self):
+        directory = pathlib.Path(__file__).parents[0]
+        allFiles = os.listdir(directory)
+        csvFiles = [file for file in allFiles if file.endswith(".csv")]
+        for file in csvFiles:
+            path = os.path.join(directory, file)
+            os.remove(path)
+        with app.app_context():
+            db.drop_all()
+
+
+class TestRoutesMisc(unittest.TestCase):
     def testSmista_NoOp(self):
         tester = app.test_client(self)
 
@@ -167,3 +273,5 @@ class TestRoutes(unittest.TestCase):
         for file in csvFiles:
             path = os.path.join(directory, file)
             os.remove(path)
+        with app.app_context():
+            db.drop_all()
