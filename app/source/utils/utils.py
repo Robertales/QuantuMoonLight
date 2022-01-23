@@ -15,6 +15,7 @@ def numberOfColumns(filename):
     :return: number of columns of the given dataset
     :rtype: int
     """
+
     f = open(filename, "r")
     reader = csv.reader(f, delimiter=",")
     numCols = len(next(reader))
