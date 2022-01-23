@@ -40,13 +40,13 @@ def adminPage():
 @app.route("/adminDataset")
 def adminDataset():
     datasets = Dataset.query.all()
-    return render_template("adminDataset.html", datasets=datasets)
+    return render_template("datasetList.html", datasets=datasets)
 
 
 @app.route("/userDataset")
 def userDataset():
     datasets = Dataset.query.filter_by(email_user=current_user.email)
-    return render_template("adminDataset.html", datasets=datasets)
+    return render_template("datasetList.html", datasets=datasets)
 
 
 @app.route("/modifyUserPage")
