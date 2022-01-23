@@ -139,8 +139,8 @@ class UtenteControl:
                 zip_name = 'ValidationResult.zip'
                 zip = ZipFile(zip_path, 'w')
                 if exists(filepath / "Data_training.csv") and exists(filepath / "Data_testing.csv"):
-                    zip.write('Data_training.csv')
-                    zip.write('Data_testing.csv')
+                    zip.write(filepath / "Data_training.csv","data_training.csv")
+                    zip.write(filepath / 'Data_testing.csv',"data_testing.csv")
                 zip.close()
 
             else:
@@ -148,15 +148,15 @@ class UtenteControl:
                 zip_name = 'PreprocessingResult.zip'
                 zip = ZipFile(zip_path, 'w')
                 if exists(filepath / "DataSetTestPreprocessato.csv") and exists(filepath / "DataSetTrainPreprocessato.csv"):
-                    zip.write('DataSetTestPreprocessato.csv')
-                    zip.write('DataSetTrainPreprocessato.csv')
+                    zip.write(filepath / 'DataSetTestPreprocessato.csv','DataSetTestPreprocessato.csv')
+                    zip.write(filepath / 'DataSetTrainPreprocessato.csv','DataSetTrainPreprocessato.csv')
                 if exists(filepath / "doPredictionFE.csv"):
-                    zip.write('doPredictionFE.csv')
+                    zip.write(filepath / 'doPredictionFE.csv','doPredictionFE.csv')
                 if exists(filepath / "reducedTrainingPS.csv"):
-                    zip.write('reducedTrainingPS.csv')
+                    zip.write(filepath / 'reducedTrainingPS.csv','reducedTrainingPS.csv')
                 if exists(filepath / "yourPCA_Test.csv") and exists(filepath / "yourPCA_Train.csv"):
-                    zip.write('yourPCA_Test.csv')
-                    zip.write('yourPCA_Train.csv')
+                    zip.write(filepath / 'yourPCA_Test.csv','yourPCA_Test.csv')
+                    zip.write(filepath / 'yourPCA_Train.csv','yourPCA_Train.csv')
                 zip.close()
 
             return send_from_directory(
