@@ -121,7 +121,7 @@ class ClassificazioneControl:
             provider = IBMQ.get_provider(hub="ibm-q")
             IBMQ.disable_account()
         except BaseException:
-            print("Errore activating/deactivating IBM account")
+            print("Error activating/deactivating IBM account")
 
         qubit = len(features)
 
@@ -272,6 +272,8 @@ class ClassificazioneControl:
         """
 
         :param result: dict risultante dalla funzione classify dal quale si prendono i dati da inviare per email
+        :param userpathToPredict: String necessario a risalire alla directory di quel particolare dataset di quel particolare utente
+        :param email: dict email a cui inviare i risultati della classificazione
         :return: 0 error, 1 done
         """
 
@@ -335,7 +337,7 @@ class ClassificazioneControl:
             if result["no_backend"]:
                 msg.attach(
                     MIMEText(
-                        "<center><h5>For this classification, a simulated quantum backend has been used"
+                        "<center><h5>For this classification, a simulated quantum backend has been used "
                         "due to the following reason:<br></h5>"
                         "<h6>- The selected backend has not enough qubits"
                         " to process all the dataset features<br>"
