@@ -67,9 +67,17 @@
         <input type="text" value="{{current_user.token}}" id="token" hidden>
         <button class="fadeIn fourth btn btn-primary" onclick="copy()"><span class="fa fa-copy"></span> Copy</button>
       <br>
-    <br><form action="#">
+
+      {% if current_user.isAdmin %}
+    <br><form action="{{url_for("adminDataset")}}">
             <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-bar-chart"></span>  Storico Dataset</button>
         </form><br>
+      {% else %}
+          <br><form action="{{url_for("userDataset")}}">
+            <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-bar-chart"></span>  Storico Dataset</button>
+        </form><br>
+            {% endif %}
+
     <br><form action="{{url_for("modifyUser")}}">
             <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Edit Profile</button>
         </form><br>

@@ -50,9 +50,8 @@ class TestClassifyControl(unittest.TestCase):
 
     def test_classification_thread(self):
         """
-                Test the classify function with correct parameters and input files, and check if the classification result
-                file is created
-                """
+        Test if thread that calls the classify and QSVM works properly
+        """
         path_train = (
                 pathlib.Path(__file__).cwd()
                 / "testingFiles"
