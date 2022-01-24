@@ -1405,7 +1405,7 @@ class TestRoutes(unittest.TestCase):
                     backend=backend,
                     token=token,
                     email=email,
-
+                    Radio="simpleSplit"
 
                 ),
             )
