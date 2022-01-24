@@ -174,7 +174,7 @@ def smista():
         email_user=current_user.email,
         name=dataset_train.filename,
         upload_date=datetime.now(),
-        simple_split=bool(autosplit),
+        simple_split=bool(simpleSplit),
         ps=bool(prototypeSelection),
         fe=bool(featureExtraction),
         k_fold=bool(kFold),
