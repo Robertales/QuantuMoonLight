@@ -180,7 +180,9 @@ def smista():
         ),
     )
     if kFold:
-        return "ora scarica e procedi dalla home specificando quali usare"
+        return render_template(
+            "downloadPage.html",
+            ID=salvataggiodatabase.id)
     # Preprocessing
     print("\nIn preprocessing...")
     app.test_client().post(
@@ -247,9 +249,7 @@ def smista():
 
     return render_template(
         "downloadPage.html",
-        ID=salvataggiodatabase.id,
-        ValidationName="Data_testing.csv",
-        PreprocessingName="DataSetTestPreprocessato.csv")
+        ID=salvataggiodatabase.id)
 
 
 def upload(file, file1, file2, idTrainSet):
