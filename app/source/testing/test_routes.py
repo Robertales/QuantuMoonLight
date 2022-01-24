@@ -9,7 +9,7 @@ from sqlalchemy import desc
 from sqlalchemy_utils import create_database, database_exists
 
 from app import app, db
-from app.source.model import User, Dataset
+from app.source.model.models import User, Dataset
 
 
 class TestRoutes(unittest.TestCase):
@@ -23,34 +23,34 @@ class TestRoutes(unittest.TestCase):
             create_database(app.config["SQLALCHEMY_DATABASE_URI"])
         with app.app_context():
             db.create_all()
-            # Setup for login testing
-            password = "quercia"
-            password = hashlib.sha512(password.encode()).hexdigest()
-            utente = User(
-                email="boscoverde27@gmail.com",
-                password=password,
-                username="Antonio de Curtis",
-                name="Antonio",
-                surname="De Curtis",
-                token=""
-            )
-            db.session.add(utente)
-            db.session.commit()
+
+
+
+
 
     def test_routes(self):
         # Login User and test if that works
         tester = app.test_client()
         self.assertFalse(current_user)
         with tester:
+            # Setup for login testing
+            password = "quercia12345"
+            password = hashlib.sha512(password.encode()).hexdigest()
             response = tester.post(
-                "/login",
-                data=dict(email="boscoverde27@gmail.com", password="quercia"),
-            )
-            statuscode = response.status_code
-            self.assertEqual(statuscode, 200)
+                "/signup",
+                data=dict(email="boscoverde27@gmail.com",
+                          password=password,
+                          confirmPassword=password,
+                          username="Antonio",
+                          isResearcher="",
+                          nome="Antonio",
+                          cognome="De Curtis",
+                          token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
+                          ), )
+            print(current_user)
             assert isinstance(current_user, User)
             self.assertTrue(current_user.is_authenticated)
-            print(current_user)
+
             simpleSplit = True
             prototypeSelection = True
             featureExtraction = True

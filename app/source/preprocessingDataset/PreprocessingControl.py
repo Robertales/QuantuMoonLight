@@ -12,6 +12,9 @@ from app.source.preprocessingDataset import (
 )
 from app.source.utils import utils, addAttribute
 
+"""
+handles the preprocessing process of the dataset
+"""
 class PreprocessingControl:
     @app.route("/preprocessingControl", methods=["POST"])
     # @login_required
@@ -223,5 +226,3 @@ class PreprocessingControl:
             pathPC / "DataSetTrainPreprocessato.csv",
             pathPC / "DataSetTestPreprocessato.csv",
         )
-
-
