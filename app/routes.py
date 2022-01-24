@@ -40,13 +40,49 @@ def adminPage():
 @app.route("/adminDataset")
 def adminDataset():
     datasets = Dataset.query.all()
-    return render_template("datasetList.html", datasets=datasets)
+    rows = Dataset.query.count()
+    v1 = 0
+    v2 = 0
+    v3 = 0
+    v4 = 0
+    v5 = 0
+    for dataset in datasets:
+        if dataset.simple_split: v1 += 1
+        if dataset.k_fold: v2 += 1
+        if dataset.ps: v3 += 1
+        if dataset.fe: v4 += 1
+        if dataset.doQSVM: v5 += 1
+    p1 = v1 * 100 / rows
+    p2 = v2 * 100 / rows
+    p3 = v3 * 100 / rows
+    p4 = v4 * 100 / rows
+    p5 = v5 * 100 / rows
+    return render_template("datasetList.html", datasets=datasets, p_ss=p1, p_kf=p2,
+                           p_ps=p3, p_fe=p4, p_qv=p5)
 
 
 @app.route("/userDataset")
 def userDataset():
     datasets = Dataset.query.filter_by(email_user=current_user.email)
-    return render_template("datasetList.html", datasets=datasets)
+    rows = Dataset.query.filter_by(email_user=current_user.email).count()
+    v1 = 0
+    v2 = 0
+    v3 = 0
+    v4 = 0
+    v5 = 0
+    for dataset in datasets:
+        if dataset.simple_split: v1 += 1
+        if dataset.k_fold: v2 += 1
+        if dataset.ps: v3 += 1
+        if dataset.fe: v4 += 1
+        if dataset.doQSVM: v5 += 1
+    p1 = v1 * 100 / rows
+    p2 = v2 * 100 / rows
+    p3 = v3 * 100 / rows
+    p4 = v4 * 100 / rows
+    p5 = v5 * 100 / rows
+    return render_template("datasetList.html", datasets=datasets, p_ss="{:.2f}".format(p1), p_kf="{:.2f}".format(p2),
+                           p_ps="{:.2f}".format(p3), p_fe="{:.2f}".format(p4), p_qv="{:.2f}".format(p5))
 
 
 @app.route("/modifyUserPage")
