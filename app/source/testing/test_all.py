@@ -1312,6 +1312,7 @@ class TestClassifyControl(unittest.TestCase):
             backend_selected,
         )
         self.assertEqual(result, 1)
+        print(pathlib.Path(__file__).parent / "testingFiles" / "classifiedFile.csv")
         self.assertFalse(
             exists(
                 pathlib.Path(__file__).parent
