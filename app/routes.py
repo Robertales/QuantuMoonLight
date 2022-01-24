@@ -112,9 +112,17 @@ def smista():
     print("doQSVM: ", doQSVM)
 
     # Advanced option
-    simpleSplit = request.form.get("simpleSplit")
+    print(request.form["Radio"])
+    if request.form["Radio"] == "simpleSplit":
+        simpleSplit = "simpleSplit"
+        kFold = None
+    elif request.form["Radio"] == "kFold":
+        simpleSplit = None
+        kFold = "kFold"
+
+    #simpleSplit = request.form.get("simpleSplit")
     print("simpleSplit: ", simpleSplit)
-    kFold = request.form.get("kFold")
+    #kFold = request.form.get("kFold")
     print("kFold: ", kFold)
     k = request.form.get("kFoldValue", type=int)
     print("kFoldValue: ", k)
