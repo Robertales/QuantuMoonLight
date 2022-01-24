@@ -120,7 +120,7 @@ class ClassificazioneControl:
             IBMQ.enable_account(token)
             provider = IBMQ.get_provider(hub="ibm-q")
             IBMQ.disable_account()
-        except BaseException:
+        except:
             print("Error activating/deactivating IBM account")
 
         qubit = len(features)
@@ -155,7 +155,7 @@ class ClassificazioneControl:
                         .n_qubits
                     )
                 )
-        except BaseException:
+        except:
             # when selected backend has not enough qubit, or no backends has enough
             # qubits, or the user token has no privileges to use the selected
             # backend
@@ -206,7 +206,7 @@ class ClassificazioneControl:
         print("Running....\n")
         try:
             result = qsvm.run(quantum_instance)
-        except BaseException:
+        except:
             print("Error on IBM server")
             result = 1
             return result
@@ -243,8 +243,8 @@ class ClassificazioneControl:
         result["no_backend"] = no_backend
         return result
 
-    def plot(classified_dataset):
-        return classified_dataset
+    #def plot(self, classified_dataset):
+    #    return classified_dataset
 
     def load_dataset(training_path, testing_path, features, label):
         """
@@ -295,8 +295,6 @@ class ClassificazioneControl:
             "logos" /
             "Logo_SenzaScritta.png",
             "rb")
-        # img_path = pathlib.Path(__file__).parents[2] / "static" / "images" / "logos" / "Logo_SenzaScritta.png"
-        # msg.attach(MIMEText('<center><img style="width:25%;" src="'+ img_path.__str__() +'"></center>', 'html'))
         img = MIMEImage(img_path.read())
         img.add_header('Content-ID', '<image>')
         msg.attach(img)
@@ -365,7 +363,7 @@ class ClassificazioneControl:
             server.login("quantumoonlight@gmail.com", "Quantum123?")
             server.send_message(msg)
             server.close()
-        except BaseException:
+        except:
             return 0
         return 1
 

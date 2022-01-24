@@ -1,4 +1,5 @@
 import hashlib
+import itertools
 import re
 from os.path import exists
 from pathlib import Path
@@ -148,8 +149,18 @@ class UtenteControl:
                     zip.write(
                         filepath / 'Data_testing.csv',
                         "data_testing.csv")
-                zip.close()
 
+                for count in itertools.count(start=1):
+                    str_test = "testing_fold_" + count.__str__() + ".csv"
+                    str_train = "training_fold_" + count.__str__() + ".csv"
+                    if exists(filepath / str_test):
+                        zip.write(filepath / str_test,
+                                  str_test)
+                        zip.write(filepath / str_train,
+                                  str_train)
+                    else:
+                        break
+                zip.close()
             else:
                 zip_path = filepath / 'PreprocessingResult.zip'
                 zip_name = 'PreprocessingResult.zip'
