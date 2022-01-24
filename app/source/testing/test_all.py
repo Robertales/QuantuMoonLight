@@ -15,8 +15,8 @@ from sqlalchemy_utils import database_exists, create_database
 
 from app import app
 from app import db
-from app.source.model import Article, Dataset
-from app.source.model import User
+from app.source.model.models import Article, Dataset
+from app.source.model.models import User
 from app.source.utils import utils
 from app.source.validazioneDataset import kFoldValidation
 from app.source.validazioneDataset import train_testSplit
@@ -1312,6 +1312,7 @@ class TestClassifyControl(unittest.TestCase):
             backend_selected,
         )
         self.assertEqual(result, 1)
+        print(pathlib.Path(__file__).parent / "testingFiles" / "classifiedFile.csv")
         self.assertFalse(
             exists(
                 pathlib.Path(__file__).parent

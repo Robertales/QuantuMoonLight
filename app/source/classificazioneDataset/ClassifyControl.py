@@ -33,7 +33,7 @@ class ClassificazioneControl:
     # @login_required
     def classify_control():
         """
-
+        The function get the form value and start the async thread that will handle the classification
         :return:
         """
         path_train = request.form.get("pathTrain")
@@ -58,12 +58,6 @@ class ClassificazioneControl:
         thread.setDaemon(True)
         thread.start()
 
-        # if result==0 token is not valid
-        # if result==1 error on IBM server (error reported through email)
-        # if result["noBackend"]==True selected backend is not active for the token or the are no active by default,
-        # and simulator is used
-        # aggiungere controlli per result["noBackend"]==True e result==0 per
-        # mostrare gli errori tramite frontend
         return "Classification started"
 
     def classification_thread(
@@ -76,15 +70,21 @@ class ClassificazioneControl:
             backend,
             email):
         """
+        The function is called from classify_control(), anc starts the async thread to run the classification,
+        at the end of which the email with the result is sent, through the function get_classified_dataset()
 
-        :param path_train: path del file di training output delle fasi precedenti
-        :param path_test: path del file di testing output delle fasi precedenti
-        :param path_prediction: path del file di prediction output delle fasi precedenti
-        :param features: lista di features per qsvm
-        :param token: token dell'utente
-        :param backend: backend selezionato dal form(se vuoto utilizza backend di default)
+        if result==1 error on IBM server (error reported through email)
+        if result["noBackend"]==True selected backend is not active for the token or the are no active by default,
+        and simulator is used
+
+        :param path_train: training dataset path
+        :param path_test: testing dataset path
+        :param path_prediction: prediction dataset path
+        :param features: features list used by QSVM
+        :param token: user token
+        :param backend: backend selected from the form
         :param email: email used to send the classification result
-        :return: dict contenente informazioni relative alla classificazione
+        :return: dict containing classification-related info
         """
         result: dict = ClassificazioneControl.classify(
             self, path_train, path_test, path_prediction, features, token, backend)
@@ -94,23 +94,25 @@ class ClassificazioneControl:
         return result
 
     def classify(
-        self,
-        path_train,
-        path_test,
-        user_path_to_predict,
-        features,
-        token,
-        backend_selected,
+            self,
+            path_train,
+            path_test,
+            user_path_to_predict,
+            features,
+            token,
+            backend_selected,
     ):
         """
+        This function connects to the IBM backend, handles IBM backend errors, executes the QSVM classification,
+        and creates the result dataset (classifiedDataset.csv)
 
-        :param path_train: path del file di training output delle fasi precedenti
-        :param path_test: path del file di testing output delle fasi precedenti
-        :param user_path_to_predict: path del file di prediction output delle fasi precedenti
-        :param features: lista di features per qsvm
-        :param token: token dell'utente
-        :param backend_selected: backend selezionato dal form(se vuoto utilizza backend di default)
-        :return: dict contenente informazioni relative alla classificazione
+        :param path_train: training dataset path
+        :param path_test: testing dataset path
+        :param user_path_to_predict: prediction dataset path
+        :param features: features list used by QSVM
+        :param token: user token
+        :param backend_selected: backend selected from the form
+        :return: dict containing classification-related info
         """
 
         start_time = time.time()
@@ -142,8 +144,8 @@ class ClassificazioneControl:
                 backend = least_busy(
                     provider.backends(
                         filters=lambda x: x.configuration().n_qubits >= qubit
-                        and not x.configuration().simulator
-                        and x.status().operational
+                                          and not x.configuration().simulator
+                                          and x.status().operational
                     )
                 )
                 print("least busy backend: ", backend)
@@ -151,8 +153,8 @@ class ClassificazioneControl:
                     "backend qubit:"
                     + str(
                         provider.get_backend(backend.name())
-                        .configuration()
-                        .n_qubits
+                            .configuration()
+                            .n_qubits
                     )
                 )
         except:
@@ -271,9 +273,9 @@ class ClassificazioneControl:
     def get_classified_dataset(self, result, userpathToPredict, email):
         """
 
-        :param result: dict risultante dalla funzione classify dal quale si prendono i dati da inviare per email
-        :param userpathToPredict: String necessario a risalire alla directory di quel particolare dataset di quel particolare utente
-        :param email: dict email a cui inviare i risultati della classificazione
+        :param result: dict used to add details sent through email
+        :param userpathToPredict: String to get the directory of the exact dataset of the exact user
+        :param email: destination email
         :return: 0 error, 1 done
         """
 
@@ -344,7 +346,7 @@ class ClassificazioneControl:
                         "</center></h6>", 'html'))
 
             file = pathlib.Path(userpathToPredict).parent / \
-                "classifiedFile.csv"
+                   "classifiedFile.csv"
             attach_file = open(file, "rb")
             payload = MIMEBase("application", "octet-stream")
             payload.set_payload(attach_file.read())
