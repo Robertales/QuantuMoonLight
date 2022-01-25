@@ -59,14 +59,9 @@
 
     <!-- User Page -->
       <h4>EDIT YOUR INFORMATIONS HERE</h4><br>
-      <form method="POST" action="{{url_for("modifyUserProfile")}}"
-      <input type="hidden" name="email" value="{{current_user.email}}">
-      <h6 class="text-uppercase font-weight-bold">New Username:</h6><input type="text" id="newUsername" class="fadeIn second" name="username" placeholder="{{current_user.username}}" maxlength="50"><br>
-      <h6 class="text-uppercase font-weight-bold">New Name:</h6><input type="text" id="newName" class="fadeIn second" name="nome" placeholder="{{current_user.name}}" maxlength="50"><br>
-      <h6 class="text-uppercase font-weight-bold">New Surname:</h6><input type="text" id="newSuname" class="fadeIn second" name="cognome" placeholder="{{current_user.surname}}" maxlength="50"><br>
-      <h6 class="text-uppercase font-weight-bold">New Password:</h6><input type="password" id="newPassword" class="fadeIn third" name="password" minlength="8"><br>
-      <h6 class="text-uppercase font-weight-bold">Confirm Password:</h6><input type="password" id="newConfirmPassword" class="fadeIn fourth" name="confirmPassword" minlength="8"><br>
-      <h6 class="text-uppercase font-weight-bold">New IBM Token</h6><input type="text" id="newToken" class="fadeIn fourth" name="token"><br>
+      <form method="POST" action={{url_for("modifyUserProfile")}}
+      <h3>Your email <input readonly type="text" name="email" value={{current_user.email}} placeholder={{current_user.email}}> </h3>
+      <h6 class="text-uppercase font-weight-bold">New IBM Token</h6><textarea type="text" id="newToken" class="fadeIn fourth" name="token" required></textarea><br>
       <br><br>
         <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-save"></span>  Save</button>
     </form>

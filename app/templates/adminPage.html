@@ -47,7 +47,7 @@
         <!-- BUTTON ARTICOLI-->
     </form><br>
     <form action={{url_for("removeUser")}}>
-        <input type="email" value="email"> <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-user-times"></span>  Remove User</button>
+        <input type="email" name="email" placeholder="User email to be removed"> <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-user-times"></span>  Remove User</button>
     </form><br>
     <form action={{url_for("modifyUserPage")}}>
         <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Edit User</button>

@@ -26,6 +26,7 @@ class TestUser(TestCase):
                 username="Antonio de Curtis ",
                 name="Antonio",
                 surname="De Curtis",
+                token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
             )
             db.session.add(user)
             db.session.commit()
@@ -64,20 +65,18 @@ class TestUser(TestCase):
             User.query.filter_by(email="mariorossi12@gmail.com").first()
         )
         response = tester.post(
-            "/ModifyUser/",
+            "/ModifyUserByAdmin/",
             data=dict(
                 email="mariorossi12@gmail.com",
-                password="newPassword",
-                username="newUsername ",
-                nome="newName",
-                cognome="newSurname",
+                token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccZZ"
             ),
         )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         self.assertTrue(
             User.query.filter_by(
-                email="mariorossi12@gmail.com", username="newUsername"
+                email="mariorossi12@gmail.com",
+                token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccZZ"
             ).first()
         )
         db.session.commit()
