@@ -8,6 +8,7 @@ from datetime import datetime
 from os.path import exists
 from unittest import TestCase
 
+import flask
 from flask_login import UserMixin, AnonymousUserMixin
 from flask_login import current_user
 from sqlalchemy import desc
@@ -971,13 +972,17 @@ class TestUser(TestCase):
                 password="prosopagnosia",
                 username="Antonio de Curtis ",
                 name="Antonio",
-                token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2",
                 surname="De Curtis",
+                token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
             )
             db.session.add(user)
             db.session.commit()
 
     def test_removeUser(self):
+        """
+        test the removeUser functionality, checking first that the account exists,
+        then delete it and verify that it was deleted correctly
+        """
         tester = app.test_client(self)
         with app.app_context():
             db.create_all()
@@ -996,6 +1001,10 @@ class TestUser(TestCase):
             db.session.commit()
 
     def test_modifyUser(self):
+        """
+        test the modifyUser functionality, checking first that the account exists,
+        then modify it and verify that it has been modified correctly
+        """
         tester = app.test_client()
         with app.app_context():
             db.create_all()
@@ -1003,20 +1012,18 @@ class TestUser(TestCase):
             User.query.filter_by(email="mariorossi12@gmail.com").first()
         )
         response = tester.post(
-            "/ModifyUser/",
+            "/ModifyUserByAdmin/",
             data=dict(
                 email="mariorossi12@gmail.com",
-                password="newPassword",
-                username="newUsername ",
-                nome="newName",
-                cognome="newSurname",
+                token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccZZ"
             ),
         )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
         self.assertTrue(
             User.query.filter_by(
-                email="mariorossi12@gmail.com", username="newUsername"
+                email="mariorossi12@gmail.com",
+                token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccZZ"
             ).first()
         )
         db.session.commit()
@@ -1043,7 +1050,6 @@ class TestList(TestCase):
                 password="prosopagnosia",
                 username="Antonio de Curtis ",
                 name="Antonio",
-                token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2",
                 surname="De Curtis",
             )
             user2 = User(
@@ -1075,27 +1081,26 @@ class TestList(TestCase):
             db.session.commit()
 
     def test_listUser(self):
+        """
+        test the functionality of getting all registered users to the site
+        """
         tester = app.test_client()
         with app.app_context():
             db.create_all()
-        self.assertTrue(
-            User.query.filter_by(email="mariorossi12@gmail.com").first()
-        )
         response = tester.post(
             "/gestione/",
-            data=dict(scelta="listUser", email="mariorossi12@gmail.com"),
+            data=dict(scelta="listUser"),
         )
         statuscode = response.status_code
         self.assertEqual(statuscode, 200)
-        self.assertTrue(
-            User.query.filter_by(email="mariorossi12@gmail.com").first()
-        )
-        self.assertTrue(
-            User.query.filter_by(email="giuseppeverdi@gmail.com").first()
-        )
+        self.assertTrue(User.query.filter_by(email="mariorossi12@gmail.com").first())
+        self.assertTrue(User.query.filter_by(email="giuseppeverdi@gmail.com").first())
         db.session.commit()
 
     def test_listArticlesUser(self):
+        """
+        test the functionality of getting articles written by a user
+        """
         tester = app.test_client()
         with app.app_context():
             db.create_all()
@@ -1116,6 +1121,9 @@ class TestList(TestCase):
         db.session.commit()
 
     def test_listArticlesData(self):
+        """
+        tests the functionality of getting articles written between two dates
+        """
         tester = app.test_client()
         with app.app_context():
             db.create_all()
@@ -1162,7 +1170,8 @@ class TestClassifyControl(unittest.TestCase):
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
         features = utils.createFeatureList(2)
-        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
+        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe5196" \
+                "91a7ad17643eecbe13d1c8c4adccd2"
         backend = "ibmq_qasm_simulator"
         email = "quantumoonlight@gmail.com"
 
@@ -1178,14 +1187,15 @@ class TestClassifyControl(unittest.TestCase):
                 backend=backend,
             ),
         )
+        thread = flask.g
+        thread.join()
         statuscode = response.status_code
         self.assertEqual(200, statuscode)
 
     def test_classification_thread(self):
         """
-                Test the classify function with correct parameters and input files, and check if the classification result
-                file is created
-                """
+        Test if thread that calls the classify and QSVM works properly
+        """
         path_train = (
                 pathlib.Path(__file__).cwd()
                 / "testingFiles"
@@ -1200,11 +1210,13 @@ class TestClassifyControl(unittest.TestCase):
                 pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
         features = utils.createFeatureList(2)
-        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
+        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe5196" \
+                "91a7ad17643eecbe13d1c8c4adccd2"
         backend_selected = "ibmq_qasm_simulator"
         email = "quantumoonlight@gmail.com"
-        control = ClassificazioneControl()
-        result = control.classification_thread(path_train, path_test, path_prediction, features, token, backend_selected, email)
+
+        result = ClassificazioneControl().classification_thread(path_train, path_test, path_prediction, features,
+                                                                token, backend_selected, email)
 
         self.assertNotEqual(result, 1)
         self.assertTrue(
@@ -1234,12 +1246,11 @@ class TestClassifyControl(unittest.TestCase):
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
         features = utils.createFeatureList(2)
-        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
+        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519" \
+                "691a7ad17643eecbe13d1c8c4adccd2"
         backend_selected = "ibmq_qasm_simulator"
-        control = ClassificazioneControl()
-        print(token)
-        print(backend_selected)
-        result = control.classify(
+
+        result = ClassificazioneControl().classify(
             path_train,
             path_test,
             path_prediction,
@@ -1276,11 +1287,44 @@ class TestClassifyControl(unittest.TestCase):
         user_path_to_predict = (
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
-        control = ClassificazioneControl()
-        value = control.get_classified_dataset(
+
+        value = ClassificazioneControl().get_classified_dataset(
             result, user_path_to_predict, "quantumoonlight@gmail.com"
         )
         self.assertEqual(value, 1)
+
+    def tearDown(self):
+        if os.path.exists(
+            pathlib.Path(__file__).parent
+            / "testingFiles"
+            / "classifiedFile.csv"
+        ):
+            os.remove(
+                pathlib.Path(__file__).parent
+                / "testingFiles"
+                / "classifiedFile.csv"
+            )
+
+
+class TestIbmFail(unittest.TestCase):
+
+    def setUp(self):
+        if os.path.exists(
+            pathlib.Path(__file__).parent
+            / "testingFiles"
+            / "classifiedFile.csv"
+        ):
+            os.remove(
+                pathlib.Path(__file__).parent
+                / "testingFiles"
+                / "classifiedFile.csv"
+            )
+        open(
+            pathlib.Path(__file__).parent
+            / "testingFiles"
+            / "emptyFile.csv",
+            "w",
+        ).write("1234567890987654321")
 
     def test_classify_ibmFail(self):
         """
@@ -1297,13 +1341,14 @@ class TestClassifyControl(unittest.TestCase):
             / "DataSetTestPreprocessato.csv"
         )
         path_prediction = (
-            pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
+            pathlib.Path(__file__).cwd() / "testingFiles" / "emptyFile.csv"
         )
         features = utils.createFeatureList(2)
-        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
+        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691" \
+                "a7ad17643eecbe13d1c8c4adccd2"
         backend_selected = "ibmq_qasm_simulator"
-        control = ClassificazioneControl()
-        result = control.classify(
+
+        result = ClassificazioneControl().classify(
             path_train,
             path_test,
             path_prediction,
@@ -1312,7 +1357,6 @@ class TestClassifyControl(unittest.TestCase):
             backend_selected,
         )
         self.assertEqual(result, 1)
-        print(pathlib.Path(__file__).parent / "testingFiles" / "classifiedFile.csv")
         self.assertFalse(
             exists(
                 pathlib.Path(__file__).parent
@@ -1321,7 +1365,7 @@ class TestClassifyControl(unittest.TestCase):
             )
         )
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         if os.path.exists(
             pathlib.Path(__file__).parent
             / "testingFiles"
@@ -1345,34 +1389,31 @@ class TestRoutes(unittest.TestCase):
             create_database(app.config["SQLALCHEMY_DATABASE_URI"])
         with app.app_context():
             db.create_all()
-            # Setup for login testing
-            password = "quercia"
-            password = hashlib.sha512(password.encode()).hexdigest()
-            utente = User(
-                email="boscoverde27@gmail.com",
-                password=password,
-                username="Antonio de Curtis",
-                name="Antonio",
-                surname="De Curtis",
-                token=""
-            )
-            db.session.add(utente)
-            db.session.commit()
 
     def test_routes(self):
         # Login User and test if that works
         tester = app.test_client()
         self.assertFalse(current_user)
         with tester:
+            # Setup for login testing
+            password = "quercia12345"
+            password = hashlib.sha512(password.encode()).hexdigest()
             response = tester.post(
-                "/login",
-                data=dict(email="boscoverde27@gmail.com", password="quercia"),
+                "/signup",
+                data=dict(
+                    email="boscoverde27@gmail.com",
+                    password=password,
+                    confirmPassword=password,
+                    username="Antonio",
+                    isResearcher="",
+                    nome="Antonio",
+                    cognome="De Curtis",
+                    token="43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"),
             )
-            statuscode = response.status_code
-            self.assertEqual(statuscode, 200)
+            print(current_user)
             assert isinstance(current_user, User)
             self.assertTrue(current_user.is_authenticated)
-            print(current_user)
+
             simpleSplit = True
             prototypeSelection = True
             featureExtraction = True
@@ -1436,5 +1477,3 @@ class TestRoutes(unittest.TestCase):
             os.remove(path)
         with app.app_context():
             db.drop_all()
-
-

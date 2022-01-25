@@ -3,8 +3,10 @@ import pathlib
 import unittest
 from os.path import exists
 
+import flask
+
 from app import app
-from app.source.classificazioneDataset import ClassifyControl
+from app.source.classificazioneDataset.ClassifyControl import ClassificazioneControl
 from app.source.utils import utils
 
 
@@ -29,7 +31,8 @@ class TestClassifyControl(unittest.TestCase):
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
         features = utils.createFeatureList(2)
-        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
+        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe5196" \
+                "91a7ad17643eecbe13d1c8c4adccd2"
         backend = "ibmq_qasm_simulator"
         email = "quantumoonlight@gmail.com"
 
@@ -45,6 +48,8 @@ class TestClassifyControl(unittest.TestCase):
                 backend=backend,
             ),
         )
+        thread = flask.g
+        thread.join()
         statuscode = response.status_code
         self.assertEqual(200, statuscode)
 
@@ -66,11 +71,13 @@ class TestClassifyControl(unittest.TestCase):
                 pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
         features = utils.createFeatureList(2)
-        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
+        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe5196" \
+                "91a7ad17643eecbe13d1c8c4adccd2"
         backend_selected = "ibmq_qasm_simulator"
         email = "quantumoonlight@gmail.com"
 
-        result = ClassifyControl.classification_thread(path_train, path_test, path_prediction, features, token, backend_selected, email)
+        result = ClassificazioneControl().classification_thread(path_train, path_test, path_prediction, features,
+                                                                token, backend_selected, email)
 
         self.assertNotEqual(result, 1)
         self.assertTrue(
@@ -100,10 +107,11 @@ class TestClassifyControl(unittest.TestCase):
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
         features = utils.createFeatureList(2)
-        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
+        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519" \
+                "691a7ad17643eecbe13d1c8c4adccd2"
         backend_selected = "ibmq_qasm_simulator"
 
-        result = ClassifyControl.classify(
+        result = ClassificazioneControl().classify(
             path_train,
             path_test,
             path_prediction,
@@ -114,44 +122,6 @@ class TestClassifyControl(unittest.TestCase):
 
         self.assertNotEqual(result, 1)
         self.assertTrue(
-            exists(
-                pathlib.Path(__file__).parent
-                / "testingFiles"
-                / "classifiedFile.csv"
-            )
-        )
-
-    def test_classify_ibmFail(self):
-        """
-        Test the classify function with not valid train and test datasets, to make the IBM backend fail on purpose
-        """
-        path_train = (
-            pathlib.Path(__file__).cwd()
-            / "testingFiles"
-            / "DataSetTrainPreprocessato.csv"
-        )
-        path_test = (
-            pathlib.Path(__file__).cwd()
-            / "testingFiles"
-            / "DataSetTestPreprocessato.csv"
-        )
-        path_prediction = (
-            pathlib.Path(__file__).cwd() / "testingFiles" / "bupa.csv"
-        )
-        features = utils.createFeatureList(2)
-        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691a7ad17643eecbe13d1c8c4adccd2"
-        backend_selected = "ibmq_qasm_simulator"
-
-        result = ClassifyControl.classify(
-            path_train,
-            path_test,
-            path_prediction,
-            features,
-            token,
-            backend_selected,
-        )
-        self.assertEqual(result, 1)
-        self.assertFalse(
             exists(
                 pathlib.Path(__file__).parent
                 / "testingFiles"
@@ -179,12 +149,84 @@ class TestClassifyControl(unittest.TestCase):
             pathlib.Path(__file__).cwd() / "testingFiles" / "doPrediction.csv"
         )
 
-        value = ClassifyControl.get_classified_dataset(
+        value = ClassificazioneControl().get_classified_dataset(
             result, user_path_to_predict, "quantumoonlight@gmail.com"
         )
         self.assertEqual(value, 1)
 
     def tearDown(self):
+        if os.path.exists(
+            pathlib.Path(__file__).parent
+            / "testingFiles"
+            / "classifiedFile.csv"
+        ):
+            os.remove(
+                pathlib.Path(__file__).parent
+                / "testingFiles"
+                / "classifiedFile.csv"
+            )
+
+
+class TestIbmFail(unittest.TestCase):
+
+    def setUp(self):
+        if os.path.exists(
+            pathlib.Path(__file__).parent
+            / "testingFiles"
+            / "classifiedFile.csv"
+        ):
+            os.remove(
+                pathlib.Path(__file__).parent
+                / "testingFiles"
+                / "classifiedFile.csv"
+            )
+        open(
+            pathlib.Path(__file__).parent
+            / "testingFiles"
+            / "emptyFile.csv",
+            "w",
+        ).write("1234567890987654321")
+
+    def test_classify_ibmFail(self):
+        """
+        Test the classify function with not valid train and test datasets, to make the IBM backend fail on purpose
+        """
+        path_train = (
+            pathlib.Path(__file__).cwd()
+            / "testingFiles"
+            / "DataSetTrainPreprocessato.csv"
+        )
+        path_test = (
+            pathlib.Path(__file__).cwd()
+            / "testingFiles"
+            / "DataSetTestPreprocessato.csv"
+        )
+        path_prediction = (
+            pathlib.Path(__file__).cwd() / "testingFiles" / "emptyFile.csv"
+        )
+        features = utils.createFeatureList(2)
+        token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691" \
+                "a7ad17643eecbe13d1c8c4adccd2"
+        backend_selected = "ibmq_qasm_simulator"
+
+        result = ClassificazioneControl().classify(
+            path_train,
+            path_test,
+            path_prediction,
+            features,
+            token,
+            backend_selected,
+        )
+        self.assertEqual(result, 1)
+        self.assertFalse(
+            exists(
+                pathlib.Path(__file__).parent
+                / "testingFiles"
+                / "classifiedFile.csv"
+            )
+        )
+
+    def tearDown(self) -> None:
         if os.path.exists(
             pathlib.Path(__file__).parent
             / "testingFiles"

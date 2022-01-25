@@ -12,9 +12,11 @@ from email.mime.text import MIMEText
 from email.utils import formatdate
 from threading import Thread
 
+import flask
+from flask import jsonify
 import numpy as np
 import pandas as pd
-from flask import request
+from flask import request, Response
 from qiskit import IBMQ
 from qiskit.aqua import QuantumInstance, aqua_globals
 from qiskit.aqua.algorithms import QSVM
@@ -57,8 +59,8 @@ class ClassificazioneControl:
                 email))
         thread.setDaemon(True)
         thread.start()
-
-        return "Classification started"
+        flask.g = thread
+        return ""
 
     def classification_thread(
             self,
