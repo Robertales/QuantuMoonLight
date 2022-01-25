@@ -31,6 +31,9 @@ def registrationPage():
 def downloadPage():
     return render_template("downloadPage.html")
 
+@app.route("/showList")
+def showList():
+    return render_template("showList.html")
 
 @app.route("/adminPage")
 def adminPage():

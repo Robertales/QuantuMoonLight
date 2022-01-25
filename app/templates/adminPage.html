@@ -42,9 +42,9 @@
     </div>
 
     <!-- Admin Page -->
-    <form action={{url_for("getList")}}>
-        <button type="submit" class="fadeIn fourth btn btn-primary" value="listUser"><span class="fa fa-list"></span>  Show All Users</button>
-        <!-- BUTTON ARTICOLI-->
+    <form action={{url_for("getList")}} method="post">
+        <input type="hidden" name="scelta" value="listUser">
+        <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-list"></span>  Show All Users</button>
     </form><br>
     <form action={{url_for("removeUser")}}>
         <input type="email" name="email" placeholder="User email to be removed"> <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-user-times"></span>  Remove User</button>

@@ -20,18 +20,20 @@ class GestioneControl:
 
         :return: redirect to index page
         """
-        
         scelta = request.form.get("scelta")
+        print(scelta)
         if scelta == "listUser":
             list = GestioneControl.getListaUser()
+            return render_template("showList.html", list=list)
         if scelta == "listArticlesData":
             first_data = request.form.get("firstData")
             second_data = request.form.get("secondData")
             list = GestioneControl.getListaArticlesData(first_data, second_data)
+            return render_template("showList.html", list=list)
         if scelta == "listArticlesUser":
             email = request.form.get("email")
             list = GestioneControl.getListaArticlesUser(email)
-
+            return render_template("showList.html", list=list)
         return "List of User or article"
 
     @app.route("/removeUser/", methods=["GET", "POST"])

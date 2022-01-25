@@ -1367,14 +1367,24 @@ class TestIbmFail(unittest.TestCase):
 
     def tearDown(self) -> None:
         if os.path.exists(
-            pathlib.Path(__file__).parent
-            / "testingFiles"
-            / "classifiedFile.csv"
+                pathlib.Path(__file__).parent
+                / "testingFiles"
+                / "classifiedFile.csv"
         ):
             os.remove(
                 pathlib.Path(__file__).parent
                 / "testingFiles"
                 / "classifiedFile.csv"
+            )
+        if os.path.exists(
+                pathlib.Path(__file__).parent
+                / "testingFiles"
+                / "emptyFile.csv"
+        ):
+            os.remove(
+                pathlib.Path(__file__).parent
+                / "testingFiles"
+                / "emptyFile.csv"
             )
 
 
