@@ -118,6 +118,7 @@ class PreprocessingControl:
                 pathPC / "featureDataset.csv",
             )  # modifica 'featureDataset.csv'
             # con le istanze create da 'reducedTrainingPS.csv'
+
             aggId.addId(
                 pathPC / "featureDataset.csv",
                 pathPC / "DataSetTrainPreprocessato.csv",
@@ -134,27 +135,21 @@ class PreprocessingControl:
             featureExtractionPCA.callFeatureExtraction(
                 pathPC / "Data_training.csv",
                 pathPC / "yourPCA_Train.csv",
-                featuresLabels,
                 numColsFE,
             )  # effettua FE su Data_Training e genera yourPCA_Train.csv
             featureExtractionPCA.callFeatureExtraction(
                 pathPC / "Data_testing.csv",
                 pathPC / "yourPCA_Test.csv",
-                featuresLabels,
                 numColsFE,
             )  # effettua FE su Data_testing e genera yourPCA_Test.csv
 
-            # Aggiunge ID, features e label al Dataset Train
-            addClass.addClassPCAtraining(
-                pathPC / "Data_training.csv",
+            aggId.addId(
+                pathPC / "yourPCA_Train.csv",
                 pathPC / "DataSetTrainPreprocessato.csv",
-                numColsFE,
             )
-            # Aggiunge ID, features e label al Dataset Test
-            addClass.addClassPCAtesting(
-                pathPC / "Data_testing.csv",
+            aggId.addId(
+                pathPC / "yourPCA_Test.csv",
                 pathPC / "DataSetTestPreprocessato.csv",
-                numColsFE,
             )
 
         # FE and PS:
@@ -174,26 +169,21 @@ class PreprocessingControl:
             featureExtractionPCA.callFeatureExtraction(
                 pathPC / "reducedTrainingPS_attribute.csv",
                 pathPC / "yourPCA_Train.csv",
-                featuresLabels,
                 numColsFE,
             )  # effettua FE su Data_Training e genera yourPCA_Train.csv
             featureExtractionPCA.callFeatureExtraction(
                 pathPC / "Data_testing.csv",
                 pathPC / "yourPCA_Test.csv",
-                featuresLabels,
                 numColsFE,
             )  # effettua FE su Data_testing e genera yourPCA_Test.csv
-            # Aggiunge ID, features e label al Dataset Train
-            addClass.addClassPCAtraining(
-                pathPC / "Data_training.csv",
+
+            aggId.addId(
+                pathPC / "yourPCA_Train.csv",
                 pathPC / "DataSetTrainPreprocessato.csv",
-                numColsFE,
             )
-            # Aggiunge ID, features e label al Dataset Test
-            addClass.addClassPCAtesting(
-                pathPC / "Data_testing.csv",
+            aggId.addId(
+                pathPC / "yourPCA_Test.csv",
                 pathPC / "DataSetTestPreprocessato.csv",
-                numColsFE,
             )
             os.remove(pathPC / "reducedTrainingPS_attribute.csv")
 

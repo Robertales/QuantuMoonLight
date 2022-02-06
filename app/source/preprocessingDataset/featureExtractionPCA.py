@@ -1,79 +1,60 @@
-import os
 import pathlib
 import warnings
-
-import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from app.source.utils import utils
 
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
 
 def callFeatureExtraction(
-    path: pathlib.Path,
-    output: pathlib.Path,
-    features: list,
-    n_components=2,
+        path: pathlib.Path,
+        output: pathlib.Path,
+        n_components=2
 ):
     """
     This function executes the Feature Extraction on the given dataset
 
     :param path: path to the location of the dataset that is going to be reduced with FE
     :param output: path to the location of the dataset preprocessed with FE
-    :param features: list that specify the labels of the dataset input
     :param n_components: number of new columns
     :return: string that points to the location of the dataset preprocessed with FE
     :rtype: str
     """
-    dataPath = path.parent
     print("Into callFeatureExtraction...")
-    f = pd.read_csv(path)
-    keep_col = features
-    new_f = f[keep_col]
-    new_f.to_csv(dataPath / "tempPCA.csv", index=False)
 
-    dataset = pd.read_csv(dataPath / "tempPCA.csv")
+    # A comma-separated values (csv) file is returned as a DataFrame: two-dimensional data structure with labeled axes.
+    df = pd.read_csv(path)
+    X = df.drop("labels", 1)  # Dataset senza colonna labels, su cui fare PCA
+    Y = df["labels"]  # Solo le label, da reinserire dopo la PCA
 
-    X = dataset.drop("labels", 1)
-
-    y = dataset["labels"]
-    # print(dataset.head())
-    # print(y)
-
-    # Splitting the dataset into the Training set and Test set
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=0
-    )
+    # Feature Scaling
     sc = StandardScaler()
-    X_train = sc.fit_transform(X_train)
-    X_test = sc.transform(X_test)
+    X = sc.fit_transform(X)
+    # print(X)
 
+    # Feature Extraction
     pca = PCA(n_components)
-    X_train = pca.fit_transform(X_train)
-    X_test = pca.transform(X_test)
+    X = pca.fit_transform(X)
+    # print(X)
 
-    explained_variance = pca.explained_variance_ratio_
-    # print(explained_variance)
+    # Recupero i nomi delle colonne, i valori delle labels e di queste faccio anche lo scaling
+    PCA_df = pd.DataFrame(data=X, columns=utils.createFeatureList(n_components))
+    PCA_df = pd.concat([PCA_df, Y], axis=1)
+    PCA_df['labels'] = LabelEncoder().fit_transform(PCA_df['labels'])
+    # print(PCA_df.head())
 
-    z = np.concatenate((X_train, X_test))
-
-    # write csv data
-
-    # nuovo salvataggio, da testare
+    # salvataggio su output in formato csv
     pathFileYourPCA = pathlib.Path(__file__).parent
     pathFileYourPCA = pathFileYourPCA / output
-    # print("pathFileYourPCA :", pathFileYourPCA)
-    np.savetxt(pathFileYourPCA.__str__(), z, delimiter=",", fmt="%s")
-
-    os.remove(dataPath / "tempPCA.csv")
+    PCA_df.to_csv(pathFileYourPCA, index=False)
 
     return pathFileYourPCA.__str__()
 
 
 def extractFeatureForPrediction(
-    path: pathlib.Path, output: pathlib.Path, n_components=2
+        path: pathlib.Path, output: pathlib.Path, n_components=2
 ):
     """
     This function executes the Feature Extraction on the doPrediction
@@ -84,34 +65,24 @@ def extractFeatureForPrediction(
     :return: string that points to the location of the dataset preprocessed with FE
     :rtype: str
     """
-    dataPath = path.parent
     print("Into extractFeatureForPrediction...")
-    f = pd.read_csv(path)
-    f.to_csv(dataPath / "tempPCA.csv", index=False)
-    dataset = pd.read_csv((dataPath / "tempPCA.csv").__str__())
-    X = dataset.drop("labels", 1)
-    y = dataset["labels"]
 
-    # Splitting the dataset into the Training set and Test set
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=0
-    )
+    # A comma-separated values (csv) file is returned as a DataFrame: two-dimensional data structure with labeled axes.
+    df = pd.read_csv(path)
+    X = df.drop("labels", 1)
+
+    # Feature Scaling
     sc = StandardScaler()
-    X_train = sc.fit_transform(X_train)
-    X_test = sc.transform(X_test)
+    X = sc.fit_transform(X)
 
+    # Feature Extraction
     pca = PCA(n_components)
-    X_train = pca.fit_transform(X_train)
-    X_test = pca.transform(X_test)
+    X = pca.fit_transform(X)
 
-    z = np.concatenate((X_train, X_test))
-
-    # salvataggio
+    PCA_df = pd.DataFrame(data=X)
+    # salvataggio su output in formato csv
     pathFileYourPCA = pathlib.Path(__file__).parent
     pathFileYourPCA = pathFileYourPCA / output
-    # print("pathFileYourPCA :", pathFileYourPCA)
-    np.savetxt(pathFileYourPCA.__str__(), z, delimiter=",", fmt="%s")
-
-    os.remove(dataPath / "tempPCA.csv")
+    PCA_df.to_csv(pathFileYourPCA, index=False, header=False)
 
     return pathFileYourPCA.__str__()
