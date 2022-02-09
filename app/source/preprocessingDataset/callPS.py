@@ -1,15 +1,12 @@
 import pathlib
-
-import numpy as np
-
+import pandas as pd
 from app.source.preprocessingDataset import (
     PrototypeSelectionProblem as ps,
 )
-from app.source.utils import utils
 
 
 def callPrototypeSelection(
-    path: pathlib.Path, number_of_reduced_training_instances=10
+        path: pathlib.Path, number_of_reduced_training_instances=10
 ):
     """
     This function executes the prototype selection on the given dataset
@@ -19,33 +16,31 @@ def callPrototypeSelection(
     :return: string that points to the location of the dataset preprocessed with PS
     :rtype: str
     """
-    (
-        x_train,
-        x_test,
-        number_of_features,
-        number_of_classes,
-        number_of_total_instances,
-    ) = utils.prepareData(path)
 
-    number_of_solutions = 500
-    chromosomeToEvaluate, fitness = ps.runGeneticAlgorithXPS(
-        number_of_solutions,
-        x_train,
+    # Create a dataframe from csv
+    df = pd.read_csv(path)
+    X = df.values
+
+    # The evolution ends when the maximum number of evaluations of fitness (corresponding to the number of
+    # solutions evaluated) is achieved
+
+    # Run evolution
+    chromosomeToEvaluate, fitness = ps.runGeneticAlgorithm(
+        X,
         number_of_reduced_training_instances,
         path.parent,
     )
-
+    print("Fitness of the obtained reduced individual %f" % fitness)
+    print("Best selection of instance: ")
     print(chromosomeToEvaluate)
+
     pathFileReducedTrainingPS = pathlib.Path(path).parent
     pathFileReducedTrainingPS = (
-        pathFileReducedTrainingPS / "reducedTrainingPS.csv"
+            pathFileReducedTrainingPS / "reducedTrainingPS.csv"
     )
 
-    np.savetxt(
-        pathFileReducedTrainingPS.__str__(),
-        x_train[chromosomeToEvaluate, :],
-        delimiter=",",
-        fmt="%s",
-    )
+    # Recupero nomi colonne e scrivo in reducedTrainingPS.csv
+    PS_df = pd.DataFrame(data=df.values[chromosomeToEvaluate, :], columns=df.columns)
+    PS_df.to_csv(pathFileReducedTrainingPS, index=False)
 
     return pathFileReducedTrainingPS.__str__()

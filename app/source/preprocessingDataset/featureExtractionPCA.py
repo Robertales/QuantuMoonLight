@@ -43,7 +43,7 @@ def callFeatureExtraction(
     PCA_df = pd.DataFrame(data=X, columns=utils.createFeatureList(n_components))
     PCA_df = pd.concat([PCA_df, Y], axis=1)
     # PCA_df['labels'] = LabelEncoder().fit_transform(PCA_df['labels'])
-    # print(PCA_df.head())
+    print(PCA_df.head())
 
     # salvataggio su output in formato csv
     pathFileYourPCA = pathlib.Path(__file__).parent

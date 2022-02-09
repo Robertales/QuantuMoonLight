@@ -5,12 +5,11 @@ from flask import request, Response
 
 from app import app
 from app.source.preprocessingDataset import (
-    addClass,
     callPS,
     aggId,
     featureExtractionPCA,
 )
-from app.source.utils import utils, addAttribute
+from app.source.utils import utils
 
 """
 handles the preprocessing process of the dataset
@@ -99,11 +98,6 @@ class PreprocessingControl:
         :rtype: (str, str)
         """
 
-        numRows = utils.numberOfRows(userpath)
-        numCols = utils.numberOfColumns(userpath)
-        features = utils.createFeatureList(numCols - 1)
-        featuresLabels = features.copy()
-        featuresLabels.append("labels")
         pathPC = pathlib.Path(userpath).parents[0]
 
         # PS with GA
@@ -113,14 +107,9 @@ class PreprocessingControl:
             callPS.callPrototypeSelection(
                 pathPC / "Data_training.csv", numRowsPS
             )  # crea 'reducedTrainingPS.csv'
-            addAttribute.addAttribute(
-                pathPC / "reducedTrainingPS.csv",
-                pathPC / "featureDataset.csv",
-            )  # modifica 'featureDataset.csv'
-            # con le istanze create da 'reducedTrainingPS.csv'
 
             aggId.addId(
-                pathPC / "featureDataset.csv",
+                pathPC / "reducedTrainingPS.csv",
                 pathPC / "DataSetTrainPreprocessato.csv",
             )
             aggId.addId(
@@ -160,14 +149,10 @@ class PreprocessingControl:
             callPS.callPrototypeSelection(
                 pathPC / "Data_training.csv", numRowsPS
             )  # crea 'reducedTrainingPS.csv'
-            addAttribute.addAttribute(
-                pathPC / "reducedTrainingPS.csv",
-                pathPC / "reducedTrainingPS_attribute.csv",
-            )
 
             # pca
             featureExtractionPCA.callFeatureExtraction(
-                pathPC / "reducedTrainingPS_attribute.csv",
+                pathPC / "reducedTrainingPS.csv",
                 pathPC / "yourPCA_Train.csv",
                 numColsFE,
             )  # effettua FE su Data_Training e genera yourPCA_Train.csv
@@ -185,7 +170,6 @@ class PreprocessingControl:
                 pathPC / "yourPCA_Test.csv",
                 pathPC / "DataSetTestPreprocessato.csv",
             )
-            os.remove(pathPC / "reducedTrainingPS_attribute.csv")
 
         if doQSVM and featureExtraction:
             # effettua feature Extraction sul doPrediction e rigenera doPrediction
