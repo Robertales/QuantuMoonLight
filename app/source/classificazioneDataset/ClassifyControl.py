@@ -133,7 +133,7 @@ class ClassificazioneControl:
             if (
                     backend_selected
                     and backend_selected != "backend"
-                    and provider.get_backend(backend_selected).configuration().n_qubits
+                    and int(provider.get_backend(backend_selected).configuration().n_qubits)
                     >= qubit
             ):
                 print("backend selected:" + str(backend_selected))
@@ -145,9 +145,9 @@ class ClassificazioneControl:
             else:
                 backend = least_busy(
                     provider.backends(
-                        filters=lambda x: x.configuration().n_qubits >= qubit
+                        filters=lambda x: int(x.configuration().n_qubits) >= qubit
                                           and not x.configuration().simulator
-                                          and x.status().operational
+                                          and x.status().operational == True
                     )
                 )
                 print("least busy backend: ", backend)
