@@ -47,28 +47,3 @@ def addAttribute(filename: Path, outputName="featureDataset.csv"):
     g.close()
 
     return outputName
-
-
-def addAttributeToPredict(filename: Path):
-    """
-    This function add into the output file the features string and all the raws contained in the input file
-
-    :param filename: input file name
-    :rtype: Path
-    """
-    numCols = utils.numberOfColumns(filename)
-    featuresString = createFeatureString(numCols + 1)
-    output = Path(filename).parent / "doPredictionFeatured.csv"
-
-    f = open(output, "w")
-    f.write(featuresString)
-    f.close()
-
-    f = open(output, "a+")
-    g = open(filename, "r")
-    contents = g.read()
-    f.write(contents)
-    f.close()
-    g.close()
-
-    return output

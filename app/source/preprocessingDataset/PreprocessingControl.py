@@ -63,10 +63,6 @@ class PreprocessingControl:
         )
 
         # Cancello i file di supporto al preprocessing
-        if os.path.exists(pathPC / "TestPS_500_0.15_0.8_5.txt"):
-            os.remove(pathPC / "TestPS_500_0.15_0.8_5.txt")
-        if os.path.exists(pathPC / "TestPS_500_0.15_0.8_5.xlsx"):
-            os.remove(pathPC / "TestPS_500_0.15_0.8_5.xlsx")
         if os.path.exists(pathPC / "IdPCADataset.csv"):
             os.remove(pathPC / "IdPCADataset.csv")
         if os.path.exists(pathPC / "IdPCADatasetTrain.csv"):
@@ -100,101 +96,32 @@ class PreprocessingControl:
 
         pathPC = pathlib.Path(userpath).parents[0]
 
-        # PS with GA
-        if prototypeSelection and not featureExtraction:
-            print("I'm doing Prototype Selection ...")
+        pathTrain = pathPC / "Data_training.csv"
+        pathTest = pathPC / "Data_testing.csv"
 
-            callPS.callPrototypeSelection(
-                pathPC / "Data_training.csv", numRowsPS
-            )  # crea 'reducedTrainingPS.csv'
+        if prototypeSelection:
+            pathTrain = callPS.callPrototypeSelection(
+                pathTrain,
+                numRowsPS,
+            )  # create 'reducedTrainingPS.csv'
 
-            aggId.addId(
-                pathPC / "reducedTrainingPS.csv",
-                pathPC / "DataSetTrainPreprocessato.csv",
-            )
-            aggId.addId(
-                pathPC / "Data_testing.csv",
-                pathPC / "DataSetTestPreprocessato.csv",
-            )
-
-        # FE with PCA
-        elif featureExtraction and not prototypeSelection:
-            print("I'm doing Feature Extraction ...")
-
-            featureExtractionPCA.callFeatureExtraction(
-                pathPC / "Data_training.csv",
-                pathPC / "yourPCA_Train.csv",
+        if featureExtraction:
+            pathTrain, pathTest = featureExtractionPCA.callFeatureExtraction(
+                pathTrain,
+                pathTest,
+                userpathToPredict,
+                doQSVM,
                 numColsFE,
-            )  # effettua FE su Data_Training e genera yourPCA_Train.csv
-            featureExtractionPCA.callFeatureExtraction(
-                pathPC / "Data_testing.csv",
-                pathPC / "yourPCA_Test.csv",
-                numColsFE,
-            )  # effettua FE su Data_testing e genera yourPCA_Test.csv
+            )  # create 'yourPCA_Train', 'yourPCA_Test' and, in case doQSVM=True, 'doPredictionFE.csv'
 
-            aggId.addId(
-                pathPC / "yourPCA_Train.csv",
-                pathPC / "DataSetTrainPreprocessato.csv",
-            )
-            aggId.addId(
-                pathPC / "yourPCA_Test.csv",
-                pathPC / "DataSetTestPreprocessato.csv",
-            )
-
-        # FE and PS:
-        elif prototypeSelection and featureExtraction:  # pragma: no branch
-            print("I'm doing Protype Selection and feature extraction ")
-
-            # ps
-            callPS.callPrototypeSelection(
-                pathPC / "Data_training.csv", numRowsPS
-            )  # crea 'reducedTrainingPS.csv'
-
-            # pca
-            featureExtractionPCA.callFeatureExtraction(
-                pathPC / "reducedTrainingPS.csv",
-                pathPC / "yourPCA_Train.csv",
-                numColsFE,
-            )  # effettua FE su Data_Training e genera yourPCA_Train.csv
-            featureExtractionPCA.callFeatureExtraction(
-                pathPC / "Data_testing.csv",
-                pathPC / "yourPCA_Test.csv",
-                numColsFE,
-            )  # effettua FE su Data_testing e genera yourPCA_Test.csv
-
-            aggId.addId(
-                pathPC / "yourPCA_Train.csv",
-                pathPC / "DataSetTrainPreprocessato.csv",
-            )
-            aggId.addId(
-                pathPC / "yourPCA_Test.csv",
-                pathPC / "DataSetTestPreprocessato.csv",
-            )
-
-        if doQSVM and featureExtraction:
-            # effettua feature Extraction sul doPrediction e rigenera doPrediction
-
-            # aggiungere riga delle feature al do Prediction
-            h = open(pathPC / "doPredictionFeatured.csv", "a+")
-            featureString = ""
-            for x in range(1, utils.numberOfColumns(userpath)):
-                stringa = "feature{},".format(x)
-                featureString += stringa
-            featureString += "labels\r"
-            h.write(featureString)
-            print("USERPATH TO PREDICT", userpathToPredict)
-            g = open(userpathToPredict, "r")
-            contents = g.read()
-            h.write(contents)
-            h.close()
-            g.close()
-
-            featureExtractionPCA.extractFeatureForPrediction(
-                pathPC / "doPredictionFeatured.csv",
-                pathPC / "doPredictionFE.csv",
-                numColsFE,
-            )
-            os.remove(pathPC / "doPredictionFeatured.csv")
+        aggId.addId(
+            pathTrain,
+            pathPC / "DataSetTrainPreprocessato.csv",
+        )  # create 'DataSetTrainPreprocessato.csv'
+        aggId.addId(
+            pathTest,
+            pathPC / "DataSetTestPreprocessato.csv",
+        )  # create 'DataSetTestPreprocessato.csv'
 
         return (
             pathPC / "DataSetTrainPreprocessato.csv",

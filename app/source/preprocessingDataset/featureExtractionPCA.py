@@ -1,89 +1,110 @@
 import pathlib
 import warnings
+from itertools import cycle
+
 import pandas as pd
+from matplotlib import pyplot as plt
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.preprocessing import StandardScaler
 from app.source.utils import utils
 
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
 
 def callFeatureExtraction(
-        path: pathlib.Path,
-        output: pathlib.Path,
+        pathTrain: pathlib.Path,
+        pathTest: pathlib.Path,
+        pathToPredict: pathlib.Path,
+        doQSVM: bool,
         n_components=2
 ):
     """
     This function executes the Feature Extraction on the given dataset
 
-    :param path: path to the location of the dataset that is going to be reduced with FE
-    :param output: path to the location of the dataset preprocessed with FE
+    :param pathTrain: path to the location of the dataset Train that is going to be reduced with FE
+    :param pathTest: path to the location of the dataset Test that is going to be reduced with FE
+    :param pathToPredict: path to the location of the dataset to Predict that is going to be reduced with FE
+    :param doQSVM: boolean flag that indicated whether the user wants to execute classification or not
     :param n_components: number of new columns
-    :return: string that points to the location of the dataset preprocessed with FE
-    :rtype: str
+    :return: string that points to the location of the datasets preprocessed with FE
+    :rtype: pathlib.Path, pathlib.Path
     """
     print("Into callFeatureExtraction...")
+    pathFileYourPCA = pathTrain.parent
 
     # A comma-separated values (csv) file is returned as a DataFrame: two-dimensional data structure with labeled axes.
-    df = pd.read_csv(path)
-    X = df.drop("labels", 1)  # Dataset senza colonna labels, su cui fare PCA
-    Y = df["labels"]  # Solo le label, da reinserire dopo la PCA
+    df_train = pd.read_csv(pathTrain)
+    X_train = df_train.drop("labels", 1)  # Dataset senza colonna labels, su cui fare PCA
+    Y_train = df_train["labels"]  # Solo le label, da reinserire dopo la PCA
+
+    df_test = pd.read_csv(pathTest)
+    X_test = df_test.drop("labels", 1)  # Dataset senza colonna labels, su cui fare PCA
+    Y_test = df_test["labels"]  # Solo le label, da reinserire dopo la PCA
 
     # Feature Scaling
     sc = StandardScaler()
-    X = sc.fit_transform(X)
-    # print(X)
+    sc.fit(X_train)
+    X_train_scaled = sc.transform(X_train)
+    X_test_scaled = sc.transform(X_test)
 
     # Feature Extraction
     pca = PCA(n_components)
-    X = pca.fit_transform(X)
-    # print(X)
+    pca.fit(X_train_scaled)
+    X_train_PCA = pca.transform(X_train_scaled)
+    X_test_PCA = pca.transform(X_test_scaled)
 
-    # Recupero i nomi delle colonne, i valori delle labels e di queste faccio anche lo scaling
-    PCA_df = pd.DataFrame(data=X, columns=utils.createFeatureList(n_components))
-    PCA_df = pd.concat([PCA_df, Y], axis=1)
-    # PCA_df['labels'] = LabelEncoder().fit_transform(PCA_df['labels'])
-    print("Feature Extraction result for: " + path.__str__())
-    print(PCA_df.head())
+    # Restore columns name for X_train and relative labels from Y_train
+    PCA_df_train = pd.DataFrame(data=X_train_PCA, columns=utils.createFeatureList(n_components))
+    PCA_df_train = pd.concat([PCA_df_train, Y_train], axis=1)
+    # Restore columns name for X_test and relative labels from Y_test
+    PCA_df_test = pd.DataFrame(data=X_test_PCA, columns=utils.createFeatureList(n_components))
+    PCA_df_test = pd.concat([PCA_df_test, Y_test], axis=1)
 
-    # salvataggio su output in formato csv
-    pathFileYourPCA = pathlib.Path(__file__).parent
-    pathFileYourPCA = pathFileYourPCA / output
-    PCA_df.to_csv(pathFileYourPCA, index=False)
+    # save output in csv
+    pathFileYourPCATrain = pathFileYourPCA / "yourPCA_Train.csv"
+    pathFileYourPCATest = pathFileYourPCA / "yourPCA_Test.csv"
+    PCA_df_train.to_csv(pathFileYourPCATrain, index=False)
+    PCA_df_test.to_csv(pathFileYourPCATest, index=False)
 
-    return pathFileYourPCA.__str__()
+    print("Feature Extraction result for: " + pathTrain.__str__())
+    print(PCA_df_train.head())
+    print("Feature Extraction result for: " + pathTest.__str__())
+    print(PCA_df_test.head())
 
+    if doQSVM:
+        df_to_predict = pd.read_csv(pathToPredict, header=None)
+        df_to_predict.columns = X_train.columns
+        print(df_to_predict)
 
-def extractFeatureForPrediction(
-        path: pathlib.Path, output: pathlib.Path, n_components=2
-):
-    """
-    This function executes the Feature Extraction on the doPrediction
+        # Scaling
+        X_to_predict_scaled = sc.transform(df_to_predict)
+        # Extraction with PCA
+        X_to_predict_PCA = pca.transform(X_to_predict_scaled)
 
-    :param path: path to the location of the dataset that is going to be reduced with FE
-    :param output: path to the location of the dataset preprocessed with FE
-    :param n_components: number of new columns
-    :return: string that points to the location of the dataset preprocessed with FE
-    :rtype: str
-    """
-    print("Into extractFeatureForPrediction...")
+        PCA_df_to_predict = pd.DataFrame(data=X_to_predict_PCA)
 
-    # A comma-separated values (csv) file is returned as a DataFrame: two-dimensional data structure with labeled axes.
-    df = pd.read_csv(path)
-    X = df.drop("labels", 1)
+        # save output in csv
+        pathFileYourPCAToPredict = pathFileYourPCA / "doPredictionFE.csv"
+        PCA_df_to_predict.to_csv(pathFileYourPCAToPredict, index=False, header=False)
 
-    # Feature Scaling
-    sc = StandardScaler()
-    X = sc.fit_transform(X)
+        print("Feature Extraction result for: " + pathToPredict.__str__())
+        print(PCA_df_to_predict.head())
 
-    # Feature Extraction
-    pca = PCA(n_components)
-    X = pca.fit_transform(X)
+    if n_components == 2 and len(Y_train.unique()) < 7:
+        plt.figure(dpi=150, facecolor='w', edgecolor='k')
+        classes = Y_train.unique()  # find nique values for labels
+        cycol = cycle('rbgcmyk')  # possible colors for labels
+        for clas in classes:
+            plt.scatter(PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature1'],
+                        PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature2'],
+                        c=next(cycol))
 
-    PCA_df = pd.DataFrame(data=X)
-    # salvataggio su output in formato csv
-    pathFileYourPCA = pathlib.Path(__file__).parent
-    pathFileYourPCA = pathFileYourPCA / output
-    PCA_df.to_csv(pathFileYourPCA, index=False, header=False)
+        plt.xlabel('feature1', fontsize=12)
+        plt.ylabel('feature2', fontsize=12)
+        plt.title('2D PCA', fontsize=15)
+        plt.legend([Y_train.unique()[0], Y_train.unique()[1]])
+        plt.grid()
+        plt.savefig(pathFileYourPCA / 'graphFE', dpi=150)
+        plt.show()
 
-    return pathFileYourPCA.__str__()
+    return pathFileYourPCATrain, pathFileYourPCATest

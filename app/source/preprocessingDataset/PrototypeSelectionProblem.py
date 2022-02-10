@@ -154,7 +154,7 @@ def runGeneticAlgorithm(
             num_evals_max,
             stats,
             hof,
-            verbose=True  # Set True to print in the console info about generations
+            verbose=False  # Set True to print in the console info about generations
         )
         time_End = t.time()
         time = time_End - time_Start
