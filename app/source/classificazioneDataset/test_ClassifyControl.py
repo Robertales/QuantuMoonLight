@@ -33,7 +33,7 @@ class TestClassifyControl(unittest.TestCase):
         features = utils.createFeatureList(2)
         token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe5196" \
                 "91a7ad17643eecbe13d1c8c4adccd2"
-        backend = "ibmq_qasm_simulator"
+        backend = "aer_simulator"
         email = "quantumoonlight@gmail.com"
 
         response = app.test_client(self).post(
@@ -73,7 +73,7 @@ class TestClassifyControl(unittest.TestCase):
         features = utils.createFeatureList(2)
         token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe5196" \
                 "91a7ad17643eecbe13d1c8c4adccd2"
-        backend_selected = "ibmq_qasm_simulator"
+        backend_selected = "aer_simulator"
         email = "quantumoonlight@gmail.com"
 
         result = ClassificazioneControl().classification_thread(path_train, path_test, path_prediction, features,
@@ -109,7 +109,7 @@ class TestClassifyControl(unittest.TestCase):
         features = utils.createFeatureList(2)
         token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519" \
                 "691a7ad17643eecbe13d1c8c4adccd2"
-        backend_selected = "ibmq_qasm_simulator"
+        backend_selected = "aer_simulator"
 
         result = ClassificazioneControl().classify(
             path_train,
@@ -207,7 +207,7 @@ class TestIbmFail(unittest.TestCase):
         features = utils.createFeatureList(2)
         token = "43a75c20e78cef978267a3bdcdb0207dab62575c3c9da494a1cd344022abc8a326ca1a9b7ee3f533bb7ead73a5f9fe519691" \
                 "a7ad17643eecbe13d1c8c4adccd2"
-        backend_selected = "ibmq_qasm_simulator"
+        backend_selected = "aer_simulator"
 
         result = ClassificazioneControl().classify(
             path_train,

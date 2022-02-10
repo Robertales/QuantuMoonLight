@@ -17,7 +17,7 @@ from flask import jsonify
 import numpy as np
 import pandas as pd
 from flask import request, Response
-from qiskit import IBMQ
+from qiskit import IBMQ, Aer
 from qiskit.aqua import QuantumInstance, aqua_globals
 from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.components.multiclass_extensions import AllPairs
@@ -132,6 +132,7 @@ class ClassificazioneControl:
         try:
             if (
                     backend_selected
+                    and backend_selected != "aer_simulator"
                     and backend_selected != "backend"
                     and int(provider.get_backend(backend_selected).configuration().n_qubits)
                     >= qubit
@@ -142,6 +143,9 @@ class ClassificazioneControl:
                 backend = provider.get_backend(
                     backend_selected
                 )  # Specifying Quantum System
+            elif backend_selected == "aer_simulator":
+                backend = Aer.get_backend('aer_simulator')
+                print("backend selected: aer_simulator")
             else:
                 backend = least_busy(
                     provider.backends(
@@ -164,7 +168,7 @@ class ClassificazioneControl:
             # qubits, or the user token has no privileges to use the selected
             # backend
             no_backend = True
-            backend = provider.get_backend("ibmq_qasm_simulator")
+            backend = Aer.get_backend('aer_simulator')
             print("backend selected: simulator")
             print("backend qubit:" +
                   str(provider.get_backend(backend.name()).configuration().n_qubits))
@@ -210,8 +214,9 @@ class ClassificazioneControl:
         print("Running....\n")
         try:
             result = qsvm.run(quantum_instance)
-        except:
+        except Exception as e:
             print("Error on IBM server")
+            print(e)
             result = 1
             return result
 
