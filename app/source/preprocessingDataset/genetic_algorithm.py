@@ -1,15 +1,10 @@
 from __future__ import division
-
 import random
-
 from deap import tools
 
 
-# genetic algorithm with mutation probability on each individual and in each generation the population is replace
-# with offpring
 def deapGeneticAlgorithm(
     toolbox,
-    pop_size,
     cxpb,
     mutpb,
     generations,
@@ -18,14 +13,30 @@ def deapGeneticAlgorithm(
     hof=None,
     verbose=__debug__,
 ):
+    """
+    This function use the toolbox and the input parameters to run the genetic algorithm
+    with mutation probability on each individual in each generation the population is replace
+    with offspring.
+
+    :param toolbox: deap toolbox that contains all the functionality for the genetic algorithm, like
+    individuals, population, crossover, mutation, selection and fitness evaluation.
+    :param cxpb: probability of crossover
+    :param mutpb: probability of mutation
+    :param generations: max number of generations
+    :param num_evals_max: max number of evaluations
+    :param stats: statistic tool
+    :param hof: Hall Of Fame that store the best indivual of the entire population
+    :param verbose: if True, print in the console logs and statistics for each generations
+
+    :return: final population and logbook of statistics for the run
+    """
     logbook = tools.Logbook()
     logbook.header = ["gen", "nevals_gen", "nevals"] + (
         stats.fields if stats else []
     )
 
-    pop = toolbox.population(n=pop_size)
-
-    # print(pop)
+    # Create an initial population of individuals
+    pop = toolbox.population()
 
     # Evaluate the individuals with an invalid fitness
     invalid_ind = [ind for ind in pop if not ind.fitness.valid]
@@ -42,14 +53,14 @@ def deapGeneticAlgorithm(
     )
     if verbose:
         print(logbook.stream)
-
-    ind = tools.selBest(pop, 1)
-    print("ind best" + str(ind[0].fitness.values))
+        ind = tools.selBest(pop, 1)
+        print("ind best" + str(ind[0].fitness.values))
 
     g = 0
+    # The evolution ends when the maximum number of evaluations of fitness is achieved
     while g < generations and logbook.select("nevals")[-1] < num_evals_max:
         # Select the next generation individuals
-        offspring = toolbox.select(pop, len(pop))
+        offspring = toolbox.select(pop)
         # Clone the selected individuals
         offspring = list(map(toolbox.clone, offspring))
 
@@ -66,14 +77,19 @@ def deapGeneticAlgorithm(
                 toolbox.mutate(mutant)
                 del mutant.fitness.values
 
+        # Since the content of some of our offspring changed during the last two step,
+        # we now need to re-evaluate their fitnesses. To save time and resources,
+        # we just map those offspring which fitnesses were marked invalid.
         invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
         fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit
 
+        # update the Hall of Fame with the offspring.
         if hof is not None:
             hof.update(offspring)
 
+        # update the logbook
         record = stats.compile(offspring) if stats else {}
         logbook.record(
             gen=g + 1,
@@ -83,11 +99,9 @@ def deapGeneticAlgorithm(
         )
         if verbose:
             print(logbook.stream)
+            ind = tools.selBest(offspring, 1)
+            print("ind best" + str(ind[0].fitness.values))
 
-        ind = tools.selBest(offspring, 1)
-        print("ind best" + str(ind[0].fitness.values))
-
-        # Evaluate the individuals with an invalid fitnes
         # The population is entirely replaced by the offspring
         pop[:] = offspring
 
