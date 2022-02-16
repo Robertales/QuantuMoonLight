@@ -3,6 +3,7 @@ import os.path
 import pathlib
 import smtplib
 import time
+import traceback
 import warnings
 from email import encoders
 from email.mime.base import MIMEBase
@@ -144,7 +145,7 @@ class ClassificazioneControl:
                     backend_selected
                 )  # Specifying Quantum System
             elif backend_selected == "aer_simulator":
-                backend = Aer.get_backend('aer_simulator')
+                backend = Aer.get_backend('qasm_simulator')
                 print("backend selected: aer_simulator")
             else:
                 backend = least_busy(
@@ -217,6 +218,7 @@ class ClassificazioneControl:
         except Exception as e:
             print("Error on IBM server")
             print(e)
+            traceback.format_exception()
             result = 1
             return result
 
