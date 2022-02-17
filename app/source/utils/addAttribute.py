@@ -23,7 +23,7 @@ def createFeatureString(numCols: int):
     return featureString
 
 
-def addAttribute(filename: Path, outputName="featureDataset.csv"):
+def addAttribute(filename: Path, outputName):
     """
     This function add into the output file the features string and all the raws contained in the input file
 
