@@ -1,14 +1,16 @@
 import os.path
 import pathlib
 from datetime import datetime
-
+import csv as csv
 from flask import render_template, request, Response, flash
 from flask_login import current_user, login_required
 from qiskit import IBMQ
-
+import pandas as pd
 from app import app, db
 from app.source.model.models import User, Dataset
 from app.source.utils import utils
+from app.source.utils import addAttribute
+
 
 
 @app.route("/")
@@ -198,6 +200,30 @@ def smista():
     userpathTest = paths[1]
     userpathToPredict = paths[2]
     dataPath = userpathTrain.parent
+
+    #Data Imputation
+    missing_values = ["n/n", "na", "--", "nan", "NaN"]
+    if os.path.exists(userpathTrain):
+        addAttribute.addAttribute(userpathTrain, userpathTrain.parent / "TrainImputation.csv")
+        train = pd.read_csv(userpathTrain.parent / "TrainImputation.csv", na_values=missing_values)
+        for column in train:
+            train[column] = train[column].fillna(train[column].mean())
+        train.to_csv(userpathTrain, index=False, header=False)
+        os.remove(userpathTrain.parent / "TrainImputation.csv")
+    if os.path.exists(userpathTest):
+        addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestImputation.csv")
+        test = pd.read_csv(userpathTest.parent / "TestImputation.csv", na_values=missing_values)
+        for column in test:
+            test[column] = test[column].fillna(test[column].mean())
+        test.to_csv(userpathTest, index=False, header=False)
+        os.remove(userpathTest.parent / "TestImputation.csv")
+    if os.path.exists(userpathToPredict):
+        addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictImputation.csv")
+        predict = pd.read_csv(userpathToPredict.parent / "PredictImputation.csv", na_values=missing_values)
+        for column in predict:
+            predict[column] = predict[column].fillna(predict[column].mean())
+        predict.to_csv(userpathToPredict, index=False, header=False)
+        os.remove(userpathToPredict.parent / "PredictImputation.csv")
 
     # Validazione
     print("\nIn validazione...")
