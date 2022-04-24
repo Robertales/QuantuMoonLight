@@ -16,7 +16,8 @@ def splitDataset(filename: str):
     data = pd.read_csv(filename)
     X = data
 
-    X_train, X_test = train_test_split(X, test_size=0.2)
+    X_train, X_test = train_test_split(X, test_size=0.20)
+
     pathData = Path(filename).parent
     print("\nX_train:\n")
     print(X_train.head())
