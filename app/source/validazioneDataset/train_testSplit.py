@@ -17,6 +17,7 @@ def splitDataset(filename: str):
     X = data
 
     X_train, X_test = train_test_split(X, test_size=0.20)
+
     pathData = Path(filename).parent
     print("\nX_train:\n")
     print(X_train.head())
