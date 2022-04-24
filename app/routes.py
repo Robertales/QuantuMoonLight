@@ -2,12 +2,12 @@ import os.path
 import pathlib
 from datetime import datetime
 import csv as csv
-from flask import render_template, request, Response, flash
+from flask import render_template, request, Response, flash, redirect, url_for
 from flask_login import current_user, login_required
 from qiskit import IBMQ
 import pandas as pd
 from app import app, db
-from app.source.model.models import User, Dataset
+from app.source.model.models import User, Dataset, Article
 from app.source.utils import utils
 from app.source.utils import addAttribute
 
@@ -33,9 +33,11 @@ def registrationPage():
 def downloadPage():
     return render_template("downloadPage.html")
 
+
 @app.route("/showList")
 def showList():
     return render_template("showList.html")
+
 
 @app.route("/adminPage")
 def adminPage():
@@ -107,7 +109,39 @@ def sendEmail():
 
 @app.route("/blog")
 def blog():
-    return render_template("blog.html")
+    posts = Article.query.order_by(Article.data.desc()).all()
+
+    return render_template("blog.html", posts=posts)
+
+
+@app.route('/post/<int:post_id>')
+def post(post_id):
+    post = Article.query.filter_by(id=post_id).one()
+
+    return render_template('post.html', post=post)
+
+
+
+@app.route('/add')
+@login_required
+def add():
+    return render_template('add.html')
+
+
+
+@app.route('/addpost', methods=['POST'])
+@login_required
+def addpost():
+    title = request.form['title']
+    author = current_user.email
+    body = request.form['content']
+
+    post = Article(title=title, email_user=author, body=body, data=datetime.now())
+
+    db.session.add(post)
+    db.session.commit()
+
+    return redirect(url_for('blog'))
 
 
 @app.route("/userPage")
@@ -123,11 +157,6 @@ def formPage():
 @app.route("/preprocessingPage")
 def preprocessingPage():
     return render_template("preprocessing.html")
-
-
-@app.route("/blog")
-def blogPage():
-    return render_template("blog.html")
 
 
 @app.route("/aboutUs")
@@ -161,9 +190,9 @@ def smista():
         simpleSplit = None
         kFold = "kFold"
 
-    #simpleSplit = request.form.get("simpleSplit")
+    # simpleSplit = request.form.get("simpleSplit")
     print("simpleSplit: ", simpleSplit)
-    #kFold = request.form.get("kFold")
+    # kFold = request.form.get("kFold")
     print("kFold: ", kFold)
     k = request.form.get("kFoldValue", type=int)
     print("kFoldValue: ", k)

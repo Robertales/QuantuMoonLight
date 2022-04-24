@@ -131,11 +131,11 @@ h1 {
     </table><br>
 
     <h4 style='font-weight: bold; margin-bottom: 0.4em' class="text-center">Metrics (in %):</h4>
-    <h6 style='font-weight: bold;' class="text-center">Simple Split: {{p_ss|round}}%<br>
-        K-Fold: {{p_kf|round}}%<br>
-        Prototype Selection: {{p_ps|round}}%<br>
-        Feature Extraction: {{p_fe|round}}%<br>
-        QSVM: {{p_ps|round}}%</h6><br>
+    <h6 style='font-weight: bold;' class="text-center">Simple Split: {{p_ss|int|round}}%<br>
+        K-Fold: {{p_kf|int|round}}%<br>
+        Prototype Selection: {{p_ps|int|round}}%<br>
+        Feature Extraction: {{p_fe|int|round}}%<br>
+        QSVM: {{p_ps|int|round}}%</h6><br>
 {% endblock %}
 </div>
 </body>

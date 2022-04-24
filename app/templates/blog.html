@@ -22,9 +22,21 @@
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 {% extends "base.html" %}
 {% block content %}
-    <br>
-    <center><img src="../static/images/icons/uc.jpg"></center>
-    <br>
+
+ <br><form action="{{url_for("add")}}">
+            <button type="submit" class="fadeIn fourth btn btn-primary">Write a new blog post</button>
+        </form><br>
+
+   {% for Article in posts %}
+          <div class="post-preview">
+            <a href="{{ url_for('post', post_id=Article.id) }}">
+              <h2 class="post-title">
+                {{ Article.title }}
+              </h2>
+            </a>
+            <p class="post-meta">Posted by {{ Article.email_user }} on {{ Article.data.strftime('%B %d, %Y') }}</p>
+          </div>
+          {% endfor %}
 {% endblock %}
 </body>
 </html>
