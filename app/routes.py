@@ -11,10 +11,9 @@ from flask_login import current_user, login_required
 from qiskit import IBMQ
 import pandas as pd
 from app import app, db
-from app.source.model.models import User, Dataset, Article
+from app.source.model.models import User, Dataset, Article, Comment
 from app.source.utils import utils
 from app.source.utils import addAttribute
-
 
 
 @app.route("/")
@@ -121,9 +120,8 @@ def blog():
 @app.route('/post/<int:post_id>')
 def post(post_id):
     post = Article.query.filter_by(id=post_id).one()
-
-    return render_template('post.html', post=post)
-
+    comments = Comment.query.filter_by(id_article=post_id).all()
+    return render_template('post.html', post=post, comments=comments)
 
 
 @app.route('/add')
@@ -132,20 +130,40 @@ def add():
     return render_template('add.html')
 
 
-
 @app.route('/addpost', methods=['POST'])
 @login_required
 def addpost():
     title = request.form['title']
-    author = current_user.email
+    author = current_user.username
+    email = current_user.email
     body = request.form['content']
 
-    post = Article(title=title, email_user=author, body=body, data=datetime.now())
+    post = Article(title=title, author=author, body=body, data=datetime.now(), email_user=email)
 
     db.session.add(post)
     db.session.commit()
 
     return redirect(url_for('blog'))
+
+
+@app.route('/addcomment', methods=['POST'])
+@login_required
+def addcomment():
+
+    author = current_user.username
+    email = current_user.email
+    body = request.form['content']
+    id = request.form['artId']
+
+
+    comment = Comment(email_user=email, author=author, body=body, data=datetime.now(), id_article=id)
+
+    db.session.add(comment)
+    db.session.commit()
+
+    return redirect(url_for('blog'))
+
+
 
 
 @app.route("/userPage")
@@ -234,7 +252,7 @@ def smista():
     userpathToPredict = paths[2]
     dataPath = userpathTrain.parent
 
-    #Data Imputation
+    # Data Imputation
     missing_values = ["n/n", "na", "--", "nan", "NaN"]
     if os.path.exists(userpathTrain):
         addAttribute.addAttribute(userpathTrain, userpathTrain.parent / "TrainImputation.csv")
@@ -300,13 +318,12 @@ def smista():
     # DataSet Test ready to be classified
     pathTest = dataPath / "DataSetTestPreprocessato.csv"
 
-    #Data Balancing
+    # Data Balancing
     x_train = pd.read_csv(pathTrain)
     y_train = x_train["labels"]
     sm = SMOTE(random_state=42)
     x_train, y_train = sm.fit_resample(x_train, y_train)
-    #x_train.to_csv(pathTrain)
-
+    # x_train.to_csv(pathTrain)
 
     # Classificazione
     if doQSVM:

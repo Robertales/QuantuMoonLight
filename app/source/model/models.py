@@ -42,6 +42,7 @@ class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email_user = db.Column(db.VARCHAR(255), ForeignKey("user.email"))
     title = db.Column(db.Text(length=200), nullable=False)
+    author = db.Column(db.Text(length=200), nullable=False)
     body = db.Column(db.Text(length=1200), nullable=False)
     category = db.Column(db.String(20), nullable=True)
     data = db.Column(db.DateTime, nullable=False)
@@ -51,10 +52,11 @@ class Comment(db.Model):
     """
        code representation of the Comment table of the database
        """
-    __table_args__ = (db.PrimaryKeyConstraint("email_user", "id_article"),)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email_user = db.Column(db.VARCHAR(255), ForeignKey("user.email"))
     id_article = db.Column(db.Integer, ForeignKey("article.id"))
     body = db.Column(db.Text(length=250), nullable=False)
+    author = db.Column(db.Text(length=200), nullable=False)
     data = db.Column(db.Date, nullable=False)
 
 
