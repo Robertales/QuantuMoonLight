@@ -83,6 +83,8 @@ def callFeatureExtraction(
 
         PCA_df_to_predict = pd.DataFrame(data=X_to_predict_PCA)
 
+        print("Il valore medio della varianza é: "+pca.explained_variance_ratio_)
+
         # save output in csv
         pathFileYourPCAToPredict = pathFileYourPCA / "doPredictionFE.csv"
         PCA_df_to_predict.to_csv(pathFileYourPCAToPredict, index=False, header=False)

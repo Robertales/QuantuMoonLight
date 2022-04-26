@@ -348,6 +348,7 @@ def smista():
                 features=features,
                 token=token,
                 backend=backend,
+                id=salvataggiodatabase.id
             ),
         )
 

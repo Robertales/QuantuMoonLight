@@ -88,7 +88,8 @@ h1 {
              <th scope="col">K-Fold</th>
              <th scope="col">Prototype Selection</th>
              <th scope="col">Feature Extraction</th>
-             <th scope="doQSVM">QSVM</th>
+             <th scope="col">QSVM</th>
+             <th scope="col">Accuracy</th>
 
         </tr>
     </thead>
@@ -123,6 +124,11 @@ h1 {
             <td>Yes</td>
             {% else %}
             <td>No</td>
+            {% endif %}
+            {% if(item.doQSVM) %}
+            <td>{{ item.accuracy}}</td>
+            {% else %}
+            <td>N/A</td>
             {% endif %}
 
         </tr>

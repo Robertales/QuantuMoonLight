@@ -13,10 +13,9 @@ from email.utils import formatdate
 from threading import Thread
 
 import flask
-from flask import jsonify
 import numpy as np
 import pandas as pd
-from flask import request, Response
+from flask import request
 from qiskit import IBMQ, Aer
 from qiskit.aqua import QuantumInstance, aqua_globals
 from qiskit.aqua.algorithms import QSVM
@@ -24,8 +23,10 @@ from qiskit.aqua.components.multiclass_extensions import AllPairs
 from qiskit.circuit.library import ZZFeatureMap
 from qiskit.providers.ibmq import least_busy
 
-from app import app
+from app import app, db
+from app.source.model.models import Dataset
 from app.source.utils import utils
+from sklearn.metrics import recall_score
 
 warnings.simplefilter(action="ignore", category=DeprecationWarning)
 
@@ -45,6 +46,7 @@ class ClassificazioneControl:
         token = request.form.get("token")
         backend = request.form.get("backend")
         email = request.form.get("email")
+        id_dataset = request.form.get("id")
 
         thread = Thread(
             target=ClassificazioneControl.classification_thread,
@@ -56,7 +58,8 @@ class ClassificazioneControl:
                 features,
                 token,
                 backend,
-                email))
+                email,
+                id_dataset))
         thread.setDaemon(True)
         thread.start()
         flask.g = thread
@@ -70,15 +73,17 @@ class ClassificazioneControl:
             features,
             token,
             backend,
-            email):
+            email,
+            id_dataset):
         """
         The function is called from classify_control(), anc starts the async thread to run the classification,
         at the end of which the email with the result is sent, through the function get_classified_dataset()
 
         if result==1 error on IBM server (error reported through email)
-        if result["noBackend"]==True selected backend is not active for the token or the are no active by default,
+        if result["noBackend"]==True selected backend is not active for the token or there is none active by default,
         and simulator is used
 
+        :param id_dataset: database dataset id
         :param path_train: training dataset path
         :param path_test: testing dataset path
         :param path_prediction: prediction dataset path
@@ -89,7 +94,7 @@ class ClassificazioneControl:
         :return: dict containing classification-related info
         """
         result: dict = ClassificazioneControl.classify(
-            self, path_train, path_test, path_prediction, features, token, backend)
+            self, path_train, path_test, path_prediction, features, token, backend, id_dataset)
         if result != 0:
             ClassificazioneControl.get_classified_dataset(
                 self, result, path_prediction, email)
@@ -103,11 +108,13 @@ class ClassificazioneControl:
             features,
             token,
             backend_selected,
-    ):
+            id_dataset
+):
         """
         This function connects to the IBM backend, handles IBM backend errors, executes the QSVM classification,
         and creates the result dataset (classifiedDataset.csv)
 
+        :param id_dataset: database dataset id
         :param path_train: training dataset path
         :param path_test: testing dataset path
         :param user_path_to_predict: prediction dataset path
@@ -223,6 +230,10 @@ class ClassificazioneControl:
         total_time = time.time() - start_time
         result["total_time"] = str(total_time)[0:6]
 
+        dataset = Dataset.query.get(id_dataset)
+        dataset.accuracy = result.get("testing_accuracy")
+        db.session.commit()
+
         print("Prediction from datapoints set:")
         for k, v in result.items():
             print("{} : {}".format(k, v))
@@ -245,6 +256,7 @@ class ClassificazioneControl:
                 row.rstrip("\n") + "," + str(predicted_labels[i]) + "\n"
             )
             i += 1
+
         classified_file.close()
         prediction_file.close()
         file_to_predict.close()
