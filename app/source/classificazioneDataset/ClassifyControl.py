@@ -25,6 +25,7 @@ from qiskit.circuit.library import ZZFeatureMap
 from qiskit.providers.ibmq import least_busy
 
 from app import app
+from app.source.classificazioneDataset.myPegasosQSVC import myPegasosQSVC
 from app.source.utils import utils
 
 warnings.simplefilter(action="ignore", category=DeprecationWarning)
@@ -45,6 +46,7 @@ class ClassificazioneControl:
         token = request.form.get("token")
         backend = request.form.get("backend")
         email = request.form.get("email")
+        model =  request.form.get("model")
 
         thread = Thread(
             target=ClassificazioneControl.classification_thread,
@@ -56,7 +58,8 @@ class ClassificazioneControl:
                 features,
                 token,
                 backend,
-                email))
+                email,
+                model))
         thread.setDaemon(True)
         thread.start()
         flask.g = thread
@@ -70,7 +73,8 @@ class ClassificazioneControl:
             features,
             token,
             backend,
-            email):
+            email,
+            model):
         """
         The function is called from classify_control(), anc starts the async thread to run the classification,
         at the end of which the email with the result is sent, through the function get_classified_dataset()
@@ -89,7 +93,7 @@ class ClassificazioneControl:
         :return: dict containing classification-related info
         """
         result: dict = ClassificazioneControl.classify(
-            self, path_train, path_test, path_prediction, features, token, backend)
+            self, path_train, path_test, path_prediction, features, token, backend, model)
         if result != 0:
             ClassificazioneControl.get_classified_dataset(
                 self, result, path_prediction, email)
@@ -103,6 +107,7 @@ class ClassificazioneControl:
             features,
             token,
             backend_selected,
+            model
     ):
         """
         This function connects to the IBM backend, handles IBM backend errors, executes the QSVM classification,
@@ -177,48 +182,53 @@ class ClassificazioneControl:
         shots = 1024
         aqua_globals.random_seed = seed
 
-        training_input, test_input = ClassificazioneControl.load_dataset(
-            path_train, path_test, features, label="labels"
-        )
+        if model == "QSVM":
+            training_input, test_input = ClassificazioneControl.load_dataset(
+                path_train, path_test, features, label="labels"
+            )
 
-        path_do_prediction = pathlib.Path(user_path_to_predict).parent
-        if os.path.exists(path_do_prediction / "doPredictionFE.csv"):
-            path_do_prediction = path_do_prediction / "doPredictionFE.csv"
-        else:
-            path_do_prediction = user_path_to_predict
-        file_to_predict = open(path_do_prediction.__str__(), "r")
-        prediction = np.array(
-            list(csv.reader(file_to_predict, delimiter=","))
-        ).astype("float")
+            path_do_prediction = pathlib.Path(user_path_to_predict).parent
+            if os.path.exists(path_do_prediction / "doPredictionFE.csv"):
+                path_do_prediction = path_do_prediction / "doPredictionFE.csv"
+            else:
+                path_do_prediction = user_path_to_predict
+            file_to_predict = open(path_do_prediction.__str__(), "r")
+            prediction = np.array(
+                list(csv.reader(file_to_predict, delimiter=","))
+            ).astype("float")
 
-        feature_map = ZZFeatureMap(
-            feature_dimension=qubit, reps=2, entanglement="linear"
-        )
-        print(feature_map)
+            feature_map = ZZFeatureMap(
+                feature_dimension=qubit, reps=2, entanglement="linear"
+            )
+            print(feature_map)
 
-        qsvm = QSVM(
-            feature_map,
-            training_input,
-            test_input,
-            prediction,
-            multiclass_extension=AllPairs(),
-        )
+            qsvm = QSVM(
+                feature_map,
+                training_input,
+                test_input,
+                prediction,
+                multiclass_extension=AllPairs(),
+            )
 
-        quantum_instance = QuantumInstance(
-            backend,
-            shots=shots,
-            seed_simulator=seed,
-            seed_transpiler=seed,
-        )
+            quantum_instance = QuantumInstance(
+                backend,
+                shots=shots,
+                seed_simulator=seed,
+                seed_transpiler=seed,
+            )
 
-        print("Running....\n")
-        try:
-            result = qsvm.run(quantum_instance)
-        except Exception as e:
-            print("Error on IBM server")
-            print(e)
-            result = 1
-            return result
+            print("Running....\n")
+            try:
+                result = qsvm.run(quantum_instance)
+            except Exception as e:
+                print("Error on IBM server")
+                print(e)
+                result = 1
+                return result
+
+        elif model == "PegasosQSVC":
+            model = myPegasosQSVC(path_train, path_test, features.__len__)
+
 
         total_time = time.time() - start_time
         result["total_time"] = str(total_time)[0:6]

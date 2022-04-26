@@ -163,9 +163,15 @@ h1:before {
                                         </label>
                                     </li>
                                     <li>
-                                        <label>
-                                            <input type="checkbox" id="checkQSVM" name="doQSVM" value="doQSVM" onclick="disable_check()"> QSVM
-                                        </label>
+                                        <label>Select the algorithm: <select name="model" id="model" style="border: 0.1em solid grey">
+                                                                <option value="None">None</option>
+                                                                <option value="QSVM">QSVM</option>
+                                                                <option value="QSVC">QSVC </option>
+                                                                <option value="PegasosQSVC">PegasosQSVC </option>
+                                                                <option value="ibmq_brooklyn">NeuralNetworkClassifier </option>
+                                                                <option value="ibmq_kolkata">QSVR </option>
+                                                                <option value="ibmq_guadalupe">NeuralNetworkRegressor </option>
+                                                        </select></label>
                                     </li>
                                 </ul>
                             <p><br> <!-- Advanced Options -->

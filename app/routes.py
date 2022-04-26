@@ -62,7 +62,7 @@ def adminDataset():
         if dataset.k_fold: v2 += 1
         if dataset.ps: v3 += 1
         if dataset.fe: v4 += 1
-        if dataset.doQSVM: v5 += 1
+        if dataset.model: v5 += 1
     p1 = v1 * 100 / rows
     p2 = v2 * 100 / rows
     p3 = v3 * 100 / rows
@@ -86,7 +86,7 @@ def userDataset():
         if dataset.k_fold: v2 += 1
         if dataset.ps: v3 += 1
         if dataset.fe: v4 += 1
-        if dataset.doQSVM: v5 += 1
+        if dataset.model: v5 += 1
     p1 = v1 * 100 / rows
     p2 = v2 * 100 / rows
     p3 = v3 * 100 / rows
@@ -182,8 +182,8 @@ def smista():
     print("Prototype Selection: ", prototypeSelection)
     featureExtraction = request.form.get("reduceFE")
     print("Feature Extraction: ", featureExtraction)
-    doQSVM = request.form.get("doQSVM")
-    print("doQSVM: ", doQSVM)
+    model = request.form.get("model")
+    print("Model: ", model)
 
     # Advanced option
     print(request.form["Radio"])
@@ -309,10 +309,9 @@ def smista():
 
 
     # Classificazione
-    if doQSVM:
-        print("\nIn classification...")
+    if model != "None":
+        print("\nClassification...")
         backend = request.form.get("backend")
-        # backend = "ibmq_qasm_simulator"
         if request.form.get("token"):
             token = request.form.get("token")
         else:
@@ -348,6 +347,7 @@ def smista():
                 features=features,
                 token=token,
                 backend=backend,
+                model=model
             ),
         )
 
