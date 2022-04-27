@@ -3,7 +3,7 @@ import time
 import pandas as pd
 from qiskit.circuit.library import ZFeatureMap
 from qiskit.utils import algorithm_globals, QuantumInstance
-from qiskit_machine_learning.algorithms import PegasosQSVC
+from qiskit_machine_learning.algorithms import PegasosQSVC, QSVC
 from qiskit_machine_learning.kernels import QuantumKernel
 from sklearn.metrics import precision_score, recall_score, accuracy_score
 import numpy as np
@@ -12,7 +12,7 @@ from app.source.utils import utils
 from app.source.utils.utils import createFeatureList, numberOfColumns
 
 
-class myPegasosQSVC:
+class myQSVC:
     def classify(pathTrain, pathTest, path_predict, backend, num_qubits):
 
         print(pathTrain, pathTest, path_predict)
@@ -45,8 +45,6 @@ class myPegasosQSVC:
         prediction_data = np.genfromtxt(path_predict, delimiter=',')
         prediction_data = np.delete(prediction_data, 0, axis=0)
 
-
-
         test_features = test_features.to_numpy() #Pegasos.fit accetta numpy array e non dataframe
         train_features = train_features.to_numpy()
 
@@ -57,13 +55,11 @@ class myPegasosQSVC:
         print(prediction_data)
 
         result = {}
-        tau = 100
-        C = 1000
         algorithm_globals.random_seed = 12345
 
         feature_map = ZFeatureMap(feature_dimension=num_qubits, reps=1)
         qkernel = QuantumKernel(feature_map=feature_map, quantum_instance=QuantumInstance(backend))
-        qsvc = PegasosQSVC(quantum_kernel=qkernel, C=C, num_steps=tau)
+        qsvc = QSVC(quantum_kernel=qkernel)
 
         # training
         print("Running...")

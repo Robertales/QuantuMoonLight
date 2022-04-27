@@ -16,7 +16,10 @@ from flask import request, Response
 from qiskit import IBMQ, Aer
 from qiskit.providers.ibmq import least_busy
 from app import app
+from app.source.classificazioneDataset.myQSVR import myQSVR
+from app.source.classificazioneDataset.myNeuralNetworkClassifier import myNeuralNetworkClassifier
 from app.source.classificazioneDataset.myPegasosQSVC import myPegasosQSVC
+from app.source.classificazioneDataset.myQSVC import myQSVC
 from app.source.classificazioneDataset.myQSVM import myQSVM
 from app.source.utils import utils
 
@@ -118,6 +121,11 @@ class ClassificazioneControl:
         result = {}
         result["error"] = 0
         result["model"] = model
+        result["mae"] = "--"
+        result["mse"] = "--"
+        result["accuracy"] = "--"
+        result["precision"] = "--"
+        result["recall"] = "--"
         provider = ""
         try:
             IBMQ.enable_account(token)
@@ -178,6 +186,22 @@ class ClassificazioneControl:
 
         elif model == "PegasosQSVC":
             r = myPegasosQSVC.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            result = {**result, **r}
+
+        elif model == "QSVC":
+            r = myQSVC.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            result = {**result, **r}
+
+        elif model == "NeuralNetworkClassifier":
+            r = myNeuralNetworkClassifier.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            result = {**result, **r}
+
+        elif model == "QSVR":
+            r = myQSVR.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            result = {**result, **r}
+
+        elif model == "NeuralNetworkRegressor":
+            r = myQSVR.classify(path_train, path_test, user_path_to_predict, backend, qubit)
             result = {**result, **r}
 
         if result["error"] != 1:
@@ -260,6 +284,8 @@ class ClassificazioneControl:
             accuracy = result.get("testing_accuracy")
             precision = result.get("testing_precision")
             recall = result.get("testing_recall")
+            mae = result.get("mae")
+            mse = result.get("mse")
             msg.attach(
                 MIMEText(
                     "<center><h3>"
@@ -270,6 +296,10 @@ class ClassificazioneControl:
                     "{:.2%}".format(precision) +
                     "<br><br>Testing recall: " +
                     "{:.2%}".format(recall) +
+                    "< br > < br > Mean Squared Error: " +
+                    "{:.2%}".format(mse) +
+                    "< br > < br > Mean Absolute Error: " +
+                    "{:.2%}".format(mae) +
                     "</h3></center>",
                     'html'))
             msg.attach(

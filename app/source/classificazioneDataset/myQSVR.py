@@ -3,16 +3,16 @@ import time
 import pandas as pd
 from qiskit.circuit.library import ZFeatureMap
 from qiskit.utils import algorithm_globals, QuantumInstance
-from qiskit_machine_learning.algorithms import PegasosQSVC
+from qiskit_machine_learning.algorithms import PegasosQSVC, QSVC, QSVR
 from qiskit_machine_learning.kernels import QuantumKernel
-from sklearn.metrics import precision_score, recall_score, accuracy_score
+from sklearn.metrics import precision_score, recall_score, accuracy_score, mean_squared_error, mean_absolute_error
 import numpy as np
 
 from app.source.utils import utils
 from app.source.utils.utils import createFeatureList, numberOfColumns
 
 
-class myPegasosQSVC:
+class myQSVR:
     def classify(pathTrain, pathTest, path_predict, backend, num_qubits):
 
         print(pathTrain, pathTest, path_predict)
@@ -45,8 +45,6 @@ class myPegasosQSVC:
         prediction_data = np.genfromtxt(path_predict, delimiter=',')
         prediction_data = np.delete(prediction_data, 0, axis=0)
 
-
-
         test_features = test_features.to_numpy() #Pegasos.fit accetta numpy array e non dataframe
         train_features = train_features.to_numpy()
 
@@ -57,35 +55,35 @@ class myPegasosQSVC:
         print(prediction_data)
 
         result = {}
-        tau = 100
-        C = 1000
         algorithm_globals.random_seed = 12345
 
         feature_map = ZFeatureMap(feature_dimension=num_qubits, reps=1)
         qkernel = QuantumKernel(feature_map=feature_map, quantum_instance=QuantumInstance(backend))
-        qsvc = PegasosQSVC(quantum_kernel=qkernel, C=C, num_steps=tau)
+        qsvr = QSVR(quantum_kernel=qkernel)
 
         # training
         print("Running...")
         start_time = time.time()
-        qsvc.fit(train_features, train_labels)
+        qsvr.fit(train_features, train_labels)
         training_time = time.time() - start_time
         print("Train effettuato in " + str(training_time))
 
         # test
         start_time = time.time()
-        test_prediction = qsvc.predict(test_features)
+        test_prediction = qsvr.predict(test_features)
         testing_time = time.time() - start_time
-        accuracy = accuracy_score(test_labels, test_prediction)
-        precision = precision_score(test_labels, test_prediction, average="weighted")
-        recall = recall_score(test_labels, test_prediction, average="weighted")
-        result["testing_precision"] = precision
-        result["testing_recall"] = recall
-        result["testing_accuracy"] = accuracy
+        result["testing_precision"] = "--"
+        result["testing_recall"] = "--"
+        result["testing_accuracy"] = "--"
+        mse = mean_squared_error(test_labels, test_prediction)
+        mae = mean_absolute_error(test_labels, test_prediction)
+        result["mse"] = mse
+        result["mae"] = mae
 
         # prediction
         start_time = time.time()
-        predicted_labels = qsvc.predict(prediction_data)
+        predicted_labels = qsvr.predict(prediction_data)
+        print(predicted_labels)
         total_time = time.time() - start_time
         print("Prediction effettuata in " + str(total_time))
         result["predicted_labels"] = np.array(predicted_labels)
