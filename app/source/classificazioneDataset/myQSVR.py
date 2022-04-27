@@ -70,15 +70,18 @@ class myQSVR:
 
         # test
         start_time = time.time()
+        score = qsvr.score(test_features, test_labels)
         test_prediction = qsvr.predict(test_features)
         testing_time = time.time() - start_time
-        result["testing_precision"] = "--"
-        result["testing_recall"] = "--"
-        result["testing_accuracy"] = "--"
+        result["regression_score"] = score
         mse = mean_squared_error(test_labels, test_prediction)
         mae = mean_absolute_error(test_labels, test_prediction)
         result["mse"] = mse
         result["mae"] = mae
+
+        print("Score: ", score)
+        print("Mae: ", mae)
+        print("\nMse: ", mse)
 
         # prediction
         start_time = time.time()

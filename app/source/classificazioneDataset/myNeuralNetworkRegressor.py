@@ -101,11 +101,8 @@ class myNeuralNetworkRegressor:
         # test
         start_time = time.time()
         score = circuit_regressor.score(test_features, test_labels)
-        test_prediction = circuit_regressor.score(test_features)
+        test_prediction = circuit_regressor.predict(test_features)
         testing_time = time.time() - start_time
-        result["testing_precision"] = "--"
-        result["testing_recall"] = "--"
-        result["testing_accuracy"] = "--"
         result["regression_score"] = score
         mse = mean_squared_error(test_labels, test_prediction)
         mae = mean_absolute_error(test_labels, test_prediction)

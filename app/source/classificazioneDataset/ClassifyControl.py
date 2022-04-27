@@ -41,7 +41,7 @@ class ClassificazioneControl:
         token = request.form.get("token")
         backend = request.form.get("backend")
         email = request.form.get("email")
-        model =  request.form.get("model")
+        model = request.form.get("model")
 
         thread = Thread(
             target=ClassificazioneControl.classification_thread,
@@ -121,11 +121,6 @@ class ClassificazioneControl:
         result = {}
         result["error"] = 0
         result["model"] = model
-        result["mae"] = "--"
-        result["mse"] = "--"
-        result["accuracy"] = "--"
-        result["precision"] = "--"
-        result["recall"] = "--"
         provider = ""
         try:
             IBMQ.enable_account(token)
@@ -135,14 +130,12 @@ class ClassificazioneControl:
             print("Error activating/deactivating IBM account")
 
         qubit = len(features)
-
         try:
             if (
                     backend_selected
                     and backend_selected != "aer_simulator"
                     and backend_selected != "backend"
-                    and int(provider.get_backend(backend_selected).configuration().n_qubits)
-                    >= qubit
+                    and int(provider.get_backend(backend_selected).configuration().n_qubits) >= qubit
             ):
                 print("backend selected:" + str(backend_selected))
                 print("backend qubit:" +
@@ -162,23 +155,17 @@ class ClassificazioneControl:
                     )
                 )
                 print("least busy backend: ", backend)
-                print(
-                    "backend qubit:"
-                    + str(
-                        provider.get_backend(backend.name())
-                            .configuration()
-                            .n_qubits
-                    )
-                )
-        except:
+                print("backend qubit:" + str(provider.get_backend(backend.name()).configuration().n_qubits))
+
+        except Exception as e:
             # when selected backend has not enough qubit, or no backends has enough
             # qubits, or the user token has no privileges to use the selected
             # backend
+            print(e)
             no_backend = True
             backend = Aer.get_backend('aer_simulator')
             print("backend selected: simulator")
-            print("backend qubit:" +
-                  str(provider.get_backend(backend.name()).configuration().n_qubits))
+            print("backend qubit: 32")
 
         if model == "QSVM":
             r = myQSVM.classify(path_train, path_test, user_path_to_predict, backend, features, qubit)
@@ -219,8 +206,6 @@ class ClassificazioneControl:
             rows = prediction_file.readlines()
             if model != "QSVM":
                 rows.pop(0)
-
-            print(rows)
 
             for j in range(1, utils.numberOfColumns(user_path_to_predict) + 1):
                 classified_file.write("feature" + str(j) + ",")
@@ -281,27 +266,39 @@ class ClassificazioneControl:
                 MIMEText(
                     "<center><h1>Classification details:</h1></center>",
                     'html'))
-            accuracy = result.get("testing_accuracy")
-            precision = result.get("testing_precision")
-            recall = result.get("testing_recall")
-            mae = result.get("mae")
-            mse = result.get("mse")
-            msg.attach(
-                MIMEText(
-                    "<center><h3>"
-                    "Modello: " + result.get("model") +
-                    "<br><br>Testing accuracy: " +
-                    "{:.2%}".format(accuracy) +
-                    "<br><br>Testing precision: " +
-                    "{:.2%}".format(precision) +
-                    "<br><br>Testing recall: " +
-                    "{:.2%}".format(recall) +
-                    "< br > < br > Mean Squared Error: " +
-                    "{:.2%}".format(mse) +
-                    "< br > < br > Mean Absolute Error: " +
-                    "{:.2%}".format(mae) +
-                    "</h3></center>",
-                    'html'))
+
+            model = result.get("model")
+            if model == "QSVR" or model == "NeuralNetworkRegressor":
+                mae = result.get("mae")
+                mse = result.get("mse")
+                score = result.get("regression_score")
+                msg.attach(
+                    MIMEText(
+                        "<center><h3>" +
+                        "Modello: " + result.get("model") +
+                        "<br><br> Mean Squared Error: " +
+                        "{:.2%}".format(float(mse)) +
+                        "<br><br> Mean Absolute Error: " +
+                        "{:.2%}".format(float(mae)) +
+                        "<br><br> Regression score: " +
+                        "{:.2%}".format(float(score)) +
+                        "</h3></center>",
+                        'html'))
+            else:
+                accuracy = result.get("testing_accuracy")
+                precision = result.get("testing_precision")
+                recall = result.get("testing_recall")
+                msg.attach(
+                    MIMEText(
+                        "<center><h3>" +
+                        "<br><br>Testing accuracy: " +
+                        "{:.2%}".format(accuracy) +
+                        "<br><br>Testing precision: " +
+                        "{:.2%}".format(precision) +
+                        "<br><br>Testing recall: " +
+                        "{:.2%}".format(recall) +
+                        "</h3></center>", 'html'))
+
             msg.attach(
                 MIMEText(
                     "<center><h3>Training time: " +
