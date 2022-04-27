@@ -13,11 +13,12 @@ from qiskit.utils import QuantumInstance
 
 class myQSVM:
 
-    def classify(self, path_train, path_test, path_predict, backend, features, num_qubits):
+    def classify(path_train, path_test, path_predict, backend, features, num_qubits):
         seed = 8192
         shots = 1024
+        result = {}
         aqua_globals.random_seed = seed
-        training_input, test_input = self.load_dataset(
+        training_input, test_input = myQSVM.load_dataset(
             path_train, path_test, features, label="labels"
         )
 
@@ -27,8 +28,10 @@ class myQSVM:
         else:
             path_do_prediction = path_predict
 
+        file_to_predict = open(path_do_prediction.__str__(), "r")
+        print(path_do_prediction)
         prediction = np.array(
-            list(csv.reader(path_do_prediction, delimiter=","))
+            list(csv.reader(file_to_predict, delimiter=","))
         ).astype("float")
 
         feature_map = ZZFeatureMap(
@@ -58,11 +61,14 @@ class myQSVM:
         except Exception as e:
             print("Error on IBM server")
             print(e)
-            result = 1
+            result["error"] = 1
             return result
 
         total_time = time.time() - start_time
         result["total_time"] = str(total_time)[0:6]
+        result["training_time"] = "--"
+        result["testing_precision"] = "--"
+        result["testing_recall"] = "--"
         return result
 
     @staticmethod

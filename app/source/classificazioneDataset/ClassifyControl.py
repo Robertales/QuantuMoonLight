@@ -114,9 +114,10 @@ class ClassificazioneControl:
         :return: dict containing classification-related info
         """
 
-        start_time = time.time()
         no_backend = False
         result = {}
+        result["error"] = 0
+        result["model"] = model
         provider = ""
         try:
             IBMQ.enable_account(token)
@@ -172,35 +173,43 @@ class ClassificazioneControl:
                   str(provider.get_backend(backend.name()).configuration().n_qubits))
 
         if model == "QSVM":
-            result = myQSVM.classify(path_train, path_test, user_path_to_predict, backend, features, qubit)
+            r = myQSVM.classify(path_train, path_test, user_path_to_predict, backend, features, qubit)
+            result = {**result, **r}
 
         elif model == "PegasosQSVC":
-            result = myPegasosQSVC(path_train, path_test, user_path_to_predict, backend, qubit)
+            r = myPegasosQSVC.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            result = {**result, **r}
 
-        print("Prediction from datapoints set:")
-        for k, v in result.items():
-            print("{} : {}".format(k, v))
+        if result["error"] != 1:
+            print("Prediction from datapoints set:")
+            for k, v in result.items():
+                print("{} : {}".format(k, v))
 
-        predicted_labels = result["predicted_labels"]
+            predicted_labels = result["predicted_labels"]
 
-        classified_file = open(
-            pathlib.Path(user_path_to_predict).parent / "classifiedFile.csv",
-            "w",
-        )
-        prediction_file = open(user_path_to_predict, "r")
-        rows = prediction_file.readlines()
-
-        for j in range(1, utils.numberOfColumns(user_path_to_predict) + 1):
-            classified_file.write("feature" + str(j) + ",")
-        classified_file.write("label\n")
-        i = 0
-        for row in rows:
-            classified_file.write(
-                row.rstrip("\n") + "," + str(predicted_labels[i]) + "\n"
+            classified_file = open(
+                pathlib.Path(user_path_to_predict).parent / "classifiedFile.csv",
+                "w",
             )
-            i += 1
-        classified_file.close()
-        prediction_file.close()
+            prediction_file = open(user_path_to_predict, "r")
+            rows = prediction_file.readlines()
+            if model != "QSVM":
+                rows.pop(0)
+
+            print(rows)
+
+            for j in range(1, utils.numberOfColumns(user_path_to_predict) + 1):
+                classified_file.write("feature" + str(j) + ",")
+            classified_file.write("label\n")
+            i = 0
+            for row in rows:
+                classified_file.write(
+                    row.rstrip("\n") + "," +
+                    str(predicted_labels[i]) + "\n"
+                )
+                i += 1
+            classified_file.close()
+            prediction_file.close()
 
         result["no_backend"] = no_backend
         return result
@@ -236,7 +245,7 @@ class ClassificazioneControl:
         img.add_header('Content-ID', '<image>')
         msg.attach(img)
 
-        if result == 1:
+        if result["error"] == 1:
             msg.attach(
                 MIMEText(
                     "<center><h3>IBM Server error, please check status on https:"
@@ -249,17 +258,24 @@ class ClassificazioneControl:
                     "<center><h1>Classification details:</h1></center>",
                     'html'))
             accuracy = result.get("testing_accuracy")
-            success_ratio = result.get("test_success_ratio")
+            precision = result.get("testing_precision")
+            recall = result.get("testing_recall")
             msg.attach(
                 MIMEText(
-                    "<center><h3>Testing accuracy: " +
+                    "<center><h3>"
+                    "Modello: " + result.get("model") +
+                    "<br><br>Testing accuracy: " +
                     "{:.2%}".format(accuracy) +
+                    "<br><br>Testing precision: " +
+                    "{:.2%}".format(precision) +
+                    "<br><br>Testing recall: " +
+                    "{:.2%}".format(recall) +
                     "</h3></center>",
                     'html'))
             msg.attach(
                 MIMEText(
-                    "<center><h3>Success ratio: " +
-                    "{:.2%}".format(success_ratio) +
+                    "<center><h3>Training time: " +
+                    result.get("training_time") +
                     "</h3></center>",
                     'html'))
             msg.attach(

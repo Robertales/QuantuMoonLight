@@ -184,6 +184,7 @@ def smista():
     print("Feature Extraction: ", featureExtraction)
     model = request.form.get("model")
     print("Model: ", model)
+    doQSVM = request.form.get("doQSVM")
 
     # Advanced option
     print(request.form["Radio"])
@@ -304,7 +305,7 @@ def smista():
     x_train = pd.read_csv(pathTrain)
     y_train = x_train["labels"]
     sm = SMOTE(random_state=42)
-    x_train, y_train = sm.fit_resample(x_train, y_train)
+    #x_train, y_train = sm.fit_resample(x_train, y_train)
     #x_train.to_csv(pathTrain)
 
 
