@@ -161,7 +161,7 @@ def addcomment():
     db.session.add(comment)
     db.session.commit()
 
-    return redirect(url_for('blog'))
+    return redirect(url_for('post',post_id=id))
 
 
 

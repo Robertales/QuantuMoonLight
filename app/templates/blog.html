@@ -34,7 +34,7 @@
                 {{ Article.title }}
               </h2>
             </a>
-            <p class="post-meta">Posted by {{ Article.email_user }} on {{ Article.data.strftime('%B %d, %Y') }}</p>
+            <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }}</p>
           </div>
           {% endfor %}
 

@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Clean Blog - Start Bootstrap Theme</title>
+    <title>Blog</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
@@ -36,7 +36,7 @@
             <div class="post-heading">
               <h1>{{ post.title }}</h1>
               <span class="meta">Posted by
-                {{ post.email_user }}
+                {{ post.author }}
                 on {{ post.data.strftime('%B %d, %Y') }}</span>
             </div>
           </div>
