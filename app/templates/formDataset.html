@@ -164,8 +164,20 @@ h1:before {
                                     </li>
                                     <li>
                                         <label>
-                                            <input type="checkbox" id="checkQSVM" name="doQSVM" value="doQSVM" onclick="disable_check()"> QSVM
+                                            <input type="checkbox" id="doQSVM" name="doQSVM" value="doQSVM" >
                                         </label>
+                                        <label>Select the algorithm: <select name="model" id="model" style="border: 0.1em solid grey">
+
+                                                                <option value="None">None</option>
+                                             <optgroup label="Classificators">
+                                                                <option value="QSVM">QSVM</option>
+                                                                <option value="QSVC">QSVC </option>
+                                                                <option value="PegasosQSVC">PegasosQSVC </option>
+                                                 <option value="NeuralNetworkClassifier">NeuralNetworkClassifier </option></optgroup>
+                                            <optgroup label="Regressors">
+                                                                <option value="QSVR">QSVR </option>
+                                                <option value="NeuralNetworkRegressor">NeuralNetworkRegressor </option></optgroup>
+                                                        </select></label>
                                     </li>
                                 </ul>
                             <p><br> <!-- Advanced Options -->
@@ -183,7 +195,7 @@ h1:before {
                                     {% if current_user.isResearcher %}
                                     <label>Select one: <select name="backend" id="backend" style="border: 0.1em solid grey">
                                                                 <option value="backend">Least Busy IBM Backend</option>
-                                                                <option value="aer_simulator">IBM Qasm Simulator; Qubit: 32 </option>
+                                                                <option value="aer_simulator">IBM Aer Simulator; Qubit: 32 </option>
                                                                 <option value="ibm_washington">IBM Washington; Processor type: Eagle R1; Qubit: 127 </option>
                                                                 <option value="ibmq_brooklyn">IBMQ Brooklyn; Processor type: Hammingbird R1; Qubit: 65 </option>
                                                                 <option value="ibmq_kolkata">IBMQ Kolkata; Processor type: Falcon r5.11; Qubit: 27 </option>
