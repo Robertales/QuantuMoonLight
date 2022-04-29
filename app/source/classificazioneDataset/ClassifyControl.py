@@ -11,20 +11,16 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formatdate
 from threading import Thread
-
 import flask
-from flask import jsonify
-import numpy as np
-import pandas as pd
 from flask import request, Response
 from qiskit import IBMQ, Aer
-from qiskit.aqua import QuantumInstance, aqua_globals
-from qiskit.aqua.algorithms import QSVM
-from qiskit.aqua.components.multiclass_extensions import AllPairs
-from qiskit.circuit.library import ZZFeatureMap
 from qiskit.providers.ibmq import least_busy
-
 from app import app
+from app.source.classificazioneDataset.myQSVR import myQSVR
+from app.source.classificazioneDataset.myNeuralNetworkClassifier import myNeuralNetworkClassifier
+from app.source.classificazioneDataset.myPegasosQSVC import myPegasosQSVC
+from app.source.classificazioneDataset.myQSVC import myQSVC
+from app.source.classificazioneDataset.myQSVM import myQSVM
 from app.source.utils import utils
 
 warnings.simplefilter(action="ignore", category=DeprecationWarning)
@@ -45,6 +41,7 @@ class ClassificazioneControl:
         token = request.form.get("token")
         backend = request.form.get("backend")
         email = request.form.get("email")
+        model = request.form.get("model")
 
         thread = Thread(
             target=ClassificazioneControl.classification_thread,
@@ -56,7 +53,8 @@ class ClassificazioneControl:
                 features,
                 token,
                 backend,
-                email))
+                email,
+                model))
         thread.setDaemon(True)
         thread.start()
         flask.g = thread
@@ -70,7 +68,8 @@ class ClassificazioneControl:
             features,
             token,
             backend,
-            email):
+            email,
+            model):
         """
         The function is called from classify_control(), anc starts the async thread to run the classification,
         at the end of which the email with the result is sent, through the function get_classified_dataset()
@@ -89,7 +88,7 @@ class ClassificazioneControl:
         :return: dict containing classification-related info
         """
         result: dict = ClassificazioneControl.classify(
-            self, path_train, path_test, path_prediction, features, token, backend)
+            self, path_train, path_test, path_prediction, features, token, backend, model)
         if result != 0:
             ClassificazioneControl.get_classified_dataset(
                 self, result, path_prediction, email)
@@ -103,6 +102,7 @@ class ClassificazioneControl:
             features,
             token,
             backend_selected,
+            model
     ):
         """
         This function connects to the IBM backend, handles IBM backend errors, executes the QSVM classification,
@@ -117,8 +117,10 @@ class ClassificazioneControl:
         :return: dict containing classification-related info
         """
 
-        start_time = time.time()
         no_backend = False
+        result = {}
+        result["error"] = 0
+        result["model"] = model
         provider = ""
         try:
             IBMQ.enable_account(token)
@@ -128,14 +130,12 @@ class ClassificazioneControl:
             print("Error activating/deactivating IBM account")
 
         qubit = len(features)
-
         try:
             if (
                     backend_selected
                     and backend_selected != "aer_simulator"
                     and backend_selected != "backend"
-                    and int(provider.get_backend(backend_selected).configuration().n_qubits)
-                    >= qubit
+                    and int(provider.get_backend(backend_selected).configuration().n_qubits) >= qubit
             ):
                 print("backend selected:" + str(backend_selected))
                 print("backend qubit:" +
@@ -155,127 +155,73 @@ class ClassificazioneControl:
                     )
                 )
                 print("least busy backend: ", backend)
-                print(
-                    "backend qubit:"
-                    + str(
-                        provider.get_backend(backend.name())
-                            .configuration()
-                            .n_qubits
-                    )
-                )
-        except:
+                print("backend qubit:" + str(provider.get_backend(backend.name()).configuration().n_qubits))
+
+        except Exception as e:
             # when selected backend has not enough qubit, or no backends has enough
             # qubits, or the user token has no privileges to use the selected
             # backend
+            print(e)
             no_backend = True
             backend = Aer.get_backend('aer_simulator')
             print("backend selected: simulator")
-            print("backend qubit:" +
-                  str(provider.get_backend(backend.name()).configuration().n_qubits))
+            print("backend qubit: 32")
 
-        seed = 8192
-        shots = 1024
-        aqua_globals.random_seed = seed
+        if model == "QSVM":
+            r = myQSVM.classify(path_train, path_test, user_path_to_predict, backend, features, qubit)
+            result = {**result, **r}
 
-        training_input, test_input = ClassificazioneControl.load_dataset(
-            path_train, path_test, features, label="labels"
-        )
+        elif model == "PegasosQSVC":
+            r = myPegasosQSVC.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            result = {**result, **r}
 
-        path_do_prediction = pathlib.Path(user_path_to_predict).parent
-        if os.path.exists(path_do_prediction / "doPredictionFE.csv"):
-            path_do_prediction = path_do_prediction / "doPredictionFE.csv"
-        else:
-            path_do_prediction = user_path_to_predict
-        file_to_predict = open(path_do_prediction.__str__(), "r")
-        prediction = np.array(
-            list(csv.reader(file_to_predict, delimiter=","))
-        ).astype("float")
+        elif model == "QSVC":
+            r = myQSVC.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            result = {**result, **r}
 
-        feature_map = ZZFeatureMap(
-            feature_dimension=qubit, reps=2, entanglement="linear"
-        )
-        print(feature_map)
+        elif model == "NeuralNetworkClassifier":
+            r = myNeuralNetworkClassifier.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            result = {**result, **r}
 
-        qsvm = QSVM(
-            feature_map,
-            training_input,
-            test_input,
-            prediction,
-            multiclass_extension=AllPairs(),
-        )
+        elif model == "QSVR":
+            r = myQSVR.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            result = {**result, **r}
 
-        quantum_instance = QuantumInstance(
-            backend,
-            shots=shots,
-            seed_simulator=seed,
-            seed_transpiler=seed,
-        )
+        elif model == "NeuralNetworkRegressor":
+            r = myQSVR.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            result = {**result, **r}
 
-        print("Running....\n")
-        try:
-            result = qsvm.run(quantum_instance)
-        except Exception as e:
-            print("Error on IBM server")
-            print(e)
-            result = 1
-            return result
+        if result["error"] != 1:
+            print("Prediction from datapoints set:")
+            for k, v in result.items():
+                print("{} : {}".format(k, v))
 
-        total_time = time.time() - start_time
-        result["total_time"] = str(total_time)[0:6]
+            predicted_labels = result["predicted_labels"]
 
-        print("Prediction from datapoints set:")
-        for k, v in result.items():
-            print("{} : {}".format(k, v))
-
-        predicted_labels = result["predicted_labels"]
-
-        classified_file = open(
-            pathlib.Path(user_path_to_predict).parent / "classifiedFile.csv",
-            "w",
-        )
-        prediction_file = open(user_path_to_predict, "r")
-        rows = prediction_file.readlines()
-
-        for j in range(1, utils.numberOfColumns(user_path_to_predict) + 1):
-            classified_file.write("feature" + str(j) + ",")
-        classified_file.write("label\n")
-        i = 0
-        for row in rows:
-            classified_file.write(
-                row.rstrip("\n") + "," + str(predicted_labels[i]) + "\n"
+            classified_file = open(
+                pathlib.Path(user_path_to_predict).parent / "classifiedFile.csv",
+                "w",
             )
-            i += 1
-        classified_file.close()
-        prediction_file.close()
-        file_to_predict.close()
+            prediction_file = open(user_path_to_predict, "r")
+            rows = prediction_file.readlines()
+            if model != "QSVM":
+                rows.pop(0)
+
+            for j in range(1, utils.numberOfColumns(user_path_to_predict) + 1):
+                classified_file.write("feature" + str(j) + ",")
+            classified_file.write("label\n")
+            i = 0
+            for row in rows:
+                classified_file.write(
+                    row.rstrip("\n") + "," +
+                    str(predicted_labels[i]) + "\n"
+                )
+                i += 1
+            classified_file.close()
+            prediction_file.close()
 
         result["no_backend"] = no_backend
         return result
-
-    #def plot(self, classified_dataset):
-    #    return classified_dataset
-
-    def load_dataset(training_path, testing_path, features, label):
-        """
-        Loads the data, normalizes it and returns it in the following format:
-        {class_0: points_0, class_1:points_1, ...}
-        Where points_i corresponds to the points that belong to class_i as a numpy array
-        """
-        df_train = pd.read_csv(training_path, index_col=0)
-        df_test = pd.read_csv(testing_path, index_col=0)
-
-        train, test = df_train, df_test
-
-        train_dict, test_dict = {}, {}
-        for category in train[label].unique():
-            train_dict[category] = train[train["labels"] == category][
-                features
-            ].values
-            test_dict[category] = test[test["labels"] == category][
-                features
-            ].values
-
-        return train_dict, test_dict
 
     def get_classified_dataset(self, result, userpathToPredict, email):
         """
@@ -308,7 +254,7 @@ class ClassificazioneControl:
         img.add_header('Content-ID', '<image>')
         msg.attach(img)
 
-        if result == 1:
+        if result["error"] == 1:
             msg.attach(
                 MIMEText(
                     "<center><h3>IBM Server error, please check status on https:"
@@ -320,18 +266,43 @@ class ClassificazioneControl:
                 MIMEText(
                     "<center><h1>Classification details:</h1></center>",
                     'html'))
-            accuracy = result.get("testing_accuracy")
-            success_ratio = result.get("test_success_ratio")
+
+            model = result.get("model")
+            if model == "QSVR" or model == "NeuralNetworkRegressor":
+                mae = result.get("mae")
+                mse = result.get("mse")
+                score = result.get("regression_score")
+                msg.attach(
+                    MIMEText(
+                        "<center><h3>" +
+                        "Modello: " + result.get("model") +
+                        "<br><br> Mean Squared Error: " +
+                        "{:.2%}".format(float(mse)) +
+                        "<br><br> Mean Absolute Error: " +
+                        "{:.2%}".format(float(mae)) +
+                        "<br><br> Regression score: " +
+                        "{:.2%}".format(float(score)) +
+                        "</h3></center>",
+                        'html'))
+            else:
+                accuracy = result.get("testing_accuracy")
+                precision = result.get("testing_precision")
+                recall = result.get("testing_recall")
+                msg.attach(
+                    MIMEText(
+                        "<center><h3>" +
+                        "<br><br>Testing accuracy: " +
+                        "{:.2%}".format(accuracy) +
+                        "<br><br>Testing precision: " +
+                        "{:.2%}".format(precision) +
+                        "<br><br>Testing recall: " +
+                        "{:.2%}".format(recall) +
+                        "</h3></center>", 'html'))
+
             msg.attach(
                 MIMEText(
-                    "<center><h3>Testing accuracy: " +
-                    "{:.2%}".format(accuracy) +
-                    "</h3></center>",
-                    'html'))
-            msg.attach(
-                MIMEText(
-                    "<center><h3>Success ratio: " +
-                    "{:.2%}".format(success_ratio) +
+                    "<center><h3>Training time: " +
+                    result.get("training_time") +
                     "</h3></center>",
                     'html'))
             msg.attach(
