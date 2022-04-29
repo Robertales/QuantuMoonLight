@@ -65,16 +65,23 @@
                 <hr/>
 				<ul class="comments">
                      {% for Comment in comments %}
+                  {% if Comment.authorized or current_user.isAdmin %}
                   <li class="clearfix">
 				  <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
 				  <div class="post-comments">
 				      <p class="meta">{{ Comment.data.strftime('%B %d, %Y') }} <a href="#">{{ Comment.author }}</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
+                    {% if not Comment.authorized %} #if dove inserire i tasti per approvare
+                <h6>
+                 Commento non autorizzato inserire qui tasto
+              </h6>
+                    {% endif %}
 				      <p>
 				          {{ Comment.body }}
 				      </p>
 				  </div>
 				  </ul>
 				</li>
+              {% endif %}
                  {% endfor %}
 				</ul>
 			</div>
