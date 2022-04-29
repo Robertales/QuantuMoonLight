@@ -27,16 +27,23 @@
             <button type="submit" class="fadeIn fourth btn btn-primary">Write a new blog post</button>
         </form><br>
 
-   {% for Article in posts %}
+ {% for Article in posts %}
+    {% if Article.authorized or current_user.isAdmin %}
           <div class="post-preview">
             <a href="{{ url_for('post', post_id=Article.id) }}">
               <h2 class="post-title">
                 {{ Article.title }}
               </h2>
+                {% if not Article.authorized %} #if dove inserire i tasti per approvare
+                <h6>
+                 Articolo non autorizzato inserire qui tasto
+              </h6>
+                 {% endif %}
             </a>
             <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }}</p>
           </div>
-          {% endfor %}
+    {% endif %}
+ {% endfor %}
 
 {% endblock %}
 </body>
