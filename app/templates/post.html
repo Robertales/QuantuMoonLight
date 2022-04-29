@@ -36,7 +36,7 @@
             <div class="post-heading">
               <h1>{{ post.title }}</h1>
               <span class="meta">Posted by
-                {{ post.author }}
+                {{ post.email_user }}
                 on {{ post.data.strftime('%B %d, %Y') }}</span>
             </div>
           </div>
@@ -49,11 +49,60 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            {{ post.content|safe }}
+            {{ post.body|safe }}
           </div>
         </div>
       </div>
     </article>
+
+
+
+    <div class="container bootstrap snippets bootdey">
+    <div class="row">
+		<div class="col-md-12">
+		    <div class="blog-comment">
+				<h3 class="text-success">Comments</h3>
+                <hr/>
+				<ul class="comments">
+                     {% for Comment in comments %}
+                  <li class="clearfix">
+				  <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
+				  <div class="post-comments">
+				      <p class="meta">{{ Comment.data.strftime('%B %d, %Y') }} <a href="#">{{ Comment.author }}</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
+				      <p>
+				          {{ Comment.body }}
+				      </p>
+				  </div>
+				  </ul>
+				</li>
+                 {% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <form name="addForm" id="addForm" method="POST" action="{{ url_for('addcomment') }}" novalidate>
+            <div class="control-group">
+              <div class="form-group floating-label-form-group controls">
+                 <input type="hidden" id="artId" name="artId" value={{post.id}}>
+                <textarea rows="5" cols="50" class="form-control" placeholder="Write a comment" name="content" id="content" ></textarea>
+                <p class="help-block text-danger"></p>
+              </div>
+            </div>
+            <br>
+            <div id="success"></div>
+            <div class="form-group">
+              <button type="Publish Comment" class="btn btn-secondary" id="sendMessageButton">Send</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
 
     <hr>
 
