@@ -15,12 +15,13 @@ import flask
 from flask import request, Response
 from qiskit import IBMQ, Aer
 from qiskit.providers.ibmq import least_busy
-from app import app
+from app import app, db
 from app.source.classificazioneDataset.myQSVR import myQSVR
 from app.source.classificazioneDataset.myNeuralNetworkClassifier import myNeuralNetworkClassifier
 from app.source.classificazioneDataset.myPegasosQSVC import myPegasosQSVC
 from app.source.classificazioneDataset.myQSVC import myQSVC
 from app.source.classificazioneDataset.myQSVM import myQSVM
+from app.source.model.models import Dataset
 from app.source.utils import utils
 
 warnings.simplefilter(action="ignore", category=DeprecationWarning)
@@ -42,6 +43,7 @@ class ClassificazioneControl:
         backend = request.form.get("backend")
         email = request.form.get("email")
         model = request.form.get("model")
+        id_dataset = request.form.get("id_dataset")
 
         thread = Thread(
             target=ClassificazioneControl.classification_thread,
@@ -54,7 +56,8 @@ class ClassificazioneControl:
                 token,
                 backend,
                 email,
-                model))
+                model,
+                id_dataset))
         thread.setDaemon(True)
         thread.start()
         flask.g = thread
@@ -69,7 +72,8 @@ class ClassificazioneControl:
             token,
             backend,
             email,
-            model):
+            model,
+            id_dataset):
         """
         The function is called from classify_control(), anc starts the async thread to run the classification,
         at the end of which the email with the result is sent, through the function get_classified_dataset()
@@ -88,7 +92,7 @@ class ClassificazioneControl:
         :return: dict containing classification-related info
         """
         result: dict = ClassificazioneControl.classify(
-            self, path_train, path_test, path_prediction, features, token, backend, model)
+            self, path_train, path_test, path_prediction, features, token, backend, model, id_dataset)
         if result != 0:
             ClassificazioneControl.get_classified_dataset(
                 self, result, path_prediction, email)
@@ -102,7 +106,8 @@ class ClassificazioneControl:
             features,
             token,
             backend_selected,
-            model
+            model,
+            id_dataset
     ):
         """
         This function connects to the IBM backend, handles IBM backend errors, executes the QSVM classification,
@@ -190,6 +195,18 @@ class ClassificazioneControl:
         elif model == "NeuralNetworkRegressor":
             r = myQSVR.classify(path_train, path_test, user_path_to_predict, backend, qubit)
             result = {**result, **r}
+
+        dataset = Dataset.query.get(id_dataset)
+        if model == "QSVR" or model == "NeuralNetworkRegressor":
+            dataset.mse = result.get("mse")
+            dataset.mae = result.get("mae")
+        else:
+            dataset.accuracy = result.get("testing_accuracy")
+            dataset.precision = result.get("testing_precision")
+            dataset.recall = result.get("testing_recall")
+        dataset.training_time = result.get("training_time")
+        dataset.total_time = result.get("total_time")
+        db.session.commit()
 
         if result["error"] != 1:
             print("Prediction from datapoints set:")

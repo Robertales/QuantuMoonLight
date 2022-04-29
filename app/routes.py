@@ -200,9 +200,10 @@ def smista():
     print("Prototype Selection: ", prototypeSelection)
     featureExtraction = request.form.get("reduceFE")
     print("Feature Extraction: ", featureExtraction)
+    # doQSVM = request.form.get("doQSVM")
     model = request.form.get("model")
     print("Model: ", model)
-    doQSVM = request.form.get("doQSVM")
+
 
     # Advanced option
     print(request.form["Radio"])
@@ -235,7 +236,7 @@ def smista():
         ps=bool(prototypeSelection),
         fe=bool(featureExtraction),
         k_fold=bool(kFold),
-        doQSVM=bool(doQSVM),
+        model=model,
     )
     db.session.add(salvataggiodatabase)
     db.session.commit()
@@ -311,7 +312,7 @@ def smista():
             featureExtraction=featureExtraction,
             numRawsPS=numRawsPS,
             numColsFE=numColsFE,
-            doQSVM=doQSVM,
+            doQSVM=True,
         ),
     )
     # DataSet Train ready to be classified
@@ -367,7 +368,8 @@ def smista():
                 features=features,
                 token=token,
                 backend=backend,
-                model=model
+                model=model,
+                id_dataset=salvataggiodatabase.id
             ),
         )
 
