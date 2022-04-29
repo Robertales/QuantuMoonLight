@@ -33,6 +33,7 @@ class Dataset(db.Model):
     ps = db.Column(db.Boolean, nullable=True)
     fe = db.Column(db.Boolean, nullable=True)
     doQSVM = db.Column(db.Boolean, nullable=True)
+    accuracy = db.Column(db.Float, nullable=True)
 
 
 class Article(db.Model):
