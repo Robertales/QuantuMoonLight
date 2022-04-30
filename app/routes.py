@@ -202,7 +202,17 @@ def smista():
     print("Feature Extraction: ", featureExtraction)
     # doQSVM = request.form.get("doQSVM")
     model = request.form.get("model")
-    print("Model: ", model)
+    print("model: ", model)
+    loss = request.form.get("loss")
+    print("loss: ", loss)
+    optimizer = request.form.get("optimizer")
+    print("optimizer: ", optimizer)
+    C = request.form.get("C")
+    print("C: ", C)
+    tau = request.form.get("tau")
+    print("tau: ", tau)
+    max_iter = request.form.get("max_iter")
+    print("max_iter: ", max_iter)
 
 
     # Advanced option
@@ -369,6 +379,11 @@ def smista():
                 token=token,
                 backend=backend,
                 model=model,
+                C=C,
+                tau=tau,
+                optimizer=optimizer,
+                loss=loss,
+                max_iter=max_iter,
                 id_dataset=salvataggiodatabase.id
             ),
         )

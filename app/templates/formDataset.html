@@ -190,6 +190,22 @@ h1:before {
                                     <label>Insert nr of columns to reduce:   <input type="number" max="10000" min="2" value="2" id="nrColumns" name="nrColumns" style="border: 0.1em solid grey"></label><br>
                                     <label>Insert nr of rows to reduce:    <input type="number" max="10000" min="2" value="100" id="nrRows" name="nrRows" style="border: 0.1em solid grey"></label>
                                     {% if current_user.isResearcher %}
+                                    <label>Insert PegasosQSVC C:    <input type="number" max="10000" min="2" value="1000" id="C" name="C" style="border: 0.1em solid grey"></label>
+                                    <label>Insert PegasosQSVC tau:    <input type="number" max="10000" min="2" value="100" id="tau" name="tau" style="border: 0.1em solid grey"></label>
+                                    <label>Insert NN optimizer:    <select name="optimizer" id="optimizer" style="border: 0.1em solid grey">
+                                                                        <option value="SLSQP">SLSQP</option>
+                                                                        <option value="ADAM">ADAM</option>
+                                                                        <option value="GradientDescent">Gradient Descent </option>
+                                                                        <option value="COBYLA">COBYLA</option>
+                                                                    </select>
+                                    <label>Insert NN loss function:     <select name="loss" id="loss" style="border: 0.1em solid grey">
+                                                                            <option value="cross_entropy">Cross Entropy</option>
+                                                                            <option value="squared_error">Squared Error </option>
+                                                                            <option value="absolute_error">Absolute Error </option>
+                                                                            <option value="cross_entropy_sigmoid">Sigmoid Cross Entropy </option>
+                                                                        </select>
+                                    <label>Insert max iterations optimizer:    <input type="number" max="10000" min="10" value="100" id="max_iter" name="max_iter" style="border: 0.1em solid grey"></label>
+
                                     <label>Select one: <select name="backend" id="backend" style="border: 0.1em solid grey">
                                                                 <option value="backend">Least Busy IBM Backend</option>
                                                                 <option value="aer_simulator">IBM Aer Simulator; Qubit: 32 </option>

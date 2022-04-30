@@ -2,7 +2,7 @@ import csv
 import time
 import pandas as pd
 from qiskit import QuantumCircuit
-from qiskit.algorithms.optimizers import COBYLA
+from qiskit.algorithms.optimizers import COBYLA, SLSQP, ADAM, GradientDescent
 from qiskit.circuit.library import ZFeatureMap, ZZFeatureMap, RealAmplitudes
 from qiskit.utils import algorithm_globals, QuantumInstance
 from qiskit_machine_learning.algorithms import PegasosQSVC, NeuralNetworkClassifier
@@ -16,11 +16,11 @@ from app.source.utils.utils import createFeatureList, numberOfColumns
 
 
 class myNeuralNetworkClassifier:
-    def classify(pathTrain, pathTest, path_predict, backend, num_qubits):
+    def classify(pathTrain, pathTest, path_predict, backend, num_qubits, optimizer, loss, max_iter):
 
         print(pathTrain, pathTest, path_predict)
         data_train = pd.read_csv(pathTrain)
-        data_train = data_train.drop(columns='Id') #QSVM richiede l'id e Pegasos no
+        data_train = data_train.drop(columns='Id')
         train_features = data_train.drop(columns='labels')
         train_labels = data_train["labels"].values
         data_test = pd.read_csv(pathTest)
@@ -48,7 +48,7 @@ class myNeuralNetworkClassifier:
         prediction_data = np.genfromtxt(path_predict, delimiter=',')
         prediction_data = np.delete(prediction_data, 0, axis=0)
 
-        test_features = test_features.to_numpy() #Pegasos.fit accetta numpy array e non dataframe
+        test_features = test_features.to_numpy()
         train_features = train_features.to_numpy()
 
         print("Train features: ", train_features)
@@ -87,10 +87,26 @@ class myNeuralNetworkClassifier:
             quantum_instance=quantum_instance,
         )
         # construct classifier
-        circuit_classifier = NeuralNetworkClassifier(
-            neural_network=circuit_qnn, optimizer=COBYLA(maxiter=50)
-        )
+        def callback():
+            return
 
+        circuit_classifier = []
+        if optimizer == "COBYLA":
+            circuit_classifier = NeuralNetworkClassifier(
+                neural_network=circuit_qnn, optimizer=COBYLA(maxiter=int(max_iter)), loss=loss, callback=callback
+            )
+        elif optimizer == "SLSQP":
+            circuit_classifier = NeuralNetworkClassifier(
+                neural_network=circuit_qnn, optimizer=SLSQP(maxiter=int(max_iter)), loss=loss, callback=callback
+            )
+        elif optimizer == "ADAM":
+            circuit_classifier = NeuralNetworkClassifier(
+                neural_network=circuit_qnn, optimizer=ADAM(maxiter=int(max_iter)), loss=loss, callback=callback
+            )
+        elif optimizer == "GradientDescent":
+            circuit_classifier = NeuralNetworkClassifier(
+                neural_network=circuit_qnn, optimizer=GradientDescent(maxiter=int(max_iter)), loss=loss, callback=callback
+            )
         # training
         print("Running...")
         start_time = time.time()

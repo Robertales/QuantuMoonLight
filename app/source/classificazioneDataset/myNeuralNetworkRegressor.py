@@ -2,7 +2,7 @@ import csv
 import time
 import pandas as pd
 from qiskit import QuantumCircuit
-from qiskit.algorithms.optimizers import COBYLA
+from qiskit.algorithms.optimizers import COBYLA, SLSQP, ADAM, GradientDescent
 from qiskit.circuit.library import ZFeatureMap, ZZFeatureMap, RealAmplitudes
 from qiskit.utils import algorithm_globals, QuantumInstance
 from qiskit_machine_learning.algorithms import PegasosQSVC, NeuralNetworkClassifier, NeuralNetworkRegressor
@@ -16,7 +16,7 @@ from app.source.utils.utils import createFeatureList, numberOfColumns
 
 
 class myNeuralNetworkRegressor:
-    def classify(pathTrain, pathTest, path_predict, backend, num_qubits):
+    def classify(pathTrain, pathTest, path_predict, backend, num_qubits, optimizer, loss, max_iter):
 
         print(pathTrain, pathTest, path_predict)
         data_train = pd.read_csv(pathTrain)
@@ -87,9 +87,27 @@ class myNeuralNetworkRegressor:
             quantum_instance=quantum_instance,
         )
         # construct classifier
-        circuit_regressor = NeuralNetworkRegressor(
-            neural_network=circuit_qnn, optimizer=COBYLA(maxiter=50)
-        )
+        def callback():
+            return
+
+        circuit_regressor = []
+        if optimizer == "COBYLA":
+            circuit_regressor = NeuralNetworkRegressor(
+                neural_network=circuit_qnn, optimizer=COBYLA(maxiter=int(max_iter)), loss=loss, callback=callback
+            )
+        elif optimizer == "SLSQP":
+            circuit_regressor = NeuralNetworkRegressor(
+                neural_network=circuit_qnn, optimizer=SLSQP(maxiter=int(max_iter)), loss=loss, callback=callback
+            )
+        elif optimizer == "ADAM":
+            circuit_regressor = NeuralNetworkRegressor(
+                neural_network=circuit_qnn, optimizer=ADAM(maxiter=int(max_iter)), loss=loss, callback=callback
+            )
+        elif optimizer == "GradientDescent":
+            circuit_regressor = NeuralNetworkRegressor(
+                neural_network=circuit_qnn, optimizer=GradientDescent(maxiter=int(max_iter)), loss=loss,
+                callback=callback
+            )
 
         # training
         print("Running...")

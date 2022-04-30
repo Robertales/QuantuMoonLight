@@ -16,6 +16,7 @@ from flask import request, Response
 from qiskit import IBMQ, Aer
 from qiskit.providers.ibmq import least_busy
 from app import app, db
+from app.source.classificazioneDataset.myNeuralNetworkRegressor import myNeuralNetworkRegressor
 from app.source.classificazioneDataset.myQSVR import myQSVR
 from app.source.classificazioneDataset.myNeuralNetworkClassifier import myNeuralNetworkClassifier
 from app.source.classificazioneDataset.myPegasosQSVC import myPegasosQSVC
@@ -43,6 +44,12 @@ class ClassificazioneControl:
         backend = request.form.get("backend")
         email = request.form.get("email")
         model = request.form.get("model")
+        C = request.form.get("C")
+        tau = request.form.get("tau")
+        optimizer = request.form.get("optimizer")
+        loss = request.form.get("loss")
+        max_iter = request.form.get("max_iter")
+
         id_dataset = request.form.get("id_dataset")
 
         thread = Thread(
@@ -57,6 +64,11 @@ class ClassificazioneControl:
                 backend,
                 email,
                 model,
+                C,
+                tau,
+                optimizer,
+                loss,
+                max_iter,
                 id_dataset))
         thread.setDaemon(True)
         thread.start()
@@ -73,6 +85,11 @@ class ClassificazioneControl:
             backend,
             email,
             model,
+            C,
+            tau,
+            optimizer,
+            loss,
+            max_iter,
             id_dataset):
         """
         The function is called from classify_control(), anc starts the async thread to run the classification,
@@ -92,7 +109,7 @@ class ClassificazioneControl:
         :return: dict containing classification-related info
         """
         result: dict = ClassificazioneControl.classify(
-            self, path_train, path_test, path_prediction, features, token, backend, model, id_dataset)
+            self, path_train, path_test, path_prediction, features, token, backend, model, C, tau, optimizer, loss, max_iter, id_dataset)
         if result != 0:
             ClassificazioneControl.get_classified_dataset(
                 self, result, path_prediction, email)
@@ -107,6 +124,11 @@ class ClassificazioneControl:
             token,
             backend_selected,
             model,
+            C,
+            tau,
+            optimizer,
+            loss,
+            max_iter,
             id_dataset
     ):
         """
@@ -177,7 +199,7 @@ class ClassificazioneControl:
             result = {**result, **r}
 
         elif model == "PegasosQSVC":
-            r = myPegasosQSVC.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            r = myPegasosQSVC.classify(path_train, path_test, user_path_to_predict, backend, qubit, C, tau)
             result = {**result, **r}
 
         elif model == "QSVC":
@@ -185,7 +207,7 @@ class ClassificazioneControl:
             result = {**result, **r}
 
         elif model == "NeuralNetworkClassifier":
-            r = myNeuralNetworkClassifier.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            r = myNeuralNetworkClassifier.classify(path_train, path_test, user_path_to_predict, backend, qubit, optimizer, loss, max_iter)
             result = {**result, **r}
 
         elif model == "QSVR":
@@ -193,7 +215,7 @@ class ClassificazioneControl:
             result = {**result, **r}
 
         elif model == "NeuralNetworkRegressor":
-            r = myQSVR.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            r = myNeuralNetworkRegressor.classify(path_train, path_test, user_path_to_predict, backend, qubit, optimizer, loss, max_iter)
             result = {**result, **r}
 
         dataset = Dataset.query.get(id_dataset)
