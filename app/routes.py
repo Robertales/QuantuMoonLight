@@ -361,6 +361,7 @@ def smista():
             email = current_user.email
 
         if featureExtraction:
+            userpathToPredict = dataPath / "doPredictionFE.csv"
             features = utils.createFeatureList(
                 numColsFE
             )  # lista di features per la qsvm
@@ -368,6 +369,7 @@ def smista():
             features = utils.createFeatureList(
                 utils.numberOfColumns(userpathTrain) - 1
             )
+        print("Routes ", userpathToPredict)
         app.test_client().post(
             "/classify_control",
             data=dict(

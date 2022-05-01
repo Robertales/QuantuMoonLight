@@ -53,8 +53,9 @@ class myPegasosQSVC:
         result = {}
         algorithm_globals.random_seed = 12345
 
-        print(C)
-        print(tau)
+        print(train_features, train_labels)
+        print(test_features, test_labels)
+        print("Prediction: ", prediction_data)
 
         feature_map = ZFeatureMap(feature_dimension=num_qubits, reps=1)
         qkernel = QuantumKernel(feature_map=feature_map, quantum_instance=QuantumInstance(backend))
