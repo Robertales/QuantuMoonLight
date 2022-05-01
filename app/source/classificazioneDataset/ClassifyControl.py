@@ -109,7 +109,8 @@ class ClassificazioneControl:
         :return: dict containing classification-related info
         """
         result: dict = ClassificazioneControl.classify(
-            self, path_train, path_test, path_prediction, features, token, backend, model, C, tau, optimizer, loss, max_iter, id_dataset)
+            self, path_train, path_test, path_prediction, features, token, backend, model, C, tau, optimizer, loss,
+            max_iter, id_dataset)
         if result != 0:
             ClassificazioneControl.get_classified_dataset(
                 self, result, path_prediction, email)
@@ -310,7 +311,6 @@ class ClassificazioneControl:
             if model == "QSVR" or model == "NeuralNetworkRegressor":
                 mae = result.get("mae")
                 mse = result.get("mse")
-                score = result.get("regression_score")
                 msg.attach(
                     MIMEText(
                         "<center><h3>" +
@@ -319,8 +319,6 @@ class ClassificazioneControl:
                         "{:.2%}".format(float(mse)) +
                         "<br><br> Mean Absolute Error: " +
                         "{:.2%}".format(float(mae)) +
-                        "<br><br> Regression score: " +
-                        "{:.2%}".format(float(score)) +
                         "</h3></center>",
                         'html'))
             else:
@@ -330,6 +328,7 @@ class ClassificazioneControl:
                 msg.attach(
                     MIMEText(
                         "<center><h3>" +
+                        "Modello: " + result.get("model") +
                         "<br><br>Testing accuracy: " +
                         "{:.2%}".format(accuracy) +
                         "<br><br>Testing precision: " +

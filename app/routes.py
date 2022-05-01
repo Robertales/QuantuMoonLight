@@ -331,8 +331,8 @@ def smista():
     pathTest = dataPath / "DataSetTestPreprocessato.csv"
 
     # Data Balancing
-    x_train = pd.read_csv(pathTrain)
-    y_train = x_train["labels"]
+    #x_train = pd.read_csv(pathTrain)
+    #y_train = x_train["labels"]
     sm = SMOTE(random_state=42)
 
     #x_train, y_train = sm.fit_resample(x_train, y_train)

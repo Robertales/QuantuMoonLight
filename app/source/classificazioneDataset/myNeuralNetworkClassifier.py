@@ -18,6 +18,7 @@ from app.source.utils.utils import createFeatureList, numberOfColumns
 class myNeuralNetworkClassifier:
     def classify(pathTrain, pathTest, path_predict, backend, num_qubits, optimizer, loss, max_iter):
 
+
         print(pathTrain, pathTest, path_predict)
         data_train = pd.read_csv(pathTrain)
         data_train = data_train.drop(columns='Id')
@@ -51,11 +52,15 @@ class myNeuralNetworkClassifier:
         test_features = test_features.to_numpy()
         train_features = train_features.to_numpy()
 
-        print("Train features: ", train_features)
-        print("Test features: ", test_features)
-        print("Train labels: ", train_labels)
-        print("Test labels: ", test_labels)
-        print(prediction_data)
+        print("Train features: ", train_features, type(train_features))
+        print("Test features: ", test_features, type(test_features))
+        print("Train labels: ", train_labels, type(train_labels))
+        print("Test labels: ", test_labels, type(test_labels))
+        print("Prediction data: ", prediction_data, type(prediction_data))
+        print("Optimizer: ", optimizer)
+        print("Loss: ", loss)
+        print("Max iter: ", max_iter)
+        print("qubit ", num_qubits)
 
         result = {}
 
@@ -76,7 +81,8 @@ class myNeuralNetworkClassifier:
         def parity(x):
             return "{:b}".format(x).count("1") % 2
 
-        output_shape = len(np.unique(train_labels))  # corresponds to the number of classes, possible outcomes of the (parity) mapping.
+        output_shape = len(
+            np.unique(train_labels))  # corresponds to the number of classes, possible outcomes of the (parity) mapping.
         # construct QNN
         circuit_qnn = CircuitQNN(
             circuit=qc,
@@ -86,26 +92,24 @@ class myNeuralNetworkClassifier:
             output_shape=output_shape,
             quantum_instance=quantum_instance,
         )
-        # construct classifier
-        def callback():
-            return
 
-        circuit_classifier = []
+        # construct classifier
+
+        circuit_classifier = NeuralNetworkClassifier(
+            neural_network=circuit_qnn, optimizer=SLSQP(maxiter=int(max_iter)), loss=str(loss)
+        )
         if optimizer == "COBYLA":
             circuit_classifier = NeuralNetworkClassifier(
-                neural_network=circuit_qnn, optimizer=COBYLA(maxiter=int(max_iter)), loss=loss, callback=callback
+                neural_network=circuit_qnn, optimizer=COBYLA(maxiter=int(max_iter)), loss=str(loss)
             )
-        elif optimizer == "SLSQP":
-            circuit_classifier = NeuralNetworkClassifier(
-                neural_network=circuit_qnn, optimizer=SLSQP(maxiter=int(max_iter)), loss=loss, callback=callback
-            )
+
         elif optimizer == "ADAM":
             circuit_classifier = NeuralNetworkClassifier(
-                neural_network=circuit_qnn, optimizer=ADAM(maxiter=int(max_iter)), loss=loss, callback=callback
+                neural_network=circuit_qnn, optimizer=ADAM(maxiter=int(max_iter)), loss=str(loss)
             )
         elif optimizer == "GradientDescent":
             circuit_classifier = NeuralNetworkClassifier(
-                neural_network=circuit_qnn, optimizer=GradientDescent(maxiter=int(max_iter)), loss=loss, callback=callback
+                neural_network=circuit_qnn, optimizer=GradientDescent(maxiter=int(max_iter)), loss=str(loss)
             )
         # training
         print("Running...")
