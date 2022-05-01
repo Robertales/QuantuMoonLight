@@ -1,6 +1,7 @@
 import csv
 import time
 import pandas as pd
+from matplotlib import pyplot as plt
 from qiskit import QuantumCircuit
 from qiskit.algorithms.optimizers import COBYLA
 from qiskit.circuit.library import ZFeatureMap, ZZFeatureMap, RealAmplitudes
@@ -20,7 +21,7 @@ class myNeuralNetworkClassifier:
 
         print(pathTrain, pathTest, path_predict)
         data_train = pd.read_csv(pathTrain)
-        data_train = data_train.drop(columns='Id') #QSVM richiede l'id e Pegasos no
+        data_train = data_train.drop(columns='Id')  # QSVM richiede l'id e Pegasos no
         train_features = data_train.drop(columns='labels')
         train_labels = data_train["labels"].values
         data_test = pd.read_csv(pathTest)
@@ -48,7 +49,7 @@ class myNeuralNetworkClassifier:
         prediction_data = np.genfromtxt(path_predict, delimiter=',')
         prediction_data = np.delete(prediction_data, 0, axis=0)
 
-        test_features = test_features.to_numpy() #Pegasos.fit accetta numpy array e non dataframe
+        test_features = test_features.to_numpy()  # Pegasos.fit accetta numpy array e non dataframe
         train_features = train_features.to_numpy()
 
         print("Train features: ", train_features)
@@ -76,7 +77,8 @@ class myNeuralNetworkClassifier:
         def parity(x):
             return "{:b}".format(x).count("1") % 2
 
-        output_shape = len(np.unique(train_labels))  # corresponds to the number of classes, possible outcomes of the (parity) mapping.
+        output_shape = len(
+            np.unique(train_labels))  # corresponds to the number of classes, possible outcomes of the (parity) mapping.
         # construct QNN
         circuit_qnn = CircuitQNN(
             circuit=qc,
@@ -118,5 +120,20 @@ class myNeuralNetworkClassifier:
 
         result["total_time"] = str(testing_time + training_time)[0:6]
         result["training_time"] = str(training_time)[0:6]
+
+        labels = np.unique(train_labels)
+        occurrences = {}
+        for i in train_labels.data:
+            if i in occurrences:
+                occurrences[i] += 1
+            else:
+                occurrences[i] = 1
+        sizes = occurrences.values()
+
+        fig1, ax1 = plt.subplots()
+        ax1.pie(sizes, labels=labels, autopct='%1.1f%%')
+        ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+        plt.show()
 
         return result
