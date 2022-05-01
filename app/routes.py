@@ -146,24 +146,37 @@ def addpost():
     return redirect(url_for('blog'))
 
 
+@app.route('/enableArticle/<int:article_id>', methods=['POST'])
+def enableArticle(article_id):
+    article = Article.query.filter_by(id=article_id).one()
+    article.authorized = True
+    db.session.commit()
+
+    return redirect(url_for('blog'))
+
+
+@app.route('/enableComment/<int:comment_id>', methods=['POST'])
+def enableComment(comment_id):
+    comment = Comment.query.filter_by(id=comment_id).one()
+    comment.authorized = True
+    db.session.commit()
+
+    return redirect(url_for('blog'))
+
 @app.route('/addcomment', methods=['POST'])
 @login_required
 def addcomment():
-
     author = current_user.username
     email = current_user.email
     body = request.form['content']
     id = request.form['artId']
-
 
     comment = Comment(email_user=email, author=author, body=body, data=datetime.now(), id_article=id)
 
     db.session.add(comment)
     db.session.commit()
 
-    return redirect(url_for('post',post_id=id))
-
-
+    return redirect(url_for('post', post_id=id))
 
 
 @app.route("/userPage")
@@ -200,9 +213,10 @@ def smista():
     print("Prototype Selection: ", prototypeSelection)
     featureExtraction = request.form.get("reduceFE")
     print("Feature Extraction: ", featureExtraction)
+    # doQSVM = request.form.get("doQSVM")
     model = request.form.get("model")
     print("Model: ", model)
-    doQSVM = request.form.get("doQSVM")
+
 
     # Advanced option
     print(request.form["Radio"])
@@ -235,7 +249,7 @@ def smista():
         ps=bool(prototypeSelection),
         fe=bool(featureExtraction),
         k_fold=bool(kFold),
-        doQSVM=bool(doQSVM),
+        model=model,
     )
     db.session.add(salvataggiodatabase)
     db.session.commit()
@@ -311,7 +325,7 @@ def smista():
             featureExtraction=featureExtraction,
             numRawsPS=numRawsPS,
             numColsFE=numColsFE,
-            doQSVM=doQSVM,
+            doQSVM=True,
         ),
     )
     # DataSet Train ready to be classified
@@ -367,7 +381,8 @@ def smista():
                 features=features,
                 token=token,
                 backend=backend,
-                model=model
+                model=model,
+                id_dataset=salvataggiodatabase.id
             ),
         )
 

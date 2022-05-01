@@ -67,8 +67,6 @@ class myQSVM:
         total_time = time.time() - start_time
         result["total_time"] = str(total_time)[0:6]
         result["training_time"] = "--"
-        result["testing_precision"] = "--"
-        result["testing_recall"] = "--"
         return result
 
     @staticmethod

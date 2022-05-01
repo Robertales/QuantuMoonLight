@@ -88,9 +88,14 @@ h1 {
              <th scope="col">K-Fold</th>
              <th scope="col">Prototype Selection</th>
              <th scope="col">Feature Extraction</th>
-             <th scope="col">QSVM</th>
+             <th scope="col">Classifier</th>
              <th scope="col">Accuracy</th>
-
+             <th scope="col">Precision</th>
+             <th scope="col">Recall</th>
+             <th scope="col">MSE</th>
+             <th scope="col">MAE</th>
+             <th scope="col">Training Time</th>
+             <th scope="col">Total Time</th>
         </tr>
     </thead>
          <tbody>
@@ -120,15 +125,41 @@ h1 {
             {% else %}
             <td>No</td>
             {% endif %}
-            {% if(item.doQSVM) %}
-            <td>Yes</td>
-            {% else %}
-            <td>No</td>
-            {% endif %}
-            {% if(item.doQSVM) %}
-            <td>{{ item.accuracy}}</td>
-            {% else %}
+            <td>{{ item.model }}<td>
+            {% if(item.accuracy==-1) %}
             <td>N/A</td>
+            {% else %}
+            <td>{{item.accuracy}}%</td>
+            {% endif %}
+            {% if(item.precision==-1) %}
+            <td>N/A</td>
+            {% else %}
+            <td>{{item.precision}}%</td>
+            {% endif %}
+            {% if(item.recall==-1) %}
+            <td>N/A</td>
+            {% else %}
+            <td>{{item.recall}}%</td>
+            {% endif %}
+            {% if(item.mse==-1) %}
+            <td>N/A</td>
+            {% else %}
+            <td>{{item.mse}}%</td>
+            {% endif %}
+            {% if(item.mae==-1) %}
+            <td>N/A</td>
+            {% else %}
+            <td>{{item.mae}}%</td>
+            {% endif %}
+            {% if(item.training_time==-1) %}
+            <td>N/A</td>
+            {% else %}
+            <td>{{item.training_time}}s</td>
+            {% endif %}
+            {% if(item.total_time==-1) %}
+            <td>N/A</td>
+            {% else %}
+            <td>{{item.total_time}}s</td>
             {% endif %}
 
         </tr>
