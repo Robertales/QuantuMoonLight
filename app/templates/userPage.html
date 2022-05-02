@@ -84,6 +84,11 @@
           <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Admin Page</button>
       </form><br>
       {% endif %}
+      {% if current_user.isAdmin %}
+      <form action="{{url_for("ArticleApproval")}}">
+          <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span> Article Approval</button>
+      </form><br>
+      {% endif %}
 
       <form action="/logout" method="post">
           <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-sign-out"></span> Log-Out</button>
