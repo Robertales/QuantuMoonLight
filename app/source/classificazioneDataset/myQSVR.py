@@ -72,6 +72,7 @@ class myQSVR:
         start_time = time.time()
         score = qsvr.score(test_features, test_labels)
         test_prediction = qsvr.predict(test_features)
+        print(test_labels, test_prediction)
         testing_time = time.time() - start_time
         result["regression_score"] = score
         mse = mean_squared_error(test_labels, test_prediction)

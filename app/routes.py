@@ -215,7 +215,17 @@ def smista():
     print("Feature Extraction: ", featureExtraction)
     # doQSVM = request.form.get("doQSVM")
     model = request.form.get("model")
-    print("Model: ", model)
+    print("model: ", model)
+    loss = request.form.get("loss")
+    print("loss: ", loss)
+    optimizer = request.form.get("optimizer")
+    print("optimizer: ", optimizer)
+    C = request.form.get("C")
+    print("C: ", C)
+    tau = request.form.get("tau")
+    print("tau: ", tau)
+    max_iter = request.form.get("max_iter")
+    print("max_iter: ", max_iter)
 
 
     # Advanced option
@@ -334,8 +344,8 @@ def smista():
     pathTest = dataPath / "DataSetTestPreprocessato.csv"
 
     # Data Balancing
-    x_train = pd.read_csv(pathTrain)
-    y_train = x_train["labels"]
+    #x_train = pd.read_csv(pathTrain)
+    #y_train = x_train["labels"]
     sm = SMOTE(random_state=42)
 
     #x_train, y_train = sm.fit_resample(x_train, y_train)
@@ -364,6 +374,7 @@ def smista():
             email = current_user.email
 
         if featureExtraction:
+            userpathToPredict = dataPath / "doPredictionFE.csv"
             features = utils.createFeatureList(
                 numColsFE
             )  # lista di features per la qsvm
@@ -371,6 +382,7 @@ def smista():
             features = utils.createFeatureList(
                 utils.numberOfColumns(userpathTrain) - 1
             )
+        print("Routes ", userpathToPredict)
         app.test_client().post(
             "/classify_control",
             data=dict(
@@ -382,6 +394,11 @@ def smista():
                 token=token,
                 backend=backend,
                 model=model,
+                C=C,
+                tau=tau,
+                optimizer=optimizer,
+                loss=loss,
+                max_iter=max_iter,
                 id_dataset=salvataggiodatabase.id
             ),
         )

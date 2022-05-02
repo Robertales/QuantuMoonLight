@@ -9,6 +9,7 @@ from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.components.multiclass_extensions import AllPairs
 from qiskit.circuit.library import ZZFeatureMap
 from qiskit.utils import QuantumInstance
+from sklearn.metrics import accuracy_score, precision_score, recall_score
 
 
 class myQSVM:
@@ -38,7 +39,6 @@ class myQSVM:
             feature_dimension=num_qubits, reps=2, entanglement="linear"
         )
         print(feature_map)
-
         qsvm = QSVM(
             feature_map,
             training_input,
@@ -58,15 +58,32 @@ class myQSVM:
         start_time = time.time()
         try:
             result = qsvm.run(quantum_instance)
+            predicted_labels = result.get("predicted_labels")
         except Exception as e:
             print("Error on IBM server")
             print(e)
             result["error"] = 1
             return result
 
+        test = pd.read_csv(path_test, index_col=0)
+        test_labels = test["labels"]
+        test_features = test.drop(columns='labels')
+        test_labels = test_labels.to_numpy()
+        test_features = test_features.to_numpy()
+        print("Test labels: ", test_labels)
+        print("Test features: ", test_features)
+
         total_time = time.time() - start_time
         result["total_time"] = str(total_time)[0:6]
         result["training_time"] = "--"
+        test_prediction = qsvm.predict(test_features, quantum_instance)
+        accuracy = accuracy_score(test_labels, test_prediction)
+        precision = precision_score(test_labels, test_prediction, average="weighted")
+        recall = recall_score(test_labels, test_prediction, average="weighted")
+        result["testing_precision"] = precision
+        result["testing_recall"] = recall
+        result["testing_accuracy"] = accuracy
+        result["predicted_labels"] = predicted_labels
         return result
 
     @staticmethod
