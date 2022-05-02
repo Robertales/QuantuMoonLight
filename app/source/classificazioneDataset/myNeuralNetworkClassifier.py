@@ -2,7 +2,7 @@ import csv
 import time
 import pandas as pd
 from qiskit import QuantumCircuit
-from qiskit.algorithms.optimizers import COBYLA
+from qiskit.algorithms.optimizers import COBYLA, SLSQP, ADAM, GradientDescent
 from qiskit.circuit.library import ZFeatureMap, ZZFeatureMap, RealAmplitudes
 from qiskit.utils import algorithm_globals, QuantumInstance
 from qiskit_machine_learning.algorithms import PegasosQSVC, NeuralNetworkClassifier
@@ -16,11 +16,12 @@ from app.source.utils.utils import createFeatureList, numberOfColumns
 
 
 class myNeuralNetworkClassifier:
-    def classify(pathTrain, pathTest, path_predict, backend, num_qubits):
+    def classify(pathTrain, pathTest, path_predict, backend, num_qubits, optimizer, loss, max_iter):
+
 
         print(pathTrain, pathTest, path_predict)
         data_train = pd.read_csv(pathTrain)
-        data_train = data_train.drop(columns='Id') #QSVM richiede l'id e Pegasos no
+        data_train = data_train.drop(columns='Id')
         train_features = data_train.drop(columns='labels')
         train_labels = data_train["labels"].values
         data_test = pd.read_csv(pathTest)
@@ -48,14 +49,18 @@ class myNeuralNetworkClassifier:
         prediction_data = np.genfromtxt(path_predict, delimiter=',')
         prediction_data = np.delete(prediction_data, 0, axis=0)
 
-        test_features = test_features.to_numpy() #Pegasos.fit accetta numpy array e non dataframe
+        test_features = test_features.to_numpy()
         train_features = train_features.to_numpy()
 
-        print("Train features: ", train_features)
-        print("Test features: ", test_features)
-        print("Train labels: ", train_labels)
-        print("Test labels: ", test_labels)
-        print(prediction_data)
+        print("Train features: ", train_features, type(train_features))
+        print("Test features: ", test_features, type(test_features))
+        print("Train labels: ", train_labels, type(train_labels))
+        print("Test labels: ", test_labels, type(test_labels))
+        print("Prediction data: ", prediction_data, type(prediction_data))
+        print("Optimizer: ", optimizer)
+        print("Loss: ", loss)
+        print("Max iter: ", max_iter)
+        print("qubit ", num_qubits)
 
         result = {}
 
@@ -76,7 +81,8 @@ class myNeuralNetworkClassifier:
         def parity(x):
             return "{:b}".format(x).count("1") % 2
 
-        output_shape = len(np.unique(train_labels))  # corresponds to the number of classes, possible outcomes of the (parity) mapping.
+        output_shape = len(
+            np.unique(train_labels))  # corresponds to the number of classes, possible outcomes of the (parity) mapping.
         # construct QNN
         circuit_qnn = CircuitQNN(
             circuit=qc,
@@ -86,11 +92,25 @@ class myNeuralNetworkClassifier:
             output_shape=output_shape,
             quantum_instance=quantum_instance,
         )
-        # construct classifier
-        circuit_classifier = NeuralNetworkClassifier(
-            neural_network=circuit_qnn, optimizer=COBYLA(maxiter=50)
-        )
 
+        # construct classifier
+
+        circuit_classifier = NeuralNetworkClassifier(
+            neural_network=circuit_qnn, optimizer=SLSQP(maxiter=int(max_iter)), loss=str(loss)
+        )
+        if optimizer == "COBYLA":
+            circuit_classifier = NeuralNetworkClassifier(
+                neural_network=circuit_qnn, optimizer=COBYLA(maxiter=int(max_iter)), loss=str(loss)
+            )
+
+        elif optimizer == "ADAM":
+            circuit_classifier = NeuralNetworkClassifier(
+                neural_network=circuit_qnn, optimizer=ADAM(maxiter=int(max_iter)), loss=str(loss)
+            )
+        elif optimizer == "GradientDescent":
+            circuit_classifier = NeuralNetworkClassifier(
+                neural_network=circuit_qnn, optimizer=GradientDescent(maxiter=int(max_iter)), loss=str(loss)
+            )
         # training
         print("Running...")
         start_time = time.time()

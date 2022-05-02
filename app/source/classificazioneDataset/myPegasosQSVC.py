@@ -13,7 +13,7 @@ from app.source.utils.utils import createFeatureList, numberOfColumns
 
 
 class myPegasosQSVC:
-    def classify(pathTrain, pathTest, path_predict, backend, num_qubits):
+    def classify(pathTrain, pathTest, path_predict, backend, num_qubits, C, tau):
 
         print(pathTrain, pathTest, path_predict)
         data_train = pd.read_csv(pathTrain)
@@ -50,20 +50,16 @@ class myPegasosQSVC:
         test_features = test_features.to_numpy() #Pegasos.fit accetta numpy array e non dataframe
         train_features = train_features.to_numpy()
 
-        print("Train features: ", train_features)
-        print("Test features: ", test_features)
-        print("Train labels: ", train_labels)
-        print("Test labels: ", test_labels)
-        print(prediction_data)
-
         result = {}
-        tau = 100
-        C = 1000
         algorithm_globals.random_seed = 12345
+
+        print(train_features, train_labels)
+        print(test_features, test_labels)
+        print("Prediction: ", prediction_data)
 
         feature_map = ZFeatureMap(feature_dimension=num_qubits, reps=1)
         qkernel = QuantumKernel(feature_map=feature_map, quantum_instance=QuantumInstance(backend))
-        qsvc = PegasosQSVC(quantum_kernel=qkernel, C=C, num_steps=tau)
+        qsvc = PegasosQSVC(quantum_kernel=qkernel, C=int(C), num_steps=int(tau))
 
         # training
         print("Running...")
