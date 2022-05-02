@@ -2,22 +2,13 @@ div{ /* non funziona */
     padding-left: 10px;
     padding-right: 10px;
 }
-#blog_text{
+#blog_title{
         font-weight: bold;
         background-image: linear-gradient(to left,darkblue, blueviolet);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        }
-.blog_title
-{
-        padding-top: 10px;
-        background: white;
 }
 
-.blog_div_user
-{
-    float: left;
-}
 #username{
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -26,6 +17,24 @@ div{ /* non funziona */
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none;
 }
+.btn {background-image: linear-gradient(to right, #000080 0%, blueviolet  51%, #4B0082  100%)}
+         .btn {
+
+            padding: 15px 45px;
+            text-align: center;
+            text-transform: uppercase;
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;
+            box-shadow: 0 0 20px #eee;
+            border-radius: 10px;
+            display: block;
+          }
+          .btn:hover {
+            background-position: right center; /* change the direction of the change here */
+            color: #fff;
+            text-decoration: none;
+          }
 .post-preview
 {
     border : 4px solid transparent;

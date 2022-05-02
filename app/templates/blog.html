@@ -23,20 +23,16 @@
 {% extends "base.html" %}
 {% block content %}
 
- <div class="blog_title" align="center">
- <h1 id="blog_text">QUANTUM BLOG</h1>
+ <div align="center">
+ <h1 id="blog_title">QUANTUM BLOG</h1>
  </div>
 
  <br>
- <div class="blog_div_btn" align="center">
-     <div class="blog_div_user">
-         <h6 id="username">{{current_user.username}}</h6>
-     </div>
-     <div class="blog_div_form">
-         <form action="{{url_for("add")}}">
+ <div class="create_post">
+ <h5 id="username">{{current_user.username}}</h5>
+ <form action="{{url_for("add")}}">
             <button class="btn" type="submit">Create New Post</button>
-        </form><br>
-     </div>
+ </form>
  </div>
 
  {% for Article in posts %}
