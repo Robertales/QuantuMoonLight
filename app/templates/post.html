@@ -20,11 +20,17 @@
 
     <!-- Custom styles for this template -->
     <link href="{{ url_for('static', filename='clean-blog.min.css') }}" rel="stylesheet">
+      <link href="../static/styles/css/nav.css" rel="stylesheet">
+    <link rel="icon" href="../static/images/logos/logo.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="../static/styles/css/revolution-slider.css" rel="stylesheet">
+    <link href="../static/styles/css/style.css" rel="stylesheet">
 
   </head>
 
   <body>
-
+    {% extends "base.html" %}
+        {% block content %}
     <!-- Navigation -->
 
 
@@ -65,16 +71,23 @@
                 <hr/>
 				<ul class="comments">
                      {% for Comment in comments %}
+                  {% if Comment.authorized or current_user.isAdmin %}
                   <li class="clearfix">
 				  <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
 				  <div class="post-comments">
 				      <p class="meta">{{ Comment.data.strftime('%B %d, %Y') }} <a href="#">{{ Comment.author }}</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
+                    {% if not Comment.authorized %} #if dove inserire i tasti per approvare
+                <h6>
+                 Commento non autorizzato inserire qui tasto
+              </h6>
+                    {% endif %}
 				      <p>
 				          {{ Comment.body }}
 				      </p>
 				  </div>
 				  </ul>
 				</li>
+              {% endif %}
                  {% endfor %}
 				</ul>
 			</div>
@@ -114,7 +127,8 @@
 
     <!-- Custom scripts for this template -->
     <script src="{{ url_for('static', filename='clean-blog.min.js') }}"></script>
-
+    <br><br><br>
+  {% endblock %}
   </body>
 
 </html>

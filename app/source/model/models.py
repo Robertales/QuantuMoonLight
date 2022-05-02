@@ -53,6 +53,7 @@ class Article(db.Model):
     body = db.Column(db.Text(length=1200), nullable=False)
     category = db.Column(db.String(20), nullable=True)
     data = db.Column(db.DateTime, nullable=False)
+    authorized= db.Column(db.Boolean, default=False)
 
 
 class Comment(db.Model):
@@ -65,6 +66,7 @@ class Comment(db.Model):
     body = db.Column(db.Text(length=250), nullable=False)
     author = db.Column(db.Text(length=200), nullable=False)
     data = db.Column(db.Date, nullable=False)
+    authorized = db.Column(db.Boolean, default=False)
 
 
 class Like(db.Model):

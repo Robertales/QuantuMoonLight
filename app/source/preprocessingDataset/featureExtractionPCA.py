@@ -4,6 +4,7 @@ from itertools import cycle
 
 import pandas as pd
 from matplotlib import pyplot as plt
+from mpl_toolkits import mplot3d
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from app.source.utils import utils
@@ -83,7 +84,9 @@ def callFeatureExtraction(
 
         PCA_df_to_predict = pd.DataFrame(data=X_to_predict_PCA)
 
+
         #print("Il valore medio della varianza é: "+pca.explained_variance_ratio_)
+
 
         # save output in csv
         pathFileYourPCAToPredict = pathFileYourPCA / "doPredictionFE.csv"
@@ -104,7 +107,27 @@ def callFeatureExtraction(
         plt.xlabel('feature1', fontsize=12)
         plt.ylabel('feature2', fontsize=12)
         plt.title('2D PCA', fontsize=15)
-        plt.legend([Y_train.unique()[0], Y_train.unique()[1]])
+        plt.legend(Y_train.unique().data)
+        plt.grid()
+        plt.savefig(pathFileYourPCA / 'graphFE', dpi=150)
+        plt.show()
+
+    if n_components == 3    :
+
+        plt.figure(dpi=150, facecolor='w', edgecolor='k')
+        ax = plt.axes(projection='3d')
+        classes = Y_train.unique()  # find nique values for labels
+        for clas in classes:
+            ax.scatter3D(PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature1'],
+                         PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature2'],
+                         PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature3']
+                         )
+
+        ax.set_xlabel('feature1', fontsize=12)
+        ax.set_ylabel('feature2', fontsize=12)
+        ax.set_zlabel('feature3', fontsize=12)
+        plt.title('3D PCA', fontsize=15)
+        plt.legend(Y_train.unique().data)
         plt.grid()
         plt.savefig(pathFileYourPCA / 'graphFE', dpi=150)
         plt.show()

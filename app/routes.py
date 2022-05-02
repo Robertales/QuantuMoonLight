@@ -146,24 +146,37 @@ def addpost():
     return redirect(url_for('blog'))
 
 
+@app.route('/enableArticle/<int:article_id>', methods=['POST'])
+def enableArticle(article_id):
+    article = Article.query.filter_by(id=article_id).one()
+    article.authorized = True
+    db.session.commit()
+
+    return redirect(url_for('blog'))
+
+
+@app.route('/enableComment/<int:comment_id>', methods=['POST'])
+def enableComment(comment_id):
+    comment = Comment.query.filter_by(id=comment_id).one()
+    comment.authorized = True
+    db.session.commit()
+
+    return redirect(url_for('blog'))
+
 @app.route('/addcomment', methods=['POST'])
 @login_required
 def addcomment():
-
     author = current_user.username
     email = current_user.email
     body = request.form['content']
     id = request.form['artId']
-
 
     comment = Comment(email_user=email, author=author, body=body, data=datetime.now(), id_article=id)
 
     db.session.add(comment)
     db.session.commit()
 
-    return redirect(url_for('post',post_id=id))
-
-
+    return redirect(url_for('post', post_id=id))
 
 
 @app.route("/userPage")
