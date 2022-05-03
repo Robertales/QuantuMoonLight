@@ -49,44 +49,53 @@
 {% block content %}
 <div class="wrapper fadeInDown">
   <div id="formContent">
-    <!-- Tabs Titles -->
+
       <!-- Logo -->
-    <div class="fadeIn first">
-        <img src="../static/images/logos/Logo_SenzaScritta.png" id="icon" alt="Logo">
-    </div>
+      <div class="container-fluid">
+          <img src="../static/images/logos/Logo_SenzaScritta.png" height="120" alt="QML" loading="lazy" />
+      </div>
 
-    <!-- User Page -->
+    <!-- Hi email,  -->
+    <h5 class="font-weight-bold"> Hi {{current_user.email}}, </h5><br>
 
-      <h6 class="text-uppercase font-weight-bold">E-mail:</h6><h5>{{current_user.email}}</h5><br>
-      <h6 class="text-uppercase font-weight-bold">Username:</h6><h5>{{current_user.username}}</h5><br>
-      <h6 class="text-uppercase font-weight-bold">Name:</h6><h5>{{current_user.name}}</h5><br>
-      <h6 class="text-uppercase font-weight-bold">Surname:</h6><h5>{{current_user.surname}}</h5><br>
-      <h6 class="text-uppercase font-weight-bold">IBM Token:</h6>
-        <input type="text" value="{{current_user.token}}" id="token" hidden>
-        <button class="fadeIn fourth btn btn-primary" onclick="copy()"><span class="fa fa-copy"></span> Copy</button>
-      <br>
+    <!-- Button -->
+        <h6 class="font-weight-bold">Your IBM Token:</h6>
+          <input type="text" value="{{current_user.token}}" id="token" readonly style="border: none transparent; outline: none;">
 
-      {% if current_user.isAdmin %}
-    <br><form action="{{url_for("adminDataset")}}">
-            <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-bar-chart"></span>  Storico Dataset</button>
-        </form><br>
-      {% else %}
-          <br><form action="{{url_for("userDataset")}}">
-            <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-bar-chart"></span>  Storico Dataset</button>
-        </form><br>
-            {% endif %}
+            <!-- Token operations -->
+           <div style="align:left">
+                 <button onclick="copy()" style="padding:0; border:none; background:none;"><span class="fa fa-copy"></span> Copy</button>
+                  <form action="{{url_for("modifyUser")}}">
+                      <button type="submit" style="padding: 0; border: none; background: none;">
+                          <span class="fa fa-pencil"></span>  Edit Token</button>
+                  </form>
+           </div>
 
-    <br><form action="{{url_for("modifyUser")}}">
-            <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Edit Profile</button>
-        </form><br>
-      {% if current_user.isAdmin %}
+    <!-- Admin Stats -->
+    {% if current_user.isAdmin %}
+        <form action="{{url_for("adminDataset")}}">
+            <button type="submit" style="padding: 0; border: none; background: none;">
+                <span class="fa fa-bar-chart"></span>Statistics and history of operations</button>
+        </form>
+    {% else %}
+    <!-- User Stats -->
+        <form action="{{url_for("userDataset")}}">
+            <button type="submit" style="padding: 0; border: none; background: none;">
+                <span class="fa fa-bar-chart"></span>Statistics and history of operations</button>
+        </form>
+    {% endif %}
+    {% if current_user.isAdmin %}
+    <!-- Admin page -->
       <form action="{{url_for("adminPage")}}">
-          <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Admin Page</button>
+          <button type="submit" style="padding: 0; border: none; background: none;" >
+              <span class="fa fa-pencil"></span>  Admin Page</button>
       </form><br>
       {% endif %}
 
       <form action="/logout" method="post">
-          <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-sign-out"></span> Log-Out</button>
+          <button type="submit" style="padding: 0; border: none; background: none;">
+              <span class="fa fa-sign-out"></span> Logout
+          </button>
       </form><br>
 
     <!-- Return to Log In page -->
