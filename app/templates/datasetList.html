@@ -327,13 +327,13 @@
 <div class="divTable divTable">
         <div class="divTableHeading">
                 <div class="divTableRow">
-                    <div class="divTableHead">Code</div>
+                    <div class="divTableHead">ID</div>
                     <div class="divTableHead">Dataset</div>
-                    <div class="divTableHead">Upload date</div>
-                    <div class="divTableHead">Split by</div>
+                    <div class="divTableHead">Upload Date</div>
+                    <div class="divTableHead">Validation Method</div>
                     <div class="divTableHead">PS</div>
                     <div class="divTableHead">FE</div>
-                    <div class="divTableHead">Algorithm used</div>
+                    <div class="divTableHead">Classificator/Regressor</div>
                     <div class="divTableHead">Metrics</div>
                     <div class="divTableHead">Time</div>
                 </div>
@@ -343,14 +343,15 @@
 
         <div class="divTableRow">
         <div class="divTableCell">{{ item.id}}</div>
-            <div class="divTableCell">{{ item.name}}</div>
-            <div class="divTableCell">{{ item.upload_date}}</div>
+            <div class="divTableCell"><strong>{{ item.name}}</strong></div>
+            <div class="divTableCell">{{ item.upload_date.strftime('%d/%m/%Y')}}<br>
+                {{ item.upload_date.strftime('%H:%M:%S')}}</div>
             <div class="divTableCell">
                 {% if(item.simple_split) %}
-                Simple Split
+                Train/Test Split
                     {% endif %}
                 {% if(item.k_fold) %}
-                    K Fold
+                    K-Fold
                 {% endif %}
             </div>
             <div class="divTableCell">
@@ -374,20 +375,24 @@
             <div class="divTableCell">{{ item.model }}</div>
             <div class="divTableCell">
                  {% if(item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'PegasosQSVC') or (item.model == 'NeuralNetworkClassifier') %}
-                Accuracy: {{ item.accuracy }} <br>
-                Precision: {{ item.precision }} <br>
-                Recall: {{ item.recall }}
+                Accuracy: {{'%0.2f'|format(item.accuracy|float)}}% <br>
+                Precision: {{'%0.2f'|format(item.precision|float)}}% <br>
+                Recall: {{'%0.2f'|format(item.recall|float)}}%
                 {% else %}
                  {% if(item.model ==  'QSVR') or (item.model ==  'NeuralNetworkRegressor') %}
-                MSE : {{ item.mse }} <br>
-                MAE: {{ item.mae }} <br>
-                RMSE: da implementare
+                MSE : {{'%0.2f'|format(item.mse|float)}}% <br>
+                MAE: {{'%0.2f'|format(item.mae|float)}}% <br>
+                RMSE: soon implemented
                 {% endif %}
                 {% endif %}
             </div>
             <div class="divTableCell">
-                Training time: {{ item.training_time}}<br>
-                Total time: {{ item.total_time}}
+                {% if(item.training_time==-1) %}
+                Training time: N/A<br>
+                {% else %}
+                Training time: {{ item.training_time}}s<br>
+                {% endif %}
+                Total time: {{ item.total_time}}s
             </div>
         </div>
 

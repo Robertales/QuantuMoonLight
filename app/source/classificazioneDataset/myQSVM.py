@@ -75,7 +75,7 @@ class myQSVM:
 
         total_time = time.time() - start_time
         result["total_time"] = str(total_time)[0:6]
-        result["training_time"] = "--"
+        result["training_time"] = -1
         test_prediction = qsvm.predict(test_features, quantum_instance)
         accuracy = accuracy_score(test_labels, test_prediction)
         precision = precision_score(test_labels, test_prediction, average="weighted")

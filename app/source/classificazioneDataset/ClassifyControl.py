@@ -221,12 +221,12 @@ class ClassificazioneControl:
 
         dataset = Dataset.query.get(id_dataset)
         if model == "QSVR" or model == "NeuralNetworkRegressor":
-            dataset.mse = result.get("mse")
-            dataset.mae = result.get("mae")
+            dataset.mse = result.get("mse")*100
+            dataset.mae = result.get("mae")*100
         else:
-            dataset.accuracy = result.get("testing_accuracy")
-            dataset.precision = result.get("testing_precision")
-            dataset.recall = result.get("testing_recall")
+            dataset.accuracy = result.get("testing_accuracy")*100
+            dataset.precision = result.get("testing_precision")*100
+            dataset.recall = result.get("testing_recall")*100
         dataset.training_time = result.get("training_time")
         dataset.total_time = result.get("total_time")
         db.session.commit()
@@ -336,13 +336,19 @@ class ClassificazioneControl:
                         "<br><br>Testing recall: " +
                         "{:.2%}".format(recall) +
                         "</h3></center>", 'html'))
-
-            msg.attach(
-                MIMEText(
-                    "<center><h3>Training time: " +
-                    result.get("training_time") +
-                    "</h3></center>",
-                    'html'))
+            if result.get("training_time")==-1:
+                msg.attach(
+                    MIMEText(
+                        "<center><h3>Training time: N/A" +
+                        "</h3></center>",
+                        'html'))
+            else:
+                msg.attach(
+                    MIMEText(
+                        "<center><h3>Training time: " +
+                        result.get("training_time") +
+                        "</h3></center>",
+                        'html'))
             msg.attach(
                 MIMEText(
                     "<center><h3>Total time elapsed: " +
