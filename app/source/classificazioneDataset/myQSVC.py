@@ -5,7 +5,7 @@ from qiskit.circuit.library import ZFeatureMap
 from qiskit.utils import algorithm_globals, QuantumInstance
 from qiskit_machine_learning.algorithms import PegasosQSVC, QSVC
 from qiskit_machine_learning.kernels import QuantumKernel
-from sklearn.metrics import precision_score, recall_score, accuracy_score
+from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score
 import numpy as np
 
 from app.source.utils import utils
@@ -48,12 +48,6 @@ class myQSVC:
         test_features = test_features.to_numpy() #Pegasos.fit accetta numpy array e non dataframe
         train_features = train_features.to_numpy()
 
-        print("Train features: ", train_features)
-        print("Test features: ", test_features)
-        print("Train labels: ", train_labels)
-        print("Test labels: ", test_labels)
-        print(prediction_data)
-
         result = {}
         algorithm_globals.random_seed = 12345
 
@@ -75,6 +69,8 @@ class myQSVC:
         accuracy = accuracy_score(test_labels, test_prediction)
         precision = precision_score(test_labels, test_prediction, average="weighted")
         recall = recall_score(test_labels, test_prediction, average="weighted")
+        f1 = f1_score(test_labels, test_prediction, average="weighted")
+        result["f1"] = f1
         result["testing_precision"] = precision
         result["testing_recall"] = recall
         result["testing_accuracy"] = accuracy

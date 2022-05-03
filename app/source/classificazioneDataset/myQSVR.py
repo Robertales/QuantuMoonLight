@@ -1,4 +1,5 @@
 import csv
+import math
 import time
 import pandas as pd
 from qiskit.circuit.library import ZFeatureMap
@@ -48,12 +49,6 @@ class myQSVR:
         test_features = test_features.to_numpy() #Pegasos.fit accetta numpy array e non dataframe
         train_features = train_features.to_numpy()
 
-        print("Train features: ", train_features)
-        print("Test features: ", test_features)
-        print("Train labels: ", train_labels)
-        print("Test labels: ", test_labels)
-        print(prediction_data)
-
         result = {}
         algorithm_globals.random_seed = 12345
 
@@ -79,10 +74,9 @@ class myQSVR:
         mae = mean_absolute_error(test_labels, test_prediction)
         result["mse"] = mse
         result["mae"] = mae
-
-        print("Score: ", score)
-        print("Mae: ", mae)
-        print("\nMse: ", mse)
+        rmse = math.sqrt(mse)
+        result["regression_score"] = score
+        result["rmse"] = rmse
 
         # prediction
         start_time = time.time()

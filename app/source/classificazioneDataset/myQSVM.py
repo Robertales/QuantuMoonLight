@@ -9,7 +9,7 @@ from qiskit.aqua.algorithms import QSVM
 from qiskit.aqua.components.multiclass_extensions import AllPairs
 from qiskit.circuit.library import ZZFeatureMap
 from qiskit.utils import QuantumInstance
-from sklearn.metrics import accuracy_score, precision_score, recall_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 
 class myQSVM:
@@ -75,11 +75,13 @@ class myQSVM:
 
         total_time = time.time() - start_time
         result["total_time"] = str(total_time)[0:6]
-        result["training_time"] = "--"
+        result["training_time"] = "-1"
         test_prediction = qsvm.predict(test_features, quantum_instance)
         accuracy = accuracy_score(test_labels, test_prediction)
         precision = precision_score(test_labels, test_prediction, average="weighted")
         recall = recall_score(test_labels, test_prediction, average="weighted")
+        f1 = f1_score(test_labels, test_prediction, average="weighted")
+        result["f1"] = f1
         result["testing_precision"] = precision
         result["testing_recall"] = recall
         result["testing_accuracy"] = accuracy

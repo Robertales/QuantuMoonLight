@@ -1,13 +1,16 @@
 import csv
+import math
 import time
+import traceback
+
 import pandas as pd
 from qiskit import QuantumCircuit
 from qiskit.algorithms.optimizers import COBYLA, SLSQP, ADAM, GradientDescent, L_BFGS_B
 from qiskit.circuit.library import ZFeatureMap, ZZFeatureMap, RealAmplitudes
 from qiskit.utils import algorithm_globals, QuantumInstance
-from qiskit_machine_learning.algorithms import PegasosQSVC, NeuralNetworkClassifier, NeuralNetworkRegressor
+from qiskit_machine_learning.algorithms import PegasosQSVC, NeuralNetworkClassifier, NeuralNetworkRegressor, VQR
 from qiskit_machine_learning.kernels import QuantumKernel
-from qiskit_machine_learning.neural_networks import CircuitQNN
+from qiskit_machine_learning.neural_networks import CircuitQNN, two_layer_qnn
 from sklearn.metrics import precision_score, recall_score, accuracy_score, mean_squared_error, mean_absolute_error
 import numpy as np
 
@@ -51,12 +54,6 @@ class myNeuralNetworkRegressor:
         test_features = test_features.to_numpy() #Pegasos.fit accetta numpy array e non dataframe
         train_features = train_features.to_numpy()
 
-        print("Train features: ", train_features)
-        print("Test features: ", test_features)
-        print("Train labels: ", train_labels)
-        print("Test labels: ", test_labels)
-        print(prediction_data)
-
         result = {}
 
         quantum_instance = QuantumInstance(backend)
@@ -66,76 +63,43 @@ class myNeuralNetworkRegressor:
         # construct ansatz
         ansatz = RealAmplitudes(num_qubits, reps=1)
 
-        # construct quantum circuit
-        qc = QuantumCircuit(num_qubits)
-        qc.append(feature_map, range(num_qubits))
-        qc.append(ansatz, range(num_qubits))
-        qc.decompose().draw(output="mpl")
-
-        # parity maps bitstrings to 0 or 1
-        def parity(x):
-            return "{:b}".format(x).count("1") % 2
-
-        output_shape = len(np.unique(train_labels))  # corresponds to the number of classes, possible outcomes of the (parity) mapping.
-        # construct QNN
-        circuit_qnn = CircuitQNN(
-            circuit=qc,
-            input_params=feature_map.parameters,
-            weight_params=ansatz.parameters,
-            interpret=parity,
-            output_shape=output_shape,
-            quantum_instance=quantum_instance,
+        vqr = VQR(
+            feature_map=feature_map,
+            ansatz=ansatz,
+            optimizer=L_BFGS_B(maxiter=int(max_iter)),
+            loss=loss,
+            quantum_instance=quantum_instance
         )
-        # construct classifier
-
-        circuit_regressor = NeuralNetworkRegressor(
-            neural_network=circuit_qnn, optimizer=L_BFGS_B()
-        )
-        if optimizer == "COBYLA":
-            circuit_regressor = NeuralNetworkRegressor(
-                neural_network=circuit_qnn, optimizer=COBYLA(maxiter=int(max_iter)), loss=str(loss)
-            )
-
-        elif optimizer == "ADAM":
-            circuit_regressor = NeuralNetworkRegressor(
-                neural_network=circuit_qnn, optimizer=ADAM(maxiter=int(max_iter)), loss=str(loss)
-            )
-        elif optimizer == "GradientDescent":
-            circuit_regressor = NeuralNetworkRegressor(
-                neural_network=circuit_qnn, optimizer=GradientDescent(maxiter=int(max_iter)), loss=str(loss)
-            )
 
         # training
         print("Running...")
-        start_time = time.time()
-        circuit_regressor.fit(train_features, train_labels)
-        training_time = time.time() - start_time
+        start = time.time()
+        vqr.fit(train_features, train_labels)
+        training_time = time.time() - start
         print("Train effettuato in " + str(training_time))
 
-        """
         # test
         start_time = time.time()
-        #score = circuit_regressor.score(test_features, test_labels)
-
-        test_prediction = circuit_regressor.predict(test_features)
-        print(test_features)
-        print(test_labels, test_prediction)
+        test_prediction = vqr.predict(test_features)
         testing_time = time.time() - start_time
+        print("Test effettuato in " + str(testing_time))
 
+        score = vqr.score(test_features, test_labels)
         mse = mean_squared_error(test_labels, test_prediction)
         mae = mean_absolute_error(test_labels, test_prediction)
+        rmse = math.sqrt(mse)
+        result["regression_score"] = score
         result["mse"] = mse
-        result["mae"] = mae"""
-
-        result["mse"] = 0
-        result["mae"] = 0
-        testing_time = 123456
+        result["mae"] = mae
+        result["rmse"] = rmse
 
         # prediction
         start_time = time.time()
-        predicted_labels = circuit_regressor.predict(prediction_data)
-        total_time = time.time() - start_time
-        print("Prediction effettuata in " + str(total_time))
+        predicted_labels = vqr.predict(prediction_data)
+        prediction_time = time.time() - start_time
+        total_time = time.time() - start
+        print("Prediction effettuata in " + str(prediction_time))
+        print("Total time: " + str(total_time))
         result["predicted_labels"] = np.array(predicted_labels)
 
         result["total_time"] = str(testing_time + training_time)[0:6]
