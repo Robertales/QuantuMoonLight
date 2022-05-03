@@ -1,179 +1,402 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
-
+<html lang="en">
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <meta charset="utf-8">
     <title> QuantuMoonLight </title>
     <link rel="icon" href="../static/images/logos/logo.ico">
 
     <!-- Stylesheets -->
-    <link href="../static/styles/css/revolution-slider.css" rel="stylesheet">
-    <link href="../static/styles/css/style.css" rel="stylesheet">
     <link href="../static/styles/css/nav.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+                <script type="text/javascript">
+                        // COLLAPSE BUTTON
+                        function collapse(){
+                              var coll = document.getElementsByClassName("collapsible");
+                     var i;
+                     for (i = 0; i < coll.length; i++) {
+                         coll[i].addEventListener("click", function() {
+                             this.classList.toggle("active");
+                            var content = this.nextElementSibling;
+                            if (content.style.maxHeight){
+                                content.style.maxHeight = null;
+                            } else {
+                                content.style.maxHeight = content.scrollHeight + "px";
+                             }
+                      });
+                    }
+                        }
+                </script>
+
+    <style>
+
+        /* Table Datasets */
+
+               table.TableDataset {
+                      border: 0px solid #000000;
+                      background-color: #FFFFFF;
+                      width: 95%;
+                      text-align: center;
+                      border-collapse: collapse;
+                    }
+                table.TableDataset td, table.TableDataset th {
+                      border: 1px solid #000000;
+                      padding: 3px 2px;
+                    }
+                table.TableDataset tbody td {
+                      font-size: 14px;
+                      font-weight: bold;
+                    }
+                table.TableDataset tr:nth-child(even) {
+                      background: rgb(0, 0, 255, 0.3)
+
+                    }
+                table.TableDataset thead {
+                      background: #000000;
+                      border-bottom: 2px solid #444444;
+                    }
+                table.TableDataset thead th {
+                      font-size: 16px;
+                      font-weight: bold;
+                      color: #FFFFFF;
+                      text-align: center;
+                    }
+                table.TableDataset tfoot td {
+                      font-size: 14px;
+                    }
+
+                table.TableDataset tfoot .links {
+                      text-align: right;
+                    }
+
+                table.TableDataset tfoot .links a{
+                      display: inline-block;
+                      background: #1C6EA4;
+                      color: #FFFFFF;
+                      padding: 2px 8px;
+                      border-radius: 5px;
+                    }
+        /* End Table Datasets Style*/
+
+                h1 {
+                  color: white;
+                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                  font-weight: bold;
+                  margin-left: auto;
+                  margin-right: auto;}
+
+                .intestazione{
+                    background: -moz-linear-gradient(left, #000080 0%, #4B0082 100%);
+                    background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
+                    background: linear-gradient(to right, #000080 0%, #4B0082 100%);
+                    padding-top: 0.5em;
+                    padding-bottom: 0.5em;
+                    color: white;}
+
+                .graph{
+                    float: left;
+                    width: 33.3%;
+                }
+
+                .graph-container{
+                    margin-top: 30px;
+                    width: 100%;
+                    border: none;
+                    text-align: center;
+                    margin-top: 50px;
+                }
+
+                div.divTable {
+                      border: 2px solid #FFFFFF;
+                      width: 100%;
+                      text-align: center;
+                      border-collapse: collapse;
+                }
+
+                .divTable.divTable .divTableCell, .divTable.divTable .divTableHead {
+                      border: 1px solid #FFFFFF;
+                      padding: 4px 5px;
+                }
+
+                .divTable.divTable .divTableBody .divTableCell {
+                      font-size: 13px;
+                    }
+
+                .divTable.divTable .divTableCell:nth-child(even) {
+                      background: #EBEBEB;
+                    }
+
+                .divTable.divTable .divTableHeading {
+                      background: #FFFFFF;
+                      border-bottom: 4px solid #333333;
+                    }
+
+                .divTable.divTable .divTableHeading .divTableHead {
+                      font-size: 15px;
+                      font-weight: bold;
+                      color: #333333;
+                      text-align: center;
+                      border-left: 2px solid #333333;
+                    }
+
+                .divTable.divTable .divTableHeading .divTableHead:first-child {
+                      border-left: none;
+                    }
+
+                .divTable {
+                      font-size: 14px;
+                    }
+
+                .divTable{ display: table; }
+                .divTableRow { display: table-row; }
+                .divTableHeading { display: table-header-group;}
+                .divTableCell, .divTableHead { display: table-cell;}
+                .divTableHeading { display: table-header-group;}
+                .divTableBody { display: table-row-group;}
+
+                /* COLLAPSE BUTTON */
+             .collapsible {
+                  padding: 18px;
+                  width: 100%;
+                  border: none;
+                  text-align: center;
+                  outline: none;
+                  font-size: 18pt;
+                  background: -moz-linear-gradient(left, #000080 0%, #4B0082 100%);
+                  background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
+                  background: linear-gradient(to right, #000080 0%, #4B0082 100%);
+                  color: white;
+                }
+
+                .active, .collapsible:hover {
+                  background-color: #555;
+                }
+
+                .collapsible:after {
+                  content: '\002B';
+                  color: white;
+                  font-weight: bold;
+                  float: right;
+                  margin-left: 5px;
+                }
+
+                .active:after {
+                  content: "\2212";
+                }
+
+                .content {
+                  max-height: 0;
+                  overflow: hidden;
+                  transition: max-height 0.2s ease-out;
+                }
+</style>
 
     <!-- Responsive -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link href="../static/styles/css/responsive.css" rel="stylesheet">
-    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-    <!--[if lt IE 9]>
-    <script src="../../static/js/respond.js"></script><![endif]-->
-
-
 </head>
 
 <body>
 
-<style>
+    <div class="page-wrapper">
+    {% extends "base.html" %}
+    {% block content %}
 
-table{
-    width: 95%;
-    border: 0.5em #4B0082 solid ;
-    margin: 2em;
-    text-align: center;
-    font-family: "Poppins", sans-serif;
-}
+    <div class="intestazione">
+        <h3 class="text-center">Stats and history of operation</h3>
+    </div>
 
-tr, td, th {
-    margin-left: auto;
-    margin-right: auto;
-    border: #4B0082 solid 0.3em;
-}
+    <div class="graph-container">
+    <!-- PIE GRAPH CL -->
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+              google.charts.load('current', {'packages':['corechart']});
+              google.charts.setOnLoadCallback(drawChartCR);
 
-thead{
-    background-color: #4B0082;
-    color: white;
-    margin-left: auto;
-    margin-right: auto;
-}
+              function drawChartCR() {
+                var data = google.visualization.arrayToDataTable([
+                    ['Class', 'Number'],
+                    ['QSVM',  {{datasets|selectattr('model',"equalto",'QSVM')|list|length }} ],
+                    ['QSVC',  {{datasets|selectattr('model',"equalto",'QSVC')|list|length }} ],
+                    ['PegasosQSVC',   {{datasets|selectattr('model',"equalto",'PegasosQSVC')|list|length }} ],
+                    ['NeuralNetworkClassifier',   {{datasets|selectattr('model',"equalto",'NeuralNetworkClassifier')|list|length }} ],
+                    ['QSVR',   {{datasets|selectattr('model',"equalto",'QSVR')|list|length }} ],
+                    ['NeuralNetworkRegressor',   {{datasets|selectattr('model',"equalto",'NeuralNetworkRegressor')|list|length }} ],
+              ]);
 
-h1 {
-  color: white;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-weight: bold;
-  margin-left: auto;
-  margin-right: auto;
-}
+                var options = {
+                    title: 'History of classification and regression algorithms used',
+                    pieHole: 0.25,
+                    pieSliceText: 'value'
+                };
 
-#intestazione{
-    background: -moz-linear-gradient(left, #000080 0%, #4B0082 100%);
-    background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
-    background: linear-gradient(to right, #000080 0%, #4B0082 100%);
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    color: white;
-}
+                var chart = new google.visualization.PieChart(document.getElementById("PieChartClass"));
+                chart.draw(data, options);
+              }
+            </script>
+
+            <div id="PieChartClass" class="graph"></div>
+    <!-- END GRAPH -->
+
+    <!-- PIE GRAPH FE PS -->
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+            /*  google.charts.load('current', {'packages':['corechart']});
+              google.charts.setOnLoadCallback(drawChart);
+
+              function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                    ['FE-PS', 'Num'],
+                    ['Feature Extraction',  {{datasets|selectattr('fe')|list|length }}],
+                    ['Prototype Selection',  {{datasets|selectattr('ps')|list|length }}],
+                    ['N/A',  0 ]
+              ]);
+
+                var options = { title: 'History of FE and PS used' };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechartVal'));
+                chart.draw(data, options);
+              }*/
+            </script>
+            <div id="piechartVal" class="graph"></div>
+    <!-- END GRAPH -->
+
+    <!-- BAR CHART -->
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+            google.charts.load("current", {packages:['corechart']});
+            google.charts.setOnLoadCallback(drawBarChart);
+
+              function drawBarChart() {
+                var data = google.visualization.arrayToDataTable([
+                    ['FE-PS', 'Num',  { role: 'annotation' }, {role: 'style'}],
+                    ['Feature Extraction', {{datasets|selectattr('fe')|list|length }} ,  "FE", '#4065c5' ],
+                    ['Prototype Selection', {{datasets|selectattr('ps')|list|length }} , "PS", '#ff9c23' ],
+              ]);
+
+                var view = new google.visualization.DataView(data);
+
+                var options = {
+                            title:  'History of FE and PS used',
+                            bar: {groupWidth: "85%"},
+                            vAxis: {format: '0'},
+                            legend: { position: "none" },
+                          };
+
+                var chart = new google.visualization.ColumnChart(document.getElementById("barchart"));
+                chart.draw(view, options);
+              }
+            </script>
+            <div id="barchart" class="graph"></div>
 
 
-</style>
+    <!-- END CHART -->
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- PIE GRAPH SPLIT -->
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+              google.charts.load('current', {'packages':['corechart']});
+              google.charts.setOnLoadCallback(drawChartSplit);
 
-<div class="page-wrapper">
-{% extends "base.html" %}
-{% block content %}
-<div id="intestazione"><h1 class="text-center">STORICO DATASET</h1></div>
-<br>
-    <table>
-          <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Used Email</th>
-             <th scope="col">Name</th>
-             <th scope="col">Upload Date</th>
-             <th scope="col">Simple Split</th>
-             <th scope="col">K-Fold</th>
-             <th scope="col">Prototype Selection</th>
-             <th scope="col">Feature Extraction</th>
-             <th scope="col">Classifier</th>
-             <th scope="col">Accuracy</th>
-             <th scope="col">Precision</th>
-             <th scope="col">Recall</th>
-             <th scope="col">MSE</th>
-             <th scope="col">MAE</th>
-             <th scope="col">Training Time</th>
-             <th scope="col">Total Time</th>
-        </tr>
-    </thead>
-         <tbody>
-      {% for item in datasets %}
-        <tr>
-            <td>{{ item.id}}</td>
-            <td>{{ item.email_user}}</td>
-            <td style='font-weight: bold;'>{{ item.name}}</td>
-            <td>{{ item.upload_date}}</td>
-            {% if(item.simple_split) %}
-            <td>Yes</td>
-            {% else %}
-            <td>No</td>
-            {% endif %}
-            {% if(item.k_fold) %}
-            <td>Yes</td>
-            {% else %}
-            <td>No</td>
-            {% endif %}
-            {% if(item.ps) %}
-            <td>Yes</td>
-            {% else %}
-            <td>No</td>
-            {% endif %}
-            {% if(item.fe) %}
-            <td>Yes</td>
-            {% else %}
-            <td>No</td>
-            {% endif %}
-            <td>{{ item.model }}<td>
-            {% if(item.accuracy==-1) %}
-            <td>N/A</td>
-            {% else %}
-            <td>{{item.accuracy}}%</td>
-            {% endif %}
-            {% if(item.precision==-1) %}
-            <td>N/A</td>
-            {% else %}
-            <td>{{item.precision}}%</td>
-            {% endif %}
-            {% if(item.recall==-1) %}
-            <td>N/A</td>
-            {% else %}
-            <td>{{item.recall}}%</td>
-            {% endif %}
-            {% if(item.mse==-1) %}
-            <td>N/A</td>
-            {% else %}
-            <td>{{item.mse}}%</td>
-            {% endif %}
-            {% if(item.mae==-1) %}
-            <td>N/A</td>
-            {% else %}
-            <td>{{item.mae}}%</td>
-            {% endif %}
-            {% if(item.training_time==-1) %}
-            <td>N/A</td>
-            {% else %}
-            <td>{{item.training_time}}s</td>
-            {% endif %}
-            {% if(item.total_time==-1) %}
-            <td>N/A</td>
-            {% else %}
-            <td>{{item.total_time}}s</td>
-            {% endif %}
+              function drawChartSplit() {
+                var data = google.visualization.arrayToDataTable([
+                    ['Split', 'N'],
+                    ['Simple Split',  {{ datasets|selectattr('simple_split')|list|length}}],
+                    ['K Fold',  {{ datasets|selectattr('k_fold')|list|length }}],
+                ]);
 
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table><br>
+                var options = {
+                    title: 'History of split algorithms used',
+                    pieHole: 0.25,
+                    pieSliceText: 'value'
+                };
 
-    <h4 style='font-weight: bold; margin-bottom: 0.4em' class="text-center">Metrics (in %):</h4>
-    <h6 style='font-weight: bold;' class="text-center">Simple Split: {{p_ss|int|round}}%<br>
-        K-Fold: {{p_kf|int|round}}%<br>
-        Prototype Selection: {{p_ps|int|round}}%<br>
-        Feature Extraction: {{p_fe|int|round}}%<br>
-        QSVM: {{p_ps|int|round}}%</h6><br>
+                var chart = new google.visualization.PieChart(document.getElementById("PieChartSplit"));
+                chart.draw(data, options);
+              }
+            </script>
+
+            <div id="PieChartSplit" class="graph"></div>
+    <!-- END GRAPH -->
+        </div>
+    <br><br>
+        <button type="button" class="collapsible" onclick="collapse()">Show all experiments</button>
+<div class="content">
+<div class="divTable divTable">
+        <div class="divTableHeading">
+                <div class="divTableRow">
+                    <div class="divTableHead">Code</div>
+                    <div class="divTableHead">Dataset</div>
+                    <div class="divTableHead">Upload date</div>
+                    <div class="divTableHead">Split by</div>
+                    <div class="divTableHead">PS</div>
+                    <div class="divTableHead">FE</div>
+                    <div class="divTableHead">Algorithm used</div>
+                    <div class="divTableHead">Metrics</div>
+                    <div class="divTableHead">Time</div>
+                </div>
+        </div>
+ {% for item in datasets %}
+        <div class="divTableBody">
+
+        <div class="divTableRow">
+        <div class="divTableCell">{{ item.id}}</div>
+            <div class="divTableCell">{{ item.name}}</div>
+            <div class="divTableCell">{{ item.upload_date}}</div>
+            <div class="divTableCell">
+                {% if(item.simple_split) %}
+                Simple Split
+                    {% endif %}
+                {% if(item.k_fold) %}
+                    K Fold
+                {% endif %}
+            </div>
+            <div class="divTableCell">
+                {% if(item.ps) %}
+                   GA
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                {% endif %}
+            </div>
+            <div class="divTableCell">
+                {% if(item.fe) %}
+                     PCA
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                {% endif %}
+            </div>
+            <div class="divTableCell">{{ item.model }}</div>
+            <div class="divTableCell">
+                 {% if(item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'PegasosQSVC') or (item.model == 'NeuralNetworkClassifier') %}
+                Accuracy: {{ item.accuracy }} <br>
+                Precision: {{ item.precision }} <br>
+                Recall: {{ item.recall }}
+                {% else %}
+                 {% if(item.model ==  'QSVR') or (item.model ==  'NeuralNetworkRegressor') %}
+                MSE : {{ item.mse }} <br>
+                MAE: {{ item.mae }} <br>
+                RMSE: da implementare
+                {% endif %}
+                {% endif %}
+            </div>
+            <div class="divTableCell">
+                Training time: {{ item.training_time}}<br>
+                Total time: {{ item.total_time}}
+            </div>
+        </div>
+
+        </div>
+{% endfor %}
+      </div><!-- DIV TABLE CLOSE -->
+    </div>
+
+    </div>
 {% endblock %}
-</div>
 </body>
 </html>
