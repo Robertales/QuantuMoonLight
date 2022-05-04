@@ -173,7 +173,7 @@ h1:before {
                                                  <option value="NeuralNetworkClassifier">NeuralNetworkClassifier </option></optgroup>
                                             <optgroup label="Regressors">
                                                                 <option value="QSVR">QSVR </option>
-                                                <option value="NeuralNetworkRegressor">NeuralNetworkRegressor </option></optgroup>
+                                                <option value="NeuralNetworkRegressor">VQR </option></optgroup>
                                                         </select></label>
                                     </li>
                                 </ul>
@@ -184,11 +184,15 @@ h1:before {
                             </p>
                             <div class="collapse" id="collapseExample">
                                 <div class="card card-body">
+                                    <label><input type="checkbox" class="AdvancedOption" id="imputation" name="imputation" value="imputation">  Data Imputation</label>
                                     <label><input type="radio" class="AdvancedOption" id="checkSimpleSplit" name="Radio" value="simpleSplit" checked>   Simple Train-Test Split</label>
                                     <label><input type="radio" class="AdvancedOption" id="checkKFold" name="Radio" value="kFold">  K-fold Cross Validation </label>
+                                    <label><input type="radio" class="AdvancedOption" id="MinMax" name="scaling" value="MinMax">   MinMax Scaling</label>
+                                    <label><input type="radio" class="AdvancedOption" id="Standard" name="scaling" value="Standard">  Standard Scaling </label>
                                     <label>Insert k parameter:   <input type="number" max="10000" value="10" id="kFoldValue" name="kFoldValue" min="10" style="border: 0.1em solid grey"></label>
                                     <label>Insert nr of columns to reduce:   <input type="number" max="10000" min="2" value="2" id="nrColumns" name="nrColumns" style="border: 0.1em solid grey"></label><br>
                                     <label>Insert nr of rows to reduce:    <input type="number" max="10000" min="2" value="100" id="nrRows" name="nrRows" style="border: 0.1em solid grey"></label>
+                                    <label><input type="checkbox" class="AdvancedOption" id="balancing" name="balancing" value="balancing">  Data Balancing</label>
                                     {% if current_user.isResearcher %}
                                     <label>Insert PegasosQSVC C:    <input type="number" max="10000" min="2" value="1000" id="C" name="C" style="border: 0.1em solid grey"></label>
                                     <label>Insert PegasosQSVC tau:    <input type="number" max="10000" min="2" value="100" id="tau" name="tau" style="border: 0.1em solid grey"></label>
