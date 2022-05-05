@@ -84,9 +84,7 @@ def callFeatureExtraction(
 
         PCA_df_to_predict = pd.DataFrame(data=X_to_predict_PCA)
 
-
-        #print("Il valore medio della varianza é: "+pca.explained_variance_ratio_)
-
+        # print("Il valore medio della varianza é: "+pca.explained_variance_ratio_)
 
         # save output in csv
         pathFileYourPCAToPredict = pathFileYourPCA / "doPredictionFE.csv"
@@ -95,14 +93,12 @@ def callFeatureExtraction(
         print("Feature Extraction result for: " + pathToPredict.__str__())
         print(PCA_df_to_predict.head())
 
-    if n_components == 2 and len(Y_train.unique()) < 7:
+    if n_components == 2:
         plt.figure(dpi=150, facecolor='w', edgecolor='k')
         classes = Y_train.unique()  # find nique values for labels
-        cycol = cycle('rbgcmyk')  # possible colors for labels
         for clas in classes:
             plt.scatter(PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature1'],
-                        PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature2'],
-                        c=next(cycol))
+                        PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature2'])
 
         plt.xlabel('feature1', fontsize=12)
         plt.ylabel('feature2', fontsize=12)
@@ -112,7 +108,7 @@ def callFeatureExtraction(
         plt.savefig(pathFileYourPCA / 'graphFE', dpi=150)
         plt.show()
 
-    if n_components == 3    :
+    if n_components == 3:
 
         plt.figure(dpi=150, facecolor='w', edgecolor='k')
         ax = plt.axes(projection='3d')
