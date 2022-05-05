@@ -1,20 +1,15 @@
-import csv
 import time
 import pandas as pd
 from matplotlib import pyplot as plt
 from qiskit import QuantumCircuit
 from qiskit.algorithms.optimizers import COBYLA, SLSQP, ADAM, GradientDescent
-from qiskit.circuit.library import ZFeatureMap, ZZFeatureMap, RealAmplitudes
-from qiskit.utils import algorithm_globals, QuantumInstance
-from qiskit_machine_learning.algorithms import PegasosQSVC, NeuralNetworkClassifier
-from qiskit_machine_learning.kernels import QuantumKernel
+from qiskit.circuit.library import ZZFeatureMap, RealAmplitudes
+from qiskit.utils import QuantumInstance
+from qiskit_machine_learning.algorithms import NeuralNetworkClassifier
 from qiskit_machine_learning.neural_networks import CircuitQNN
-from sklearn.metrics import precision_score, recall_score, accuracy_score
+from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score
 import numpy as np
-
 from app.source.utils import utils
-from app.source.utils.utils import createFeatureList, numberOfColumns
-
 
 class myNeuralNetworkClassifier:
     def classify(pathTrain, pathTest, path_predict, backend, num_qubits, optimizer, loss, max_iter):
@@ -54,16 +49,6 @@ class myNeuralNetworkClassifier:
         test_features = test_features.to_numpy()  # Pegasos.fit accetta numpy array e non dataframe
 
         train_features = train_features.to_numpy()
-
-        print("Train features: ", train_features, type(train_features))
-        print("Test features: ", test_features, type(test_features))
-        print("Train labels: ", train_labels, type(train_labels))
-        print("Test labels: ", test_labels, type(test_labels))
-        print("Prediction data: ", prediction_data, type(prediction_data))
-        print("Optimizer: ", optimizer)
-        print("Loss: ", loss)
-        print("Max iter: ", max_iter)
-        print("qubit ", num_qubits)
 
         result = {}
 
@@ -128,6 +113,8 @@ class myNeuralNetworkClassifier:
         accuracy = accuracy_score(test_labels, test_prediction)
         precision = precision_score(test_labels, test_prediction, average="weighted")
         recall = recall_score(test_labels, test_prediction, average="weighted")
+        f1 = f1_score(test_labels, test_prediction, average="weighted")
+        result["f1"] = f1
         result["testing_precision"] = precision
         result["testing_recall"] = recall
         result["testing_accuracy"] = accuracy
