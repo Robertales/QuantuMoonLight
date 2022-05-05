@@ -19,8 +19,8 @@
 
 </head>
 <body>
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-{% extends "base.html" %}
+  <script src="https://kit.fontawesome.com/b0f51da084.js" crossorigin="anonymous"></script>
+ {% extends "base.html" %}
 {% block content %}
 
  <div align="center">
@@ -44,12 +44,31 @@
               <a href="{{ url_for('post', post_id=Article.id) }}">
               <h2 class="post-title">
                 {{ Article.title }}
+              </h2>
             </a>
+              <!--<button onclick="Toggle1()" id="btnh1" class="btn-like" ><i class="fa-solid fa-heart"></i>-->
+                  <Button onclick="Toggle1()" id="btnh1" class="btn-like"><i class="fa-solid fa-rocket"></i></Button>
+              </button>
           </div>
+  <script>
+
+    var btnvar1 = document.getElementById('btnh1');
+
+       function Toggle1(){
+                if (btnvar1.style.color =="red") {
+                    btnvar1.style.color = "grey"
+                }
+                else{
+                    btnvar1.style.color = "red"
+                }
+       }
+</script>
  <br>
     {% endif %}
  {% endfor %}
 
 {% endblock %}
+
+
 </body>
 </html>

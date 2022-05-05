@@ -27,16 +27,10 @@
 {% block content %}
 
 <div align="center">
-    <h1 id="blog_title">QUANTUM COMMUNITY</h1>
+    <h1 id="blog_title">QUANTUM APPROVAL</h1>
 </div>
 
 <br>
-<div class="create_post">
-    <h5 id="username">{{current_user.username}}</h5>
-    <form action="{{url_for("add")}}">
-    <button class="btn" type="submit">Create New Post</button>
-    </form>
-</div>
 
 {% for Article in posts %}
 {% if not Article.authorized and current_user.isAdmin %}
@@ -49,6 +43,10 @@
             {{ Article.title }}
         </h2>
     </a>
+    <button id="brnApp" name="Approva">Approva</button>
+    <br>
+    <button name="Approva">Rifiuta</button>
+    <br>
 </div>
 <br>
 {% endif %}
