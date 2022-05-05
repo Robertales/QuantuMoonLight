@@ -43,9 +43,12 @@
             {{ Article.title }}
         </h2>
     </a>
-    <button id="brnApp" name="Approva">Approva</button>
+
+    <a href="{{url_for('enableArticle', article_id=Article.id)}}">
+    <button id="brnApp" type="submit" name="Approva" >Approva</button>
+    </a>
     <br>
-    <button name="Approva">Rifiuta</button>
+    <button name="Rifiuta">Rifiuta</button>
     <br>
 </div>
 <br>

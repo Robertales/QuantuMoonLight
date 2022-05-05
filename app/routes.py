@@ -212,7 +212,7 @@ def addpost():
     return redirect(url_for('blog'))
 
 
-@app.route('/enableArticle/<int:article_id>', methods=['POST'])
+@app.route('/enableArticle/<int:article_id>', methods=['POST','GET'])
 def enableArticle(article_id):
     article = Article.query.filter_by(id=article_id).one()
     article.authorized = True
