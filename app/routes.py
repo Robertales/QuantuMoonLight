@@ -120,6 +120,13 @@ def blog():
     return render_template("blog.html", posts=posts)
 
 
+@app.route("/ArticleApproval")
+def ArticleApproval():
+    posts = Article.query.order_by(Article.data.desc()).all()
+
+    return render_template("ArticleApproval.html", posts=posts)
+
+
 @app.route('/post/<int:post_id>')
 def post(post_id):
     post = Article.query.filter_by(id=post_id).one()
