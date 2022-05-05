@@ -10,8 +10,11 @@ from flask import render_template, request, Response, flash
 from flask_login import current_user, login_required
 from qiskit import IBMQ
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+
 from app import app, db
 from app.source.model.models import User, Dataset, Article, Comment
+from app.source.preprocessingDataset.aggId import addId
 from app.source.utils import utils
 from app.source.utils import addAttribute
 
@@ -220,7 +223,6 @@ def smista():
     print("Prototype Selection: ", prototypeSelection)
     featureExtraction = request.form.get("reduceFE")
     print("Feature Extraction: ", featureExtraction)
-    # doQSVM = request.form.get("doQSVM")
     model = request.form.get("model")
     print("model: ", model)
     loss = request.form.get("loss")
@@ -233,7 +235,12 @@ def smista():
     print("tau: ", tau)
     max_iter = request.form.get("max_iter")
     print("max_iter: ", max_iter)
-
+    data_imputation = request.form.get("imputation")
+    print("imputation: ", data_imputation)
+    scaling = request.form.get("scaling")
+    print("scaling: ", scaling)
+    balancing = request.form.get("balancing")
+    print("balancing: ", balancing)
 
     # Advanced option
     print(request.form["Radio"])
@@ -284,29 +291,91 @@ def smista():
     userpathToPredict = paths[2]
     dataPath = userpathTrain.parent
 
-    # Data Imputation
-    missing_values = ["n/n", "na", "--", "nan", "NaN"]
-    if os.path.exists(userpathTrain):
-        addAttribute.addAttribute(userpathTrain, userpathTrain.parent / "TrainImputation.csv")
-        train = pd.read_csv(userpathTrain.parent / "TrainImputation.csv", na_values=missing_values)
-        for column in train:
-            train[column] = train[column].fillna(train[column].mean())
-        train.to_csv(userpathTrain, index=False, header=False)
-        os.remove(userpathTrain.parent / "TrainImputation.csv")
-    if os.path.exists(userpathTest):
-        addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestImputation.csv")
-        test = pd.read_csv(userpathTest.parent / "TestImputation.csv", na_values=missing_values)
-        for column in test:
-            test[column] = test[column].fillna(test[column].mean())
-        test.to_csv(userpathTest, index=False, header=False)
-        os.remove(userpathTest.parent / "TestImputation.csv")
-    if os.path.exists(userpathToPredict):
-        addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictImputation.csv")
-        predict = pd.read_csv(userpathToPredict.parent / "PredictImputation.csv", na_values=missing_values)
-        for column in predict:
-            predict[column] = predict[column].fillna(predict[column].mean())
-        predict.to_csv(userpathToPredict, index=False, header=False)
-        os.remove(userpathToPredict.parent / "PredictImputation.csv")
+    if data_imputation:
+        # Data Imputation
+        print("DATA IMPUTATION")
+        missing_values = ["n/n", "na", "--", "nan", "NaN"]
+        if os.path.exists(userpathTrain):
+            addAttribute.addAttribute(userpathTrain, userpathTrain.parent / "TrainImputation.csv")
+            train = pd.read_csv(userpathTrain.parent / "TrainImputation.csv", na_values=missing_values)
+            for column in train:
+                train[column] = train[column].fillna(train[column].mean())
+            train.to_csv(userpathTrain, index=False, header=False)
+            os.remove(userpathTrain.parent / "TrainImputation.csv")
+        if os.path.exists(userpathTest):
+            addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestImputation.csv")
+            test = pd.read_csv(userpathTest.parent / "TestImputation.csv", na_values=missing_values)
+            for column in test:
+                test[column] = test[column].fillna(test[column].mean())
+            test.to_csv(userpathTest, index=False, header=False)
+            os.remove(userpathTest.parent / "TestImputation.csv")
+        if os.path.exists(userpathToPredict):
+            addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictImputation.csv")
+            predict = pd.read_csv(userpathToPredict.parent / "PredictImputation.csv", na_values=missing_values)
+            for column in predict:
+                predict[column] = predict[column].fillna(predict[column].mean())
+            predict.to_csv(userpathToPredict, index=False, header=False)
+            os.remove(userpathToPredict.parent / "PredictImputation.csv")
+
+
+    if scaling == "MinMax":
+        #Scaling normalization
+        scaler = MinMaxScaler()
+        print("MINMAX SCALING")
+        if os.path.exists(userpathTrain):
+            addAttribute.addAttribute(userpathTrain, userpathTrain.parent / "TrainScaled.csv")
+            data = pd.read_csv(userpathTrain.parent / "TrainScaled.csv")
+            train = data.drop("labels", axis=1)
+            train_scaled = scaler.fit_transform(train)
+            df = pd.DataFrame(train_scaled)
+            df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
+            df.to_csv(userpathTrain, index=False, header=False)
+            os.remove(userpathTrain.parent / "TrainScaled.csv")
+        if os.path.exists(userpathTest):
+            addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestScaled.csv")
+            data = pd.read_csv(userpathTest.parent / "TestScaled.csv")
+            test = data.drop("labels", axis=1)
+            test_scaled = scaler.fit_transform(test)
+            df = pd.DataFrame(test_scaled)
+            df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
+            df.to_csv(userpathTest, index=False, header=False)
+            os.remove(userpathTest.parent / "TestScaled.csv")
+        if os.path.exists(userpathToPredict):
+            addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictScaled.csv")
+            predict = pd.read_csv(userpathToPredict.parent / "PredictScaled.csv")
+            predict_scaled = scaler.fit_transform(predict)
+            df = pd.DataFrame(predict_scaled)
+            df.to_csv(userpathToPredict, index=False, header=False)
+            os.remove(userpathToPredict.parent / "PredictScaled.csv")
+    elif scaling == "Standard":
+        # Scaling standardization z-score
+        scaler = StandardScaler()
+        print("STANDARD SCALING")
+        if os.path.exists(userpathTrain):
+            addAttribute.addAttribute(userpathTrain, userpathTrain.parent / "TrainScaled.csv")
+            data = pd.read_csv(userpathTrain.parent / "TrainScaled.csv")
+            train = data.drop("labels", axis=1)
+            train_scaled = scaler.fit_transform(train)
+            df = pd.DataFrame(train_scaled)
+            df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
+            df.to_csv(userpathTrain, index=False, header=False)
+            os.remove(userpathTrain.parent / "TrainScaled.csv")
+        if os.path.exists(userpathTest):
+            addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestScaled.csv")
+            data = pd.read_csv(userpathTest.parent / "TestScaled.csv")
+            test = data.drop("labels", axis=1)
+            test_scaled = scaler.fit_transform(test)
+            df = pd.DataFrame(test_scaled)
+            df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
+            df.to_csv(userpathTest, index=False, header=False)
+            os.remove(userpathTest.parent / "TestScaled.csv")
+        if os.path.exists(userpathToPredict):
+            addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictScaled.csv")
+            predict = pd.read_csv(userpathToPredict.parent / "PredictScaled.csv")
+            predict_scaled = scaler.fit_transform(predict)
+            df = pd.DataFrame(predict_scaled)
+            df.to_csv(userpathToPredict, index=False, header=False)
+            os.remove(userpathToPredict.parent / "PredictScaled.csv")
 
     # Validazione
     print("\nIn validazione...")
@@ -350,14 +419,23 @@ def smista():
     # DataSet Test ready to be classified
     pathTest = dataPath / "DataSetTestPreprocessato.csv"
 
-    # Data Balancing
-    #x_train = pd.read_csv(pathTrain)
-    #y_train = x_train["labels"]
-    sm = SMOTE(random_state=42)
-
-    #x_train, y_train = sm.fit_resample(x_train, y_train)
-    #x_train.to_csv(pathTrain)
-
+    if balancing:
+        # Data Balancing
+        x_train = pd.read_csv(pathTrain)
+        y_train = x_train["labels"].values
+        x_train = x_train.drop("labels", axis=1)
+        x_train = x_train.drop("Id", axis=1)
+        columns = x_train.columns
+        print("DATA BALANCING")
+        x_train_array = x_train.to_numpy()
+        sm = SMOTE()
+        x_train_array_bal, y_train_bal = sm.fit_resample(x_train_array, y_train)
+        df = pd.DataFrame(x_train_array_bal)
+        #df = df.iloc[:, 1:]
+        df.columns = columns
+        df.insert(loc=len(df.columns), column="labels", value=y_train_bal)
+        df.to_csv(pathTrain, index=False)
+        addId(pathTrain, pathTrain)
 
     # Classificazione
     if model != "None":
@@ -389,7 +467,7 @@ def smista():
             features = utils.createFeatureList(
                 utils.numberOfColumns(userpathTrain) - 1
             )
-        print("Routes ", userpathToPredict)
+
         app.test_client().post(
             "/classify_control",
             data=dict(
