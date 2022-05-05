@@ -103,7 +103,7 @@ h1:before {
         <form enctype="multipart/form-data" action="/formcontrol" method="POST">
         <section class="features-section">
             <div class="auto-container">
-                <div class="row clearfix d-flex justify-content-center">
+                <div class="row clearfix d-flex justify-content-center w-100">
                     <!-- <div id="research" class="sec-title wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1000ms"><h2> Conventionality in research belongs to yesterday!</h2></div>
             <div class="sec-text wow fadeInUp" data-wow-delay="200ms" data-wow-duration="1000ms"><p>The QUASAR Lab is part of the Department of Physics "Ettore Pancini" of University of Naples Federico II, <br> where it is committed to perform research activities in theory and applications of <br> Computational Intelligence, Quantum Machine Intelligence and Cognitive Robotics.  </p></div>
         	-->
@@ -163,18 +163,69 @@ h1:before {
                                         </label>
                                     </li>
                                     <li>
-                                        <label>Select the algorithm: <select name="model" id="model" style="border: 0.1em solid grey">
+                                        <style>
+                                            #tooltip
+                                            {
+                                                position: relative;
+                                                cursor: pointer;
+                                                width: 1%;
+                                                float: right;
+                                                margin-right: 2em;
+                                                margin-bottom: 1.5em;
+                                            }
+                                            #tooltipText
+                                            {
+                                                float: right;
+                                                position: absolute;
+                                                top: 0;
+                                                margin-left: 2.5em;
+                                                margin-bottom: 2.5em;
+                                                background-color: #4e5b6c;
+                                                color: #fff;
+                                                white-space: nowrap;
+                                                padding: 10px 15px;
+                                                border-radius: 7px;
+                                                visibility: hidden;
+                                                opacity: 0;
+                                                transition: .4s ease-in-out; /*delay chiusura */
 
+                                            }
+                                            #tooltipText::before
+                                            {
+                                                content: "";
+                                                position: absolute;
+                                                right: 50%;
+
+                                            }
+                                            #tooltip:hover #tooltipText
+                                            {   visibility: visible;
+                                                opacity: 90%;
+                                                transition: .4s ease-in-out;
+                                            }
+                                            #tooltipText:hover /*delay chiusura */
+                                            {
+                                                transition-delay: 5s;
+                                                visibility: visible;
+                                            }
+                                        </style>
+                                        <label>Select the algorithm: <select name="model" id="model" style="border: 0.1em solid grey">
                                                                 <option value="None">None</option>
                                              <optgroup label="Classificators">
-                                                                <option value="QSVM">QSVM</option>
+                                                 <option value="QSVM" title="ciao">QSVM</p></option>
                                                                 <option value="QSVC">QSVC </option>
                                                                 <option value="PegasosQSVC">PegasosQSVC </option>
                                                  <option value="NeuralNetworkClassifier">NeuralNetworkClassifier </option></optgroup>
                                             <optgroup label="Regressors">
                                                                 <option value="QSVR">QSVR </option>
                                                 <option value="NeuralNetworkRegressor">NeuralNetworkRegressor </option></optgroup>
-                                                        </select></label>
+                                        </select></label>
+                                        <div id="tooltip">
+                                            <span id="tooltipText"><a href="www.google.com"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
                                     </li>
                                 </ul>
                             <p><br> <!-- Advanced Options -->
@@ -228,7 +279,7 @@ h1:before {
                             <br>
 
                             <br>
-                    </div>
+                        </div>
                     <!--result form-->
                    <!-- <div class="col-md-2">
                     </div>
@@ -244,7 +295,7 @@ h1:before {
                                 <font size=2>Create an IBMid account</font>
                             </a></div>
                             <br><br>
-                            <!-- <button type="submit" name="submit" class="theme-btn btn-style-one mainred hvr-bounce-to-right"><span class="fa fa-play"></span>SEND</button>
+                            <button type="submit" name="submit" class="theme-btn btn-style-one mainred hvr-bounce-to-right"><span class="fa fa-play"></span>SEND</button>
                             <br><br>
                         <br>
                     </div> -->
