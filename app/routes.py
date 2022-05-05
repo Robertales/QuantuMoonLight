@@ -17,7 +17,7 @@ from app.source.model.models import User, Dataset, Article, Comment
 from app.source.preprocessingDataset.aggId import addId
 from app.source.utils import utils
 from app.source.utils import addAttribute
-
+from sqlalchemy import func
 
 @app.route("/")
 @app.route("/home", methods=["GET", "POST"])
@@ -49,6 +49,62 @@ def showList():
 def adminPage():
     return render_template("adminPage.html")
 
+@app.route("/compareExperiments" , methods=['POST'])
+def compareExperiments():
+
+    listDataset = request.form.getlist('selectedDataset')
+    datasets = Dataset.query.filter(Dataset.id.in_(listDataset)).all()
+
+    #COMPARISION FOR TOTAL TIME
+    maxTotalTime = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.total_time).first()
+    minTotalTime = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.total_time.desc()).first()
+
+    # COMPARISION FOR TRAINING TIME
+    maxTrainingTime = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.training_time).first()
+    minTrainingTime = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.training_time.desc()).first()
+
+    # COMPARISION FOR PRECISION
+    maxPrecision = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.precision).first()
+    minPrecision = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.precision.desc()).first()
+
+    # COMPARISION FOR ACCURACY
+    maxAccuracy = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.accuracy).first()
+    minAccuracy = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.accuracy.desc()).first()
+
+    # COMPARISION FOR RECALL
+    maxRecall = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.recall).first()
+    minRecall = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.recall.desc()).first()
+
+    # COMPARISION FOR MSE
+    maxMSE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.mse).first()
+    minMSE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.mse.desc()).first()
+
+    # COMPARISION FOR MAE
+    maxMAE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.mae).first()
+    minMAE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.mae.desc()).first()
+
+    # COMPARISION FOR RMSE
+    maxRMSE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.rmse).first()
+    minRMSE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.rmse.desc()).first()
+    return render_template("compareExperiments.html",
+                           datasets=datasets,
+                           maxTotalTime=maxTotalTime,
+                           minTotalTime=minTotalTime,
+                           maxTrainingTime=maxTrainingTime,
+                           minTrainingTime=minTrainingTime,
+                           maxPrecision=maxPrecision,
+                           minPrecision=minPrecision,
+                           maxAccuracy=maxAccuracy,
+                           minAccuracy=minAccuracy,
+                           maxRecall=maxRecall,
+                           minRecall=minRecall,
+                           maxMSE=maxMSE,
+                           minMSE=minMSE,
+                           maxMAE=maxMAE,
+                           minMAE=minMAE,
+                           maxRMSE=maxRMSE,
+                           minRMSE=minRMSE
+                           )
 
 @app.route("/adminDataset")
 def adminDataset():

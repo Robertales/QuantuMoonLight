@@ -36,11 +36,11 @@ class Dataset(db.Model):
     accuracy = db.Column(db.Float, nullable=True, default=-1)
     precision = db.Column(db.Float, nullable=True, default=-1)
     recall = db.Column(db.Float, nullable=True, default=-1)
+    rmse = db.Column(db.Float, nullable=True, default=-1)
     mse = db.Column(db.Float, nullable=True, default=-1)
     mae = db.Column(db.Float, nullable=True, default=-1)
     training_time = db.Column(db.Integer, nullable=True, default=-1)
     total_time = db.Column(db.Integer, nullable=True, default=-1)
-
 
 class Article(db.Model):
     """

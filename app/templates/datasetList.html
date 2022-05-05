@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <title> QuantuMoonLight </title>
@@ -13,12 +13,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
                 <script type="text/javascript">
                         // COLLAPSE BUTTON
-                        function collapse(){
+                    function collapse(){
                               var coll = document.getElementsByClassName("collapsible");
                      var i;
                      for (i = 0; i < coll.length; i++) {
                          coll[i].addEventListener("click", function() {
-                             this.classList.toggle("active");
+                            this.classList.toggle("active");
                             var content = this.nextElementSibling;
                             if (content.style.maxHeight){
                                 content.style.maxHeight = null;
@@ -26,59 +26,25 @@
                                 content.style.maxHeight = content.scrollHeight + "px";
                              }
                       });
-                    }
+                    }}
+
+                    function showCheckbox(){
+                        if (document.getElementById("resultHidden").style.display == "block") {
+                            document.getElementById('resultHidden').style.display = 'none';
+                            document.getElementById('headHidden').style.display = 'none';
+                            document.getElementById('checkboxHidden').style.display = 'none';
+                            document.getElementById('checkHidden').style.display = 'none';
+
+                        } else {
+                            document.getElementById('resultHidden').style.display = 'block';
+                            document.getElementById('headHidden').style.display = 'block';
+                            document.getElementById('checkboxHidden').style.display = 'block';
+                            document.getElementById('checkHidden').style.display = 'block';
                         }
+                    }
                 </script>
 
     <style>
-
-        /* Table Datasets */
-
-               table.TableDataset {
-                      border: 0px solid #000000;
-                      background-color: #FFFFFF;
-                      width: 95%;
-                      text-align: center;
-                      border-collapse: collapse;
-                    }
-                table.TableDataset td, table.TableDataset th {
-                      border: 1px solid #000000;
-                      padding: 3px 2px;
-                    }
-                table.TableDataset tbody td {
-                      font-size: 14px;
-                      font-weight: bold;
-                    }
-                table.TableDataset tr:nth-child(even) {
-                      background: rgb(0, 0, 255, 0.3)
-
-                    }
-                table.TableDataset thead {
-                      background: #000000;
-                      border-bottom: 2px solid #444444;
-                    }
-                table.TableDataset thead th {
-                      font-size: 16px;
-                      font-weight: bold;
-                      color: #FFFFFF;
-                      text-align: center;
-                    }
-                table.TableDataset tfoot td {
-                      font-size: 14px;
-                    }
-
-                table.TableDataset tfoot .links {
-                      text-align: right;
-                    }
-
-                table.TableDataset tfoot .links a{
-                      display: inline-block;
-                      background: #1C6EA4;
-                      color: #FFFFFF;
-                      padding: 2px 8px;
-                      border-radius: 5px;
-                    }
-        /* End Table Datasets Style*/
 
                 h1 {
                   color: white;
@@ -191,6 +157,64 @@
                   overflow: hidden;
                   transition: max-height 0.2s ease-out;
                 }
+
+                #compareButton{
+                  padding: 8px;
+                  margin: 3px;
+                  border: none;
+                  text-align: center;
+                  outline: none;
+                  font-size: 13pt;
+                  background: -moz-linear-gradient(left, #000080 0%, #4B0082 100%);
+                  background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
+                  background: linear-gradient(to right, #000080 0%, #4B0082 100%);
+                  color: white;
+                }
+
+                #tooltip
+                {
+                    position: relative;
+                    cursor: pointer;
+                    width: 1%;
+                    display: inline;
+                    margin-right: 2em;
+                    margin-bottom: 1.5em;
+                }
+                #tooltipText
+                {
+                    float: right;
+                    position: center;
+                    top: 0;
+                    margin-left: 2.5em;
+                    margin-right: 14%;
+                    background-color: #4e5b6c;
+                    color: #fff;
+                    white-space: nowrap;
+                    padding: 10px 15px;
+                    border-radius: 7px;
+                    visibility: hidden;
+                    opacity: 0;
+                    transition: .4s ease-in-out; /*delay chiusura */
+
+                }
+                #tooltipText::before
+                {
+                    content: "";
+                    position: absolute;
+                    right: 50%;
+
+                }
+                #tooltip:hover #tooltipText
+                {   visibility: visible;
+                    opacity: 90%;
+                    transition: .4s ease-in-out;
+                }
+                #tooltipText:hover /*delay chiusura */
+                {
+                    transition-delay: 5s;
+                    visibility: visible;
+                }
+
 </style>
 
     <!-- Responsive -->
@@ -209,7 +233,8 @@
     </div>
 
     <div class="graph-container">
-    <!-- PIE GRAPH CL -->
+
+        <!-- PIE GRAPH CL\RG -->
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
             <script type="text/javascript">
               google.charts.load('current', {'packages':['corechart']});
@@ -240,29 +265,6 @@
             <div id="PieChartClass" class="graph"></div>
     <!-- END GRAPH -->
 
-    <!-- PIE GRAPH FE PS -->
-            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-            <script type="text/javascript">
-            /*  google.charts.load('current', {'packages':['corechart']});
-              google.charts.setOnLoadCallback(drawChart);
-
-              function drawChart() {
-                var data = google.visualization.arrayToDataTable([
-                    ['FE-PS', 'Num'],
-                    ['Feature Extraction',  {{datasets|selectattr('fe')|list|length }}],
-                    ['Prototype Selection',  {{datasets|selectattr('ps')|list|length }}],
-                    ['N/A',  0 ]
-              ]);
-
-                var options = { title: 'History of FE and PS used' };
-
-                var chart = new google.visualization.PieChart(document.getElementById('piechartVal'));
-                chart.draw(data, options);
-              }*/
-            </script>
-            <div id="piechartVal" class="graph"></div>
-    <!-- END GRAPH -->
-
     <!-- BAR CHART -->
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
             <script type="text/javascript">
@@ -290,9 +292,7 @@
               }
             </script>
             <div id="barchart" class="graph"></div>
-
-
-    <!-- END CHART -->
+    <!-- END BAR CHART -->
 
     <!-- PIE GRAPH SPLIT -->
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -320,22 +320,26 @@
 
             <div id="PieChartSplit" class="graph"></div>
     <!-- END GRAPH -->
+
         </div>
     <br><br>
         <button type="button" class="collapsible" onclick="collapse()">Show all experiments</button>
+
 <div class="content">
+    <form action={{url_for('compareExperiments')}} method="post">
 <div class="divTable divTable">
         <div class="divTableHeading">
                 <div class="divTableRow">
-                    <div class="divTableHead">Code</div>
+                    <div class="divTableHead">ID</div>
                     <div class="divTableHead">Dataset</div>
-                    <div class="divTableHead">Upload date</div>
-                    <div class="divTableHead">Split by</div>
+                    <div class="divTableHead">Upload Date</div>
+                    <div class="divTableHead">Validation Method</div>
                     <div class="divTableHead">PS</div>
                     <div class="divTableHead">FE</div>
-                    <div class="divTableHead">Algorithm used</div>
+                    <div class="divTableHead">Classificator/Regressor</div>
                     <div class="divTableHead">Metrics</div>
                     <div class="divTableHead">Time</div>
+                    <div class="divTableHead">Compare</div>
                 </div>
         </div>
  {% for item in datasets %}
@@ -343,14 +347,15 @@
 
         <div class="divTableRow">
         <div class="divTableCell">{{ item.id}}</div>
-            <div class="divTableCell">{{ item.name}}</div>
-            <div class="divTableCell">{{ item.upload_date}}</div>
+            <div class="divTableCell"><strong>{{ item.name}}</strong></div>
+            <div class="divTableCell">{{ item.upload_date.strftime('%d/%m/%Y')}}<br>
+                {{ item.upload_date.strftime('%H:%M:%S')}}</div>
             <div class="divTableCell">
                 {% if(item.simple_split) %}
                 Simple Split
-                    {% endif %}
+                {% endif %}
                 {% if(item.k_fold) %}
-                    K Fold
+                K Fold
                 {% endif %}
             </div>
             <div class="divTableCell">
@@ -373,30 +378,70 @@
             </div>
             <div class="divTableCell">{{ item.model }}</div>
             <div class="divTableCell">
-                 {% if(item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'PegasosQSVC') or (item.model == 'NeuralNetworkClassifier') %}
-                Accuracy: {{ item.accuracy }} <br>
-                Precision: {{ item.precision }} <br>
-                Recall: {{ item.recall }}
-                {% else %}
-                 {% if(item.model ==  'QSVR') or (item.model ==  'NeuralNetworkRegressor') %}
-                MSE : {{ item.mse }} <br>
-                MAE: {{ item.mae }} <br>
-                RMSE: da implementare
-                {% endif %}
-                {% endif %}
+
+                {% if(item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'PegasosQSVC') or (item.model == 'NeuralNetworkClassifier') %}
+                    {% if(item.accuracy==-1) %}
+                    Accuracy: N/A<br>
+                    {% else %}
+                    Accuracy: {{'%0.2f'|format(item.accuracy|float)}}% <br>
+                    {% endif %}
+                    {% if(item.precision==-1) %}
+                    Precision: N/A<br>
+                    {% else %}
+                    Precision: {{'%0.2f'|format(item.precision|float)}}% <br>
+                    {% endif %}
+                    {% if(item.recall==-1) %}
+                    Recall: N/A<br>
+                    {% else %}
+                    Recall: {{'%0.2f'|format(item.recall|float)}}%<br>
+                    {% endif %}
+                {% else %} {% if(item.model ==  'QSVR') or (item.model ==  'NeuralNetworkRegressor') %}
+                    {% if(item.mse==-1) %}
+                    MSE : N/A <br>
+                    {% else %}
+                    MSE : {{'%0.2f'|format(item.mse|float)}}% <br>
+                    {% endif %}
+                    {% if(item.mae==-1) %}
+                    MAE : N/A <br>
+                    {% else %}
+                    MAE: {{'%0.2f'|format(item.mae|float)}}% <br>
+                    {% endif %}
+                    RMSE: {{'%0.2f'|format(item.rmse|float)}}%
+                {% endif %} {% endif %}
             </div>
             <div class="divTableCell">
-                Training time: {{ item.training_time}}<br>
-                Total time: {{ item.total_time}}
+                {% if(item.training_time==-1) %}
+                Training time: N/A<br>
+                {% else %}
+                Training time: {{ item.training_time}}s<br>
+                {% endif %}
+                {% if(item.total_time==-1) %}
+                Total time: N/A<br>
+                {% else %}
+                Total time: {{ item.total_time}}s<br>
+                {% endif %}
             </div>
+<div class="divTableCell">
+    <input type="checkbox" id="selectedDataset" name="selectedDataset" value="{{item.id}}">
+</div>
+
         </div>
 
         </div>
 {% endfor %}
       </div><!-- DIV TABLE CLOSE -->
+        <input type="submit" id="compareButton" value="Compare dataset">
+        <div id="tooltip">
+            <span id="tooltipText"> <a href="www.google.com"></a>
+               Select the datasets to be compared by checking the checkboxes and click on the button on the left
+                <br><strong>it's not possible to obtain performance metrics on datasets processed with different algorithm (e.g. classification/regression)</strong></span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+        </div>
+    </form>
     </div>
-
-    </div>
+</div>
 {% endblock %}
 </body>
 </html>
