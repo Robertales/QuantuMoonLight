@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title> QuantuMoonLight </title>
+    <link rel="icon" href="../static/images/logos/logo.ico">
+
+    <!-- Stylesheets -->
+    <link href="../static/styles/css/nav.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+                h1 {
+                  color: white;
+                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                  font-weight: bold;
+                  margin-left: auto;
+                  margin-right: auto;}
+
+                .intestazione{
+                    background: -moz-linear-gradient(left, #000080 0%, #4B0082 100%);
+                    background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
+                    background: linear-gradient(to right, #000080 0%, #4B0082 100%);
+                    padding-top: 0.5em;
+                    padding-bottom: 0.5em;
+                    color: white;}
+
+                 /* TABLE STYLE */
+                div.divTable {
+                      border: 2px solid #FFFFFF;
+                      width: 100%;
+                      text-align: center;
+                      border-collapse: collapse;
+                }
+
+                .divTable.divTable .divTableCell, .divTable.divTable .divTableHead {
+                      border: 1px solid #FFFFFF;
+                      padding: 4px 5px;
+                }
+
+                .divTable.divTable .divTableBody .divTableCell {
+                      font-size: 13px;
+                    }
+
+                .divTable.divTable .divTableCell:nth-child(even) {
+                      background: #EBEBEB;
+                    }
+
+                .divTable.divTable .divTableHeading {
+                      background: #FFFFFF;
+                      border-bottom: 4px solid #333333;
+                    }
+
+                .divTable.divTable .divTableHeading .divTableHead {
+                      font-size: 15px;
+                      font-weight: bold;
+                      color: #333333;
+                      text-align: center;
+                      border-left: 2px solid #333333;
+                    }
+
+                .divTable.divTable .divTableHeading .divTableHead:first-child {
+                      border-left: none;
+                    }
+
+                .divTable {
+                      font-size: 14px;
+                    }
+
+                .divTable{ display: table; }
+                .divTableRow { display: table-row; }
+                .divTableHeading { display: table-header-group;}
+                .divTableCell, .divTableHead { display: table-cell;}
+                .divTableHeading { display: table-header-group;}
+                .divTableBody { display: table-row-group;}
+
+                .chartContainer{
+                    display: inline-block;
+                    width: 100%;
+                }
+
+                .chart{
+                    width: 50%;
+                    float: left;
+                }
+
+                .metricsContainer{
+                    display: inline-block;
+                    width: 100%;
+                }
+
+                .chartMetrics{
+                    width: 33.3%;
+                    float: left;
+                }
+
+</style>
+
+    <!-- Responsive -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <!-- Metrics - bar graph-->
+    <script>
+
+    </script>
+</head>
+
+<body>
+    <div class="page-wrapper">
+    {% extends "base.html" %}
+    {% block content %}
+
+    <div class="intestazione"> <h5 class="text-center">COMPARISON OF TOTAL/TRAINING TIME</h5> </div>
+
+        <div class="chartContainer">
+        <!-- TOTAL TIME CHART -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+              var data = google.visualization.arrayToDataTable([
+                ['Total Time', 'Value in seconds', { role: 'style' } ],
+                ['{{maxTotalTime.name}}\nID: {{maxTotalTime.id}}\n{{maxTotalTime.model}}', {{maxTotalTime.total_time}}, "#3e8410" ],
+                ['{{minTotalTime.name}}\nID: {{minTotalTime.id}}\n{{minTotalTime.model}}', {{minTotalTime.total_time}}, "#d23114" ],
+              ]);
+
+              var view = new google.visualization.DataView(data);
+
+              var options = {
+                title: "Comparison of total processing times",
+                width: 700,
+                height: 300,
+                bar: {groupWidth: "75%"},
+                hAxis: {title: 'Total processing time  in seconds',  scaleType: 'log', format: '# s'},
+                legend: { position: "none" },
+              };
+              var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
+              chart.draw(view, options);
+          }
+          </script>
+
+        <div id="barchart_values" class="chart"></div>
+
+        <!-- TRAINING TIME CHART -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+              var data = google.visualization.arrayToDataTable([
+                ['Training Time', 'Value in seconds', { role: 'style' }],
+                ['{{maxTrainingTime.name}}\nID: {{maxTrainingTime.id}}\n{{maxTrainingTime.model}}', {{maxTrainingTime.training_time}}, "#3e8410" ],
+                ['{{minTrainingTime.name}}\nID: {{minTrainingTime.id}}\n{{minTrainingTime.model}}', {{minTrainingTime.training_time}}, "#d23114" ],
+              ]);
+
+              var view = new google.visualization.DataView(data);
+
+              var options = {
+                title: "Comparison of training processing times",
+                width: 700,
+                height: 300,
+                bar: {groupWidth: "75%"},
+                hAxis: { title: 'Training processing time in seconds', scaleType: 'log', format: '# s'},
+                legend: { position: "none" },
+              };
+              var chart = new google.visualization.BarChart(document.getElementById("barchart_valuesTraining"));
+              chart.draw(view, options);
+          }
+          </script>
+
+        <div id="barchart_valuesTraining"class="chart"></div>
+    </div>
+
+
+        <div class="metricsContainer">
+            <!-- TOTAL TIME CHART -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+              var data = google.visualization.arrayToDataTable([
+                ['Accuracy', 'Value in %', { role: 'style' } ],
+                ['{{maxAccuracy.name}}\nID: {{maxAccuracy.id}}\n{{maxAccuracy.model}}', {{maxAccuracy.accuracy}} , "#d23114"],
+                ['{{minAccuracy.name}}\nID: {{minAccuracy.id}}\n{{minAccuracy.model}}', {{minAccuracy.accuracy}} , "#3e8410"],
+              ]);
+
+              var view = new google.visualization.DataView(data);
+
+              var options = {
+                title: "Comparison of accuracy metric",
+                width: 500,
+                height: 300,
+                bar: {groupWidth: "75%"},
+                hAxis: { title: 'Accuracy metric %', scaleType: 'log', format: '#,##%'},
+                legend: { position: "none" },
+              };
+
+
+              var chart = new google.visualization.BarChart(document.getElementById("barchart_valuesAccuracy"));
+              chart.draw(view, options);
+          }
+          </script>
+
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+              var data = google.visualization.arrayToDataTable([
+                ['Precision', 'Value in %', { role: 'style' }],
+                ['{{maxPrecision.name}}\nID: {{maxPrecision.id}}\n{{maxPrecision.model}}', {{maxPrecision.precision}} ,  "#d23114"],
+                ['{{minPrecision.name}}\nID: {{minPrecision.id}}\n{{minPrecision.model}}', {{minPrecision.precision}} ,  "#3e8410" ],
+              ]);
+
+              var view = new google.visualization.DataView(data);
+
+              var options = {
+                title: "Comparison of Precision metric",
+                width: 500,
+                height: 300,
+                bar: {groupWidth: "75%"},
+                legend: { position: "none" },
+                hAxis: { title: 'Precision metric %', scaleType: 'log', format: '#,##%'}
+
+              };
+              var chart = new google.visualization.BarChart(document.getElementById("barchart_valuesPrecision"));
+              chart.draw(view, options);
+          }
+          </script>
+
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+              var data = google.visualization.arrayToDataTable([
+                ['Recall', 'Value in %', { role: 'style' }],
+                ['{{maxRecall.name}}\nID: {{maxRecall.id}}\n{{maxRecall.model}}', {{maxRecall.recall}}, "#d23114" ],
+                ['{{minRecall.name}}\nID: {{minRecall.id}}\n{{minRecall.model}}', {{minRecall.recall}}, "#3e8410" ],
+              ]);
+
+              var view = new google.visualization.DataView(data);
+
+              var options = {
+                title: "Comparison of Recall metric",
+                width: 500,
+                height: 300,
+                bar: {groupWidth: "75%"},
+                hAxis: { title: 'Recall metric %', scaleType: 'log', format: '#,##%'},
+                legend: { position: "none" },
+
+              };
+
+
+              var chart = new google.visualization.BarChart(document.getElementById("barchart_valuesRecall"));
+              chart.draw(view, options);
+          }
+          </script>
+
+        <!-- REGRESSIONE -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+              var data = google.visualization.arrayToDataTable([
+                ['MSE', 'Value in %', { role: 'style' } ],
+                ['{{maxMSE.name}}\nID: {{maxMSE.id}}\n{{maxMSE.model}}', {{maxMSE.mse}} , "#d23114"],
+                ['{{minMSE.name}}\nID: {{minMSE.id}}\n{{minMSE.model}}', {{minMSE.mse}} , "#3e8410"],
+              ]);
+
+              var view = new google.visualization.DataView(data);
+
+              var options = {
+                title: "Comparison of MSE metric",
+                width: 500,
+                height: 300,
+                bar: {groupWidth: "75%"},
+                hAxis: { title: 'MSE metric %', scaleType: 'log', format: '#,##%'},
+                legend: { position: "none" },
+              };
+
+
+              var chart = new google.visualization.BarChart(document.getElementById("barchart_valuesMSE"));
+              chart.draw(view, options);
+          }
+          </script>
+
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+              var data = google.visualization.arrayToDataTable([
+                ['MAE', 'Value in %', { role: 'style' }],
+                ['{{maxMAE.name}}\nID: {{maxMAE.id}}\n{{maxMAE.model}}', {{maxMAE.mae}}, "#d23114" ],
+                ['{{minMAE.name}}\nID: {{minMAE.id}}\n{{minMAE.model}}', {{minMAE.mae}}, "#3e8410" ],
+              ]);
+
+              var view = new google.visualization.DataView(data);
+
+              var options = {
+                title: "Comparison of MAE metric",
+                width: 500,
+                height: 300,
+                bar: {groupWidth: "75%"},
+                hAxis: { title: 'MAE metric %', scaleType: 'log', format: '#,##%'},
+                legend: { position: "none" },
+
+              };
+
+
+              var chart = new google.visualization.BarChart(document.getElementById("barchart_valuesMAE"));
+              chart.draw(view, options);
+          }
+          </script>
+
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+              var data = google.visualization.arrayToDataTable([
+                ['RMSE', 'Value in %', { role: 'style' }],
+                ['{{maxRMSE.name}}\nID: {{maxRMSE.id}}\n{{maxRMSE.model}}', {{maxRMSE.rmse}}, "#d23114" ],
+                ['{{minRMSE.name}}\nID: {{minRMSE.id}}\n{{minRMSE.model}}', {{minRMSE.rmse}}, "#3e8410" ],
+              ]);
+
+              var view = new google.visualization.DataView(data);
+
+              var options = {
+                title: "Comparison of RMSE metric",
+                width: 500,
+                height: 300,
+                bar: {groupWidth: "75%"},
+                hAxis: { title: 'RMSE metric %', scaleType: 'log', format: '#,##%'},
+                legend: { position: "none" },
+
+              };
+
+
+              var chart = new google.visualization.BarChart(document.getElementById("barchart_valuesRMSE"));
+              chart.draw(view, options);
+          }
+          </script>
+
+            {% if((maxPrecision.model == 'QSVM') or (maxPrecision.model == 'QSVC') or (maxPrecision.model == 'PegasosQSVC') or (maxPrecision.model == 'NeuralNetworkClassifier'))
+            and
+            ((minPrecision.model == 'QSVM') or (minPrecision.model == 'QSVC') or (minPrecision.model == 'PegasosQSVC') or (minPrecision.model == 'NeuralNetworkClassifier'))
+            and
+            ((maxAccuracy.model == 'QSVM') or (maxAccuracy.model == 'QSVC') or (maxAccuracy.model == 'PegasosQSVC') or (maxAccuracy.model == 'NeuralNetworkClassifier'))
+            and
+            ((minAccuracy.model == 'QSVM') or (minAccuracy.model == 'QSVC') or (minAccuracy.model == 'PegasosQSVC') or (minAccuracy.model == 'NeuralNetworkClassifier'))
+            and
+            ((maxRecall.model == 'QSVM') or (maxRecall.model == 'QSVC') or (maxRecall.model == 'PegasosQSVC') or (maxRecall.model == 'NeuralNetworkClassifier'))
+            and
+            ((minRecall.model == 'QSVM') or (minRecall.model == 'QSVC') or (minRecall.model == 'PegasosQSVC') or (minRecall.model == 'NeuralNetworkClassifier')) %}
+            <div class="intestazione"> <h5 class="text-center">METRICS COMPARISON</h5> </div>
+            <div id="barchart_valuesAccuracy" class="chartMetrics"></div>
+            <div id="barchart_valuesPrecision" class="chartMetrics"></div>
+            <div id="barchart_valuesRecall" class="chartMetrics"></div>
+            {% endif %}
+            {% if((maxMSE.model == 'QSVR') or (maxMSE.model == 'NeuralNetworkRegressor'))
+             and
+             ((minMSE.model == 'QSVR') or (minMSE.model == 'NeuralNetworkRegressor'))
+             and
+             ((maxMAE.model == 'QSVR') or (maxMAE.model == 'NeuralNetworkRegressor'))
+             and
+             ((minMAE.model == 'QSVR') or (minMAE.model == 'NeuralNetworkRegressor'))
+             and
+             ((maxRMSE.model == 'QSVR') or (maxRMSE.model == 'NeuralNetworkRegressor'))
+             and
+             ((minRMSE.model == 'QSVR') or (minRMSE.model == 'NeuralNetworkRegressor')) %}
+             <div class="intestazione"> <h5 class="text-center">METRICS COMPARISON</h5> </div>
+             <div id="barchart_valuesMSE" class="chartMetrics"></div>
+             <div id="barchart_valuesMAE" class="chartMetrics"></div>
+             <div id="barchart_valuesRMSE" class="chartMetrics"></div>
+            {% endif %}
+
+        </div>
+
+    <div class="intestazione"> <h5 class="text-center">SELECTED DATASET</h5> </div>
+        <div class="divTable divTable">
+        <div class="divTableHeading">
+                <div class="divTableRow">
+                    <div class="divTableHead">Code</div>
+                    <div class="divTableHead">Dataset</div>
+                    <div class="divTableHead">Algorithm used in the experiment</div>
+                    <div class="divTableHead">Metrics</div>
+                    <div class="divTableHead">Time</div>
+                </div>
+        </div>
+             {% for item in datasets  %}
+        <div class="divTableBody">
+            <div class="divTableCell"> {{item.id}} </div>
+            <div class="divTableCell"> {{item.name}} </div>
+            <div class="divTableCell">
+                Validation:
+                {% if(item.simple_split) %}
+                Simple Split <br>
+                {% endif %}
+                {% if(item.k_fold) %}
+                    K Fold <br>
+                {% endif %}
+
+                {% if(item.ps) %}
+                   PS with GA<br>
+                {% endif %}
+
+                {% if(item.fe) %}
+                     FE with PCA<br>
+                {% endif %}
+
+                <strong>{{ item.model }}</strong>
+
+            </div>
+
+            <div class="divTableCell">
+                {% if(item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'PegasosQSVC') or (item.model == 'NeuralNetworkClassifier') %}
+                <strong> Accuracy: </strong>{{'%0.2f'|format(item.accuracy|float)}}% <br>
+                <strong> Precision: </strong> {{'%0.2f'|format(item.precision|float)}}% <br>
+                <strong> Recall: </strong>{{'%0.2f'|format(item.recall|float)}}%
+                {% else %}
+                 {% if(item.model ==  'QSVR') or (item.model ==  'NeuralNetworkRegressor') %}
+                <strong>MSE </strong> : {{'%0.2f'|format(item.mse|float)}}% <br>
+                <strong>MAE: </strong>: {{'%0.2f'|format(item.mae|float)}}% <br>
+                <strong>RMSE: </strong>: {{'%0.2f'|format(item.rmse|float)}}%
+                {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="divTableCell">
+                Training time: {{ item.training_time}} s<br>
+                Total time: {{ item.total_time}} s</div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+ {% endblock %}
+</body>
+</html>
