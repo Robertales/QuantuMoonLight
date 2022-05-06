@@ -28,20 +28,23 @@
                       });
                     }}
 
-                    function showCheckbox(){
-                        if (document.getElementById("resultHidden").style.display == "block") {
-                            document.getElementById('resultHidden').style.display = 'none';
-                            document.getElementById('headHidden').style.display = 'none';
-                            document.getElementById('checkboxHidden').style.display = 'none';
-                            document.getElementById('checkHidden').style.display = 'none';
-
-                        } else {
-                            document.getElementById('resultHidden').style.display = 'block';
-                            document.getElementById('headHidden').style.display = 'block';
-                            document.getElementById('checkboxHidden').style.display = 'block';
-                            document.getElementById('checkHidden').style.display = 'block';
+                     function checkBoxLimit() {
+                            var checkBoxGroup = document.forms['formDatasets']['selectedDataset'];
+                            var limit = 2;
+                            for (var i = 0; i < checkBoxGroup.length; i++) {
+                                checkBoxGroup[i].onclick = function() {
+                                    var checkedcount = 0;
+                                    for (var i = 0; i < checkBoxGroup.length; i++) {
+                                        checkedcount += (checkBoxGroup[i].checked) ? 1 : 0;
+                                    }
+                                    if (checkedcount > limit) {
+                                        alert("You can select maximum of " + limit + " checkboxes.");
+                                        this.checked = false;
+                                    }
+                                }
+                            }
                         }
-                    }
+
                 </script>
 
     <style>
@@ -326,7 +329,7 @@
         <button type="button" class="collapsible" onclick="collapse()">Show all experiments</button>
 
 <div class="content">
-    <form action={{url_for('compareExperiments')}} method="post">
+    <form action={{url_for('compareExperiments')}} name="formDatasets" method="post">
 <div class="divTable divTable">
         <div class="divTableHeading">
                 <div class="divTableRow">
@@ -421,9 +424,10 @@
                 Total time: {{ item.total_time}}s<br>
                 {% endif %}
             </div>
-<div class="divTableCell">
-    <input type="checkbox" id="selectedDataset" name="selectedDataset" value="{{item.id}}">
+<div class="divTableCell checkboxGroup">
+    <input type="checkbox" id="selectedDataset" class="cb" name="selectedDataset" value="{{item.id}}">
 </div>
+            <script type="text/javascript">checkBoxLimit()</script>
 
         </div>
 
