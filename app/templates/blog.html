@@ -47,19 +47,27 @@
               </h2>
             </a>
               <!--<button onclick="Toggle1()" id="btnh1" class="btn-like" ><i class="fa-solid fa-heart"></i>-->
-                  <Button onclick="Toggle1()" id="btnh1" class="btn-like"><i class="fa-solid fa-rocket"></i></Button>
-              </button>
+                  <Button  id= {{ loop.index }} onclick="Toggle1({{loop.index }})" class="btn-like"><i class="fa-solid fa-rocket"></i></Button>
           </div>
   <script>
 
-    var btnvar1 = document.getElementById('btnh1');
 
-       function Toggle1(){
-                if (btnvar1.style.color =="red") {
+
+       function Toggle1(intValue){
+            var btnvar1 = document.getElementById(intValue);
+                if (btnvar1.style.color ==="red") {
                     btnvar1.style.color = "grey"
+                    $.ajax({
+        type: 'GET',
+        url: "{{url_for("like")}}",
+      });
                 }
                 else{
                     btnvar1.style.color = "red"
+                    $.ajax({
+        type: 'GET',
+        url: "{{url_for("like")}}",
+      });
                 }
        }
 </script>

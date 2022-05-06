@@ -196,6 +196,15 @@ def add():
     return render_template('add.html')
 
 
+@app.route('/like')
+@login_required
+def like():
+    print("ciaociaociaociaociao")
+    return render_template('add.html')
+
+
+
+
 @app.route('/addpost', methods=['POST'])
 @login_required
 def addpost():
