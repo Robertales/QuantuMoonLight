@@ -49,8 +49,13 @@
         </h2>
     </a>
     <!--<button onclick="Toggle1()" id="btnh1" class="btn-like" ><i class="fa-solid fa-heart"></i>-->
-    <Button id={{Article.id}} onclick="Toggle1({{Article.id}})" class="btn-like"><i class="fa-solid fa-rocket"></i>
+     {% if current_user.has_liked_post(Article)  %}
+    <Button id={{Article.id}} onclick="Toggle1({{Article.id}})" class="btn-like" style="color:red"><i class="fa-solid fa-rocket" ></i>
     </Button>
+     {% else %}
+    <Button id={{Article.id}} onclick="Toggle1({{Article.id}})" class="btn-like" style="color:grey"><i class="fa-solid fa-rocket"></i>
+    </Button>
+    {% endif %}
 </div>
 <script>
 

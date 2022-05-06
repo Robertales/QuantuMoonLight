@@ -18,6 +18,11 @@ class User(db.Model, UserAuth):
     newsletter = db.Column(db.Boolean, default=False)
     isResearcher = db.Column(db.Boolean, default=False)
 
+    def has_liked_post(self, post):
+        return Like.query.filter(
+            Like.email_user == self.email,
+            Like.id_article == post.id).count() > 0
+
 
 class Dataset(db.Model):
     """
