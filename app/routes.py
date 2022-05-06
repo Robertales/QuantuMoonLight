@@ -2,22 +2,20 @@ import os.path
 import pathlib
 from datetime import datetime
 
-from imblearn.over_sampling import SMOTE
-import csv as csv
-from flask import render_template, request, Response, flash, redirect, url_for
-
+import pandas as pd
+from flask import redirect, url_for
 from flask import render_template, request, Response, flash
 from flask_login import current_user, login_required
+from imblearn.over_sampling import SMOTE
 from qiskit import IBMQ
-import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from app import app, db
-from app.source.model.models import User, Dataset, Article, Comment
+from app.source.model.models import User, Dataset, Article, Comment, Like
 from app.source.preprocessingDataset.aggId import addId
-from app.source.utils import utils
 from app.source.utils import addAttribute
-from sqlalchemy import func
+from app.source.utils import utils
+
 
 @app.route("/")
 @app.route("/home", methods=["GET", "POST"])
@@ -196,12 +194,30 @@ def add():
     return render_template('add.html')
 
 
-@app.route('/like')
+
+@app.route('/like', methods=['GET'])
 @login_required
 def like():
-    print("ciaociaociaociaociao")
+    email_user = current_user.email
+    data = request.args
+    id_article = data['data']
+    like = Like(email_user=email_user,  id_article=id_article)
+
+    db.session.add(like)
+    db.session.commit()
     return render_template('add.html')
 
+@app.route('/dislike', methods=['GET'])
+@login_required
+def dislike():
+    email_user = current_user.email
+    data = request.args
+    id_article = data['data']
+    like=Like.query.filter_by(email_user=email_user ,  id_article=id_article).first()
+
+    db.session.delete(like)
+    db.session.commit()
+    return render_template('add.html')
 
 
 
