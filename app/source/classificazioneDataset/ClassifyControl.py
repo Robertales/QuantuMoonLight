@@ -311,6 +311,8 @@ class ClassificazioneControl:
             if model == "QSVR" or model == "NeuralNetworkRegressor":
                 mae = result.get("mae")
                 mse = result.get("mse")
+                rmse = result.get("rmse")
+                score = result.get("score")
                 msg.attach(
                     MIMEText(
                         "<center><h3>" +
@@ -319,12 +321,17 @@ class ClassificazioneControl:
                         "{:.2%}".format(float(mse)) +
                         "<br><br> Mean Absolute Error: " +
                         "{:.2%}".format(float(mae)) +
+                        "<br><br> Root Mean Squared Error: " +
+                        "{:.2%}".format(float(rmse)) +
+                        "<br><br> Regression Score: " +
+                        "{:.2%}".format(float(score)) +
                         "</h3></center>",
                         'html'))
             else:
                 accuracy = result.get("testing_accuracy")
                 precision = result.get("testing_precision")
                 recall = result.get("testing_recall")
+                f1 = result.get("f1")
                 msg.attach(
                     MIMEText(
                         "<center><h3>" +
@@ -335,6 +342,8 @@ class ClassificazioneControl:
                         "{:.2%}".format(precision) +
                         "<br><br>Testing recall: " +
                         "{:.2%}".format(recall) +
+                        "<br><br>Testing f1: " +
+                        "{:.2%}".format(f1) +
                         "</h3></center>", 'html'))
             if result.get("training_time")==-1:
                 msg.attach(
