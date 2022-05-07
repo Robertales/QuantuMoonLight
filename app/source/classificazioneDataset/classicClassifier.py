@@ -51,13 +51,13 @@ class classicClassifier:
         result = {}
 
         model = SVC()
-        if model_name == "KNeighborsClassifier":
+        if model_name == "K Neighbors Classifier":
             model = KNeighborsClassifier()
-        elif model_name == "NaiveBayes":
+        elif model_name == "Naive Bayes":
             model = GaussianNB()
-        elif model_name == "DecisionTreeClassifier":
+        elif model_name == "Decision Tree Classifier":
             model = DecisionTreeClassifier()
-        elif model_name == "RandomForestClassifier":
+        elif model_name == "Random Forest Classifier":
             model = RandomForestClassifier()
 
         # training
@@ -72,7 +72,7 @@ class classicClassifier:
         test_prediction = model.predict(test_features)
         testing_time = time.time() - start_time
         accuracy = accuracy_score(test_labels, test_prediction)
-        precision = precision_score(test_labels, test_prediction, average="weighted")
+        precision = precision_score(test_labels, test_prediction, average="weighted", zero_division=0)
         recall = recall_score(test_labels, test_prediction, average="weighted")
         f1 = f1_score(test_labels, test_prediction, average="weighted")
         result["f1"] = f1

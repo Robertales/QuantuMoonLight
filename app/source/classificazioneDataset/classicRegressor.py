@@ -49,7 +49,7 @@ class classicRegressor:
         result = {}
 
         model = SVR()
-        if model_name == "LinearRegression":
+        if model_name == "Linear Regression":
             model = LinearRegression()
 
         # training

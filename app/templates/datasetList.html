@@ -360,6 +360,9 @@
                 {% if(item.validation == 'K Fold') %}
                 K Fold
                 {% endif %}
+                {% if(item.validation == 'None') %}
+                None
+                {% endif %}
             </div>
             <div class="divTableCell">
                 {% if(item.ps) %}
@@ -382,7 +385,8 @@
             <div class="divTableCell">{{ item.model }}</div>
             <div class="divTableCell">
 
-                {% if(item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'PegasosQSVC') or (item.model == 'NeuralNetworkClassifier') %}
+                {% if(item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'Pegasos QSVC') or (item.model == 'Quantum Neural Network') or (item.model == 'SVC')
+                or (item.model == 'K Neighbors Classifier') or (item.model == 'Naive Bayes') or (item.model == 'Decision Tree Classifier') or (item.model == 'Random Forest Classifier') %}
                     {% if(item.accuracy==-1) %}
                     Accuracy: N/A<br>
                     {% else %}
@@ -398,18 +402,27 @@
                     {% else %}
                     Recall: {{'%0.2f'|format(item.recall|float)}}%<br>
                     {% endif %}
-                {% else %} {% if(item.model ==  'QSVR') or (item.model ==  'NeuralNetworkRegressor') %}
+                {% else %} {% if(item.model == 'QSVR') or (item.model == 'VQR') or (item.model == 'Linear Regression') or (item.model == 'SVR') %}
                     {% if(item.mse==-1) %}
-                    MSE : N/A <br>
+                    MSE: N/A <br>
                     {% else %}
-                    MSE : {{'%0.2f'|format(item.mse|float)}}% <br>
+                    MSE: {{'%0.2f'|format(item.mse|float)}}% <br>
                     {% endif %}
                     {% if(item.mae==-1) %}
-                    MAE : N/A <br>
+                    MAE: N/A <br>
                     {% else %}
                     MAE: {{'%0.2f'|format(item.mae|float)}}% <br>
                     {% endif %}
-                    RMSE: {{'%0.2f'|format(item.rmse|float)}}%
+                    {% if(item.rmse==-1) %}
+                    RMSE: N/A <br>
+                    {% else %}
+                    RMSE: {{'%0.2f'|format(item.rmse|float)}}% <br>
+                    {% endif %}
+                    {% if(item.r2==-1) %}
+                    R2: N/A <br>
+                    {% else %}
+                    R2: {{'%0.2f'|format(item.r2|float)}}% <br>
+                    {% endif %}
                 {% endif %} {% endif %}
             </div>
             <div class="divTableCell">

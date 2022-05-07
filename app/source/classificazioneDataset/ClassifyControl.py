@@ -201,7 +201,7 @@ class ClassificazioneControl:
             r = myQSVM.classify(path_train, path_test, user_path_to_predict, backend, features, qubit)
             result = {**result, **r}
 
-        elif model == "PegasosQSVC":
+        elif model == "Pegasos QSVC":
             r = myPegasosQSVC.classify(path_train, path_test, user_path_to_predict, backend, qubit, C, tau)
             result = {**result, **r}
 
@@ -209,7 +209,7 @@ class ClassificazioneControl:
             r = myQSVC.classify(path_train, path_test, user_path_to_predict, backend, qubit)
             result = {**result, **r}
 
-        elif model == "NeuralNetworkClassifier":
+        elif model == "Quantum Neural Network":
             r = myNeuralNetworkClassifier.classify(path_train, path_test, user_path_to_predict, backend, qubit, optimizer, loss, max_iter)
             result = {**result, **r}
 
@@ -217,23 +217,25 @@ class ClassificazioneControl:
             r = myQSVR.classify(path_train, path_test, user_path_to_predict, backend, qubit)
             result = {**result, **r}
 
-        elif model == "NeuralNetworkRegressor":
+        elif model == "VQR":
             r = myNeuralNetworkRegressor.classify(path_train, path_test, user_path_to_predict, backend, qubit, optimizer, loss, max_iter)
             result = {**result, **r}
 
-        elif model == "SVC" or model == "KNeighborsClassifier" or model == "NaiveBayes" or model == "DecisionTreeClassifier" or model == "RandomForestClassifier":
+        elif model == "SVC" or model == "K Neighbors Classifier" or model == "Naive Bayes" or model == "Decision Tree Classifier" or model == "Random Forest Classifier":
             r = classicClassifier.classify(path_train, path_test, user_path_to_predict, model)
             result = {**result, **r}
 
-        elif model == "SVR" or model == "LinearRegression":
+        elif model == "SVR" or model == "Linear Regression":
             r = classicRegressor.classify(path_train, path_test, user_path_to_predict, model)
             result = {**result, **r}
 
 
         dataset = Dataset.query.get(id_dataset)
-        if model == "QSVR" or model == "NeuralNetworkRegressor" or model == "LinearRegression" or model == "SVR":
+        if model == "QSVR" or model == "VQR" or model == "Linear Regression" or model == "SVR":
             dataset.mse = result.get("mse")*100
             dataset.mae = result.get("mae")*100
+            dataset.rmse = result.get("rmse")*100
+            dataset.r2 = result.get("regression_score")*100
         else:
             dataset.accuracy = result.get("testing_accuracy")*100
             dataset.precision = result.get("testing_precision")*100
@@ -318,7 +320,7 @@ class ClassificazioneControl:
                     'html'))
 
             model = result.get("model")
-            if model == "QSVR" or model == "NeuralNetworkRegressor" or model == "SVR" or model == "LinearRegression":
+            if model == "QSVR" or model == "VQR" or model == "SVR" or model == "Linear Regression":
                 mae = result.get("mae")
                 mse = result.get("mse")
                 rmse = result.get("rmse")

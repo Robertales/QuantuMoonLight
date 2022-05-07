@@ -38,6 +38,7 @@ class Dataset(db.Model):
     mse = db.Column(db.Float, nullable=True, default=-1)
     mae = db.Column(db.Float, nullable=True, default=-1)
     rmse = db.Column(db.Float, nullable=True, default=-1)
+    r2 = db.Column(db.Float, nullable=True, default=-1)
     training_time = db.Column(db.Integer, nullable=True, default=-1)
     total_time = db.Column(db.Integer, nullable=True, default=-1)
 

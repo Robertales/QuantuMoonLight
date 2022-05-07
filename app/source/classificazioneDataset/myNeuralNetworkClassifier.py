@@ -16,7 +16,7 @@ class myNeuralNetworkClassifier:
 
 
         print(pathTrain, pathTest, path_predict)
-
+        data_train = pd.read_csv(pathTrain)
         data_train = data_train.drop(columns='Id')  # QSVM richiede l'id e Pegasos no
 
         train_features = data_train.drop(columns='labels')
@@ -111,7 +111,7 @@ class myNeuralNetworkClassifier:
         test_prediction = circuit_classifier.predict(test_features)
         testing_time = time.time() - start_time
         accuracy = accuracy_score(test_labels, test_prediction)
-        precision = precision_score(test_labels, test_prediction, average="weighted")
+        precision = precision_score(test_labels, test_prediction, average="weighted", zero_division=0)
         recall = recall_score(test_labels, test_prediction, average="weighted")
         f1 = f1_score(test_labels, test_prediction, average="weighted")
         result["f1"] = f1

@@ -16,7 +16,7 @@ def callFeatureExtraction(
         pathTrain: pathlib.Path,
         pathTest: pathlib.Path,
         pathToPredict: pathlib.Path,
-        doQSVM: bool,
+        classification: bool,
         n_components=2
 ):
     """
@@ -25,7 +25,7 @@ def callFeatureExtraction(
     :param pathTrain: path to the location of the dataset Train that is going to be reduced with FE
     :param pathTest: path to the location of the dataset Test that is going to be reduced with FE
     :param pathToPredict: path to the location of the dataset to Predict that is going to be reduced with FE
-    :param doQSVM: boolean flag that indicated whether the user wants to execute classification or not
+    :param classification: boolean flag that indicated whether the user wants to execute classification or not
     :param n_components: number of new columns
     :return: string that points to the location of the datasets preprocessed with FE
     :rtype: pathlib.Path, pathlib.Path
@@ -72,7 +72,7 @@ def callFeatureExtraction(
     print("Feature Extraction result for: " + pathTest.__str__())
     print(PCA_df_test.head())
 
-    if doQSVM:
+    if classification:
         df_to_predict = pd.read_csv(pathToPredict, header=None)
         df_to_predict.columns = X_train.columns
         print(df_to_predict)

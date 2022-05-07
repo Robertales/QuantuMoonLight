@@ -211,21 +211,21 @@ h1:before {
                                         <label>Select the algorithm: <select name="model" id="model" style="border: 0.1em solid grey">
                                                                 <option value="None">None</option>
                                              <optgroup label="Classificators">
-                                                    <option value="QSVM" title="ciao">QSVM</p></option>
-                                                    <option value="QSVC">QSVC </option>
-                                                    <option value="PegasosQSVC">PegasosQSVC </option>
-                                                    <option value="NeuralNetworkClassifier">NeuralNetworkClassifier </option>
-                                                    <option value="SVC">SVC </option>
-                                                    <option value="KNeighborsClassifier">K-nearest neighbors </option>
-                                                    <option value="DecisionTreeClassifier">Decision Tree </option>
-                                                    <option value="NaiveBayes">Naive Bayes </option>
-                                                    <option value="RandomForestClassifier">Random Forest </option>
+                                                    <option value="QSVM">QSVM</p></option>
+                                                    <option value="QSVC">QSVC</option>
+                                                    <option value="Pegasos QSVC">Pegasos QSVC</option>
+                                                    <option value="Quantum Neural Network">Quantum Neural Network</option>
+                                                    <option value="SVC">SVC</option>
+                                                    <option value="K Neighbors Classifier">K Neighbors</option>
+                                                    <option value="Decision Tree Classifier">Decision Tree</option>
+                                                    <option value="Naive Bayes">Naive Bayes</option>
+                                                    <option value="Random Forest Classifier">Random Forest</option>
                                              </optgroup>
                                             <optgroup label="Regressors">
-                                                    <option value="QSVR">QSVR </option>
-                                                    <option value="NeuralNetworkRegressor">VQR </option>
-                                                    <option value="SVR">SVR </option>
-                                                    <option value="LinearRegression">Linear Regression </option>
+                                                    <option value="QSVR">QSVR</option>
+                                                    <option value="VQR">VQR</option>
+                                                    <option value="SVR">SVR</option>
+                                                    <option value="Linear Regression">Linear Regression</option>
                                             </optgroup>
                                         </select></label>
                                         <div id="tooltip">
@@ -253,7 +253,7 @@ h1:before {
                                     <label>Insert nr of columns to reduce:   <input type="number" max="10000" min="2" value="2" id="nrColumns" name="nrColumns" style="border: 0.1em solid grey"></label><br>
                                     <label>Insert nr of rows to reduce:    <input type="number" max="10000" min="2" value="100" id="nrRows" name="nrRows" style="border: 0.1em solid grey"></label>
                                     <label><input type="checkbox" class="AdvancedOption" id="balancing" name="balancing" value="balancing">  Data Balancing</label>
-                                    {% if current_user.isResearcher %}
+
                                     <label>Insert PegasosQSVC C:    <input type="number" max="10000" min="2" value="1000" id="C" name="C" style="border: 0.1em solid grey"></label>
                                     <label>Insert PegasosQSVC tau:    <input type="number" max="10000" min="2" value="100" id="tau" name="tau" style="border: 0.1em solid grey"></label>
                                     <label>Insert NN optimizer:    <select name="optimizer" id="optimizer" style="border: 0.1em solid grey">
@@ -268,6 +268,7 @@ h1:before {
                                                                         </select>
                                     <label>Insert max iterations optimizer:    <input type="number" max="10000" min="10" value="100" id="max_iter" name="max_iter" style="border: 0.1em solid grey"></label>
 
+                                        {% if current_user.isResearcher %}
                                     <label>Select one: <select name="backend" id="backend" style="border: 0.1em solid grey">
                                                                 <option value="backend">Least Busy IBM Backend</option>
                                                                 <option value="aer_simulator">IBM Aer Simulator; Qubit: 32 </option>

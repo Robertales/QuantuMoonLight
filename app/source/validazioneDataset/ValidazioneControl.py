@@ -21,8 +21,8 @@ class ValidazioneControl:
 
         kFold = False
         simpleSplit = False
-        if validation=="Simple Split": simpleSplit = True
-        elif validation=="kFold": kFold = True
+        if validation == "Simple Split": simpleSplit = True
+        elif validation == "K Fold": kFold = True
 
         if kFold and k < 2:
             # si dovrebbe anche controllare che k non sia maggiore nel numero di righe del dataset;

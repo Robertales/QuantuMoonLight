@@ -264,8 +264,8 @@ def smista():
 
     # Advanced option
     print(request.form["Radio"])
-    if request.form["Radio"] == "simpleSplit": validation = "simpleSplit"
-    elif request.form["Radio"] == "kFold": validation = "kFold"
+    if request.form["Radio"] == "simpleSplit": validation = "Simple Split"
+    elif request.form["Radio"] == "kFold": validation = "K Fold"
 
     # simpleSplit = request.form.get("simpleSplit")
 
@@ -410,7 +410,7 @@ def smista():
             k=k,
         ),
     )
-    if validation=="K Fold":
+    if validation == "K Fold":
         return render_template(
             "downloadPage.html",
             ID=salvataggiodatabase.id)
@@ -424,8 +424,7 @@ def smista():
             prototypeSelection=prototypeSelection,
             featureExtraction=featureExtraction,
             numRawsPS=numRawsPS,
-            numColsFE=numColsFE,
-            doQSVM=True,
+            numColsFE=numColsFE
         ),
     )
     # DataSet Train ready to be classified
