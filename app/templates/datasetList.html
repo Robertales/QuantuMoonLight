@@ -306,8 +306,8 @@
               function drawChartSplit() {
                 var data = google.visualization.arrayToDataTable([
                     ['Split', 'N'],
-                    ['Simple Split',  {{ datasets|selectattr('simple_split')|list|length}}],
-                    ['K Fold',  {{ datasets|selectattr('k_fold')|list|length }}],
+                    ['Simple Split',  {{ datasets|selectattr('validation', 'equalto', 'Simple Split')|list|length}}],
+                    ['K Fold',  {{ datasets|selectattr('validation', 'equalto', 'K Fold')|list|length }}],
                 ]);
 
                 var options = {
@@ -354,10 +354,10 @@
             <div class="divTableCell">{{ item.upload_date.strftime('%d/%m/%Y')}}<br>
                 {{ item.upload_date.strftime('%H:%M:%S')}}</div>
             <div class="divTableCell">
-                {% if(item.simple_split) %}
+                {% if(item.validation == 'Simple Split') %}
                 Simple Split
                 {% endif %}
-                {% if(item.k_fold) %}
+                {% if(item.validation == 'K Fold') %}
                 K Fold
                 {% endif %}
             </div>
