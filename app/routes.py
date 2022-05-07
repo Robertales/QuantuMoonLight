@@ -358,6 +358,7 @@ def smista():
                 train[column] = train[column].fillna(train[column].mean())
             train.to_csv(userpathTrain, index=False, header=False)
             os.remove(userpathTrain.parent / "TrainImputation.csv")
+            train.to_csv(userpathTrain.parent / "TrainImputation.csv", index=False, header=False)
         if os.path.exists(userpathTest):
             addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestImputation.csv")
             test = pd.read_csv(userpathTest.parent / "TestImputation.csv", na_values=missing_values)
@@ -365,6 +366,7 @@ def smista():
                 test[column] = test[column].fillna(test[column].mean())
             test.to_csv(userpathTest, index=False, header=False)
             os.remove(userpathTest.parent / "TestImputation.csv")
+            test.to_csv(userpathTest.parent / "TestImputation.csv", index=False, header=False)
         if os.path.exists(userpathToPredict):
             addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictImputation.csv")
             predict = pd.read_csv(userpathToPredict.parent / "PredictImputation.csv", na_values=missing_values)
@@ -372,6 +374,7 @@ def smista():
                 predict[column] = predict[column].fillna(predict[column].mean())
             predict.to_csv(userpathToPredict, index=False, header=False)
             os.remove(userpathToPredict.parent / "PredictImputation.csv")
+            predict.to_csv(userpathToPredict.parent / "PredictImputation.csv", index=False, header=False)
 
 
     if scaling == "MinMax":
@@ -387,6 +390,7 @@ def smista():
             df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
             df.to_csv(userpathTrain, index=False, header=False)
             os.remove(userpathTrain.parent / "TrainScaled.csv")
+            df.to_csv(userpathTrain.parent / "TrainScaled.csv", index=False, header=False)
         if os.path.exists(userpathTest):
             addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestScaled.csv")
             data = pd.read_csv(userpathTest.parent / "TestScaled.csv")
@@ -396,6 +400,7 @@ def smista():
             df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
             df.to_csv(userpathTest, index=False, header=False)
             os.remove(userpathTest.parent / "TestScaled.csv")
+            df.to_csv(userpathTest.parent / "TestScaled.csv", index=False, header=False)
         if os.path.exists(userpathToPredict):
             addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictScaled.csv")
             predict = pd.read_csv(userpathToPredict.parent / "PredictScaled.csv")
@@ -403,6 +408,7 @@ def smista():
             df = pd.DataFrame(predict_scaled)
             df.to_csv(userpathToPredict, index=False, header=False)
             os.remove(userpathToPredict.parent / "PredictScaled.csv")
+            df.to_csv(userpathToPredict.parent / "PredictScaled.csv", index=False, header=False)
     elif scaling == "Standard":
         # Scaling standardization z-score
         scaler = StandardScaler()
@@ -416,6 +422,7 @@ def smista():
             df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
             df.to_csv(userpathTrain, index=False, header=False)
             os.remove(userpathTrain.parent / "TrainScaled.csv")
+            df.to_csv(userpathTrain.parent / "TrainScaled.csv", index=False, header=False)
         if os.path.exists(userpathTest):
             addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestScaled.csv")
             data = pd.read_csv(userpathTest.parent / "TestScaled.csv")
@@ -425,6 +432,7 @@ def smista():
             df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
             df.to_csv(userpathTest, index=False, header=False)
             os.remove(userpathTest.parent / "TestScaled.csv")
+            df.to_csv(userpathTest.parent / "TestScaled.csv", index=False, header=False)
         if os.path.exists(userpathToPredict):
             addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictScaled.csv")
             predict = pd.read_csv(userpathToPredict.parent / "PredictScaled.csv")
@@ -432,6 +440,7 @@ def smista():
             df = pd.DataFrame(predict_scaled)
             df.to_csv(userpathToPredict, index=False, header=False)
             os.remove(userpathToPredict.parent / "PredictScaled.csv")
+            df.to_csv(userpathToPredict.parent / "PredictScaled.csv", index=False, header=False)
 
     # Validazione
     print("\nIn validazione...")
