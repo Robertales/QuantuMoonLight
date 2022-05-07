@@ -49,12 +49,20 @@
         </h2>
     </a>
     <!--<button onclick="Toggle1()" id="btnh1" class="btn-like" ><i class="fa-solid fa-heart"></i>-->
+    {% if current_user.is_authenticated %}
      {% if current_user.has_liked_post(Article)  %}
     <Button id={{Article.id}} onclick="Toggle1({{Article.id}})" class="btn-like" style="color:red"><i class="fa-solid fa-rocket" ></i>
     </Button>
+    {{ Article.likes.count()}}
      {% else %}
     <Button id={{Article.id}} onclick="Toggle1({{Article.id}})" class="btn-like" style="color:grey"><i class="fa-solid fa-rocket"></i>
     </Button>
+    {{ Article.likes.count()}}
+    {% endif %}
+     {% else %}
+    <Button id={{Article.id}} onclick=ShowMessage() class="btn-like" style="color:grey"><i class="fa-solid fa-rocket"></i>
+    </Button>
+   {{ Article.likes.count()}}
     {% endif %}
 </div>
 <script>
@@ -82,6 +90,17 @@
             });
         }
     }
+
+
+        function ShowMessage() {
+       alert("you need to be logged in to like an article");
+
+    }
+
+
+
+
+
 </script>
 <br>
 {% endif %}
