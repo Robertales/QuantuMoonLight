@@ -16,12 +16,14 @@ from flask import request, Response
 from qiskit import IBMQ, Aer
 from qiskit.providers.ibmq import least_busy
 from app import app, db
+from app.source.classificazioneDataset.classicClassifier import classicClassifier
 from app.source.classificazioneDataset.myNeuralNetworkRegressor import myNeuralNetworkRegressor
 from app.source.classificazioneDataset.myQSVR import myQSVR
 from app.source.classificazioneDataset.myNeuralNetworkClassifier import myNeuralNetworkClassifier
 from app.source.classificazioneDataset.myPegasosQSVC import myPegasosQSVC
 from app.source.classificazioneDataset.myQSVC import myQSVC
 from app.source.classificazioneDataset.myQSVM import myQSVM
+from app.source.classificazioneDataset.classicRegressor import classicRegressor
 from app.source.model.models import Dataset
 from app.source.utils import utils
 
@@ -219,8 +221,17 @@ class ClassificazioneControl:
             r = myNeuralNetworkRegressor.classify(path_train, path_test, user_path_to_predict, backend, qubit, optimizer, loss, max_iter)
             result = {**result, **r}
 
+        elif model == "SVC" or model == "KNeighborsClassifier" or model == "NaiveBayes" or model == "DecisionTreeClassifier" or model == "RandomForestClassifier":
+            r = classicClassifier.classify(path_train, path_test, user_path_to_predict, model)
+            result = {**result, **r}
+
+        elif model == "SVR" or model == "LinearRegression":
+            r = classicRegressor.classify(path_train, path_test, user_path_to_predict, model)
+            result = {**result, **r}
+
+
         dataset = Dataset.query.get(id_dataset)
-        if model == "QSVR" or model == "NeuralNetworkRegressor":
+        if model == "QSVR" or model == "NeuralNetworkRegressor" or model == "LinearRegression" or model == "SVR":
             dataset.mse = result.get("mse")*100
             dataset.mae = result.get("mae")*100
         else:
@@ -276,7 +287,6 @@ class ClassificazioneControl:
         msg["From"] = "quantumoonlight@gmail.com"
         msg["To"] = "quantumoonlight@gmail.com, " + email
         msg["Date"] = formatdate(localtime=True)
-        # + dataset.name + " " + dataset.upload_date
         msg["Subject"] = "Classification Result "
 
         msg.attach(
@@ -308,11 +318,11 @@ class ClassificazioneControl:
                     'html'))
 
             model = result.get("model")
-            if model == "QSVR" or model == "NeuralNetworkRegressor":
+            if model == "QSVR" or model == "NeuralNetworkRegressor" or model == "SVR" or model == "LinearRegression":
                 mae = result.get("mae")
                 mse = result.get("mse")
                 rmse = result.get("rmse")
-                score = result.get("score")
+                score = result.get("regression_score")
                 msg.attach(
                     MIMEText(
                         "<center><h3>" +
@@ -345,7 +355,8 @@ class ClassificazioneControl:
                         "<br><br>Testing f1: " +
                         "{:.2%}".format(f1) +
                         "</h3></center>", 'html'))
-            if result.get("training_time")==-1:
+
+            if result.get("training_time") == -1:
                 msg.attach(
                     MIMEText(
                         "<center><h3>Training time: N/A" +

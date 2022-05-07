@@ -195,6 +195,18 @@ class UtenteControl:
                     zip.write(
                         filepath / 'yourPCA_Train.csv',
                         'yourPCA_Train.csv')
+                if exists(filepath / "TrainImputation.csv"):
+                    zip.write(filepath / "TrainImputation.csv", "TrainImputation.csv")
+                if exists(filepath / "TestImputation.csv"):
+                    zip.write(filepath / "TestImputation.csv", "TestImputation.csv")
+                if exists(filepath / "PredictImputation.csv"):
+                    zip.write(filepath / "PredictImputation.csv", "PredictImputation.csv")
+                if exists(filepath / "TrainScaled.csv"):
+                    zip.write(filepath / "TrainScaled.csv", "TrainScaled.csv")
+                if exists(filepath / "TestScaled.csv"):
+                    zip.write(filepath / "TestScaled.csv", "TestScaled.csv")
+                if exists(filepath / "PredictScaled.csv"):
+                    zip.write(filepath / "PredictScaled.csv", "PredictScaled.csv")
                 zip.close()
 
             return send_from_directory(
