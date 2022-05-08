@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Enum
 
 from app import db
 from app.source.utente.UserAuth import UserAuth
@@ -47,6 +47,7 @@ class Dataset(db.Model):
     training_time = db.Column(db.Integer, nullable=True, default=-1)
     total_time = db.Column(db.Integer, nullable=True, default=-1)
 
+
 class Article(db.Model):
     """
        code representation of the Article table of the database
@@ -58,8 +59,11 @@ class Article(db.Model):
     body = db.Column(db.Text(length=1200), nullable=False)
     category = db.Column(db.String(20), nullable=True)
     data = db.Column(db.DateTime, nullable=False)
-    authorized= db.Column(db.Boolean, default=False)
+    authorized = db.Column(db.Boolean, default=False)
     likes = db.relationship('Like', backref='post', lazy='dynamic')
+
+
+
 
 class Comment(db.Model):
     """
@@ -72,7 +76,7 @@ class Comment(db.Model):
     author = db.Column(db.Text(length=200), nullable=False)
     data = db.Column(db.Date, nullable=False)
     authorized = db.Column(db.Boolean, default=False)
-
+    label = db.Column(Enum("Article", "Experiment", name="label_enum", create_type=False))
 
 
 class Like(db.Model):
