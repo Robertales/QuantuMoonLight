@@ -121,3 +121,7 @@ h1:before {
   background: black;
   margin: 0 10px;
 }
+.checkbox-group
+{
+    padding-bottom: 1.5em;
+}
