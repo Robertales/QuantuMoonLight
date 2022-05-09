@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Enum
 
 from app import db
 from app.source.utente.UserAuth import UserAuth
@@ -17,6 +17,11 @@ class User(db.Model, UserAuth):
     surname = db.Column(db.String(30), nullable=False, unique=False)
     newsletter = db.Column(db.Boolean, default=False)
     isResearcher = db.Column(db.Boolean, default=False)
+
+    def has_liked_post(self, post):
+        return Like.query.filter(
+            Like.email_user == self.email,
+            Like.id_article == post.id).count() > 0
 
 
 class Dataset(db.Model):
@@ -42,6 +47,7 @@ class Dataset(db.Model):
     training_time = db.Column(db.Integer, nullable=True, default=-1)
     total_time = db.Column(db.Integer, nullable=True, default=-1)
 
+
 class Article(db.Model):
     """
        code representation of the Article table of the database
@@ -53,7 +59,11 @@ class Article(db.Model):
     body = db.Column(db.Text(length=1200), nullable=False)
     category = db.Column(db.String(20), nullable=True)
     data = db.Column(db.DateTime, nullable=False)
-    authorized= db.Column(db.Boolean, default=False)
+    authorized = db.Column(db.Boolean, default=False)
+    label = db.Column(Enum("Article", "Experiment", name="label_enum", create_type=False))
+    likes = db.relationship('Like', backref='post', lazy='dynamic')
+
+
 
 
 class Comment(db.Model):
@@ -67,6 +77,7 @@ class Comment(db.Model):
     author = db.Column(db.Text(length=200), nullable=False)
     data = db.Column(db.Date, nullable=False)
     authorized = db.Column(db.Boolean, default=False)
+
 
 
 class Like(db.Model):

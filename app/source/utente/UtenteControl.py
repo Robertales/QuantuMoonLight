@@ -6,7 +6,8 @@ from pathlib import Path
 from flask import request, render_template, flash, send_from_directory
 from flask_login import login_user, logout_user, current_user
 from app import app, db
-from app.source.model.models import User
+from app.source.model.models import User, Dataset, Article, Comment, Like
+from app.source.model.models import User, Like
 from zipfile import ZipFile
 
 
@@ -35,7 +36,7 @@ class UtenteControl:
                 "error")
             return render_template("registration.html")
         if not re.fullmatch(
-            '^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,10}$',
+                '^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,10}$',
                 email):
             flash("Email non valida", "error")
             return render_template("registration.html")
@@ -127,22 +128,22 @@ class UtenteControl:
         ID = request.form.get("id")
         filename = request.form.get("filename")
         filepath = Path(__file__).parents[3] / \
-            "upload_dataset" / current_user.email / ID
+                   "upload_dataset" / current_user.email / ID
         print(filename)
 
         if filename:
             # Quando l'applicazione sarà hostata su un web server sostituire
             # con un metodo di download fornito dal web server
             zip_name = ''
-            if(filename == "Validation"):
+            if (filename == "Validation"):
                 zip_path = filepath / 'ValidationResult.zip'
                 zip_name = 'ValidationResult.zip'
                 zip = ZipFile(zip_path, 'w')
                 if exists(
                         filepath /
                         "Data_training.csv") and exists(
-                        filepath /
-                        "Data_testing.csv"):
+                    filepath /
+                    "Data_testing.csv"):
                     zip.write(
                         filepath / "Data_training.csv",
                         "data_training.csv")
@@ -168,8 +169,8 @@ class UtenteControl:
                 if exists(
                         filepath /
                         "DataSetTestPreprocessato.csv") and exists(
-                        filepath /
-                        "DataSetTrainPreprocessato.csv"):
+                    filepath /
+                    "DataSetTrainPreprocessato.csv"):
                     zip.write(
                         filepath / 'DataSetTestPreprocessato.csv',
                         'DataSetTestPreprocessato.csv')
@@ -187,8 +188,8 @@ class UtenteControl:
                 if exists(
                         filepath /
                         "yourPCA_Test.csv") and exists(
-                        filepath /
-                        "yourPCA_Train.csv"):
+                    filepath /
+                    "yourPCA_Train.csv"):
                     zip.write(
                         filepath / 'yourPCA_Test.csv',
                         'yourPCA_Test.csv')
@@ -218,3 +219,4 @@ class UtenteControl:
                 "Unable to download the file, try again",
                 "error")
             return render_template("downloadPage.html")
+

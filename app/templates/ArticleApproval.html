@@ -8,7 +8,6 @@
     <link href="../static/images/logos/logo.ico" rel="icon">
     <!-- Stylesheets -->
     <link href="../static/styles/css/revolution-slider.css" rel="stylesheet">
-    <link href="../static/styles/css/blog.css" rel="stylesheet">
     <!-- Responsive -->
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
@@ -27,16 +26,27 @@
 {% block content %}
 
 <div align="center">
-    <h1 id="blog_title">QUANTUM COMMUNITY</h1>
+    <h1 id="blog_title">QUANTUM APPROVAL</h1>
 </div>
 
+<style>
+    .post-preview
+    {
+    border : 4px solid transparent;
+    border-radius: 20px;
+    background: linear-gradient(to right, white,white),
+                linear-gradient(to right,darkblue,blueviolet);
+    background-clip: padding-box,border-box;
+    background-origin: padding-box,border-box;
+        padding-left: 10px;
+        padding-bottom: 10px;
+    }
+    .post-title
+    {
+    color: black;
+    }
+</style>
 <br>
-<div class="create_post">
-    <h5 id="username">{{current_user.username}}</h5>
-    <form action="{{url_for("add")}}">
-    <button class="btn" type="submit">Create New Post</button>
-    </form>
-</div>
 
 {% for Article in posts %}
 {% if not Article.authorized and current_user.isAdmin %}
@@ -49,8 +59,13 @@
             {{ Article.title }}
         </h2>
     </a>
+
+    <a href="{{url_for('enableArticle', article_id=Article.id)}}">
+    <button id="brnApp" type="submit" name="Approva" class="btn btn-success" >Approva</button>
+    </a>
+    <button name="Rifiuta" type="button" class="btn btn-warning">Rifiuta</button>
 </div>
-<br>
+<br><br><br><br>
 {% endif %}
 {% endfor %}
 

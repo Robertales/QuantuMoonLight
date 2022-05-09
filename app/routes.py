@@ -2,22 +2,20 @@ import os.path
 import pathlib
 from datetime import datetime
 
-from imblearn.over_sampling import SMOTE
-import csv as csv
-from flask import render_template, request, Response, flash, redirect, url_for
-
+import pandas as pd
+from flask import redirect, url_for
 from flask import render_template, request, Response, flash
 from flask_login import current_user, login_required
+from imblearn.over_sampling import SMOTE
 from qiskit import IBMQ
-import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from app import app, db
-from app.source.model.models import User, Dataset, Article, Comment
+from app.source.model.models import User, Dataset, Article, Comment, Like
 from app.source.preprocessingDataset.aggId import addId
-from app.source.utils import utils
 from app.source.utils import addAttribute
-from sqlalchemy import func
+from app.source.utils import utils
+
 
 @app.route("/")
 @app.route("/home", methods=["GET", "POST"])
@@ -160,6 +158,33 @@ def add():
     return render_template('add.html')
 
 
+
+@app.route('/like', methods=['GET'])
+@login_required
+def like():
+    email_user = current_user.email
+    data = request.args
+    id_article = data['data']
+    like = Like(email_user=email_user,  id_article=id_article)
+
+    db.session.add(like)
+    db.session.commit()
+    return render_template('add.html')
+
+@app.route('/dislike', methods=['GET'])
+@login_required
+def dislike():
+    email_user = current_user.email
+    data = request.args
+    id_article = data['data']
+    like=Like.query.filter_by(email_user=email_user ,  id_article=id_article).first()
+
+    db.session.delete(like)
+    db.session.commit()
+    return render_template('add.html')
+
+
+
 @app.route('/addpost', methods=['POST'])
 @login_required
 def addpost():
@@ -168,7 +193,9 @@ def addpost():
     email = current_user.email
     body = request.form['content']
 
-    post = Article(title=title, author=author, body=body, data=datetime.now(), email_user=email)
+    label=request.form['flexRadioDefault']
+
+    post = Article(title=title, author=author, body=body, data=datetime.now(), email_user=email,label=label)
 
     db.session.add(post)
     db.session.commit()
@@ -176,13 +203,26 @@ def addpost():
     return redirect(url_for('blog'))
 
 
-@app.route('/enableArticle/<int:article_id>', methods=['POST'])
+@app.route('/enableArticle/<int:article_id>', methods=['POST','GET'])
 def enableArticle(article_id):
+    article = Article.query.filter_by(id=article_id).one()
+    db.session.delete(article)
+    db.session.commit()
+
+    return redirect(url_for('blog'))
+
+
+
+@app.route('/deleteArticle/<int:article_id>', methods=['POST','GET'])
+def deleteArticle(article_id):
     article = Article.query.filter_by(id=article_id).one()
     article.authorized = True
     db.session.commit()
 
     return redirect(url_for('blog'))
+
+
+
 
 
 @app.route('/enableComment/<int:comment_id>', methods=['POST'])

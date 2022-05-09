@@ -7,7 +7,7 @@
     <link rel="icon" href="../static/images/logos/logo.ico">
     <!-- Stylesheets -->
     <link href="../static/styles/css/revolution-slider.css" rel="stylesheet">
-    <link href="../static/styles/css/style.css" rel="stylesheet">
+    <link href="../static/styles/css/form.css" rel="stylesheet">
     <!-- Responsive -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -26,74 +26,6 @@
         {% block content %}
 
     <section>
-          <style>
-          .hpimg1 {
-  /* Set a specific height */
-  height: 540px;
-  /* Create the parallax scrolling effect */
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  padding-left: 0;
-}
-
-.hpimg1 {
-  /* The image used */
-  background-image: url("../static/images/preprocessing.gif");
-}
-
-.welcome {
-  height: 200px;
-  background-color: #fff;
-  word-wrap: normal;
-  word-break: keep-all;
-  font-family: '';
-  font-weight: 700;
-  font-size: 31px;
-  line-height: 1.125em;
-  margin-right: 0;
-  margin-left: 0;
-  margin-bottom: 0;
-  box-sizing: border-box;
-  top: 300px;
-}
-
-.Welcome {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-}
-
-h1 {
-  color: white;
-  top: 100px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-transform: uppercase;
-  padding-bottom: 38px;
-  -webkit-margin-before: 0.67em;
-  -webkit-margin-after: 0.67em;
-  -webkit-margin-start: 0;
-  -webkit-margin-end: 0;
-  -webkit-tap-highlight-colour: rgba(0, 0, 0, 0);
-  -webkit-font-smoothing: antialiased;
-  -webkit-box-direction: normal;
-}
-
-h1:after,
-h1:before {
-  content: '';
-  width: 50px;
-  height: 2px;
-  background: black;
-  margin: 0 10px;
-}
-
-          </style>
     <!-- Container element -->
     <!-- Container element -->
         </section>
@@ -147,67 +79,44 @@ h1:before {
                                 <br>
 
                                 <ul class="dropmenudata">
-                                    <li>
+                                    <li class="checkbox-group">
                                         <label>
                                             <input type="checkbox" id="checkSplitTrain" name="splitDataset" value="splitDataset" >  Automatically Split the Training Set
                                         </label>
+                                        <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
                                     </li>
-                                    <li>
+                                    <li class="checkbox-group">
                                         <label>
                                           <input type="checkbox" id="checkFeatureExtraction" name="reduceFE" value="reduceFE" >  Reduce columns with Feature Extraction
                                         </label>
+                                        <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
                                     </li>
-                                    <li>
+                                    <li class="checkbox-group">
                                         <label>
                                             <input type="checkbox" id="checkPrototypeSelection" name="reducePS" value="reducePS" > Reduce rows with Prototype Selection
                                         </label>
+                                        <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
                                     </li>
+
                                     <li>
-                                        <style>
-                                            #tooltip
-                                            {
-                                                position: relative;
-                                                cursor: pointer;
-                                                width: 1%;
-                                                float: right;
-                                                margin-right: 2em;
-                                                margin-bottom: 1.5em;
-                                            }
-                                            #tooltipText
-                                            {
-                                                float: right;
-                                                position: absolute;
-                                                top: 0;
-                                                margin-left: 2.5em;
-                                                margin-bottom: 2.5em;
-                                                background-color: #4e5b6c;
-                                                color: #fff;
-                                                white-space: nowrap;
-                                                padding: 10px 15px;
-                                                border-radius: 7px;
-                                                visibility: hidden;
-                                                opacity: 0;
-                                                transition: .4s ease-in-out; /*delay chiusura */
-
-                                            }
-                                            #tooltipText::before
-                                            {
-                                                content: "";
-                                                position: absolute;
-                                                right: 50%;
-
-                                            }
-                                            #tooltip:hover #tooltipText
-                                            {   visibility: visible;
-                                                opacity: 90%;
-                                                transition: .4s ease-in-out;
-                                            }
-                                            #tooltipText:hover /*delay chiusura */
-                                            {
-                                                transition-delay: 5s;
-                                                visibility: visible;
-                                            }
-                                        </style>
                                         <label>Select the algorithm: <select name="model" id="model" style="border: 0.1em solid grey">
                                                                 <option value="None">None</option>
                                              <optgroup label="Classificators">
@@ -229,7 +138,7 @@ h1:before {
                                             </optgroup>
                                         </select></label>
                                         <div id="tooltip">
-                                            <span id="tooltipText"><a href="www.google.com"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -268,8 +177,8 @@ h1:before {
                                                                         </select>
                                     <label>Insert max iterations optimizer:    <input type="number" max="10000" min="10" value="100" id="max_iter" name="max_iter" style="border: 0.1em solid grey"></label>
 
-                                        {% if current_user.isResearcher %}
-                                    <label>Select one: <select name="backend" id="backend" style="border: 0.1em solid grey">
+                                    {% if current_user.isResearcher %}
+                                    <label>Select one: <select name="backend" id="backend" style="border: 0.1em solid grey" >
                                                                 <option value="backend">Least Busy IBM Backend</option>
                                                                 <option value="aer_simulator">IBM Aer Simulator; Qubit: 32 </option>
                                                                 <option value="ibm_washington">IBM Washington; Processor type: Eagle R1; Qubit: 127 </option>

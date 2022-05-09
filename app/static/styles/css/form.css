@@ -1,0 +1,127 @@
+/***
+
+====================================================================
+	TOOLTIP (i) CSS
+====================================================================
+
+***/
+#tooltip
+{
+    position: relative;
+    cursor: pointer;
+    width: 1%;
+    float: right;
+    margin-right: 2em;
+    margin-bottom: 1.5em;
+}
+#tooltipText
+{
+    float: right;
+    position: absolute;
+    top: 0;
+    margin-left: 2.5em;
+    margin-bottom: 2.5em;
+    background-color: #4e5b6c;
+    color: #fff;
+    white-space: nowrap;
+    padding: 10px 15px;
+    border-radius: 7px;
+    visibility: hidden;
+    opacity: 0;
+    transition: .4s ease-in-out; /*delay chiusura */
+
+}
+#tooltipText::before
+{
+    content: "";
+    position: absolute;
+    right: 50%;
+
+}
+#tooltip:hover #tooltipText
+{   visibility: visible;
+    opacity: 90%;
+    transition: .4s ease-in-out;
+}
+#tooltipText:hover /*delay chiusura */
+{
+    transition-delay: 5s;
+    visibility: visible;
+}
+/***
+
+====================================================================
+    GENERAL CSS
+====================================================================
+
+***/
+
+.hpimg1 {
+  /* Set a specific height */
+  height: 540px;
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-left: 0;
+}
+
+.hpimg1 {
+  /* The image used */
+  background-image: url("../static/images/preprocessing.gif");
+}
+
+.welcome {
+  height: 200px;
+  background-color: #fff;
+  word-wrap: normal;
+  word-break: keep-all;
+  font-family: '';
+  font-weight: 700;
+  font-size: 31px;
+  line-height: 1.125em;
+  margin-right: 0;
+  margin-left: 0;
+  margin-bottom: 0;
+  box-sizing: border-box;
+  top: 300px;
+}
+
+.Welcome {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  color: white;
+  top: 100px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  padding-bottom: 38px;
+  -webkit-margin-before: 0.67em;
+  -webkit-margin-after: 0.67em;
+  -webkit-margin-start: 0;
+  -webkit-margin-end: 0;
+  -webkit-tap-highlight-colour: rgba(0, 0, 0, 0);
+  -webkit-font-smoothing: antialiased;
+  -webkit-box-direction: normal;
+}
+
+h1:after,
+h1:before {
+  content: '';
+  width: 50px;
+  height: 2px;
+  background: black;
+  margin: 0 10px;
+}
+.checkbox-group
+{
+    padding-bottom: 1.5em;
+}

@@ -48,3 +48,15 @@ div{ /* non funziona */
 {
     color: black;
 }
+.btn-like
+{
+     background: transparent;
+     outline: none;
+     border: none;
+     color: grey;
+}
+.btn-like i:hover
+{
+    cursor: pointer;
+
+}

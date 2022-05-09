@@ -30,7 +30,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <form name="addForm" id="addForm" method="POST" action="{{ url_for('addpost') }}" novalidate>
+          <form name="addForm" id="addForm" method="POST" action="{{url_for('addpost')}}" novalidate>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Title</label>
@@ -45,6 +45,18 @@
                 <p class="help-block text-danger"></p>
               </div>
             </div>
+            <div class="form-check">
+      <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioArticle"  value="Article">
+        <label class="form-check-label" for="radioArticle">
+        Article
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioExperiment" value="Experiment" checked>
+          <label class="form-check-label" for="radioExperiment">
+          Experiment
+          </label>
+      </div>
             <br>
             <div id="success"></div>
             <div class="form-group">
