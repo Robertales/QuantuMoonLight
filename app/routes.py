@@ -229,7 +229,9 @@ def addpost():
     email = current_user.email
     body = request.form['content']
 
-    post = Article(title=title, author=author, body=body, data=datetime.now(), email_user=email)
+    label=request.form['flexRadioDefault']
+
+    post = Article(title=title, author=author, body=body, data=datetime.now(), email_user=email,label=label)
 
     db.session.add(post)
     db.session.commit()
@@ -240,10 +242,23 @@ def addpost():
 @app.route('/enableArticle/<int:article_id>', methods=['POST','GET'])
 def enableArticle(article_id):
     article = Article.query.filter_by(id=article_id).one()
+    db.session.delete(article)
+    db.session.commit()
+
+    return redirect(url_for('blog'))
+
+
+
+@app.route('/deleteArticle/<int:article_id>', methods=['POST','GET'])
+def deleteArticle(article_id):
+    article = Article.query.filter_by(id=article_id).one()
     article.authorized = True
     db.session.commit()
 
     return redirect(url_for('blog'))
+
+
+
 
 
 @app.route('/enableComment/<int:comment_id>', methods=['POST'])
