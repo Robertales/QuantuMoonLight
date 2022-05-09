@@ -24,12 +24,13 @@ class PreprocessingControl:
         featureExtraction = request.form.get("featureExtraction")
         numRawsPS = request.form.get("numRawsPS", type=int)
         numColsFE = request.form.get("numColsFE", type=int)
-        doQSVM = request.form.get("doQSVM")
+        #VEDERE A CHE CAZZO SERVE QUESTO FLAG!!!
+        classification = True
 
         # Cartella dell'utente dove scrivere tutti i risultati
         pathPC = pathlib.Path(userpath).parents[0]
         print("path in PC: ", pathPC)
-        if not featureExtraction and not prototypeSelection and doQSVM:
+        if not featureExtraction and not prototypeSelection and classification:
             # Se l'utente non vuole preprocessare il dataset ma vuole fare QSVM,
             # allora qui creo i dataset da classificare aggiungendo la colonna ID
             aggId.addId(
@@ -59,7 +60,7 @@ class PreprocessingControl:
             featureExtraction,
             numRawsPS,
             numColsFE,
-            doQSVM,
+            classification,
         )
 
         # Cancello i file di supporto al preprocessing
@@ -78,7 +79,7 @@ class PreprocessingControl:
             featureExtraction: bool,
             numRowsPS: int,
             numColsFE: int,
-            doQSVM: bool,
+            classification: bool,
     ):
         """
         This function is going to preprocess a given Dataset with prototypeSelection or featureExtraction
@@ -89,7 +90,7 @@ class PreprocessingControl:
         :param featureExtraction: boolean flag that indicated whether the user wants to execute a feature Extraction or not
         :param numRowsPS: number of rows the prototype selection should reduce the dataset to
         :param numColsFE: number of columns the feature extraction should reduce the dataset to
-        :param doQSVM: boolean flag that indicated whether the user wants to execute classification or not
+        :param classification: boolean flag that indicated whether the user wants to execute classification or not
         :return: two preprocessed dataset: 'DataSetTrainPreprocessato.csv', 'DataSetTestPreprocessato.csv'
         :rtype: (str, str)
         """
@@ -110,9 +111,9 @@ class PreprocessingControl:
                 pathTrain,
                 pathTest,
                 userpathToPredict,
-                doQSVM,
+                classification,
                 numColsFE,
-            )  # create 'yourPCA_Train', 'yourPCA_Test' and, in case doQSVM=True, 'doPredictionFE.csv'
+            )  # create 'yourPCA_Train', 'yourPCA_Test' and, in case classification=True, 'doPredictionFE.csv'
 
         aggId.addId(
             pathTrain,

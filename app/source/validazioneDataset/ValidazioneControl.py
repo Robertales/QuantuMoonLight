@@ -14,13 +14,15 @@ class ValidazioneControl:
     def validazioneControl():
         userpathTrain = request.form.get("userpath")
         userpathTest = request.form.get("userpathTest")
-        simpleSplit = request.form.get("simpleSplit")
+        validation = request.form.get("validation")
         dataPath = Path(userpathTrain).parent
-        kFold = request.form.get("kFold")
         k = request.form.get("k", type=int)
-        print("simpleSplit in VC: ", simpleSplit)
-        print("kFold in VC: ", kFold)
         print("k in VC: ", k)
+
+        kFold = False
+        simpleSplit = False
+        if validation == "Simple Split": simpleSplit = True
+        elif validation == "K Fold": kFold = True
 
         if kFold and k < 2:
             # si dovrebbe anche controllare che k non sia maggiore nel numero di righe del dataset;

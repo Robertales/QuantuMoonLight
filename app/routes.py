@@ -107,49 +107,13 @@ def compareExperiments():
 @app.route("/adminDataset")
 def adminDataset():
     datasets = Dataset.query.all()
-    rows = Dataset.query.count()
-    v1 = 0
-    v2 = 0
-    v3 = 0
-    v4 = 0
-    v5 = 0
-    for dataset in datasets:
-        if dataset.simple_split: v1 += 1
-        if dataset.k_fold: v2 += 1
-        if dataset.ps: v3 += 1
-        if dataset.fe: v4 += 1
-        if dataset.model: v5 += 1
-    p1 = v1 * 100 / rows
-    p2 = v2 * 100 / rows
-    p3 = v3 * 100 / rows
-    p4 = v4 * 100 / rows
-    p5 = v5 * 100 / rows
-    return render_template("datasetList.html", datasets=datasets, p_ss=p1, p_kf=p2,
-                           p_ps=p3, p_fe=p4, p_qv=p5)
+    return render_template("datasetList.html", datasets=datasets)
 
 
 @app.route("/userDataset")
 def userDataset():
     datasets = Dataset.query.filter_by(email_user=current_user.email)
-    rows = Dataset.query.filter_by(email_user=current_user.email).count()
-    v1 = 0
-    v2 = 0
-    v3 = 0
-    v4 = 0
-    v5 = 0
-    for dataset in datasets:
-        if dataset.simple_split: v1 += 1
-        if dataset.k_fold: v2 += 1
-        if dataset.ps: v3 += 1
-        if dataset.fe: v4 += 1
-        if dataset.model: v5 += 1
-    p1 = v1 * 100 / rows
-    p2 = v2 * 100 / rows
-    p3 = v3 * 100 / rows
-    p4 = v4 * 100 / rows
-    p5 = v5 * 100 / rows
-    return render_template("datasetList.html", datasets=datasets, p_ss="{:.2f}".format(p1), p_kf="{:.2f}".format(p2),
-                           p_ps="{:.2f}".format(p3), p_fe="{:.2f}".format(p4), p_qv="{:.2f}".format(p5))
+    return render_template("datasetList.html", datasets=datasets)
 
 
 @app.route("/modifyUserPage")
@@ -340,17 +304,11 @@ def smista():
 
     # Advanced option
     print(request.form["Radio"])
-    if request.form["Radio"] == "simpleSplit":
-        simpleSplit = "simpleSplit"
-        kFold = None
-    elif request.form["Radio"] == "kFold":
-        simpleSplit = None
-        kFold = "kFold"
+    if request.form["Radio"] == "simpleSplit": validation = "Simple Split"
+    elif request.form["Radio"] == "kFold": validation = "K Fold"
 
     # simpleSplit = request.form.get("simpleSplit")
-    print("simpleSplit: ", simpleSplit)
-    # kFold = request.form.get("kFold")
-    print("kFold: ", kFold)
+
     k = request.form.get("kFoldValue", type=int)
     print("kFoldValue: ", k)
     # numero di righe dopo la Prototype Selection con GA
@@ -365,10 +323,9 @@ def smista():
         email_user=current_user.email,
         name=dataset_train.filename,
         upload_date=datetime.now(),
-        simple_split=bool(simpleSplit),
+        validation=validation,
         ps=bool(prototypeSelection),
         fe=bool(featureExtraction),
-        k_fold=bool(kFold),
         model=model,
     )
     db.session.add(salvataggiodatabase)
@@ -398,6 +355,7 @@ def smista():
                 train[column] = train[column].fillna(train[column].mean())
             train.to_csv(userpathTrain, index=False, header=False)
             os.remove(userpathTrain.parent / "TrainImputation.csv")
+            train.to_csv(userpathTrain.parent / "TrainImputation.csv", index=False, header=False)
         if os.path.exists(userpathTest):
             addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestImputation.csv")
             test = pd.read_csv(userpathTest.parent / "TestImputation.csv", na_values=missing_values)
@@ -405,6 +363,7 @@ def smista():
                 test[column] = test[column].fillna(test[column].mean())
             test.to_csv(userpathTest, index=False, header=False)
             os.remove(userpathTest.parent / "TestImputation.csv")
+            test.to_csv(userpathTest.parent / "TestImputation.csv", index=False, header=False)
         if os.path.exists(userpathToPredict):
             addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictImputation.csv")
             predict = pd.read_csv(userpathToPredict.parent / "PredictImputation.csv", na_values=missing_values)
@@ -412,6 +371,7 @@ def smista():
                 predict[column] = predict[column].fillna(predict[column].mean())
             predict.to_csv(userpathToPredict, index=False, header=False)
             os.remove(userpathToPredict.parent / "PredictImputation.csv")
+            predict.to_csv(userpathToPredict.parent / "PredictImputation.csv", index=False, header=False)
 
 
     if scaling == "MinMax":
@@ -427,6 +387,7 @@ def smista():
             df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
             df.to_csv(userpathTrain, index=False, header=False)
             os.remove(userpathTrain.parent / "TrainScaled.csv")
+            df.to_csv(userpathTrain.parent / "TrainScaled.csv", index=False, header=False)
         if os.path.exists(userpathTest):
             addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestScaled.csv")
             data = pd.read_csv(userpathTest.parent / "TestScaled.csv")
@@ -436,6 +397,7 @@ def smista():
             df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
             df.to_csv(userpathTest, index=False, header=False)
             os.remove(userpathTest.parent / "TestScaled.csv")
+            df.to_csv(userpathTest.parent / "TestScaled.csv", index=False, header=False)
         if os.path.exists(userpathToPredict):
             addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictScaled.csv")
             predict = pd.read_csv(userpathToPredict.parent / "PredictScaled.csv")
@@ -443,6 +405,7 @@ def smista():
             df = pd.DataFrame(predict_scaled)
             df.to_csv(userpathToPredict, index=False, header=False)
             os.remove(userpathToPredict.parent / "PredictScaled.csv")
+            df.to_csv(userpathToPredict.parent / "PredictScaled.csv", index=False, header=False)
     elif scaling == "Standard":
         # Scaling standardization z-score
         scaler = StandardScaler()
@@ -456,6 +419,7 @@ def smista():
             df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
             df.to_csv(userpathTrain, index=False, header=False)
             os.remove(userpathTrain.parent / "TrainScaled.csv")
+            df.to_csv(userpathTrain.parent / "TrainScaled.csv", index=False, header=False)
         if os.path.exists(userpathTest):
             addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestScaled.csv")
             data = pd.read_csv(userpathTest.parent / "TestScaled.csv")
@@ -465,6 +429,7 @@ def smista():
             df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
             df.to_csv(userpathTest, index=False, header=False)
             os.remove(userpathTest.parent / "TestScaled.csv")
+            df.to_csv(userpathTest.parent / "TestScaled.csv", index=False, header=False)
         if os.path.exists(userpathToPredict):
             addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictScaled.csv")
             predict = pd.read_csv(userpathToPredict.parent / "PredictScaled.csv")
@@ -472,27 +437,20 @@ def smista():
             df = pd.DataFrame(predict_scaled)
             df.to_csv(userpathToPredict, index=False, header=False)
             os.remove(userpathToPredict.parent / "PredictScaled.csv")
+            df.to_csv(userpathToPredict.parent / "PredictScaled.csv", index=False, header=False)
 
     # Validazione
     print("\nIn validazione...")
-    if autosplit and not kFold and not simpleSplit:
-        # se l'utente vuole fare autosplit ma non seleziona opzioni avanzate,
-        # di dafault faccio simpleSplit
-        simpleSplit = True
-    if not autosplit:
-        kFold = None
-        simpleSplit = None
     app.test_client().post(
         "/validazioneControl",
         data=dict(
             userpath=userpathTrain,
             userpathTest=userpathTest,
-            simpleSplit=simpleSplit,
-            kFold=kFold,
+            validation=validation,
             k=k,
         ),
     )
-    if kFold:
+    if validation == "K Fold":
         return render_template(
             "downloadPage.html",
             ID=salvataggiodatabase.id)
@@ -506,8 +464,7 @@ def smista():
             prototypeSelection=prototypeSelection,
             featureExtraction=featureExtraction,
             numRawsPS=numRawsPS,
-            numColsFE=numColsFE,
-            doQSVM=True,
+            numColsFE=numColsFE
         ),
     )
     # DataSet Train ready to be classified

@@ -72,7 +72,7 @@ class myPegasosQSVC:
         test_prediction = qsvc.predict(test_features)
         testing_time = time.time() - start_time
         accuracy = accuracy_score(test_labels, test_prediction)
-        precision = precision_score(test_labels, test_prediction, average="weighted")
+        precision = precision_score(test_labels, test_prediction, average="weighted", zero_division=0)
         recall = recall_score(test_labels, test_prediction, average="weighted")
         f1 = f1_score(test_labels, test_prediction, average="weighted")
         result["f1"] = f1

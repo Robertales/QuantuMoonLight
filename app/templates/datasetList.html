@@ -28,20 +28,23 @@
                       });
                     }}
 
-                    function showCheckbox(){
-                        if (document.getElementById("resultHidden").style.display == "block") {
-                            document.getElementById('resultHidden').style.display = 'none';
-                            document.getElementById('headHidden').style.display = 'none';
-                            document.getElementById('checkboxHidden').style.display = 'none';
-                            document.getElementById('checkHidden').style.display = 'none';
-
-                        } else {
-                            document.getElementById('resultHidden').style.display = 'block';
-                            document.getElementById('headHidden').style.display = 'block';
-                            document.getElementById('checkboxHidden').style.display = 'block';
-                            document.getElementById('checkHidden').style.display = 'block';
+                     function checkBoxLimit() {
+                            var checkBoxGroup = document.forms['formDatasets']['selectedDataset'];
+                            var limit = 2;
+                            for (var i = 0; i < checkBoxGroup.length; i++) {
+                                checkBoxGroup[i].onclick = function() {
+                                    var checkedcount = 0;
+                                    for (var i = 0; i < checkBoxGroup.length; i++) {
+                                        checkedcount += (checkBoxGroup[i].checked) ? 1 : 0;
+                                    }
+                                    if (checkedcount > limit) {
+                                        alert("You can select maximum of " + limit + " checkboxes.");
+                                        this.checked = false;
+                                    }
+                                }
+                            }
                         }
-                    }
+
                 </script>
 
     <style>
@@ -303,8 +306,8 @@
               function drawChartSplit() {
                 var data = google.visualization.arrayToDataTable([
                     ['Split', 'N'],
-                    ['Simple Split',  {{ datasets|selectattr('simple_split')|list|length}}],
-                    ['K Fold',  {{ datasets|selectattr('k_fold')|list|length }}],
+                    ['Simple Split',  {{ datasets|selectattr('validation', 'equalto', 'Simple Split')|list|length}}],
+                    ['K Fold',  {{ datasets|selectattr('validation', 'equalto', 'K Fold')|list|length }}],
                 ]);
 
                 var options = {
@@ -326,7 +329,7 @@
         <button type="button" class="collapsible" onclick="collapse()">Show all experiments</button>
 
 <div class="content">
-    <form action={{url_for('compareExperiments')}} method="post">
+    <form action={{url_for('compareExperiments')}} name="formDatasets" method="post">
 <div class="divTable divTable">
         <div class="divTableHeading">
                 <div class="divTableRow">
@@ -351,11 +354,14 @@
             <div class="divTableCell">{{ item.upload_date.strftime('%d/%m/%Y')}}<br>
                 {{ item.upload_date.strftime('%H:%M:%S')}}</div>
             <div class="divTableCell">
-                {% if(item.simple_split) %}
+                {% if(item.validation == 'Simple Split') %}
                 Simple Split
                 {% endif %}
-                {% if(item.k_fold) %}
+                {% if(item.validation == 'K Fold') %}
                 K Fold
+                {% endif %}
+                {% if(item.validation == 'None') %}
+                None
                 {% endif %}
             </div>
             <div class="divTableCell">
@@ -379,7 +385,8 @@
             <div class="divTableCell">{{ item.model }}</div>
             <div class="divTableCell">
 
-                {% if(item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'PegasosQSVC') or (item.model == 'NeuralNetworkClassifier') %}
+                {% if(item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'Pegasos QSVC') or (item.model == 'Quantum Neural Network') or (item.model == 'SVC')
+                or (item.model == 'K Neighbors Classifier') or (item.model == 'Naive Bayes') or (item.model == 'Decision Tree Classifier') or (item.model == 'Random Forest Classifier') %}
                     {% if(item.accuracy==-1) %}
                     Accuracy: N/A<br>
                     {% else %}
@@ -395,18 +402,27 @@
                     {% else %}
                     Recall: {{'%0.2f'|format(item.recall|float)}}%<br>
                     {% endif %}
-                {% else %} {% if(item.model ==  'QSVR') or (item.model ==  'NeuralNetworkRegressor') %}
+                {% else %} {% if(item.model == 'QSVR') or (item.model == 'VQR') or (item.model == 'Linear Regression') or (item.model == 'SVR') %}
                     {% if(item.mse==-1) %}
-                    MSE : N/A <br>
+                    MSE: N/A <br>
                     {% else %}
-                    MSE : {{'%0.2f'|format(item.mse|float)}}% <br>
+                    MSE: {{'%0.2f'|format(item.mse|float)}}% <br>
                     {% endif %}
                     {% if(item.mae==-1) %}
-                    MAE : N/A <br>
+                    MAE: N/A <br>
                     {% else %}
                     MAE: {{'%0.2f'|format(item.mae|float)}}% <br>
                     {% endif %}
-                    RMSE: {{'%0.2f'|format(item.rmse|float)}}%
+                    {% if(item.rmse==-1) %}
+                    RMSE: N/A <br>
+                    {% else %}
+                    RMSE: {{'%0.2f'|format(item.rmse|float)}}% <br>
+                    {% endif %}
+                    {% if(item.r2==-1) %}
+                    R2: N/A <br>
+                    {% else %}
+                    R2: {{'%0.2f'|format(item.r2|float)}}% <br>
+                    {% endif %}
                 {% endif %} {% endif %}
             </div>
             <div class="divTableCell">
@@ -421,9 +437,10 @@
                 Total time: {{ item.total_time}}s<br>
                 {% endif %}
             </div>
-<div class="divTableCell">
-    <input type="checkbox" id="selectedDataset" name="selectedDataset" value="{{item.id}}">
+<div class="divTableCell checkboxGroup">
+    <input type="checkbox" id="selectedDataset" class="cb" name="selectedDataset" value="{{item.id}}">
 </div>
+            <script type="text/javascript">checkBoxLimit()</script>
 
         </div>
 
