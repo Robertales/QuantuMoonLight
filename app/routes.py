@@ -3,14 +3,15 @@ import pathlib
 from datetime import datetime
 
 import pandas as pd
-from flask import redirect, url_for
+from flask import redirect, url_for, send_from_directory
 from flask import render_template, request, Response, flash
+from flask_ckeditor import upload_fail, upload_success
 from flask_login import current_user, login_required
 from imblearn.over_sampling import SMOTE
 from qiskit import IBMQ
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-from app import app, db
+from app import app, db, ckeditor
 from app.source.model.models import User, Dataset, Article, Comment, Like
 from app.source.preprocessingDataset.aggId import addId
 from app.source.utils import addAttribute
@@ -47,43 +48,75 @@ def showList():
 def adminPage():
     return render_template("adminPage.html")
 
-@app.route("/compareExperiments" , methods=['POST'])
-def compareExperiments():
 
+@app.route("/compareExperiments", methods=['POST'])
+def compareExperiments():
     listDataset = request.form.getlist('selectedDataset')
     datasets = Dataset.query.filter(Dataset.id.in_(listDataset)).all()
 
-    #COMPARISION FOR TOTAL TIME
-    maxTotalTime = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.total_time).first()
-    minTotalTime = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.total_time.desc()).first()
+    # COMPARISION FOR TOTAL TIME
+    maxTotalTime = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.total_time).first()
+    minTotalTime = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.total_time.desc()).first()
 
     # COMPARISION FOR TRAINING TIME
-    maxTrainingTime = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.training_time).first()
-    minTrainingTime = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.training_time.desc()).first()
+    maxTrainingTime = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.training_time).first()
+    minTrainingTime = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.training_time.desc()).first()
 
     # COMPARISION FOR PRECISION
-    maxPrecision = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.precision).first()
-    minPrecision = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.precision.desc()).first()
+    maxPrecision = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.precision).first()
+    minPrecision = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.precision.desc()).first()
 
     # COMPARISION FOR ACCURACY
-    maxAccuracy = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.accuracy).first()
-    minAccuracy = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.accuracy.desc()).first()
+    maxAccuracy = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.accuracy).first()
+    minAccuracy = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.accuracy.desc()).first()
 
     # COMPARISION FOR RECALL
-    maxRecall = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.recall).first()
-    minRecall = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.recall.desc()).first()
+    maxRecall = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.recall).first()
+    minRecall = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.recall.desc()).first()
 
     # COMPARISION FOR MSE
-    maxMSE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.mse).first()
-    minMSE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.mse.desc()).first()
+    maxMSE = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.mse).first()
+    minMSE = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.mse.desc()).first()
 
     # COMPARISION FOR MAE
-    maxMAE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.mae).first()
-    minMAE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.mae.desc()).first()
+    maxMAE = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.mae).first()
+    minMAE = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.mae.desc()).first()
 
     # COMPARISION FOR RMSE
-    maxRMSE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.rmse).first()
-    minRMSE = Dataset.query.filter(Dataset.id.in_(listDataset)).order_by(Dataset.rmse.desc()).first()
+    maxRMSE = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.rmse).first()
+    minRMSE = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.rmse.desc()).first()
     return render_template("compareExperiments.html",
                            datasets=datasets,
                            maxTotalTime=maxTotalTime,
@@ -103,6 +136,7 @@ def compareExperiments():
                            maxRMSE=maxRMSE,
                            minRMSE=minRMSE
                            )
+
 
 @app.route("/adminDataset")
 def adminDataset():
@@ -158,18 +192,18 @@ def add():
     return render_template('add.html')
 
 
-
 @app.route('/like', methods=['GET'])
 @login_required
 def like():
     email_user = current_user.email
     data = request.args
     id_article = data['data']
-    like = Like(email_user=email_user,  id_article=id_article)
+    like = Like(email_user=email_user, id_article=id_article)
 
     db.session.add(like)
     db.session.commit()
     return render_template('add.html')
+
 
 @app.route('/dislike', methods=['GET'])
 @login_required
@@ -177,12 +211,13 @@ def dislike():
     email_user = current_user.email
     data = request.args
     id_article = data['data']
-    like=Like.query.filter_by(email_user=email_user ,  id_article=id_article).first()
+    like = Like.query.filter_by(
+        email_user=email_user,
+        id_article=id_article).first()
 
     db.session.delete(like)
     db.session.commit()
     return render_template('add.html')
-
 
 
 @app.route('/addpost', methods=['POST'])
@@ -191,11 +226,17 @@ def addpost():
     title = request.form['title']
     author = current_user.username
     email = current_user.email
-    body = request.form['content']
+    body = request.form.get('ckeditor')
 
-    label=request.form['flexRadioDefault']
+    label = request.form['flexRadioDefault']
 
-    post = Article(title=title, author=author, body=body, data=datetime.now(), email_user=email,label=label)
+    post = Article(
+        title=title,
+        author=author,
+        body=body,
+        data=datetime.now(),
+        email_user=email,
+        label=label)
 
     db.session.add(post)
     db.session.commit()
@@ -203,7 +244,7 @@ def addpost():
     return redirect(url_for('blog'))
 
 
-@app.route('/enableArticle/<int:article_id>', methods=['POST','GET'])
+@app.route('/enableArticle/<int:article_id>', methods=['POST', 'GET'])
 def enableArticle(article_id):
     article = Article.query.filter_by(id=article_id).one()
     article.authorized = True
@@ -212,8 +253,7 @@ def enableArticle(article_id):
     return redirect(url_for('blog'))
 
 
-
-@app.route('/deleteArticle/<int:article_id>', methods=['POST','GET'])
+@app.route('/deleteArticle/<int:article_id>', methods=['POST', 'GET'])
 def deleteArticle(article_id):
     article = Article.query.filter_by(id=article_id).one()
     db.session.delete(article)
@@ -230,6 +270,7 @@ def enableComment(comment_id):
 
     return redirect(url_for('blog'))
 
+
 @app.route('/addcomment', methods=['POST'])
 @login_required
 def addcomment():
@@ -238,12 +279,46 @@ def addcomment():
     body = request.form['content']
     id = request.form['artId']
 
-    comment = Comment(email_user=email, author=author, body=body, data=datetime.now(), id_article=id)
+    comment = Comment(
+        email_user=email,
+        author=author,
+        body=body,
+        data=datetime.now(),
+        id_article=id)
 
     db.session.add(comment)
     db.session.commit()
 
     return redirect(url_for('post', post_id=id))
+
+
+@app.route('/images/<path:filename>', methods=['GET'])
+def uploaded_files(filename):
+    path = (
+        pathlib.Path(__file__).parents[0]
+        / "static"
+        / "images"
+    )
+    return send_from_directory(path, filename)
+
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    f = request.files.get('upload')
+    # Add more validations here
+    extension = f.filename.split('.')[-1].lower()
+    if extension not in ['jpg', 'gif', 'png', 'jpeg']:
+        return upload_fail(message='Image only!')
+    uploaddir = (
+        pathlib.Path(__file__).parents[0]
+        / "static"
+        / "images"
+    )
+
+    f.save(os.path.join(uploaddir, f.filename))
+    url = url_for('uploaded_files', filename=f.filename)
+    # return upload_success call
+    return upload_success(url, filename=f.filename)
 
 
 @app.route("/userPage")
@@ -301,8 +376,10 @@ def smista():
 
     # Advanced option
     print(request.form["Radio"])
-    if request.form["Radio"] == "simpleSplit": validation = "Simple Split"
-    elif request.form["Radio"] == "kFold": validation = "K Fold"
+    if request.form["Radio"] == "simpleSplit":
+        validation = "Simple Split"
+    elif request.form["Radio"] == "kFold":
+        validation = "K Fold"
 
     # simpleSplit = request.form.get("simpleSplit")
 
@@ -346,95 +423,187 @@ def smista():
         print("DATA IMPUTATION")
         missing_values = ["n/n", "na", "--", "nan", "NaN"]
         if os.path.exists(userpathTrain):
-            addAttribute.addAttribute(userpathTrain, userpathTrain.parent / "TrainImputation.csv")
-            train = pd.read_csv(userpathTrain.parent / "TrainImputation.csv", na_values=missing_values)
+            addAttribute.addAttribute(
+                userpathTrain,
+                userpathTrain.parent /
+                "TrainImputation.csv")
+            train = pd.read_csv(
+                userpathTrain.parent /
+                "TrainImputation.csv",
+                na_values=missing_values)
             for column in train:
                 train[column] = train[column].fillna(train[column].mean())
             train.to_csv(userpathTrain, index=False, header=False)
             os.remove(userpathTrain.parent / "TrainImputation.csv")
-            train.to_csv(userpathTrain.parent / "TrainImputation.csv", index=False, header=False)
+            train.to_csv(
+                userpathTrain.parent /
+                "TrainImputation.csv",
+                index=False,
+                header=False)
         if os.path.exists(userpathTest):
-            addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestImputation.csv")
-            test = pd.read_csv(userpathTest.parent / "TestImputation.csv", na_values=missing_values)
+            addAttribute.addAttribute(
+                userpathTest,
+                userpathTest.parent /
+                "TestImputation.csv")
+            test = pd.read_csv(
+                userpathTest.parent /
+                "TestImputation.csv",
+                na_values=missing_values)
             for column in test:
                 test[column] = test[column].fillna(test[column].mean())
             test.to_csv(userpathTest, index=False, header=False)
             os.remove(userpathTest.parent / "TestImputation.csv")
-            test.to_csv(userpathTest.parent / "TestImputation.csv", index=False, header=False)
+            test.to_csv(
+                userpathTest.parent /
+                "TestImputation.csv",
+                index=False,
+                header=False)
         if os.path.exists(userpathToPredict):
-            addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictImputation.csv")
-            predict = pd.read_csv(userpathToPredict.parent / "PredictImputation.csv", na_values=missing_values)
+            addAttribute.addAttribute(
+                userpathToPredict,
+                userpathToPredict.parent /
+                "PredictImputation.csv")
+            predict = pd.read_csv(
+                userpathToPredict.parent /
+                "PredictImputation.csv",
+                na_values=missing_values)
             for column in predict:
-                predict[column] = predict[column].fillna(predict[column].mean())
+                predict[column] = predict[column].fillna(
+                    predict[column].mean())
             predict.to_csv(userpathToPredict, index=False, header=False)
             os.remove(userpathToPredict.parent / "PredictImputation.csv")
-            predict.to_csv(userpathToPredict.parent / "PredictImputation.csv", index=False, header=False)
-
+            predict.to_csv(
+                userpathToPredict.parent /
+                "PredictImputation.csv",
+                index=False,
+                header=False)
 
     if scaling == "MinMax":
-        #Scaling normalization
+        # Scaling normalization
         scaler = MinMaxScaler()
         print("MINMAX SCALING")
         if os.path.exists(userpathTrain):
-            addAttribute.addAttribute(userpathTrain, userpathTrain.parent / "TrainScaled.csv")
+            addAttribute.addAttribute(
+                userpathTrain,
+                userpathTrain.parent /
+                "TrainScaled.csv")
             data = pd.read_csv(userpathTrain.parent / "TrainScaled.csv")
             train = data.drop("labels", axis=1)
             train_scaled = scaler.fit_transform(train)
             df = pd.DataFrame(train_scaled)
-            df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
+            df.insert(
+                loc=len(
+                    df.columns),
+                column="labels",
+                value=data["labels"].values)
             df.to_csv(userpathTrain, index=False, header=False)
             os.remove(userpathTrain.parent / "TrainScaled.csv")
-            df.to_csv(userpathTrain.parent / "TrainScaled.csv", index=False, header=False)
+            df.to_csv(
+                userpathTrain.parent /
+                "TrainScaled.csv",
+                index=False,
+                header=False)
         if os.path.exists(userpathTest):
-            addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestScaled.csv")
+            addAttribute.addAttribute(
+                userpathTest,
+                userpathTest.parent /
+                "TestScaled.csv")
             data = pd.read_csv(userpathTest.parent / "TestScaled.csv")
             test = data.drop("labels", axis=1)
             test_scaled = scaler.fit_transform(test)
             df = pd.DataFrame(test_scaled)
-            df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
+            df.insert(
+                loc=len(
+                    df.columns),
+                column="labels",
+                value=data["labels"].values)
             df.to_csv(userpathTest, index=False, header=False)
             os.remove(userpathTest.parent / "TestScaled.csv")
-            df.to_csv(userpathTest.parent / "TestScaled.csv", index=False, header=False)
+            df.to_csv(
+                userpathTest.parent /
+                "TestScaled.csv",
+                index=False,
+                header=False)
         if os.path.exists(userpathToPredict):
-            addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictScaled.csv")
-            predict = pd.read_csv(userpathToPredict.parent / "PredictScaled.csv")
+            addAttribute.addAttribute(
+                userpathToPredict,
+                userpathToPredict.parent /
+                "PredictScaled.csv")
+            predict = pd.read_csv(
+                userpathToPredict.parent /
+                "PredictScaled.csv")
             predict_scaled = scaler.fit_transform(predict)
             df = pd.DataFrame(predict_scaled)
             df.to_csv(userpathToPredict, index=False, header=False)
             os.remove(userpathToPredict.parent / "PredictScaled.csv")
-            df.to_csv(userpathToPredict.parent / "PredictScaled.csv", index=False, header=False)
+            df.to_csv(
+                userpathToPredict.parent /
+                "PredictScaled.csv",
+                index=False,
+                header=False)
     elif scaling == "Standard":
         # Scaling standardization z-score
         scaler = StandardScaler()
         print("STANDARD SCALING")
         if os.path.exists(userpathTrain):
-            addAttribute.addAttribute(userpathTrain, userpathTrain.parent / "TrainScaled.csv")
+            addAttribute.addAttribute(
+                userpathTrain,
+                userpathTrain.parent /
+                "TrainScaled.csv")
             data = pd.read_csv(userpathTrain.parent / "TrainScaled.csv")
             train = data.drop("labels", axis=1)
             train_scaled = scaler.fit_transform(train)
             df = pd.DataFrame(train_scaled)
-            df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
+            df.insert(
+                loc=len(
+                    df.columns),
+                column="labels",
+                value=data["labels"].values)
             df.to_csv(userpathTrain, index=False, header=False)
             os.remove(userpathTrain.parent / "TrainScaled.csv")
-            df.to_csv(userpathTrain.parent / "TrainScaled.csv", index=False, header=False)
+            df.to_csv(
+                userpathTrain.parent /
+                "TrainScaled.csv",
+                index=False,
+                header=False)
         if os.path.exists(userpathTest):
-            addAttribute.addAttribute(userpathTest, userpathTest.parent / "TestScaled.csv")
+            addAttribute.addAttribute(
+                userpathTest,
+                userpathTest.parent /
+                "TestScaled.csv")
             data = pd.read_csv(userpathTest.parent / "TestScaled.csv")
             test = data.drop("labels", axis=1)
             test_scaled = scaler.fit_transform(test)
             df = pd.DataFrame(test_scaled)
-            df.insert(loc=len(df.columns), column="labels", value=data["labels"].values)
+            df.insert(
+                loc=len(
+                    df.columns),
+                column="labels",
+                value=data["labels"].values)
             df.to_csv(userpathTest, index=False, header=False)
             os.remove(userpathTest.parent / "TestScaled.csv")
-            df.to_csv(userpathTest.parent / "TestScaled.csv", index=False, header=False)
+            df.to_csv(
+                userpathTest.parent /
+                "TestScaled.csv",
+                index=False,
+                header=False)
         if os.path.exists(userpathToPredict):
-            addAttribute.addAttribute(userpathToPredict, userpathToPredict.parent / "PredictScaled.csv")
-            predict = pd.read_csv(userpathToPredict.parent / "PredictScaled.csv")
+            addAttribute.addAttribute(
+                userpathToPredict,
+                userpathToPredict.parent /
+                "PredictScaled.csv")
+            predict = pd.read_csv(
+                userpathToPredict.parent /
+                "PredictScaled.csv")
             predict_scaled = scaler.fit_transform(predict)
             df = pd.DataFrame(predict_scaled)
             df.to_csv(userpathToPredict, index=False, header=False)
             os.remove(userpathToPredict.parent / "PredictScaled.csv")
-            df.to_csv(userpathToPredict.parent / "PredictScaled.csv", index=False, header=False)
+            df.to_csv(
+                userpathToPredict.parent /
+                "PredictScaled.csv",
+                index=False,
+                header=False)
 
     # Validazione
     print("\nIn validazione...")
@@ -479,9 +648,10 @@ def smista():
         print("DATA BALANCING")
         x_train_array = x_train.to_numpy()
         sm = SMOTE()
-        x_train_array_bal, y_train_bal = sm.fit_resample(x_train_array, y_train)
+        x_train_array_bal, y_train_bal = sm.fit_resample(
+            x_train_array, y_train)
         df = pd.DataFrame(x_train_array_bal)
-        #df = df.iloc[:, 1:]
+        # df = df.iloc[:, 1:]
         df.columns = columns
         df.insert(loc=len(df.columns), column="labels", value=y_train_bal)
         df.to_csv(pathTrain, index=False)
@@ -559,10 +729,10 @@ def upload(file, file1, file2, idTrainSet):
     if file is None:
         return -1
     uploaddir = (
-            pathlib.Path(__file__).parents[1]
-            / "upload_dataset"
-            / current_user.email
-            / str(idTrainSet)
+        pathlib.Path(__file__).parents[1]
+        / "upload_dataset"
+        / current_user.email
+        / str(idTrainSet)
     )
     if not uploaddir.exists():
         uploaddir.mkdir()
@@ -579,7 +749,8 @@ def upload(file, file1, file2, idTrainSet):
         # print(file1.filename)
         return -1
     if file1.filename != "":
-        userpathTest = uploaddir / os.path.basename(pathlib.Path(file1.filename))
+        userpathTest = uploaddir / \
+            os.path.basename(pathlib.Path(file1.filename))
         file1.save(userpathTest)
     if file1.content_length > 80000000:
         return -1
@@ -594,7 +765,8 @@ def upload(file, file1, file2, idTrainSet):
     if file2.filename != "" and not ext_ok.__contains__(extension):
         return -1
     if file2.filename != "" != 0:
-        userpathToPredict = uploaddir / os.path.basename(pathlib.Path(file2.filename))
+        userpathToPredict = uploaddir / \
+            os.path.basename(pathlib.Path(file2.filename))
         file2.save(userpathToPredict)
     if file2.content_length > 80000000:
         return -1

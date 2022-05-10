@@ -21,6 +21,17 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="../static/styles/css/revolution-slider.css" rel="stylesheet">
     <link href="../static/styles/css/style.css" rel="stylesheet">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link href="../static/styles/css/responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <!--[if lt IE 9]>
+    <script src="../../static/js/respond.js"></script>
+    <script src="../static/js/script.js"></script><![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   </head>
 
   <body>
@@ -30,19 +41,20 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <form name="addForm" id="addForm" method="POST" action="{{url_for('addpost')}}" novalidate>
+          <form name="addForm" id="addForm" method="POST" action="{{url_for('addpost')}}" >
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Title</label>
-                <input type="text" class="form-control" placeholder="Title" name="title" id="title" required data-validation-required-message="Please enter a title.">
+                <input type="text" class="form-control" placeholder="Title" name="title" id="title"   required data-validation-required-message="Please enter a title.">
                 <p class="help-block text-danger"></p>
               </div>
             </div>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Blog Content</label>
-                <textarea rows="5" class="form-control" placeholder="Blog content" name="content" id="content" required data-validation-required-message="Please enter a message."></textarea>
-                <p class="help-block text-danger"></p>
+                {{ ckeditor.load() }}
+                {{ ckeditor.create() }}
+                {{ ckeditor.config() }}
               </div>
             </div>
             <div class="form-check">
@@ -78,6 +90,18 @@
 
     <!-- Custom scripts for this template -->
     <script src="{{ url_for('static', filename='clean-blog.min.js') }}"></script>
+  <script>
+
+$('#addForm').submit(function(event) {
+
+  if (jQuery("#cke_1_contents iframe").contents().find("body").text() === "") {
+          alert('Article/Experiment body cannot be empty');
+           event.preventDefault();
+      return false;
+      }
+});
+
+</script>
 
   <br><br><br>
   {% endblock %}
