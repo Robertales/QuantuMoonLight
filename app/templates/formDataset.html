@@ -17,6 +17,33 @@
     <script src="../../static/js/respond.js"></script>
     <script src="../static/js/script.js"></script><![endif]-->
     <link href="../static/styles/css/nav.css" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script>
+    $( document ).ready(function() {
+
+        //per far si che funzioni in maniera logica i campi opzionali devono essere settati di default come invisibile , se si può fare in html meglio ma per ora c'è questo workaroudn (li rendi invisibili on page load con js
+          $("#nrColumns").hide()
+            $("label:has(input[name='nrColumns'])").hide()
+
+        // id del campo padre
+   $('#checkPrototypeSelection').change(function(){
+// id del campo padre
+   if (document.getElementById('checkPrototypeSelection').checked) {
+       //id del campo che deve comparire scomparire
+           $("#nrColumns").show()
+           $("label:has(input[name='nrColumns'])").show()
+        } else {
+            $("#nrColumns").hide()
+            $("label:has(input[name='nrColumns'])").hide()
+        }
+
+});
+
+    });
+
+
+    </script>
 </head>
 
 <body>
@@ -93,7 +120,10 @@
                                     </li>
                                     <li class="checkbox-group">
                                         <label>
-                                          <input type="checkbox" id="checkFeatureExtraction" name="reduceFE" value="reduceFE" >  Reduce columns with Feature Extraction
+                                          <input type="radio" id="checkFeatureExtraction" name="reduceFE" value="PCA">  Reduce columns with Feature Extraction(PCA)
+                                        </label>
+                                         <label>
+                                            <input type="radio" id="checkKBest" name="reduceFE" value="KBest" > Reduce columns with Feature Selection(K Best)
                                         </label>
                                         <div id="tooltip">
                                             <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
@@ -119,20 +149,25 @@
                                     <li>
                                         <label>Select the algorithm: <select name="model" id="model" style="border: 0.1em solid grey">
                                                                 <option value="None">None</option>
-                                             <optgroup label="Classificators">
+                                             <optgroup label="Quantum Classificators">
                                                     <option value="QSVM">QSVM</p></option>
                                                     <option value="QSVC">QSVC</option>
                                                     <option value="Pegasos QSVC">Pegasos QSVC</option>
                                                     <option value="Quantum Neural Network">Quantum Neural Network</option>
+
+                                             </optgroup>
+                                            <optgroup label="Quantum Regressors">
+                                                <option value="QSVR">QSVR</option>
+                                                <option value="VQR">VQR</option>
+                                             </optgroup>
+                                            <optgroup label="Canonical Classificators">
                                                     <option value="SVC">SVC</option>
                                                     <option value="K Neighbors Classifier">K Neighbors</option>
                                                     <option value="Decision Tree Classifier">Decision Tree</option>
                                                     <option value="Naive Bayes">Naive Bayes</option>
                                                     <option value="Random Forest Classifier">Random Forest</option>
-                                             </optgroup>
-                                            <optgroup label="Regressors">
-                                                    <option value="QSVR">QSVR</option>
-                                                    <option value="VQR">VQR</option>
+                                            </optgroup>
+                                            <optgroup label="Canonical Regressors">
                                                     <option value="SVR">SVR</option>
                                                     <option value="Linear Regression">Linear Regression</option>
                                             </optgroup>

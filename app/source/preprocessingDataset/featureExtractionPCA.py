@@ -1,23 +1,26 @@
 import pathlib
 import warnings
 from itertools import cycle
+from typing import Any
 
 import pandas as pd
 from matplotlib import pyplot as plt
 from mpl_toolkits import mplot3d
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
+from sklearn.feature_selection import SelectKBest, chi2
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from app.source.utils import utils
 
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
 
 def callFeatureExtraction(
+        featureExtraction: str,
         pathTrain: pathlib.Path,
         pathTest: pathlib.Path,
         pathToPredict: pathlib.Path,
         classification: bool,
-        n_components=2
+        n_components=2,
 ):
     """
     This function executes the Feature Extraction on the given dataset
@@ -27,6 +30,7 @@ def callFeatureExtraction(
     :param pathToPredict: path to the location of the dataset to Predict that is going to be reduced with FE
     :param classification: boolean flag that indicated whether the user wants to execute classification or not
     :param n_components: number of new columns
+    :param featureExtraction: type of Feauture Extraction/Selection
     :return: string that points to the location of the datasets preprocessed with FE
     :rtype: pathlib.Path, pathlib.Path
     """
@@ -35,24 +39,36 @@ def callFeatureExtraction(
 
     # A comma-separated values (csv) file is returned as a DataFrame: two-dimensional data structure with labeled axes.
     df_train = pd.read_csv(pathTrain)
+    print(df_train)
     X_train = df_train.drop("labels", 1)  # Dataset senza colonna labels, su cui fare PCA
     Y_train = df_train["labels"]  # Solo le label, da reinserire dopo la PCA
 
     df_test = pd.read_csv(pathTest)
+    print(df_test)
     X_test = df_test.drop("labels", 1)  # Dataset senza colonna labels, su cui fare PCA
     Y_test = df_test["labels"]  # Solo le label, da reinserire dopo la PCA
 
     # Feature Scaling
-    sc = StandardScaler()
-    sc.fit(X_train)
-    X_train_scaled = sc.transform(X_train)
-    X_test_scaled = sc.transform(X_test)
+    sc = MinMaxScaler(feature_range=(0, 1))
+    X_train_scaled = sc.fit_transform(X_train)
+    X_test_scaled = sc.fit_transform(X_test)
+    print(X_train_scaled)
+    print(X_test_scaled)
 
-    # Feature Extraction
-    pca = PCA(n_components)
-    pca.fit(X_train_scaled)
-    X_train_PCA = pca.transform(X_train_scaled)
-    X_test_PCA = pca.transform(X_test_scaled)
+    global X_train_PCA
+    global X_test_PCA
+    global pca
+    if featureExtraction == "PCA":
+        # Feature Extraction
+        pca = PCA(n_components)
+        pca.fit(X_train_scaled)
+        X_train_PCA = pca.transform(X_train_scaled)
+        X_test_PCA = pca.transform(X_test_scaled)
+    elif featureExtraction == "KBest":
+        pca = SelectKBest(score_func=chi2, k=n_components)
+        X_train_PCA = pca.fit_transform(X_train_scaled, Y_train)
+        X_test_PCA = pca.fit_transform(X_test_scaled, Y_test)
+
 
     # Restore columns name for X_train and relative labels from Y_train
     PCA_df_train = pd.DataFrame(data=X_train_PCA, columns=utils.createFeatureList(n_components))
@@ -76,6 +92,7 @@ def callFeatureExtraction(
         df_to_predict = pd.read_csv(pathToPredict, header=None)
         df_to_predict.columns = X_train.columns
         print(df_to_predict)
+
 
         # Scaling
         X_to_predict_scaled = sc.transform(df_to_predict)
