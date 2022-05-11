@@ -630,7 +630,8 @@ def smista():
             prototypeSelection=prototypeSelection,
             featureExtraction=featureExtraction,
             numRawsPS=numRawsPS,
-            numColsFE=numColsFE
+            numColsFE=numColsFE,
+            model=model
         ),
     )
     # DataSet Train ready to be classified
