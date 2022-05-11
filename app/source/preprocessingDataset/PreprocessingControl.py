@@ -24,8 +24,11 @@ class PreprocessingControl:
         featureExtraction = request.form.get("featureExtraction")
         numRawsPS = request.form.get("numRawsPS", type=int)
         numColsFE = request.form.get("numColsFE", type=int)
-        #VEDERE A CHE CAZZO SERVE QUESTO FLAG!!!
-        classification = True
+        model = request.form.get("model")
+        if model != "None":
+            classification = True
+        else:
+            classification = False
 
         # Cartella dell'utente dove scrivere tutti i risultati
         pathPC = pathlib.Path(userpath).parents[0]
@@ -108,6 +111,7 @@ class PreprocessingControl:
 
         if featureExtraction:
             pathTrain, pathTest = featureExtractionPCA.callFeatureExtraction(
+                featureExtraction,
                 pathTrain,
                 pathTest,
                 userpathToPredict,
@@ -115,7 +119,7 @@ class PreprocessingControl:
                 numColsFE,
             )  # create 'yourPCA_Train', 'yourPCA_Test' and, in case classification=True, 'doPredictionFE.csv'
 
-        aggId.addId(
+            aggId.addId(
             pathTrain,
             pathPC / "DataSetTrainPreprocessato.csv",
         )  # create 'DataSetTrainPreprocessato.csv'
