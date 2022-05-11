@@ -55,6 +55,12 @@ class UtenteControl:
         if not ((token is None) or token.__len__() == 128):
             flash("Lunghezza token non valida", "error")
             return render_template("registration.html")
+
+        utente=User.query.filter_by(email=email).first()
+        if utente:
+            flash("Email is invalid or already taken","error")
+            return render_template("registration.html")
+
         utente = User(
             email=email,
             password=hashed_password,
@@ -64,6 +70,7 @@ class UtenteControl:
             surname=cognome,
             isResearcher=bool(isResearcher)
         )
+
         db.session.add(utente)
         db.session.commit()
 
