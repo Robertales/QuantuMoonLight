@@ -17,6 +17,33 @@
     <script src="../../static/js/respond.js"></script>
     <script src="../static/js/script.js"></script><![endif]-->
     <link href="../static/styles/css/nav.css" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script>
+    $( document ).ready(function() {
+
+        //per far si che funzioni in maniera logica i campi opzionali devono essere settati di default come invisibile , se si può fare in html meglio ma per ora c'è questo workaroudn (li rendi invisibili on page load con js
+          $("#nrColumns").hide()
+            $("label:has(input[name='nrColumns'])").hide()
+
+        // id del campo padre
+   $('#checkPrototypeSelection').change(function(){
+// id del campo padre
+   if (document.getElementById('checkPrototypeSelection').checked) {
+       //id del campo che deve comparire scomparire
+           $("#nrColumns").show()
+           $("label:has(input[name='nrColumns'])").show()
+        } else {
+            $("#nrColumns").hide()
+            $("label:has(input[name='nrColumns'])").hide()
+        }
+
+});
+
+    });
+
+
+    </script>
 </head>
 
 <body>
