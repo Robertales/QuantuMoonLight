@@ -153,18 +153,34 @@
                             </p>
                             <div class="collapse" id="collapseExample">
                                 <div class="card card-body">
-                                    <label><input type="checkbox" class="AdvancedOption" id="imputation" name="imputation" value="imputation">  Data Imputation</label>
-                                    <label><input type="radio" class="AdvancedOption" id="checkSimpleSplit" name="Radio" value="simpleSplit" checked>   Simple Train-Test Split</label>
+                                    <div class = "card card-body" id = "validation"> Validation
+                                        <label><input type="radio" class="AdvancedOption" id="checkSimpleSplit" name="Radio" value="simpleSplit" checked>   Simple Train-Test Split</label>
                                     <label><input type="radio" class="AdvancedOption" id="checkKFold" name="Radio" value="kFold">  K-fold Cross Validation </label>
+                                    <label>Insert k parameter:   <input type="number" max="10000" value="10" id="kFoldValue" name="kFoldValue" min="10" style="border: 0.1em solid grey"> </label>
+                                   </div>
+
+                                    <div class="card card-body" id = "Preprocessing"> Preprocessing
+                                        <label><input type="checkbox" class="AdvancedOption" id="imputation" name="imputation" value="imputation">  Data Imputation</label>
+                                        <label><input type="checkbox" class="AdvancedOption" id="balancing" name="balancing" value="balancing">  Data Balancing</label>
                                     <label><input type="radio" class="AdvancedOption" id="MinMax" name="scaling" value="MinMax">   MinMax Scaling</label>
                                     <label><input type="radio" class="AdvancedOption" id="Standard" name="scaling" value="Standard">  Standard Scaling </label>
-                                    <label>Insert k parameter:   <input type="number" max="10000" value="10" id="kFoldValue" name="kFoldValue" min="10" style="border: 0.1em solid grey"></label>
-                                    <label>Insert nr of columns to reduce:   <input type="number" max="10000" min="2" value="2" id="nrColumns" name="nrColumns" style="border: 0.1em solid grey"></label><br>
-                                    <label>Insert nr of rows to reduce:    <input type="number" max="10000" min="2" value="100" id="nrRows" name="nrRows" style="border: 0.1em solid grey"></label>
-                                    <label><input type="checkbox" class="AdvancedOption" id="balancing" name="balancing" value="balancing">  Data Balancing</label>
 
+                                        <div class ="card card-body" id = "FeatureExtraction"> Feature Extraction
+                                             <label>Insert nr of columns to reduce:   <input type="number" max="10000" min="2" value="2" id="nrColumns" name="nrColumns" style="border: 0.1em solid grey"></label><br>
+                                    </div>
+                                        <div class ="card card-body" id = "PrototypeSelection"> Prototype Selection
+                                            <label>Insert nr of rows to reduce:    <input type="number" max="10000" min="2" value="100" id="nrRows" name="nrRows" style="border: 0.1em solid grey"></label>
+                                        </div>
+
+                                    </div>
+
+                                    <div class ="card card-body" id = "Hyperparameter"> Hyperparameter
+                                        <div class ="card card-body" id = "Pegasos"> Pegasos QSVC
                                     <label>Insert PegasosQSVC C:    <input type="number" max="10000" min="2" value="1000" id="C" name="C" style="border: 0.1em solid grey"></label>
                                     <label>Insert PegasosQSVC tau:    <input type="number" max="10000" min="2" value="100" id="tau" name="tau" style="border: 0.1em solid grey"></label>
+                                        </div>
+
+                                        <div class ="card card-body" id = "NeuralNetwork"> Quantum Neural Network
                                     <label>Insert NN optimizer:    <select name="optimizer" id="optimizer" style="border: 0.1em solid grey">
                                                                         <option value="SLSQP">SLSQP</option>
                                                                         <option value="ADAM">ADAM</option>
@@ -175,10 +191,14 @@
                                                                             <option value="squared_error">Squared Error </option>
                                                                             <option value="absolute_error">Absolute Error </option>
                                                                         </select>
-                                    <label>Insert max iterations optimizer:    <input type="number" max="10000" min="10" value="100" id="max_iter" name="max_iter" style="border: 0.1em solid grey"></label>
 
+                                    <label>Insert max iterations optimizer:    <input type="number" max="10000" min="10" value="100" id="max_iter" name="max_iter" style="border: 0.1em solid grey"></label>
+                                        </div>
+
+                                    </div>
+                                    <div class ="card card-body" id = "SelectQuantumSystem">
                                     {% if current_user.isResearcher %}
-                                    <label>Select one: <select name="backend" id="backend" style="border: 0.1em solid grey" >
+                                    <label>Select quantum system: <select name="backend" id="backend" style="border: 0.1em solid grey" >
                                                                 <option value="backend">Least Busy IBM Backend</option>
                                                                 <option value="aer_simulator">IBM Aer Simulator; Qubit: 32 </option>
                                                                 <option value="ibm_washington">IBM Washington; Processor type: Eagle R1; Qubit: 127 </option>
@@ -190,13 +210,15 @@
                                                                 <option value="ibmq_armonk">IBMQ Armonk; Processor type: Canary r1.2; Qubit: 1  </option>
                                                         </select></label>
                                     {% else %}
-                                    <label>Select one: <select name="backend" id="backend" style="border: 0.1em solid grey">
+                                    <label>Select quantum system: <select name="backend" id="backend" style="border: 0.1em solid grey">
                                                                 <option value="backend">Least Busy IBM Backend</option>
                                                                 <option value= "aer_simulator">aer_simulator; Qubit: 16 </option>
                                                                 <option value="ibmq_manila">IBMQ Manila; Processor type: Falcon r5.11L;	Qubit: 5 </option>
                                                                 <option value="ibmq_armonk">IBMQ Armonk; Processor type: Canary r1.2; Qubit: 1  </option>
                                                         </select></label>
                                     {% endif %}
+                                    </div>
+
                                 </div>
                             </div>
                             <br>
@@ -227,7 +249,7 @@
             </div>
         </section>
     </form>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
     {% endblock %}
     </div>
 </body>

@@ -1,14 +1,11 @@
-# QuantuMoonLight
-QuantuMoonLight è una piattaforma web di facile utilizzo, rivolta ad appassionati di computazione
-quantistica e machine learning, professionisti del settore, studenti e ricercatori. La funzione principale del
-sistema è quella di consentire agli utenti registrati di effettuare operazioni di validazione, preprocessing e
-classificazione su dataset caricati dagli utenti. Il Quantum Machine Learning è un settore poco
-conosciuto e dunque si vuole estendere la community interessata, cercando di offrire un prodotto
-semplice, affidabile ed utile, utilizzando le soluzioni messe a disposizione dalle nuove tecnologie di
-Quantum Computing.
-L’obiettivo del progetto è quello di osservare la variazione delle metriche di un algoritmo di classificazione
-quantistico applicando tecniche di preprocessing che diminuiscono la dimensionalità di un dataset a
-favore del tempo di esecuzione.
-Lo scopo del presente documento è presentare, nel dettaglio, gli algoritmi della pipeline di Machine
-Learning, utilizzati nella piattaforma QML: dai metodi di validazione e feature engineering fino alla
-creazione e utilizzo del modello di classificazione quantistico. 
+#QuantuMoonLight
+
+QuantuMoonLight is a user-friendly web platform aimed at quantum computation and machine learning enthusiasts, industry professionals, students and researchers.
+
+The main function of the system is to allow registered users to perform common operation as validation, preprocessing and classifications on datasets uploaded by users.
+
+Quantum Machine Learning is a little known area and therefore we want to extend the community interested, trying to offer a product simple, reliable and useful, using the solutions made available by new Quantum Computing technologies.
+
+The goal of the project is to observe the variation of the metrics of a quantum classification algorithm by applying preprocessing techniques that decrease the dimensionality of a dataset in favor of execution time.
+
+The purpose of this project is to present, in detail, the algorithms of the Machine Learning pipeline algorithms used in the QML platform: from validation and feature engineering methods to the creation and use of the quantum classification model.
