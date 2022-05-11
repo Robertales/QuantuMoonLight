@@ -70,39 +70,41 @@ class myNeuralNetworkRegressor:
             loss=loss,
             quantum_instance=quantum_instance
         )
+        try:
+            # training
+            print("Running...")
+            start = time.time()
+            vqr.fit(train_features, train_labels)
+            training_time = time.time() - start
+            print("Train effettuato in " + str(training_time))
 
-        # training
-        print("Running...")
-        start = time.time()
-        vqr.fit(train_features, train_labels)
-        training_time = time.time() - start
-        print("Train effettuato in " + str(training_time))
+            # test
+            start_time = time.time()
+            test_prediction = vqr.predict(test_features)
+            testing_time = time.time() - start_time
+            print("Test effettuato in " + str(testing_time))
 
-        # test
-        start_time = time.time()
-        test_prediction = vqr.predict(test_features)
-        testing_time = time.time() - start_time
-        print("Test effettuato in " + str(testing_time))
+            score = vqr.score(test_features, test_labels)
+            mse = mean_squared_error(test_labels, test_prediction)
+            mae = mean_absolute_error(test_labels, test_prediction)
+            rmse = math.sqrt(mse)
+            result["regression_score"] = score
+            result["mse"] = mse
+            result["mae"] = mae
+            result["rmse"] = rmse
 
-        score = vqr.score(test_features, test_labels)
-        mse = mean_squared_error(test_labels, test_prediction)
-        mae = mean_absolute_error(test_labels, test_prediction)
-        rmse = math.sqrt(mse)
-        result["regression_score"] = score
-        result["mse"] = mse
-        result["mae"] = mae
-        result["rmse"] = rmse
+            # prediction
+            start_time = time.time()
+            predicted_labels = vqr.predict(prediction_data)
+            prediction_time = time.time() - start_time
+            total_time = time.time() - start
+            print("Prediction effettuata in " + str(prediction_time))
+            print("Total time: " + str(total_time))
+            result["predicted_labels"] = np.array(predicted_labels)
 
-        # prediction
-        start_time = time.time()
-        predicted_labels = vqr.predict(prediction_data)
-        prediction_time = time.time() - start_time
-        total_time = time.time() - start
-        print("Prediction effettuata in " + str(prediction_time))
-        print("Total time: " + str(total_time))
-        result["predicted_labels"] = np.array(predicted_labels)
-
-        result["total_time"] = str(testing_time + training_time)[0:6]
-        result["training_time"] = str(training_time)[0:6]
-
+            result["total_time"] = str(testing_time + training_time)[0:6]
+            result["training_time"] = str(training_time)[0:6]
+        except Exception as e:
+            print(e)
+            result["error"] = 1
         return result

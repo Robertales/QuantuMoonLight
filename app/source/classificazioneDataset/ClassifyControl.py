@@ -229,22 +229,22 @@ class ClassificazioneControl:
             r = classicRegressor.classify(path_train, path_test, user_path_to_predict, model)
             result = {**result, **r}
 
-
-        dataset = Dataset.query.get(id_dataset)
-        if model == "QSVR" or model == "VQR" or model == "Linear Regression" or model == "SVR":
-            dataset.mse = result.get("mse")*100
-            dataset.mae = result.get("mae")*100
-            dataset.rmse = result.get("rmse")*100
-            dataset.r2 = result.get("regression_score")*100
-        else:
-            dataset.accuracy = result.get("testing_accuracy")*100
-            dataset.precision = result.get("testing_precision")*100
-            dataset.recall = result.get("testing_recall")*100
-        dataset.training_time = result.get("training_time")
-        dataset.total_time = result.get("total_time")
-        db.session.commit()
-
         if result["error"] != 1:
+
+            dataset = Dataset.query.get(id_dataset)
+            if model == "QSVR" or model == "VQR" or model == "Linear Regression" or model == "SVR":
+                dataset.mse = "{:.2f}".format(result.get("mse"))
+                dataset.mae = "{:.2f}".format(result.get("mae"))
+                dataset.rmse = "{:.2f}".format(result.get("rmse"))
+                dataset.r2 = "{:.2f}".format(result.get("regression_score"))
+            else:
+                dataset.accuracy = result.get("testing_accuracy") * 100
+                dataset.precision = result.get("testing_precision") * 100
+                dataset.recall = result.get("testing_recall") * 100
+            dataset.training_time = result.get("training_time")
+            dataset.total_time = result.get("total_time")
+            db.session.commit()
+
             print("Prediction from datapoints set:")
             for k, v in result.items():
                 print("{} : {}".format(k, v))
@@ -309,8 +309,9 @@ class ClassificazioneControl:
         if result["error"] == 1:
             msg.attach(
                 MIMEText(
-                    "<center><h3>IBM Server error, please check status on https:"
-                    "//quantum-computing.ibm.com/services?services=systems</center></h3>",
+                    "<center><h4>An error has been detected for one of the following reasons:<br>"
+                    "- IBM Server Error, check status on: //quantum-computing.ibm.com/services?services=systems<br>"
+                    "- A dataset for multilabel classification has been inserted by selecting PegasosQSVC(only binary classification)</center></h4>",
                     'html'))
 
         else:
@@ -330,13 +331,13 @@ class ClassificazioneControl:
                         "<center><h3>" +
                         "Modello: " + result.get("model") +
                         "<br><br> Mean Squared Error: " +
-                        "{:.2%}".format(float(mse)) +
+                        "{:.2f}".format(float(mse)) +
                         "<br><br> Mean Absolute Error: " +
-                        "{:.2%}".format(float(mae)) +
+                        "{:.2f}".format(float(mae)) +
                         "<br><br> Root Mean Squared Error: " +
-                        "{:.2%}".format(float(rmse)) +
-                        "<br><br> Regression Score: " +
-                        "{:.2%}".format(float(score)) +
+                        "{:.2f}".format(float(rmse)) +
+                        "<br><br> R2: " +
+                        "{:.2f}".format(float(score)) +
                         "</h3></center>",
                         'html'))
             else:

@@ -638,24 +638,26 @@ def smista():
     # DataSet Test ready to be classified
     pathTest = dataPath / "DataSetTestPreprocessato.csv"
 
-    if balancing:
-        # Data Balancing
-        x_train = pd.read_csv(pathTrain)
-        y_train = x_train["labels"].values
-        x_train = x_train.drop("labels", axis=1)
-        x_train = x_train.drop("Id", axis=1)
-        columns = x_train.columns
-        print("DATA BALANCING")
-        x_train_array = x_train.to_numpy()
-        sm = SMOTE()
-        x_train_array_bal, y_train_bal = sm.fit_resample(
-            x_train_array, y_train)
-        df = pd.DataFrame(x_train_array_bal)
-        # df = df.iloc[:, 1:]
-        df.columns = columns
-        df.insert(loc=len(df.columns), column="labels", value=y_train_bal)
-        df.to_csv(pathTrain, index=False)
-        addId(pathTrain, pathTrain)
+    try:
+        if balancing:
+            # Data Balancing
+            x_train = pd.read_csv(pathTrain)
+            y_train = x_train["labels"].values
+            x_train = x_train.drop("labels", axis=1)
+            x_train = x_train.drop("Id", axis=1)
+            columns = x_train.columns
+            print("DATA BALANCING")
+            x_train_array = x_train.to_numpy()
+            sm = SMOTE()
+            x_train_array_bal, y_train_bal = sm.fit_resample(
+                x_train_array, y_train)
+            df = pd.DataFrame(x_train_array_bal)
+            df.columns = columns
+            df.insert(loc=len(df.columns), column="labels", value=y_train_bal)
+            df.to_csv(pathTrain, index=False)
+            addId(pathTrain, pathTrain)
+    except Exception as e:
+        print(e)
 
     # Classificazione
     if model != "None":

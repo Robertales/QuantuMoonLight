@@ -1,4 +1,6 @@
 import time
+from pathlib import Path
+
 import pandas as pd
 from matplotlib import pyplot as plt
 from qiskit import QuantumCircuit
@@ -99,110 +101,114 @@ class myNeuralNetworkClassifier:
             circuit_classifier = NeuralNetworkClassifier(
                 neural_network=circuit_qnn, optimizer=GradientDescent(maxiter=int(max_iter)), loss=str(loss)
             )
-        # training
-        print("Running...")
-        start_time = time.time()
-        circuit_classifier.fit(train_features, train_labels)
-        training_time = time.time() - start_time
-        print("Train effettuato in " + str(training_time))
 
-        # test
-        start_time = time.time()
-        test_prediction = circuit_classifier.predict(test_features)
-        testing_time = time.time() - start_time
-        accuracy = accuracy_score(test_labels, test_prediction)
-        precision = precision_score(test_labels, test_prediction, average="weighted", zero_division=0)
-        recall = recall_score(test_labels, test_prediction, average="weighted")
-        f1 = f1_score(test_labels, test_prediction, average="weighted")
-        result["f1"] = f1
-        result["testing_precision"] = precision
-        result["testing_recall"] = recall
-        result["testing_accuracy"] = accuracy
+        try:
+            # training
+            print("Running...")
+            start_time = time.time()
+            circuit_classifier.fit(train_features, train_labels)
+            training_time = time.time() - start_time
+            print("Train effettuato in " + str(training_time))
 
-        # prediction
-        start_time = time.time()
-        predicted_labels = circuit_classifier.predict(prediction_data)
-        total_time = time.time() - start_time
-        print("Prediction effettuata in " + str(total_time))
-        result["predicted_labels"] = np.array(predicted_labels)
+            # test
+            start_time = time.time()
+            test_prediction = circuit_classifier.predict(test_features)
+            testing_time = time.time() - start_time
+            accuracy = accuracy_score(test_labels, test_prediction)
+            precision = precision_score(test_labels, test_prediction, average="weighted", zero_division=0)
+            recall = recall_score(test_labels, test_prediction, average="weighted")
+            f1 = f1_score(test_labels, test_prediction, average="weighted")
+            result["f1"] = f1
+            result["testing_precision"] = precision
+            result["testing_recall"] = recall
+            result["testing_accuracy"] = accuracy
 
-        result["total_time"] = str(testing_time + training_time)[0:6]
-        result["training_time"] = str(training_time)[0:6]
+            # prediction
+            start_time = time.time()
+            predicted_labels = circuit_classifier.predict(prediction_data)
+            total_time = time.time() - start_time
+            print("Prediction effettuata in " + str(total_time))
+            result["predicted_labels"] = np.array(predicted_labels)
 
-        labels = np.unique(train_labels)
-        occurrences = {}
-        for i in train_labels.data:
-            if i in occurrences:
-                occurrences[i] += 1
-            else:
-                occurrences[i] = 1
-        sizes = occurrences.values()
+            result["total_time"] = str(testing_time + training_time)[0:6]
+            result["training_time"] = str(training_time)[0:6]
 
-        fig1, ax1 = plt.subplots()
-        ax1.pie(sizes, labels=labels, autopct='%1.1f%%')
-        ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+            labels = np.unique(train_labels)
+            occurrences = {}
+            for i in train_labels.data:
+                if i in occurrences:
+                    occurrences[i] += 1
+                else:
+                    occurrences[i] = 1
+            sizes = occurrences.values()
 
-        plt.show()
+            fig1, ax1 = plt.subplots()
+            ax1.pie(sizes, labels=labels, autopct='%1.1f%%')
+            ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
-        # Each attribute we'll plot in the radar chart.
-        labels = ['Precision', 'Recall', 'Accuracy', 'f1']
-        values = [precision * 100, recall * 100, accuracy * 100, f1 * 100]
-        # Number of variables we're plotting.
-        num_vars = len(labels)
-        print(values)
-        # Split the circle into even parts and save the angles
-        # so we know where to put each axis.
-        angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+            plt.show()
 
-        # ax = plt.subplot(polar=True)
-        fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+            # Each attribute we'll plot in the radar chart.
+            labels = ['Precision', 'Recall', 'Accuracy', 'f1']
+            values = [precision * 100, recall * 100, accuracy * 100, f1 * 100]
+            # Number of variables we're plotting.
+            num_vars = len(labels)
+            print(values)
+            # Split the circle into even parts and save the angles
+            # so we know where to put each axis.
+            angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
 
-        # Draw the outline of our data.
-        ax.plot(angles, values, color='#1aaf6c', linewidth=1)
-        # Fill it in.
-        ax.fill(angles, values, color='#1aaf6c', alpha=0.25)
+            # ax = plt.subplot(polar=True)
+            fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
 
-        # Fix axis to go in the right order and start at 12 o'clock.
-        ax.set_theta_offset(np.pi / 2)
-        ax.set_theta_direction(-1)
+            # Draw the outline of our data.
+            ax.plot(angles, values, color='#1aaf6c', linewidth=1)
+            # Fill it in.
+            ax.fill(angles, values, color='#1aaf6c', alpha=0.25)
 
-        # Draw axis lines for each angle and label.
-        ax.set_thetagrids(np.degrees(angles), labels)
+            # Fix axis to go in the right order and start at 12 o'clock.
+            ax.set_theta_offset(np.pi / 2)
+            ax.set_theta_direction(-1)
 
-        # Go through labels and adjust alignment based on where
-        # it is in the circle.
-        for label, angle in zip(ax.get_xticklabels(), angles):
-            if angle in (0, np.pi):
-                label.set_horizontalalignment('center')
-            elif 0 < angle < np.pi:
-                label.set_horizontalalignment('left')
-            else:
-                label.set_horizontalalignment('right')
+            # Draw axis lines for each angle and label.
+            ax.set_thetagrids(np.degrees(angles), labels)
 
-        # Ensure radar goes from 0 to 100.
-        ax.set_ylim(0, 100)
-        # You can also set gridlines manually like this:
-        # ax.set_rgrids([20, 40, 60, 80, 100])
+            # Go through labels and adjust alignment based on where
+            # it is in the circle.
+            for label, angle in zip(ax.get_xticklabels(), angles):
+                if angle in (0, np.pi):
+                    label.set_horizontalalignment('center')
+                elif 0 < angle < np.pi:
+                    label.set_horizontalalignment('left')
+                else:
+                    label.set_horizontalalignment('right')
 
-        # Set position of y-labels (0-100) to be in the middle
-        # of the first two axes.
-        ax.set_rlabel_position(180 / num_vars)
+            # Ensure radar goes from 0 to 100.
+            ax.set_ylim(0, 100)
+            # You can also set gridlines manually like this:
+            # ax.set_rgrids([20, 40, 60, 80, 100])
 
-        # Add some custom styling.
-        # Change the color of the tick labels.
-        ax.tick_params(colors='#222222')
-        # Make the y-axis (0-100) labels smaller.
-        ax.tick_params(axis='y', labelsize=8)
-        # Change the color of the circular gridlines.
-        ax.grid(color='#AAAAAA')
-        # Change the color of the outermost gridline (the spine).
-        ax.spines['polar'].set_color('#222222')
-        # Change the background color inside the circle itself.
-        ax.set_facecolor('#FAFAFA')
+            # Set position of y-labels (0-100) to be in the middle
+            # of the first two axes.
+            ax.set_rlabel_position(180 / num_vars)
 
-        # Lastly, give the chart a title and give it some padding
-        ax.set_title('QSVC metrics', y=1.08)
-        plt.show()
-        plt.savefig(Path(pathTest).parent / 'graphClassifier', dpi=150)
+            # Add some custom styling.
+            # Change the color of the tick labels.
+            ax.tick_params(colors='#222222')
+            # Make the y-axis (0-100) labels smaller.
+            ax.tick_params(axis='y', labelsize=8)
+            # Change the color of the circular gridlines.
+            ax.grid(color='#AAAAAA')
+            # Change the color of the outermost gridline (the spine).
+            ax.spines['polar'].set_color('#222222')
+            # Change the background color inside the circle itself.
+            ax.set_facecolor('#FAFAFA')
 
+            # Lastly, give the chart a title and give it some padding
+            ax.set_title('QSVC metrics', y=1.08)
+            plt.show()
+            plt.savefig(Path(pathTest).parent / 'graphClassifier', dpi=150)
+        except Exception as e:
+            print(e)
+            result["error"] = 1
         return result
