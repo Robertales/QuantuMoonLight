@@ -165,9 +165,14 @@ def sendEmail():
     return render_template("sendEmail.html")
 
 
-@app.route("/blog")
-def blog():
-    posts = Article.query.order_by(Article.data.desc()).all()
+
+@app.route('/blog/<label>')
+@login_required
+def blog(label):
+    if label is None:
+        posts = Article.query.order_by(Article.data.desc()).all()
+    else:
+        posts = Article.query.filter_by(label=label).all()
 
     return render_template("blog.html", posts=posts)
 
@@ -258,7 +263,6 @@ def deleteArticle(article_id):
     article = Article.query.filter_by(id=article_id).one()
     db.session.delete(article)
     db.session.commit()
-
     return redirect(url_for('blog'))
 
 
@@ -267,7 +271,6 @@ def enableComment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).one()
     comment.authorized = True
     db.session.commit()
-
     return redirect(url_for('blog'))
 
 
