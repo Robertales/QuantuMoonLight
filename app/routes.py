@@ -167,7 +167,6 @@ def sendEmail():
 
 
 @app.route('/blog/<label>')
-@login_required
 def blogLabel(label):
     if label is None:
         posts = Article.query.order_by(Article.data.desc()).all()
@@ -178,7 +177,6 @@ def blogLabel(label):
 
 
 @app.route('/blog')
-@login_required
 def blog():
     posts = Article.query.order_by(Article.data.desc()).all()
     return render_template("blog.html", posts=posts)
