@@ -23,24 +23,85 @@
     $( document ).ready(function() {
 
         //per far si che funzioni in maniera logica i campi opzionali devono essere settati di default come invisibile , se si può fare in html meglio ma per ora c'è questo workaroudn (li rendi invisibili on page load con js
-          $("#nrColumns").hide()
-            $("label:has(input[name='nrColumns'])").hide()
-
+          $("#FeatureExtraction").hide()
+          $("#PrototypeSelection").hide()
+          $("#SelectQuantumSystem").hide()
+          $("#Hyperparameter").hide()
+          $("#kFoldValue").hide()
+            $("#label_kp").hide()
         // id del campo padre
    $('#checkPrototypeSelection').change(function(){
 // id del campo padre
    if (document.getElementById('checkPrototypeSelection').checked) {
        //id del campo che deve comparire scomparire
-           $("#nrColumns").show()
-           $("label:has(input[name='nrColumns'])").show()
+           $("#PrototypeSelection").show()
         } else {
-            $("#nrColumns").hide()
-            $("label:has(input[name='nrColumns'])").hide()
+            $("#PrototypeSelection").hide()
+        }
+});
+          $('input[name=reduceFE]').change(function(){
+// id del campo padre
+   if ((document.getElementById('checkFEPCA').checked) || (document.getElementById('checkFEKB').checked)) {
+       //id del campo che deve comparire scomparire
+           $("#FeatureExtraction").show()
+        } else {
+            $("#FeatureExtraction").hide()
         }
 
 });
+          $('#model').change(function(){
+// id del campo padre
+   if (document.getElementById('model').value === "None") {
+       //id del campo che deve comparire scomparire
+           $("#SelectQuantumSystem").hide()
+        } else {
+            $("#SelectQuantumSystem").show()
+        }
+});
+          $('#model').change(function(){
+// id del campo padre
+   if (document.getElementById('model').value === "Pegasos QSVC") {
+       //id del campo che deve comparire scomparire
+           $("#Hyperparameter").show()
+           $("#NeuralNetwork").hide()
+           $("#Pegasos").show()
+        }
+  else if (document.getElementById('model').value === "Quantum Neural Network") {
+       //id del campo che deve comparire scomparire
+           $("#Hyperparameter").show()
+           $("#NeuralNetwork").show()
+           $("#Pegasos").hide()
+        }
+   else if (document.getElementById('model').value != "Pegasos QSVC" && document.getElementById('model').value !="Quantum Neural Network" ) {
+       $("#Hyperparameter").hide()
+   }
+});
+          $('input[name=Radio]').change(function(){
+// id del campo padre
+   if ($("input[type='radio'][name='Radio']:checked").val() === "kFold") {
+       //id del campo che deve comparire scomparire
+           $("#kFoldValue").show()
+           $("#label_kp").show()
+        } else {
+            $("#kFoldValue").hide()
+            $("#label_kp").hide()
+        }
+});
+
+          $('#checkSplitTrain').change(function(){
+// id del campo padre
+   if (!document.getElementById('checkSplitTrain').checked) {
+       //id del campo che deve comparire scomparire
+           $("#validation").hide()
+        } else {
+            $("#validation").show()
+        }
+});
 
     });
+
+
+
 
 
     </script>
@@ -120,10 +181,10 @@
                                     </li>
                                     <li class="checkbox-group">
                                         <label>
-                                          <input type="radio" id="checkFeatureExtraction" name="reduceFE" value="PCA">  Reduce columns with Feature Extraction(PCA)
+                                          <input type="radio" id="checkFEPCA" name="reduceFE" value="PCA">  Reduce columns with Feature Extraction(PCA)
                                         </label>
                                          <label>
-                                            <input type="radio" id="checkKBest" name="reduceFE" value="KBest" > Reduce columns with Feature Selection(K Best)
+                                            <input type="radio" id="checkFEKB" name="reduceFE" value="KBest" > Reduce columns with Feature Selection(K Best)
                                         </label>
                                         <div id="tooltip">
                                             <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
@@ -191,7 +252,7 @@
                                     <div class = "card card-body" id = "validation"> Validation
                                         <label><input type="radio" class="AdvancedOption" id="checkSimpleSplit" name="Radio" value="simpleSplit" checked>   Simple Train-Test Split</label>
                                     <label><input type="radio" class="AdvancedOption" id="checkKFold" name="Radio" value="kFold">  K-fold Cross Validation </label>
-                                    <label>Insert k parameter:   <input type="number" max="10000" value="10" id="kFoldValue" name="kFoldValue" min="10" style="border: 0.1em solid grey"> </label>
+                                    <label id="label_kp">Insert k parameter:   <input type="number" max="10000" value="10" id="kFoldValue" name="kFoldValue" min="10" style="border: 0.1em solid grey"> </label>
                                    </div>
 
                                     <div class="card card-body" id = "Preprocessing"> Preprocessing
@@ -221,19 +282,19 @@
                                                                         <option value="ADAM">ADAM</option>
                                                                         <option value="GradientDescent">Gradient Descent </option>
                                                                         <option value="COBYLA">COBYLA</option>
-                                                                    </select>
+                                                                    </select></label>
                                     <label>Insert NN loss function:     <select name="loss" id="loss" style="border: 0.1em solid grey">
                                                                             <option value="squared_error">Squared Error </option>
                                                                             <option value="absolute_error">Absolute Error </option>
-                                                                        </select>
+                                                                        </select></label>
 
                                     <label>Insert max iterations optimizer:    <input type="number" max="10000" min="10" value="100" id="max_iter" name="max_iter" style="border: 0.1em solid grey"></label>
-                                        </div>
+                                    </div>
 
                                     </div>
                                     <div class ="card card-body" id = "SelectQuantumSystem">
                                     {% if current_user.isResearcher %}
-                                    <label>Select quantum system: <select name="backend" id="backend" style="border: 0.1em solid grey" >
+                                    <label>Select quantum system: <select name="backend" id="backend" style="border: 0.1em solid grey" > <!-- da fixare il width, ricercatore -->
                                                                 <option value="backend">Least Busy IBM Backend</option>
                                                                 <option value="aer_simulator">IBM Aer Simulator; Qubit: 32 </option>
                                                                 <option value="ibm_washington">IBM Washington; Processor type: Eagle R1; Qubit: 127 </option>
@@ -245,7 +306,7 @@
                                                                 <option value="ibmq_armonk">IBMQ Armonk; Processor type: Canary r1.2; Qubit: 1  </option>
                                                         </select></label>
                                     {% else %}
-                                    <label>Select quantum system: <select name="backend" id="backend" style="border: 0.1em solid grey">
+                                    <label>Select quantum system: <select name="backend" id="backend" style="max-width: 50%;"> <!-- da fixare il width -->
                                                                 <option value="backend">Least Busy IBM Backend</option>
                                                                 <option value= "aer_simulator">aer_simulator; Qubit: 16 </option>
                                                                 <option value="ibmq_manila">IBMQ Manila; Processor type: Falcon r5.11L;	Qubit: 5 </option>
