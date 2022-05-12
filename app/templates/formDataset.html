@@ -51,7 +51,7 @@
 });
           $('#model').change(function(){
 // id del campo padre
-   if (document.getElementById('model').value === "None") {
+   if ((document.getElementById('model').value === "None") || (document.getElementById('model').value === "SVC")|| (document.getElementById('model').value === "K Neighbors Classifier")|| (document.getElementById('model').value === "Decision Tree Classifier")|| (document.getElementById('model').value === "Naive Bayes")|| (document.getElementById('model').value === "Random Forest Classifier")|| (document.getElementById('model').value === "SVR")|| (document.getElementById('model').value === "Linear Regression")){
        //id del campo che deve comparire scomparire
            $("#SelectQuantumSystem").hide()
         } else {
@@ -251,21 +251,96 @@
                                 <div class="card card-body">
                                     <div class = "card card-body" id = "validation"> Validation
                                         <label><input type="radio" class="AdvancedOption" id="checkSimpleSplit" name="Radio" value="simpleSplit" checked>   Simple Train-Test Split</label>
+
+                                        <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                     <label><input type="radio" class="AdvancedOption" id="checkKFold" name="Radio" value="kFold">  K-fold Cross Validation </label>
+
+                                          <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                    </div>
+
                                     <label id="label_kp">Insert k parameter:   <input type="number" max="10000" value="10" id="kFoldValue" name="kFoldValue" min="10" style="border: 0.1em solid grey"> </label>
+
+
+
                                    </div>
+
 
                                     <div class="card card-body" id = "Preprocessing"> Preprocessing
                                         <label><input type="checkbox" class="AdvancedOption" id="imputation" name="imputation" value="imputation">  Data Imputation</label>
+
+                                        <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                         <label><input type="checkbox" class="AdvancedOption" id="balancing" name="balancing" value="balancing">  Data Balancing</label>
+
+                                        <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                     <label><input type="radio" class="AdvancedOption" id="MinMax" name="scaling" value="MinMax">   MinMax Scaling</label>
+
+                                        <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                     <label><input type="radio" class="AdvancedOption" id="Standard" name="scaling" value="Standard">  Standard Scaling </label>
+
+                                        <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
 
                                         <div class ="card card-body" id = "FeatureExtraction"> Feature Extraction
                                              <label>Insert nr of columns to reduce:   <input type="number" max="10000" min="2" value="2" id="nrColumns" name="nrColumns" style="border: 0.1em solid grey"></label><br>
+
+                                            <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                     </div>
                                         <div class ="card card-body" id = "PrototypeSelection"> Prototype Selection
                                             <label>Insert nr of rows to reduce:    <input type="number" max="10000" min="2" value="100" id="nrRows" name="nrRows" style="border: 0.1em solid grey"></label>
+
+                                            <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                         </div>
 
                                     </div>
@@ -273,7 +348,25 @@
                                     <div class ="card card-body" id = "Hyperparameter"> Hyperparameter
                                         <div class ="card card-body" id = "Pegasos"> Pegasos QSVC
                                     <label>Insert PegasosQSVC C:    <input type="number" max="10000" min="2" value="1000" id="C" name="C" style="border: 0.1em solid grey"></label>
+
+                                            <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                     <label>Insert PegasosQSVC tau:    <input type="number" max="10000" min="2" value="100" id="tau" name="tau" style="border: 0.1em solid grey"></label>
+
+                                            <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                         </div>
 
                                         <div class ="card card-body" id = "NeuralNetwork"> Quantum Neural Network
@@ -283,13 +376,40 @@
                                                                         <option value="GradientDescent">Gradient Descent </option>
                                                                         <option value="COBYLA">COBYLA</option>
                                                                     </select></label>
+
+                                            <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                     <label>Insert NN loss function:     <select name="loss" id="loss" style="border: 0.1em solid grey">
                                                                             <option value="squared_error">Squared Error </option>
                                                                             <option value="absolute_error">Absolute Error </option>
                                                                         </select></label>
 
+                                            <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                     <label>Insert max iterations optimizer:    <input type="number" max="10000" min="10" value="100" id="max_iter" name="max_iter" style="border: 0.1em solid grey"></label>
+
+                                            <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                     </div>
+
 
                                     </div>
                                     <div class ="card card-body" id = "SelectQuantumSystem">
@@ -313,6 +433,15 @@
                                                                 <option value="ibmq_armonk">IBMQ Armonk; Processor type: Canary r1.2; Qubit: 1  </option>
                                                         </select></label>
                                     {% endif %}
+
+                                        <div id="tooltip">
+                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                        </div>
+
                                     </div>
 
                                 </div>
