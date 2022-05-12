@@ -168,13 +168,21 @@ def sendEmail():
 
 @app.route('/blog/<label>')
 @login_required
-def blog(label):
+def blogLabel(label):
     if label is None:
         posts = Article.query.order_by(Article.data.desc()).all()
     else:
         posts = Article.query.filter_by(label=label).all()
 
     return render_template("blog.html", posts=posts)
+
+
+@app.route('/blog')
+@login_required
+def blog():
+    posts = Article.query.order_by(Article.data.desc()).all()
+    return render_template("blog.html", posts=posts)
+
 
 
 @app.route("/ArticleApproval")
