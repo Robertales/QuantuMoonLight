@@ -20,19 +20,54 @@
     <script src="../static/js/script.js"></script><![endif]-->
 </head>
 <body>
+<style>
+    #postBut{
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+
+    }
+
+    #sortTab{
+        width: 30%;
+        margin: 1em;
+        text-align: center;
+        align-items: center;
+    }
+
+    #btnSort{
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+</style>
 <script src="https://kit.fontawesome.com/b0f51da084.js" crossorigin="anonymous"></script>
 {% extends "base.html" %}
 {% block content %}
 
 <div align="center">
     <h1 id="blog_title">QUANTUM COMMUNITY</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dapibus, augue non sagittis varius, elit neque sagittis risus, eu varius.</p>
 </div>
 
 <br>
+<div>
+    <form class="sortBy">
+        <table id="sortTab">
+            <thead>
+              <tr>
+                <td><h4 id="blog_title">SORT BY: </h4></td>
+                <td><button id="btnSort" class="btn d-flex align-items-center" type="submit">EXPERIMENT</button></td>
+                <td><button id="btnSort" class="btn d-flex align-items-center" type="submit">ARTICLE</button></td>
+              </tr>
+            </thead>
+        </table>
+    </form>
+</div>
+
 <div class="create_post">
-    <h5 id="username">{{current_user.username}}</h5>
     <form action="{{url_for("add")}}">
-    <button class="btn" type="submit">Create New Post</button>
+        <button id="postBut" class="btn" type="submit">Create New Post</button>
     </form>
 </div>
 

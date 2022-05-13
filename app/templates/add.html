@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Blog</title>
+    <title>Add Post</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
@@ -44,7 +44,7 @@
           <form name="addForm" id="addForm" method="POST" action="{{url_for('addpost')}}" >
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
-                <label>Title</label>
+                <h3>Title</h3>
                 <input type="text" class="form-control" placeholder="Title" name="title" id="title"   required data-validation-required-message="Please enter a title.">
                 <p class="help-block text-danger"></p>
               </div>
