@@ -194,15 +194,20 @@ class UtenteControl:
                         'reducedTrainingPS.csv')
                 if exists(
                         filepath /
-                        "yourPCA_Test.csv") and exists(
+                        "Test_Feature_Extraction.csv") and exists(
                     filepath /
-                    "yourPCA_Train.csv"):
+                    "Train_Feature_Extraction.csv"):
                     zip.write(
-                        filepath / 'yourPCA_Test.csv',
-                        'yourPCA_Test.csv')
+                        filepath / 'Test_Feature_Extraction.csv',
+                        'Test_Feature_Extraction.csv')
                     zip.write(
-                        filepath / 'yourPCA_Train.csv',
-                        'yourPCA_Train.csv')
+                        filepath / 'Train_Feature_Extraction.csv',
+                        'Train_Feature_Extraction.csv')
+                if exists(filepath / "Train_Feature_Selection.csv"):
+                    zip.write(filepath / "Train_Feature_Selection.csv", "Train_Feature_Selection.csv")
+                if exists(filepath / "Test_Feature_Selection.csv"):
+                    zip.write(filepath / "Test_Feature_Selection.csv", "Test_Feature_Selection.csv")
+
                 if exists(filepath / "TrainImputation.csv"):
                     zip.write(filepath / "TrainImputation.csv", "TrainImputation.csv")
                 if exists(filepath / "TestImputation.csv"):

@@ -14,13 +14,15 @@ from app.source.utils import utils
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
 
-def callFeatureExtraction(
-        featureExtraction: str,
+def callFeatureExtraction_Selection(
+        featureSelection: bool,
+        featureExtraction: bool,
         pathTrain: pathlib.Path,
         pathTest: pathlib.Path,
         pathToPredict: pathlib.Path,
         classification: bool,
-        n_components=2,
+        n_componentsFE: int,
+        n_componentsFS: int
 ):
     """
     This function executes the Feature Extraction on the given dataset
@@ -34,17 +36,15 @@ def callFeatureExtraction(
     :return: string that points to the location of the datasets preprocessed with FE
     :rtype: pathlib.Path, pathlib.Path
     """
-    print("Into callFeatureExtraction...")
+    print("Into callFeatureExtraction_Selection...")
     pathFileYourPCA = pathTrain.parent
 
     # A comma-separated values (csv) file is returned as a DataFrame: two-dimensional data structure with labeled axes.
     df_train = pd.read_csv(pathTrain)
-    print(df_train)
     X_train = df_train.drop("labels", 1)  # Dataset senza colonna labels, su cui fare PCA
     Y_train = df_train["labels"]  # Solo le label, da reinserire dopo la PCA
 
     df_test = pd.read_csv(pathTest)
-    print(df_test)
     X_test = df_test.drop("labels", 1)  # Dataset senza colonna labels, su cui fare PCA
     Y_test = df_test["labels"]  # Solo le label, da reinserire dopo la PCA
 
@@ -52,52 +52,61 @@ def callFeatureExtraction(
     sc = MinMaxScaler(feature_range=(0, 1))
     X_train_scaled = sc.fit_transform(X_train)
     X_test_scaled = sc.fit_transform(X_test)
-    print(X_train_scaled)
-    print(X_test_scaled)
 
-    global X_train_PCA
-    global X_test_PCA
-    global pca
-    if featureExtraction == "PCA":
+    global pca, kbest, pathFileYourPCATrain, pathFileYourPCATest, PCA_df_train, X_test_, X_train_
+
+    if featureSelection:
+        kbest = SelectKBest(score_func=chi2, k=n_componentsFS)
+        X_train_ = kbest.fit_transform(X_train_scaled, Y_train)
+        X_test_ = kbest.fit_transform(X_test_scaled, Y_test)
+
+        # Restore columns name for X_train and relative labels from Y_train
+        PCA_df_train = pd.DataFrame(data=X_train_, columns=utils.createFeatureList(n_componentsFS))
+        PCA_df_train = pd.concat([PCA_df_train, Y_train], axis=1)
+        # Restore columns name for X_test and relative labels from Y_test
+        PCA_df_test = pd.DataFrame(data=X_test_, columns=utils.createFeatureList(n_componentsFS))
+        PCA_df_test = pd.concat([PCA_df_test, Y_test], axis=1)
+
+        # save output in csv
+        pathFileYourPCATrain = pathFileYourPCA / "Train_Feature_Selection.csv"
+        pathFileYourPCATest = pathFileYourPCA / "Test_Feature_Selection.csv"
+        PCA_df_train.to_csv(pathFileYourPCATrain, index=False)
+        PCA_df_test.to_csv(pathFileYourPCATest, index=False)
+
+    if featureExtraction:
         # Feature Extraction
-        pca = PCA(n_components)
+        pca = PCA(n_componentsFE)
         pca.fit(X_train_scaled)
-        X_train_PCA = pca.transform(X_train_scaled)
-        X_test_PCA = pca.transform(X_test_scaled)
-    elif featureExtraction == "KBest":
-        pca = SelectKBest(score_func=chi2, k=n_components)
-        X_train_PCA = pca.fit_transform(X_train_scaled, Y_train)
-        X_test_PCA = pca.fit_transform(X_test_scaled, Y_test)
+        X_train_ = pca.transform(X_train_scaled)
+        X_test_ = pca.transform(X_test_scaled)
 
+        # Restore columns name for X_train and relative labels from Y_train
+        PCA_df_train = pd.DataFrame(data=X_train_, columns=utils.createFeatureList(n_componentsFE))
+        PCA_df_train = pd.concat([PCA_df_train, Y_train], axis=1)
+        # Restore columns name for X_test and relative labels from Y_test
+        PCA_df_test = pd.DataFrame(data=X_test_, columns=utils.createFeatureList(n_componentsFE))
+        PCA_df_test = pd.concat([PCA_df_test, Y_test], axis=1)
 
-    # Restore columns name for X_train and relative labels from Y_train
-    PCA_df_train = pd.DataFrame(data=X_train_PCA, columns=utils.createFeatureList(n_components))
-    PCA_df_train = pd.concat([PCA_df_train, Y_train], axis=1)
-    # Restore columns name for X_test and relative labels from Y_test
-    PCA_df_test = pd.DataFrame(data=X_test_PCA, columns=utils.createFeatureList(n_components))
-    PCA_df_test = pd.concat([PCA_df_test, Y_test], axis=1)
+        # save output in csv
+        pathFileYourPCATrain = pathFileYourPCA / "Train_Feature_Extraction.csv"
+        pathFileYourPCATest = pathFileYourPCA / "Test_Feature_Extraction.csv"
+        PCA_df_train.to_csv(pathFileYourPCATrain, index=False)
+        PCA_df_test.to_csv(pathFileYourPCATest, index=False)
 
-    # save output in csv
-    pathFileYourPCATrain = pathFileYourPCA / "yourPCA_Train.csv"
-    pathFileYourPCATest = pathFileYourPCA / "yourPCA_Test.csv"
-    PCA_df_train.to_csv(pathFileYourPCATrain, index=False)
-    PCA_df_test.to_csv(pathFileYourPCATest, index=False)
-
-    print("Feature Extraction result for: " + pathTrain.__str__())
-    print(PCA_df_train.head())
-    print("Feature Extraction result for: " + pathTest.__str__())
-    print(PCA_df_test.head())
 
     if classification:
         df_to_predict = pd.read_csv(pathToPredict, header=None)
         df_to_predict.columns = X_train.columns
         print(df_to_predict)
 
-
         # Scaling
         X_to_predict_scaled = sc.transform(df_to_predict)
         # Extraction with PCA
-        X_to_predict_PCA = pca.transform(X_to_predict_scaled)
+        global X_to_predict_PCA
+        if featureExtraction:
+            X_to_predict_PCA = pca.transform(X_to_predict_scaled)
+        if featureSelection:
+            X_to_predict_PCA = kbest.transform(X_to_predict_scaled)
 
         PCA_df_to_predict = pd.DataFrame(data=X_to_predict_PCA)
 
@@ -110,6 +119,7 @@ def callFeatureExtraction(
         print("Feature Extraction result for: " + pathToPredict.__str__())
         print(PCA_df_to_predict.head())
 
+    n_components = utils.numberOfColumns(pathFileYourPCATrain)
     if n_components == 2:
         plt.figure(dpi=150, facecolor='w', edgecolor='k')
         classes = Y_train.unique()  # find nique values for labels

@@ -364,6 +364,8 @@ def smista():
     print("Prototype Selection: ", prototypeSelection)
     featureExtraction = request.form.get("reduceFE")
     print("Feature Extraction: ", featureExtraction)
+    featureSelection = request.form.get("reduceFS")
+    print("Feature Selection: ", featureSelection)
     model = request.form.get("model")
     print("model: ", model)
     loss = request.form.get("loss")
@@ -398,8 +400,11 @@ def smista():
     numRawsPS = request.form.get("nrRows", type=int)
     print("numRawsPS:  ", numRawsPS)
     # numero di colonne dopo la Feature Extraction con PCA
-    numColsFE = request.form.get("nrColumns", type=int)
+    numColsFE = request.form.get("nrColumnsFE", type=int)
     print("numColsFE: ", numColsFE)
+    # numero di colonne dopo la Feature Selection con KBest
+    numColsFS = request.form.get("nrColumnsFS", type=int)
+    print("numColsFE: ", numColsFS)
 
     assert isinstance(current_user, User)
     salvataggiodatabase = Dataset(
@@ -638,8 +643,10 @@ def smista():
             userpathToPredict=userpathToPredict,
             prototypeSelection=prototypeSelection,
             featureExtraction=featureExtraction,
+            featureSelection=featureSelection,
             numRawsPS=numRawsPS,
             numColsFE=numColsFE,
+            numColsFS=numColsFS,
             model=model
         ),
     )

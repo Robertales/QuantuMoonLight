@@ -7,7 +7,7 @@ from app import app
 from app.source.preprocessingDataset import (
     callPS,
     aggId,
-    featureExtractionPCA,
+    featureExtraction_Selection,
 )
 from app.source.utils import utils
 
@@ -22,8 +22,10 @@ class PreprocessingControl:
         userpathToPredict = request.form.get("userpathToPredict")
         prototypeSelection = request.form.get("prototypeSelection")
         featureExtraction = request.form.get("featureExtraction")
+        featureSelection = request.form.get("featureSelection")
         numRawsPS = request.form.get("numRawsPS", type=int)
         numColsFE = request.form.get("numColsFE", type=int)
+        numColsFS = request.form.get("numColsFS", type=int)
         model = request.form.get("model")
         if model != "None":
             classification = True
@@ -52,6 +54,9 @@ class PreprocessingControl:
         if featureExtraction and numColsFE > numCols:
             print("Impossibile ridurre le colonne: numColsFE > numColsData")
             return Response(status=400)
+        if featureSelection and numColsFS > numCols:
+            print("Impossibile ridurre le colonne: numColsFS > numColsData")
+            return Response(status=400)
         if prototypeSelection and numRawsPS > numRaws:
             print("Impossibile ridurre le righe: numRawsPS > numRawsData ")
             return Response(status=400)
@@ -61,8 +66,10 @@ class PreprocessingControl:
             userpathToPredict,
             prototypeSelection,
             featureExtraction,
+            featureSelection,
             numRawsPS,
             numColsFE,
+            numColsFS,
             classification,
         )
 
@@ -80,8 +87,10 @@ class PreprocessingControl:
             userpathToPredict: str,
             prototypeSelection: bool,
             featureExtraction: bool,
+            featureSelection: bool,
             numRowsPS: int,
             numColsFE: int,
+            numColsFS: int,
             classification: bool,
     ):
         """
@@ -109,14 +118,16 @@ class PreprocessingControl:
                 numRowsPS,
             )  # create 'reducedTrainingPS.csv'
 
-        if featureExtraction:
-            pathTrain, pathTest = featureExtractionPCA.callFeatureExtraction(
+        if featureExtraction or featureSelection:
+            pathTrain, pathTest = featureExtraction_Selection.callFeatureExtraction_Selection(
+                featureSelection,
                 featureExtraction,
                 pathTrain,
                 pathTest,
                 userpathToPredict,
                 classification,
                 numColsFE,
+                numColsFS
             )  # create 'yourPCA_Train', 'yourPCA_Test' and, in case classification=True, 'doPredictionFE.csv'
 
             aggId.addId(
