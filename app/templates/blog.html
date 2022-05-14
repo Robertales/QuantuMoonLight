@@ -52,17 +52,19 @@
 
 <br>
 <div>
-    <form class="sortBy">
         <table id="sortTab">
             <thead>
               <tr>
-                <td><h4 id="blog_title">SORT BY: </h4></td>
-                <td><button id="btnSort" class="btn d-flex align-items-center" type="submit">EXPERIMENT</button></td>
-                <td><button id="btnSort" class="btn d-flex align-items-center" type="submit">ARTICLE</button></td>
+                <td><h4 id="blog_sort">SORT BY: </h4></td>
+                <td>
+                    <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort1" class="btn d-flex align-items-center" >EXPERIMENT</button> </a>
+                </td>
+                <td>
+                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort2" class="btn d-flex align-items-center">ARTICLE</button> </a>
+                </td>
               </tr>
             </thead>
         </table>
-    </form>
 </div>
 
 <div class="create_post">
