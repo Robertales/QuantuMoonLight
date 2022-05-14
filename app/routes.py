@@ -165,22 +165,15 @@ def sendEmail():
     return render_template("sendEmail.html")
 
 
-
-@app.route('/blog/<label>')
-def blogLabel(label):
+@app.route("/blog/<string:label>")
+@app.route("/blog/")
+def blog(label=None):
     if label is None:
         posts = Article.query.order_by(Article.data.desc()).all()
     else:
-        posts = Article.query.filter_by(label=label).all()
+        posts = Article.query.filter_by(label=label).order_by(Article.data.desc()).all()
 
     return render_template("blog.html", posts=posts)
-
-
-@app.route('/blog')
-def blog():
-    posts = Article.query.order_by(Article.data.desc()).all()
-    return render_template("blog.html", posts=posts)
-
 
 
 @app.route("/ArticleApproval")
@@ -304,9 +297,9 @@ def addcomment():
 @app.route('/images/<path:filename>', methods=['GET'])
 def uploaded_files(filename):
     path = (
-        pathlib.Path(__file__).parents[0]
-        / "static"
-        / "images"
+            pathlib.Path(__file__).parents[0]
+            / "static"
+            / "images"
     )
     return send_from_directory(path, filename)
 
@@ -319,9 +312,9 @@ def upload():
     if extension not in ['jpg', 'gif', 'png', 'jpeg']:
         return upload_fail(message='Image only!')
     uploaddir = (
-        pathlib.Path(__file__).parents[0]
-        / "static"
-        / "images"
+            pathlib.Path(__file__).parents[0]
+            / "static"
+            / "images"
     )
 
     f.save(os.path.join(uploaddir, f.filename))
@@ -748,10 +741,10 @@ def upload(file, file1, file2, idTrainSet):
     if file is None:
         return -1
     uploaddir = (
-        pathlib.Path(__file__).parents[1]
-        / "upload_dataset"
-        / current_user.email
-        / str(idTrainSet)
+            pathlib.Path(__file__).parents[1]
+            / "upload_dataset"
+            / current_user.email
+            / str(idTrainSet)
     )
     if not uploaddir.exists():
         uploaddir.mkdir()
@@ -769,7 +762,7 @@ def upload(file, file1, file2, idTrainSet):
         return -1
     if file1.filename != "":
         userpathTest = uploaddir / \
-            os.path.basename(pathlib.Path(file1.filename))
+                       os.path.basename(pathlib.Path(file1.filename))
         file1.save(userpathTest)
     if file1.content_length > 80000000:
         return -1
@@ -785,7 +778,7 @@ def upload(file, file1, file2, idTrainSet):
         return -1
     if file2.filename != "" != 0:
         userpathToPredict = uploaddir / \
-            os.path.basename(pathlib.Path(file2.filename))
+                            os.path.basename(pathlib.Path(file2.filename))
         file2.save(userpathToPredict)
     if file2.content_length > 80000000:
         return -1
