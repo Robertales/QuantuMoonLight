@@ -107,6 +107,7 @@ class myPegasosQSVC:
             ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
             plt.show()
+            plt.savefig(Path(pathTest).parent / 'graphLabels', dpi=150)
 
             # Each attribute we'll plot in the radar chart.
             labels = ['Precision', 'Recall', 'Accuracy', 'f1']

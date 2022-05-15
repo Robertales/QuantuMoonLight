@@ -85,6 +85,23 @@ class myQSVM:
             result["testing_accuracy"] = accuracy
             result["predicted_labels"] = predicted_labels
 
+            labels = np.unique(predicted_labels)
+            occurrences = {}
+            for i in predicted_labels.data:
+                if i in occurrences:
+                    occurrences[i] += 1
+                else:
+                    occurrences[i] = 1
+            sizes = occurrences.values()
+
+            fig1, ax1 = plt.subplots()
+            ax1.pie(sizes, labels=labels, autopct='%1.1f%%')
+            # Equal aspect ratio ensures that pie is drawn as a circle.
+            ax1.axis('equal')
+
+            plt.show()
+            plt.savefig(pathlib.Path(path_do_prediction).parent / 'graphLabels', dpi=150)
+
             # Each attribute we'll plot in the radar chart.
             labels = ['Precision', 'Recall', 'Accuracy', 'f1']
             values = [precision * 100, recall * 100, accuracy * 100, f1 * 100]

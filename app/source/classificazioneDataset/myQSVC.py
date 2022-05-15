@@ -106,6 +106,7 @@ class myQSVC:
             ax1.axis('equal')
 
             plt.show()
+            plt.savefig(Path(pathTest).parent / 'graphLabels', dpi=150)
 
             # Each attribute we'll plot in the radar chart.
             labels = ['Precision', 'Recall', 'Accuracy', 'f1']
