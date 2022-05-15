@@ -77,6 +77,10 @@ class classicRegressor:
 
             # prediction
             start_time = time.time()
+            if utils.numberOfColumns(path_predict) == 1:
+                prediction_data = prediction_data.reshape(-1, 1)
+            if utils.numberOfRows(path_predict) == 1:
+                prediction_data = prediction_data.reshape(1, -1)
             predicted_labels = model.predict(prediction_data)
             print(predicted_labels)
             total_time = time.time() - start_time

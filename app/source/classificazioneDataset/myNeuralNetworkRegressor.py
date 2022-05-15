@@ -58,7 +58,7 @@ class myNeuralNetworkRegressor:
 
         quantum_instance = QuantumInstance(backend)
 
-        feature_map = ZZFeatureMap(num_qubits)
+        feature_map = ZFeatureMap(num_qubits)
 
         # construct ansatz
         ansatz = RealAmplitudes(num_qubits, reps=1)
@@ -95,6 +95,10 @@ class myNeuralNetworkRegressor:
 
             # prediction
             start_time = time.time()
+            if utils.numberOfColumns(path_predict) == 1:
+                prediction_data = prediction_data.reshape(-1, 1)
+            if utils.numberOfRows(path_predict) == 1:
+                prediction_data = prediction_data.reshape(1, -1)
             predicted_labels = vqr.predict(prediction_data)
             prediction_time = time.time() - start_time
             total_time = time.time() - start
