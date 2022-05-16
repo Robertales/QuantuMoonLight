@@ -13,7 +13,7 @@ from app.source.utils import utils
 
 
 class classicClassifier:
-    def classify(pathTrain, pathTest, path_predict, model_name):
+    def classify(pathTrain, pathTest, path_predict, model_name, kernelSVC, C_SVC):
 
         print(pathTrain, pathTest, path_predict)
         data_train = pd.read_csv(pathTrain)
@@ -50,7 +50,7 @@ class classicClassifier:
 
         result = {}
 
-        model = SVC()
+        model = SVC(kernel=str(kernelSVC), C=int(C_SVC))
         if model_name == "K Neighbors Classifier":
             model = KNeighborsClassifier()
         elif model_name == "Naive Bayes":
