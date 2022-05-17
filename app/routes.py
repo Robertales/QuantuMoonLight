@@ -265,13 +265,19 @@ def deleteArticle(article_id):
     return redirect(url_for('blog'))
 
 
-@app.route('/enableComment/<int:comment_id>', methods=['POST'])
+@app.route('/enableComment/<int:comment_id>', methods=['POST', 'GET'])
 def enableComment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).one()
     comment.authorized = True
     db.session.commit()
     return redirect(url_for('blog'))
 
+@app.route('/deleteComment/<int:comment_id>', methods=['POST', 'GET'])
+def deleteComment(comment_id):
+    comment = Comment.query.filter_by(id=comment_id).one()
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(url_for('blog'))
 
 @app.route('/addcomment', methods=['POST'])
 @login_required

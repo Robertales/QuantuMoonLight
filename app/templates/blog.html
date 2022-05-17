@@ -50,6 +50,12 @@
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dapibus, augue non sagittis varius, elit neque sagittis risus, eu varius.</p>
 </div>
 
+<div class="create_post">
+    <form action="{{url_for("add")}}">
+        <button id="postBut" class="btn" type="submit">Create New Post</button>
+    </form>
+</div>
+
 <br>
 <div>
         <table id="sortTab">
@@ -67,22 +73,18 @@
         </table>
 </div>
 
-<div class="create_post">
-    <form action="{{url_for("add")}}">
-        <button id="postBut" class="btn" type="submit">Create New Post</button>
-    </form>
-</div>
+
 
 {% for Article in posts %}
 {% if Article.authorized %}
 <br>
 <div class="post-preview">
-    <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }}</p>
 
     <a href="{{ url_for('post', post_id=Article.id) }}">
         <h2 class="post-title">
-            {{ Article.title }}   {{Article.label}}
-        </h2>
+            {{ Article.title }} </h2>   <h6 class="post-title">{{Article.label}} </h6>
+    <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }} </p>
+
     </a>
     <!--<button onclick="Toggle1()" id="btnh1" class="btn-like" ><i class="fa-solid fa-heart"></i>-->
     {% if current_user.is_authenticated %}

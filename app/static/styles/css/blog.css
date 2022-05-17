@@ -50,6 +50,11 @@ div{ /* non funziona */
 {
     color: black;
 }
+
+.post-meta{
+     color: black;
+     text-align:right
+}
 .btn-like
 {
      background: transparent;

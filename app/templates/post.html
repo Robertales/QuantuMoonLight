@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Blog</title>
+    <title>QuantuMoonLight</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
@@ -41,9 +41,9 @@
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="post-heading">
               <h1>{{ post.title }}</h1>
-              <span class="meta">Posted by
-                {{ post.author }}
-                on {{ post.data.strftime('%B %d, %Y') }}</span>
+              <span class="meta"> <B>Posted by
+                {{ post.author }}</B>
+                on {{ post.data.strftime('%B %d, %Y') }} </span>
             </div>
           </div>
         </div>
@@ -73,17 +73,25 @@
                      {% for Comment in comments %}
                   {% if Comment.authorized or current_user.isAdmin %}
                   <li class="clearfix">
-				  <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
-				  <div class="post-comments">
-				      <p class="meta">{{ Comment.data.strftime('%B %d, %Y') }} <a href="#">{{ Comment.author }}</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p>
-                    {% if not Comment.authorized %} #if dove inserire i tasti per approvare
-                <h6>
-                 Commento non autorizzato inserire qui tasto
-              </h6>
+                   <div>
+                     <img src="../static/images/logos/logo.ico" class="avatar" alt="Image" style="width:50px;height:50px;">
+                     <B>{{ Comment.author }}</B> on {{ Comment.data.strftime('%B %d, %Y') }}:
+                   </div>
+                    {{ Comment.body }}
+                    <div class="post-comments">
+				   <!--   <p class="meta">{{ Comment.data.strftime('%B %d, %Y') }} <a href="#">{{ Comment.author }}</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p> !-->
+
+                      {% if not Comment.authorized %}
+
+                      <a href="{{url_for('enableComment', comment_id=Comment.id)}}">
+                        <button id="brnAppCom" type="submit" name="Approva" class="btn btn-success" >Approves</button>
+                      </a>
+                      <a href="{{url_for('deleteComment', comment_id=Comment.id)}}">
+                            <button name="Rifiuta" type="button" class="btn btn-warning">Refuses</button>
+                      </a>
+
                     {% endif %}
-				      <p>
-				          {{ Comment.body }}
-				      </p>
+
 				  </div>
 				  </ul>
 				</li>
