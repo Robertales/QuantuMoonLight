@@ -398,7 +398,15 @@ def smista():
     print("numColsFE: ", numColsFE)
     # numero di colonne dopo la Feature Selection con KBest
     numColsFS = request.form.get("nrColumnsFS", type=int)
-    print("numColsFE: ", numColsFS)
+    print("numColsFS: ", numColsFS)
+    kernelSVR = request.form.get("kernelSVR")
+    print("kernelSVR: ", kernelSVR)
+    kernelSVC = request.form.get("kernelSVC")
+    print("kernelSVC: ", kernelSVC)
+    C_SVC = request.form.get("C_SVC")
+    print("C_SVC: ", C_SVC)
+    C_SVR = request.form.get("C_SVR")
+    print("C_SVR: ", C_SVR)
 
     assert isinstance(current_user, User)
     salvataggiodatabase = Dataset(
@@ -691,10 +699,10 @@ def smista():
         else:
             email = current_user.email
 
-        if featureExtraction:
+        if featureExtraction or featureSelection:
             userpathToPredict = dataPath / "doPredictionFE.csv"
             features = utils.createFeatureList(
-                numColsFE
+                utils.numberOfColumns(userpathToPredict)
             )  # lista di features per la qsvm
         else:
             features = utils.createFeatureList(
@@ -717,6 +725,10 @@ def smista():
                 optimizer=optimizer,
                 loss=loss,
                 max_iter=max_iter,
+                kernelSVR=kernelSVR,
+                kernelSVC=kernelSVC,
+                C_SVC=C_SVC,
+                C_SVR=C_SVR,
                 id_dataset=salvataggiodatabase.id
             ),
         )

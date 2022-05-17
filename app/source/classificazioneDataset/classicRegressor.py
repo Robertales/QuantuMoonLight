@@ -11,7 +11,7 @@ from app.source.utils import utils
 
 
 class classicRegressor:
-    def classify(pathTrain, pathTest, path_predict, model_name):
+    def classify(pathTrain, pathTest, path_predict, model_name, kernelSVR, C_SVR):
 
         print(pathTrain, pathTest, path_predict)
         data_train = pd.read_csv(pathTrain)
@@ -48,7 +48,7 @@ class classicRegressor:
 
         result = {}
 
-        model = SVR()
+        model = SVR(kernel=str(kernelSVR), C=int(C_SVR))
         if model_name == "Linear Regression":
             model = LinearRegression()
 

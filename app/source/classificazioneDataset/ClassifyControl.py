@@ -14,6 +14,7 @@ from threading import Thread
 import flask
 from flask import request, Response
 from qiskit import IBMQ, Aer
+from qiskit.providers import Backend
 from qiskit.providers.ibmq import least_busy
 from app import app, db
 from app.source.classificazioneDataset.classicClassifier import classicClassifier
@@ -51,7 +52,10 @@ class ClassificazioneControl:
         optimizer = request.form.get("optimizer")
         loss = request.form.get("loss")
         max_iter = request.form.get("max_iter")
-
+        kernelSVR = request.form.get("kernelSVR")
+        kernelSVC = request.form.get("kernelSVC")
+        C_SVC = request.form.get("C_SVC")
+        C_SVR = request.form.get("C_SVR")
         id_dataset = request.form.get("id_dataset")
 
 
@@ -72,6 +76,10 @@ class ClassificazioneControl:
                 optimizer,
                 loss,
                 max_iter,
+                kernelSVR,
+                kernelSVC,
+                C_SVC,
+                C_SVR,
                 id_dataset))
         thread.setDaemon(True)
         thread.start()
@@ -93,6 +101,10 @@ class ClassificazioneControl:
             optimizer,
             loss,
             max_iter,
+            kernelSVR,
+            kernelSVC,
+            C_SVC,
+            C_SVR,
             id_dataset):
         """
         The function is called from classify_control(), anc starts the async thread to run the classification,
@@ -113,7 +125,7 @@ class ClassificazioneControl:
         """
         result: dict = ClassificazioneControl.classify(
             self, path_train, path_test, path_prediction, features, token, backend, model, C, tau, optimizer, loss,
-            max_iter, id_dataset)
+            max_iter, kernelSVR, kernelSVC, C_SVC, C_SVR, id_dataset)
         if result != 0:
             ClassificazioneControl.get_classified_dataset(
                 self, result, path_prediction, email)
@@ -133,8 +145,12 @@ class ClassificazioneControl:
             optimizer,
             loss,
             max_iter,
+            kernelSVR,
+            kernelSVC,
+            C_SVC,
+            C_SVR,
             id_dataset
-    ):
+        ):
         """
         This function connects to the IBM backend, handles IBM backend errors, executes the QSVM classification,
         and creates the result dataset (classifiedDataset.csv)
@@ -153,50 +169,53 @@ class ClassificazioneControl:
         result["error"] = 0
         result["model"] = model
         provider = ""
-        try:
-            IBMQ.enable_account(token)
-            provider = IBMQ.get_provider(hub="ibm-q")
-            IBMQ.disable_account()
-        except:
-            print("Error activating/deactivating IBM account")
-
         qubit = len(features)
-        try:
-            if (
-                    backend_selected
-                    and backend_selected != "aer_simulator"
-                    and backend_selected != "backend"
-                    and int(provider.get_backend(backend_selected).configuration().n_qubits) >= qubit
-            ):
-                print("backend selected:" + str(backend_selected))
-                print("backend qubit:" +
-                      str(provider.get_backend(backend_selected).configuration().n_qubits))
-                backend = provider.get_backend(
-                    backend_selected
-                )  # Specifying Quantum System
-            elif backend_selected == "aer_simulator":
-                backend = Aer.get_backend('aer_simulator')
-                print("backend selected: aer_simulator")
-            else:
-                backend = least_busy(
-                    provider.backends(
-                        filters=lambda x: int(x.configuration().n_qubits) >= qubit
-                                          and not x.configuration().simulator
-                                          and x.status().operational == True
-                    )
-                )
-                print("least busy backend: ", backend)
-                print("backend qubit:" + str(provider.get_backend(backend.name()).configuration().n_qubits))
+        global backend
+        if model == "QSVM" or model == "QSVC" or model == "Pegasos QSVC" or model == "QSVR" or model == "Quantum Neural Network" or model == "VQR":
+            try:
+                IBMQ.enable_account(token)
+                provider = IBMQ.get_provider(hub="ibm-q")
+                IBMQ.disable_account()
+            except:
+                print("Error activating/deactivating IBM account")
 
-        except Exception as e:
-            # when selected backend has not enough qubit, or no backends has enough
-            # qubits, or the user token has no privileges to use the selected
-            # backend
-            print(e)
-            no_backend = True
-            backend = Aer.get_backend('aer_simulator')
-            print("backend selected: simulator")
-            print("backend qubit: 32")
+
+            try:
+                if (
+                        backend_selected
+                        and backend_selected != "aer_simulator"
+                        and backend_selected != "backend"
+                        and int(provider.get_backend(backend_selected).configuration().n_qubits) >= qubit
+                ):
+                    print("backend selected:" + str(backend_selected))
+                    print("backend qubit:" +
+                          str(provider.get_backend(backend_selected).configuration().n_qubits))
+                    backend = provider.get_backend(
+                        backend_selected
+                    )  # Specifying Quantum System
+                elif backend_selected == "aer_simulator":
+                    backend = Aer.get_backend('aer_simulator')
+                    print("backend selected: aer_simulator")
+                else:
+                    backend = least_busy(
+                        provider.backends(
+                            filters=lambda x: int(x.configuration().n_qubits) >= qubit
+                                              and not x.configuration().simulator
+                                              and x.status().operational == True
+                        )
+                    )
+                    print("least busy backend: ", backend)
+                    print("backend qubit:" + str(provider.get_backend(backend.name()).configuration().n_qubits))
+
+            except Exception as e:
+                # when selected backend has not enough qubit, or no backends has enough
+                # qubits, or the user token has no privileges to use the selected
+                # backend
+                print(e)
+                no_backend = True
+                backend = Aer.get_backend('aer_simulator')
+                print("backend selected: simulator")
+                print("backend qubit: 32")
 
         if model == "QSVM":
             r = myQSVM.classify(path_train, path_test, user_path_to_predict, backend, features, qubit)
@@ -225,11 +244,11 @@ class ClassificazioneControl:
             result = {**result, **r}
 
         elif model == "SVC" or model == "K Neighbors Classifier" or model == "Naive Bayes" or model == "Decision Tree Classifier" or model == "Random Forest Classifier":
-            r = classicClassifier.classify(path_train, path_test, user_path_to_predict, model)
+            r = classicClassifier.classify(path_train, path_test, user_path_to_predict, model, kernelSVC, C_SVC)
             result = {**result, **r}
 
         elif model == "SVR" or model == "Linear Regression":
-            r = classicRegressor.classify(path_train, path_test, user_path_to_predict, model)
+            r = classicRegressor.classify(path_train, path_test, user_path_to_predict, model, kernelSVC, C_SVR)
             result = {**result, **r}
 
         if result["error"] != 1:
