@@ -347,6 +347,7 @@ def aboutUs():
 @login_required
 def smista():
     print("\nIn smista carico le richieste dal form...")
+    quantum_backends = ['QSVM', "PegasosQSVC", "QuantumNeuralNetwork", "QSVC"]
     dataset_train = request.files.get("dataset_train")
     dataset_test = request.files.get("dataset_test")
     dataset_prediction = request.files.get("dataset_prediction")

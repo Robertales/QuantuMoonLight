@@ -92,6 +92,42 @@ def callFeatureExtraction_Selection(
         pathFileYourPCATest = pathFileYourPCA / "Test_Feature_Extraction.csv"
         PCA_df_train.to_csv(pathFileYourPCATrain, index=False)
         PCA_df_test.to_csv(pathFileYourPCATest, index=False)
+        n_components = utils.numberOfColumns(pathFileYourPCATrain)
+        print("Lunghezza features" + str(n_components))
+        if n_componentsFE == 2:
+            plt.figure(dpi=150, facecolor='w', edgecolor='k')
+            classes = Y_train.unique()  # find nique values for labels
+            for clas in classes:
+                plt.scatter(PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature1'],
+                            PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature2'])
+
+            plt.xlabel('feature1', fontsize=12)
+            plt.ylabel('feature2', fontsize=12)
+            plt.title('2D PCA', fontsize=15)
+            plt.legend(Y_train.unique().data)
+            plt.grid()
+            plt.savefig(pathFileYourPCA / 'graphFE', dpi=150)
+            plt.show()
+
+        if n_componentsFE == 3:
+
+            plt.figure(dpi=150, facecolor='w', edgecolor='k')
+            ax = plt.axes(projection='3d')
+            classes = Y_train.unique()  # find nique values for labels
+            for clas in classes:
+                ax.scatter3D(PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature1'],
+                             PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature2'],
+                             PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature3']
+                             )
+
+            ax.set_xlabel('feature1', fontsize=12)
+            ax.set_ylabel('feature2', fontsize=12)
+            ax.set_zlabel('feature3', fontsize=12)
+            plt.title('3D PCA', fontsize=15)
+            plt.legend(Y_train.unique().data)
+            plt.grid()
+            plt.savefig(pathFileYourPCA / 'graphFE', dpi=150)
+            plt.show()
 
 
     if classification:
@@ -119,40 +155,5 @@ def callFeatureExtraction_Selection(
         print("Feature Extraction result for: " + pathToPredict.__str__())
         print(PCA_df_to_predict.head())
 
-    n_components = utils.numberOfColumns(pathFileYourPCATrain)
-    if n_components == 2:
-        plt.figure(dpi=150, facecolor='w', edgecolor='k')
-        classes = Y_train.unique()  # find nique values for labels
-        for clas in classes:
-            plt.scatter(PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature1'],
-                        PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature2'])
-
-        plt.xlabel('feature1', fontsize=12)
-        plt.ylabel('feature2', fontsize=12)
-        plt.title('2D PCA', fontsize=15)
-        plt.legend(Y_train.unique().data)
-        plt.grid()
-        plt.savefig(pathFileYourPCA / 'graphFE', dpi=150)
-        plt.show()
-
-    if n_components == 3:
-
-        plt.figure(dpi=150, facecolor='w', edgecolor='k')
-        ax = plt.axes(projection='3d')
-        classes = Y_train.unique()  # find nique values for labels
-        for clas in classes:
-            ax.scatter3D(PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature1'],
-                         PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature2'],
-                         PCA_df_train.loc[PCA_df_train['labels'] == clas, 'feature3']
-                         )
-
-        ax.set_xlabel('feature1', fontsize=12)
-        ax.set_ylabel('feature2', fontsize=12)
-        ax.set_zlabel('feature3', fontsize=12)
-        plt.title('3D PCA', fontsize=15)
-        plt.legend(Y_train.unique().data)
-        plt.grid()
-        plt.savefig(pathFileYourPCA / 'graphFE', dpi=150)
-        plt.show()
 
     return pathFileYourPCATrain, pathFileYourPCATest

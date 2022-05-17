@@ -54,6 +54,7 @@ class ClassificazioneControl:
 
         id_dataset = request.form.get("id_dataset")
 
+
         thread = Thread(
             target=ClassificazioneControl.classification_thread,
             args=(
@@ -210,7 +211,8 @@ class ClassificazioneControl:
             result = {**result, **r}
 
         elif model == "Quantum Neural Network":
-            r = myNeuralNetworkClassifier.classify(path_train, path_test, user_path_to_predict, backend, qubit, optimizer, loss, max_iter)
+            r = myNeuralNetworkClassifier.classify(path_train, path_test, user_path_to_predict, backend, qubit,
+                                                   optimizer, loss, max_iter)
             result = {**result, **r}
 
         elif model == "QSVR":
@@ -218,7 +220,8 @@ class ClassificazioneControl:
             result = {**result, **r}
 
         elif model == "VQR":
-            r = myNeuralNetworkRegressor.classify(path_train, path_test, user_path_to_predict, backend, qubit, optimizer, loss, max_iter)
+            r = myNeuralNetworkRegressor.classify(path_train, path_test, user_path_to_predict, backend, qubit,
+                                                  optimizer, loss, max_iter)
             result = {**result, **r}
 
         elif model == "SVC" or model == "K Neighbors Classifier" or model == "Naive Bayes" or model == "Decision Tree Classifier" or model == "Random Forest Classifier":
