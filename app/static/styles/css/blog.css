@@ -56,8 +56,15 @@ div{ /* non funziona */
      text-align:right
 }
 .post-label{
-     color: blue;
-     text-align:right;
+     display: inline;
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  color: #fff;
+  border-radius: .25em;
+
+}
+.label-primary {
+  background-color: #337ab7;
 }
 
 .btn-like

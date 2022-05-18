@@ -18,6 +18,7 @@
     <!--[if lt IE 9]>
     <script src="../../static/js/respond.js"></script>
     <script src="../static/js/script.js"></script><![endif]-->
+
 </head>
 <body>
 
@@ -75,7 +76,7 @@
                     <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort1" class="btn d-flex align-items-center" >EXPERIMENT</button> </a>
                 </td>
                 <td>
-                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort2" class="btn d-flex align-items-center">ARTICLE</button> </a>
+                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort2" class="btn d-flex align-items-center"> ARTICLE</button> </a>
                 </td>
               </tr>
             </thead>
@@ -91,7 +92,8 @@
 <div class="post-preview">
 
     <a href="{{ url_for('post', post_id=Article.id) }}">
-        <B class="post-label">{{Article.label}} </B>
+        <span class="post-label label-primary" align="right">{{Article.label}} </span>
+
         <h2 class="post-title">
             {{ Article.title }} </h2>
 

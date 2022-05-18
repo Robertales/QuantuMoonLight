@@ -55,8 +55,12 @@
           <img src="../static/images/logos/Logo_SenzaScritta.png" height="120" alt="QML" loading="lazy" />
       </div>
 
-    <!-- Hi email,  -->
-    <h5 class="font-weight-bold"> Hi {{current_user.email}}, </h5><br>
+    <!-- Hi username,  -->
+    <h5 class="font-weight-bold"> Hi, {{current_user.username}} </h5><br>
+
+      <!-- visualizza email,  -->
+    <h6 class="font-weight-bold">Your e-mail:</h6>
+      <h5> {{current_user.email}} </h5><br>
 
     <!-- Button -->
         <h6 class="font-weight-bold">Your IBM Token:</h6>
@@ -64,7 +68,7 @@
 
             <!-- Token operations -->
            <div style="align:left">
-                 <button onclick="copy()" style="padding:0; border:none; background:none;"><span class="fa fa-copy"></span> Copy</button>
+                 <button onclick="copy()" style="padding:0; border:none; background:none;"><span class="fa fa-copy"></span> Copy Token</button>
                   <form action="{{url_for("modifyUser")}}">
                       <button type="submit" style="padding: 0; border: none; background: none;">
                           <span class="fa fa-pencil"></span>  Edit Token</button>
