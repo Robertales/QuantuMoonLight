@@ -46,7 +46,7 @@
       <!-- Left links -->
     </div>
       {% if current_user.is_authenticated %}
-      <label class="nav-item"><a class="nav-link" href="{{url_for("userPage")}}"> Welcome, {{current_user.username}}</a></label>
+      <label class="nav-item"><a class="nav-link" href="{{url_for("userPage")}}">{{current_user.username}}</a></label>
       {% endif %}
   </div>
     {% if current_user.is_authenticated %}
