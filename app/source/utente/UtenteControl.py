@@ -28,6 +28,10 @@ class UtenteControl:
         if token == "":
             token = None
         username = request.form.get("username")
+        utente = User.query.filter_by(username=username).first()
+        if utente:
+            flash("Username is invalid or already taken", "error")
+            return render_template("registration.html")
         Name = request.form.get("nome")
         cognome = request.form.get("cognome")
         if not 0 < username.__len__() < 30:

@@ -270,14 +270,14 @@ def enableComment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).one()
     comment.authorized = True
     db.session.commit()
-    return redirect(url_for('blog'))
+    return redirect(request.referrer)
 
 @app.route('/deleteComment/<int:comment_id>', methods=['POST', 'GET'])
 def deleteComment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).one()
     db.session.delete(comment)
     db.session.commit()
-    return redirect(url_for('blog'))
+    return redirect(request.referrer)
 
 @app.route('/addcomment', methods=['POST'])
 @login_required
