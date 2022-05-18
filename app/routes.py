@@ -339,9 +339,9 @@ def formPage():
     return render_template("formDataset.html")
 
 
-@app.route("/preprocessingPage")
-def preprocessingPage():
-    return render_template("preprocessing.html")
+@app.route("/getStarted")
+def getStarted():
+    return render_template("getStarted.html")
 
 
 @app.route("/aboutUs")
