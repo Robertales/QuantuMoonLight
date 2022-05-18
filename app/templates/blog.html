@@ -92,8 +92,9 @@
 <div class="post-preview">
 
     <a href="{{ url_for('post', post_id=Article.id) }}">
-        <span class="post-label label-primary" align="right">{{Article.label}} </span>
-
+        <div align="right">
+            <span class="post-label label-primary">{{Article.label}} </span>
+        </div>
         <h2 class="post-title">
             {{ Article.title }} </h2>
 
@@ -101,6 +102,7 @@
 
     </a>
     <!--<button onclick="Toggle1()" id="btnh1" class="btn-like" ><i class="fa-solid fa-heart"></i>-->
+    <div align="right">
     {% if current_user.is_authenticated %}
      {% if current_user.has_liked_post(Article)  %}
     <Button id={{Article.id}} onclick="Toggle1({{Article.id}})" class="btn-like" style="color:red"><i class="fa-solid fa-rocket" ></i>
@@ -116,6 +118,7 @@
     </Button>
    {{ Article.likes.count()}}
     {% endif %}
+    </div>
 </div>
 
 

@@ -28,10 +28,10 @@ h2 {
 
 .wrapper {
   display: flex;
-  /*background: #5A42EC;
+  background: #5A42EC;
   background: -moz-linear-gradient(left, #000080 0%, #4B0082 100%);
   background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
-  background: linear-gradient(to right, #000080 0%, #4B0082 100%);*/
+  background: linear-gradient(to right, #000080 0%, #4B0082 100%);
   align-items: center;
   flex-direction: column;
   justify-content: center;
