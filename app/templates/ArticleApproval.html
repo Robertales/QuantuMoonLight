@@ -25,8 +25,9 @@
 {% extends "base.html" %}
 {% block content %}
 
+<div id="colonna">
 <div align="center">
-    <h1 id="blog_title">QUANTUM APPROVAL</h1>
+    <h1 id="blog_title">COMUNITY POST MANAGEMENT</h1>
 </div>
 
 <style>
@@ -45,6 +46,10 @@
     {
     color: black;
     }
+    #colonna{
+     margin-left: 20%;
+    margin-right: 20%;
+}
 </style>
 <br>
 
@@ -55,6 +60,7 @@
     <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }}</p>
 
     <a href="{{ url_for('post', post_id=Article.id) }}">
+                    <span class="post-label label-primary"> Category: {{Article.label}} </span>
         <h2 class="post-title">
             {{ Article.title }}
         </h2>
@@ -67,10 +73,11 @@
     <button name="Rifiuta" type="button" class="btn btn-warning">Deny</button>
     </a>
 </div>
-<br><br><br><br>
+
 {% endif %}
 {% endfor %}
-
+</div>
+<br><br>
 {% endblock %}
 </body>
 </html>
