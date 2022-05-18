@@ -238,7 +238,7 @@
 	.main-menu .navbar-collapse > ul li.dropdown:after{
 		display:none !important;	
 	}
-	
+
 	.blog-area .author img { 
 		position:static; 
 		display:block; 
@@ -441,4 +441,5 @@
 		padding-right:15px;	
 	}
 }
+
 

@@ -20,6 +20,7 @@
     <script src="../static/js/script.js"></script><![endif]-->
 </head>
 <body>
+
 <style>
     #postBut{
         margin-left: auto;
@@ -29,10 +30,14 @@
     }
 
     #sortTab{
-        width: 30%;
-        margin: 1em;
+        margin-left: 0em;
+        margin-right: auto;
+        width: 45%;
+        margin-top: auto;
+        margin-bottom: auto;
         text-align: center;
         align-items: center;
+
     }
 
     #btnSort{
@@ -40,11 +45,15 @@
         margin-right: auto;
     }
 
+
 </style>
+
+
 <script src="https://kit.fontawesome.com/b0f51da084.js" crossorigin="anonymous"></script>
 {% extends "base.html" %}
 {% block content %}
 
+<div class="colonna">
 <div align="center">
     <h1 id="blog_title">QUANTUM COMMUNITY</h1>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dapibus, augue non sagittis varius, elit neque sagittis risus, eu varius.</p>
@@ -78,11 +87,14 @@
 {% for Article in posts %}
 {% if Article.authorized %}
 <br>
+
 <div class="post-preview">
 
     <a href="{{ url_for('post', post_id=Article.id) }}">
+        <B class="post-label">{{Article.label}} </B>
         <h2 class="post-title">
-            {{ Article.title }} </h2>   <h6 class="post-title">{{Article.label}} </h6>
+            {{ Article.title }} </h2>
+
     <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }} </p>
 
     </a>
@@ -103,6 +115,9 @@
    {{ Article.likes.count()}}
     {% endif %}
 </div>
+
+
+
 <script>
 
 
@@ -138,11 +153,11 @@
 
 
 
-
 </script>
 <br>
 {% endif %}
 {% endfor %}
+</div>
 
 {% endblock %}
 

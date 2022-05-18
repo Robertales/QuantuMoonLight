@@ -26,7 +26,17 @@
   #text{
     color: white;
   }
+  #title{
+        font-weight: bold;
+        background-image: linear-gradient(to left,darkblue, blueviolet);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+}
 
+#colonnaHome{
+     margin-left: 20%;
+    margin-right: 20%;
+}
 </style>
 <!-- NAVBAR -->
             {% extends 'base.html' %}
@@ -34,10 +44,11 @@
 
 
 <!-- ABOUT US SECTION -->
-<div>
-  <div id="aboutus">
-      <h2 id="text" class="text-center font-weight-bold mb-2">ABOUT US</h2>
-      <p class="font-italic mb-4 text-center" id="text">QuantuMoonLight Managers & Members</p>
+<div id="colonnaHome">
+  <div>
+      <h1 id="title" align="center">ABOUT US</h1>
+      <p class="font-italic mb-4 text-center">QuantuMoonLight is a project carried
+          out in the university by a team of students of the three-year and master's degree course in computer science.</p>
   </div><br>
   <div class="row pb-5 mb-4">
     <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
@@ -170,7 +181,7 @@
       </div>
     </div>
 </div>
-
+</div>
     <!-- FOOTER  -->
 {% endblock %}
 

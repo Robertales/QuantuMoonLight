@@ -55,6 +55,11 @@ div{ /* non funziona */
      color: black;
      text-align:right
 }
+.post-label{
+     color: blue;
+     text-align:right;
+}
+
 .btn-like
 {
      background: transparent;
@@ -67,3 +72,12 @@ div{ /* non funziona */
     cursor: pointer;
 
 }
+
+.colonna
+{
+    margin-left: 20%;
+    margin-right: 20%;
+
+
+}
+
