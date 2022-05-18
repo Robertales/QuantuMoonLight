@@ -330,7 +330,7 @@
                             </p>
                             <div class="collapse" id="collapseExample">
                                 <div class="card card-body">
-                                    <div class = "card card-body" id = "validation"> Validation
+                                    <div class = "card card-body" id = "validation"> <b class="headTitle">Validation</b>
                                         <label><input type="radio" class="AdvancedOption" id="checkSimpleSplit" name="Radio" value="simpleSplit" checked>   Simple Train-Test Split <div id="tooltip">
                                             <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
@@ -363,7 +363,7 @@
                                    </div>
 
 
-                                    <div class="card card-body" id = "Preprocessing"> Preprocessing
+                                    <div class="card card-body" id = "Preprocessing"> <p class="headTitle"> Preprocessing </p>
                                         <label><input type="checkbox" class="AdvancedOption" id="imputation" name="imputation" value="imputation">  Data Imputation <div id="tooltip">
                                             <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
@@ -400,7 +400,7 @@
                                         </div></label>
 
 
-                                        <div class ="card card-body" id = "FeatureExtraction"> Feature Extraction
+                                        <div class ="card card-body" id = "FeatureExtraction"> <p class="headTitle"> Feature Extraction</p>
                                              <label>Insert nr of columns to reduce Feature Extraction:   <input type="number" max="10000" min="2" value="2" id="nrColumnsFE" name="nrColumnsFE" style="border: 0.1em solid grey"><div id="tooltip">
                                             <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
@@ -409,7 +409,7 @@
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
                                              </div></label><br></div>
 
-                                        <div class ="card card-body" id = "FeatureSelection"> Feature Selection
+                                        <div class ="card card-body" id = "FeatureSelection"> <p class="headTitle"> Feature Selection </p>
                                              <label>Insert nr of columns to reduce Feature Selection:   <input type="number" max="10000" min="2" value="2" id="nrColumnsFS" name="nrColumnsFS" style="border: 0.1em solid grey"><div id="tooltip">
                                             <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
@@ -420,7 +420,7 @@
 
 
                                     </div>
-                                        <div class ="card card-body" id = "PrototypeSelection"> Prototype Selection
+                                        <div class ="card card-body" id = "PrototypeSelection"> <p class="headTitle">Prototype Selection</p>
                                             <label>Insert nr of rows to reduce:    <input type="number" max="10000" min="2" value="100" id="nrRows" name="nrRows" style="border: 0.1em solid grey"><div id="tooltip">
                                             <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
@@ -429,7 +429,7 @@
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
                                         </div></label></div>
 
-                                    <div class ="card card-body" id = "Hyperparameter"> Hyperparameter
+                                    <div class ="card card-body" id = "Hyperparameter">  <p class="headTitle">Hyperparameter</p>
                                         <div class ="card card-body" id = "Pegasos"> Pegasos QSVC
                                     <label>Insert PegasosQSVC C:    <input type="number" max="10000" min="2" value="1000" id="C" name="C" style="border: 0.1em solid grey"><div id="tooltip">
                                             <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
@@ -451,7 +451,7 @@
 
                                         </div>
 
-                                        <div class ="card card-body" id = "NeuralNetwork"> Quantum Neural Network
+                                        <div class ="card card-body" id = "NeuralNetwork"> <p class="headTitle">Quantum Neural Network</p>
                                     <label>Insert NN optimizer:    <select name="optimizer" id="optimizer" style="border: 0.1em solid grey">
                                                                         <option value="SLSQP">SLSQP</option>
                                                                         <option value="ADAM">ADAM</option>
@@ -540,7 +540,7 @@
                                     </div>
                                     <div class ="card card-body" id = "SelectQuantumSystem">
                                     {% if current_user.isResearcher %}
-                                    <label>Select quantum system: <select name="backend" id="backend" style="border: 0.1em solid grey" >
+                                    <label><p class="headTitle">Select quantum system:</p> <select name="backend" id="backend" style="border: 0.1em solid grey" >
                                                                 <option value="backend">Least Busy IBM Backend</option>
                                                                 <option value="aer_simulator">IBM Aer Simulator; Qubit: 32 </option>
                                                                 <option value="ibm_washington">IBM Washington; Processor type: Eagle R1; Qubit: 127 </option>
