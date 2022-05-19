@@ -35,7 +35,7 @@
     #sortTab{
         margin-left: 0em;
         margin-right: auto;
-        width: 45%;
+        width: 100%;
         margin-top: auto;
         margin-bottom: auto;
         text-align: center;
@@ -79,19 +79,24 @@
     <form action="{{url_for("add")}}">
         <button id="postBut" class="btn" type="submit">Create New Post</button>
     </form>
-</div>
+</div><br>
 
 
 <div>
         <table id="sortTab">
             <thead>
               <tr>
-                <td><h4 id="blog_sort">SORT BY: </h4></td>
                 <td>
-                    <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort1" class="btn d-flex align-items-center" >EXPERIMENT</button> </a>
+                    <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort" class="btn d-flex align-items-center" >EXPERIMENT</button> </a>
                 </td>
                 <td>
-                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort2" class="btn d-flex align-items-center"> ARTICLE</button> </a>
+                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort" class="btn d-flex align-items-center"> ARTICLE</button> </a>
+                </td>
+                  <td>
+                    <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort" class="btn d-flex align-items-center" > MOST LIKED</button> </a>
+                </td>
+                <td>
+                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort" class="btn d-flex align-items-center"> OLDEST</button> </a>
                 </td>
               </tr>
             </thead>
