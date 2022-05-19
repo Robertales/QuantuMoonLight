@@ -64,8 +64,12 @@ div{ /* non funziona */
 
 }
 
-.label-primary {
-  background-color: #337ab7;
+.label-primary-art {
+  background-color: darkblue;
+}
+
+.label-primary-exp {
+  background-color: darkviolet;
 }
 
 .btn-like

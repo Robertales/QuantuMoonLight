@@ -93,12 +93,13 @@
       <form action="{{url_for("adminPage")}}">
           <button type="submit" style="padding: 0; border: none; background: none;" >
               <span class="fa fa-pencil"></span>  Admin Page</button>
-      </form><br>
+      </form>
       {% endif %}
       {% if current_user.isAdmin %}
       <form action="{{url_for("ArticleApproval")}}">
-          <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span> Article Approval</button>
-      </form><br>
+          <button type="submit" style="padding: 0; border: none; background: none;">
+              <span class="fa fa-pencil"></span> Article Approval</button>
+      </form>
       {% endif %}
 
       <form action="/logout" method="post">

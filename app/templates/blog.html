@@ -33,7 +33,7 @@
     #sortTab{
         margin-left: 0em;
         margin-right: auto;
-        width: 45%;
+        width: 100%;
         margin-top: auto;
         margin-bottom: auto;
         text-align: center;
@@ -46,6 +46,19 @@
         margin-right: auto;
     }
 
+    .sorting{
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+        margin-left: 1em;
+        margin-right: 1em;
+        border : 4px solid transparent;
+        border-radius: 20px;
+        background: linear-gradient(to right, white,white),
+                    linear-gradient(to right,darkblue,blueviolet);
+        background-clip: padding-box,border-box;
+        background-origin: padding-box,border-box;
+
+    }
 
 </style>
 
@@ -67,16 +80,21 @@
 </div>
 
 <br>
-<div>
+<div class="sorting">
         <table id="sortTab">
             <thead>
               <tr>
-                <td><h4 id="blog_sort">SORT BY: </h4></td>
                 <td>
-                    <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort1" class="btn d-flex align-items-center" >EXPERIMENT</button> </a>
+                    <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort" class="btn d-flex align-items-center" >EXPERIMENT</button> </a>
                 </td>
                 <td>
-                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort2" class="btn d-flex align-items-center"> ARTICLE</button> </a>
+                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort" class="btn d-flex align-items-center"> ARTICLE</button> </a>
+                </td>
+                  <td>
+                    <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort" class="btn d-flex align-items-center" > MOST LIKED</button> </a>
+                </td>
+                <td>
+                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort" class="btn d-flex align-items-center"> OLDEST</button> </a>
                 </td>
               </tr>
             </thead>
@@ -93,12 +111,17 @@
 
     <a href="{{ url_for('post', post_id=Article.id) }}">
         <div align="right">
-            <span class="post-label label-primary">{{Article.label}} </span>
+            {% if Article.label == "Article" %}
+            <span class="post-label label-primary-art">{{Article.label}} </span>
+            {% endif %}
+            {% if Article.label == "Experiment" %}
+                <span class="post-label label-primary-exp">{{Article.label}} </span>
+            {% endif %}
         </div>
         <h2 class="post-title">
             {{ Article.title }} </h2>
 
-    <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }} </p>
+    <p class="post-meta">Posted by <b>{{ Article.author }}</b> on {{ Article.data.strftime('%B %d, %Y') }} </p>
 
     </a>
     <!--<button onclick="Toggle1()" id="btnh1" class="btn-like" ><i class="fa-solid fa-heart"></i>-->
