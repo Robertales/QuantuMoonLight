@@ -27,6 +27,11 @@
     <link href="../static/styles/css/style.css" rel="stylesheet">
 
   </head>
+<style>
+    #commentApproval{
+        color: #00a8ff;
+    }
+</style>
 
   <body>
     {% extends "base.html" %}
@@ -68,10 +73,11 @@
 		<div class="col-md-12">
 		    <div class="blog-comment">
 				<h3 class="text-success">Comments</h3>
-                <hr/>
+            <hr/>
 				<ul class="comments">
                      {% for Comment in comments %}
-                  {% if Comment.authorized or current_user.isAdmin %}
+
+                  {% if Comment.authorized or current_user.isAdmin or Comment.author == current_user.username %}
                   <li class="clearfix">
                    <div>
                      <img src="../static/images/logos/logo.ico" class="avatar" alt="Image" style="width:50px;height:50px;">
@@ -79,9 +85,10 @@
                    </div>
                     {{ Comment.body }}
                     <div class="post-comments">
-				   <!--   <p class="meta">{{ Comment.data.strftime('%B %d, %Y') }} <a href="#">{{ Comment.author }}</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p> !-->
+				      <!-- <p class="meta">{{ Comment.data.strftime('%B %d, %Y') }} <a href="#">{{ Comment.author }}</a> says : <i class="pull-right"><a href="#"><small>Reply</small></a></i></p> !-->
 
-                      {% if not Comment.authorized %}
+
+                      {% if not Comment.authorized and current_user.isAdmin %}
 
                       <a href="{{url_for('enableComment', comment_id=Comment.id)}}">
                         <button id="brnAppCom" type="submit" name="Approva" class="btn btn-success" >Approves</button>
@@ -89,13 +96,17 @@
                       <a href="{{url_for('deleteComment', comment_id=Comment.id)}}">
                             <button name="Rifiuta" type="button" class="btn btn-warning">Refuses</button>
                       </a>
+                        {% endif %}
 
-                    {% endif %}
+                      {% if not Comment.authorized and current_user.username == Comment.author %}
+                      <h5 id ="commentApproval">Comment pending approval</h5>
+                      {% endif %}
+                    </div>
 
-				  </div>
 				  </ul>
 				</li>
-              {% endif %}
+                        {% endif %}
+
                  {% endfor %}
 				</ul>
 			</div>
@@ -117,7 +128,7 @@
             <br>
             <div id="success"></div>
             <div class="form-group">
-              <button type="Publish Comment" class="btn btn-secondary" id="sendMessageButton">Send</button>
+              <button type="Publish Comment" class="btn btn-primary" id="sendMessageButton">Send</button>
             </div>
           </form>
         </div>

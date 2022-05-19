@@ -26,6 +26,8 @@
     #postBut{
         margin-left: auto;
         margin-right: auto;
+        margin-top: 1em;
+        margin-bottom: 1em;
         width: 100%;
 
     }
@@ -33,7 +35,7 @@
     #sortTab{
         margin-left: 0em;
         margin-right: auto;
-        width: 100%;
+        width: 45%;
         margin-top: auto;
         margin-bottom: auto;
         text-align: center;
@@ -79,22 +81,17 @@
     </form>
 </div>
 
-<br>
-<div class="sorting">
+
+<div>
         <table id="sortTab">
             <thead>
               <tr>
+                <td><h4 id="blog_sort">SORT BY: </h4></td>
                 <td>
-                    <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort" class="btn d-flex align-items-center" >EXPERIMENT</button> </a>
+                    <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort1" class="btn d-flex align-items-center" >EXPERIMENT</button> </a>
                 </td>
                 <td>
-                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort" class="btn d-flex align-items-center"> ARTICLE</button> </a>
-                </td>
-                  <td>
-                    <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort" class="btn d-flex align-items-center" > MOST LIKED</button> </a>
-                </td>
-                <td>
-                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort" class="btn d-flex align-items-center"> OLDEST</button> </a>
+                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort2" class="btn d-flex align-items-center"> ARTICLE</button> </a>
                 </td>
               </tr>
             </thead>
@@ -104,6 +101,21 @@
 
 
 {% for Article in posts %}
+{% if not Article.authorized and current_user.username == Article.author %}
+
+<div class="post-preview">
+    <a href="{{ url_for('post', post_id=Article.id) }}">
+        <div align="right">
+            <span class="post-label label-primary">{{Article.label}} </span>
+        </div>
+        <h2 class="post-title">
+            {{ Article.title }} </h2>
+        <h5>Post pending approval </h5>
+    <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }} </p>
+    </a>
+</div>
+
+        {% endif %}
 {% if Article.authorized %}
 <br>
 
@@ -136,6 +148,7 @@
     </Button>
     {{ Article.likes.count()}}
     {% endif %}
+
      {% else %}
     <Button id={{Article.id}} onclick=ShowMessage() class="btn-like" style="color:grey"><i class="fa-solid fa-rocket"></i>
     </Button>
