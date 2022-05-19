@@ -26,6 +26,8 @@
     #postBut{
         margin-left: auto;
         margin-right: auto;
+        margin-top: 1em;
+        margin-bottom: 1em;
         width: 100%;
 
     }
@@ -66,7 +68,7 @@
     </form>
 </div>
 
-<br>
+
 <div>
         <table id="sortTab">
             <thead>
@@ -86,8 +88,23 @@
 
 
 {% for Article in posts %}
+{% if not Article.authorized and current_user.username == Article.author %}
+
+<div class="post-preview">
+    <a href="{{ url_for('post', post_id=Article.id) }}">
+        <div align="right">
+            <span class="post-label label-primary">{{Article.label}} </span>
+        </div>
+        <h2 class="post-title">
+            {{ Article.title }} </h2>
+        <h5>Post pending approval </h5>
+    <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }} </p>
+    </a>
+</div>
+
+        {% endif %}
 {% if Article.authorized %}
-<br>
+
 
 <div class="post-preview">
 
@@ -99,8 +116,8 @@
             {{ Article.title }} </h2>
 
     <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }} </p>
-
     </a>
+
     <!--<button onclick="Toggle1()" id="btnh1" class="btn-like" ><i class="fa-solid fa-heart"></i>-->
     <div align="right">
     {% if current_user.is_authenticated %}
@@ -113,6 +130,7 @@
     </Button>
     {{ Article.likes.count()}}
     {% endif %}
+
      {% else %}
     <Button id={{Article.id}} onclick=ShowMessage() class="btn-like" style="color:grey"><i class="fa-solid fa-rocket"></i>
     </Button>
@@ -159,7 +177,7 @@
 
 
 </script>
-<br>
+
 {% endif %}
 {% endfor %}
 </div>
