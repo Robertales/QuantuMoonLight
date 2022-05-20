@@ -14,7 +14,7 @@ from app.source.model.models import User, Article, Dataset
 
 class GestioneControl:
     @app.route("/gestione/", methods=["GET", "POST"])
-    def getList():
+    def getList(self):
         """
         The function returns a list of users or administrators requested by an admin
 

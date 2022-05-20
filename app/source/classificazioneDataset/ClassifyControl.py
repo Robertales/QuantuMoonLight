@@ -34,7 +34,7 @@ warnings.simplefilter(action="ignore", category=DeprecationWarning)
 class ClassificazioneControl:
     @app.route("/classify_control", methods=["POST"])
     # @login_required
-    def classify_control():
+    def classify_control(self):
         """
         The function get the form value and start the async thread that will handle the classification
         :return:
@@ -263,6 +263,7 @@ class ClassificazioneControl:
                 dataset.accuracy = result.get("testing_accuracy") * 100
                 dataset.precision = result.get("testing_precision") * 100
                 dataset.recall = result.get("testing_recall") * 100
+                dataset.f1 = result.get("f1") * 100
             dataset.training_time = result.get("training_time")
             dataset.total_time = result.get("total_time")
             db.session.commit()

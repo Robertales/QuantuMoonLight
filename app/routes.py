@@ -94,6 +94,13 @@ def compareExperiments():
         Dataset.id.in_(listDataset)).order_by(
         Dataset.recall.desc()).first()
 
+    maxF1 = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.f1).first()
+    minF1 = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.f1.desc()).first()
+
     # COMPARISION FOR MSE
     maxMSE = Dataset.query.filter(
         Dataset.id.in_(listDataset)).order_by(
@@ -117,6 +124,14 @@ def compareExperiments():
     minRMSE = Dataset.query.filter(
         Dataset.id.in_(listDataset)).order_by(
         Dataset.rmse.desc()).first()
+
+    maxR2 = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.r2).first()
+    minR2 = Dataset.query.filter(
+        Dataset.id.in_(listDataset)).order_by(
+        Dataset.r2.desc()).first()
+
     return render_template("compareExperiments.html",
                            datasets=datasets,
                            maxTotalTime=maxTotalTime,
@@ -134,7 +149,11 @@ def compareExperiments():
                            maxMAE=maxMAE,
                            minMAE=minMAE,
                            maxRMSE=maxRMSE,
-                           minRMSE=minRMSE
+                           minRMSE=minRMSE,
+                           maxF1=maxF1,
+                           minF1=minF1,
+                           maxR2=maxR2,
+                           minR2=minR2
                            )
 
 
