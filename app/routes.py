@@ -10,8 +10,9 @@ from flask_login import current_user, login_required
 from imblearn.over_sampling import SMOTE
 from qiskit import IBMQ
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sqlalchemy import func, desc
 
-from app import app, db, ckeditor
+from app import app, db
 from app.source.model.models import User, Dataset, Article, Comment, Like
 from app.source.preprocessingDataset.aggId import addId
 from app.source.utils import addAttribute
@@ -189,6 +190,14 @@ def sendEmail():
 def blog(label=None):
     if label is None:
         posts = Article.query.order_by(Article.data.desc()).all()
+    elif label == "likes":
+        posts = db.session.query(Article, func.count(Like.email_user).label('total')).outerjoin(Like).group_by(
+            Article).order_by(desc('total')).all()
+        posts = [item[0] for item in posts]
+
+    elif label == "oldest":
+        posts = Article.query.order_by(Article.data.asc()).all()
+
     else:
         posts = Article.query.filter_by(label=label).order_by(Article.data.desc()).all()
 
@@ -197,7 +206,7 @@ def blog(label=None):
 
 @app.route("/ArticleApproval")
 def ArticleApproval():
-    posts = Article.query.order_by(Article.data.desc()).all()
+    posts = Article.query.filter_by(authorized=False).order_by(Article.data.desc()).all()
 
     return render_template("ArticleApproval.html", posts=posts)
 
@@ -273,7 +282,7 @@ def enableArticle(article_id):
     article.authorized = True
     db.session.commit()
 
-    return redirect(url_for('blog'))
+    return redirect(url_for('ArticleApproval'))
 
 
 @app.route('/deleteArticle/<int:article_id>', methods=['POST', 'GET'])
@@ -281,7 +290,7 @@ def deleteArticle(article_id):
     article = Article.query.filter_by(id=article_id).one()
     db.session.delete(article)
     db.session.commit()
-    return redirect(url_for('blog'))
+    return redirect(url_for('ArticleApproval'))
 
 
 @app.route('/enableComment/<int:comment_id>', methods=['POST', 'GET'])
@@ -291,12 +300,14 @@ def enableComment(comment_id):
     db.session.commit()
     return redirect(request.referrer)
 
+
 @app.route('/deleteComment/<int:comment_id>', methods=['POST', 'GET'])
 def deleteComment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).one()
     db.session.delete(comment)
     db.session.commit()
     return redirect(request.referrer)
+
 
 @app.route('/addcomment', methods=['POST'])
 @login_required

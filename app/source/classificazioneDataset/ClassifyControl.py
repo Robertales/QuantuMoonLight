@@ -1,8 +1,5 @@
-import csv
-import os.path
 import pathlib
 import smtplib
-import time
 import warnings
 from email import encoders
 from email.mime.base import MIMEBase
@@ -11,20 +8,21 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formatdate
 from threading import Thread
+
 import flask
-from flask import request, Response
+from flask import request
 from qiskit import IBMQ, Aer
-from qiskit.providers import Backend
 from qiskit.providers.ibmq import least_busy
+
 from app import app, db
 from app.source.classificazioneDataset.classicClassifier import classicClassifier
-from app.source.classificazioneDataset.myNeuralNetworkRegressor import myNeuralNetworkRegressor
-from app.source.classificazioneDataset.myQSVR import myQSVR
+from app.source.classificazioneDataset.classicRegressor import classicRegressor
 from app.source.classificazioneDataset.myNeuralNetworkClassifier import myNeuralNetworkClassifier
+from app.source.classificazioneDataset.myNeuralNetworkRegressor import myNeuralNetworkRegressor
 from app.source.classificazioneDataset.myPegasosQSVC import myPegasosQSVC
 from app.source.classificazioneDataset.myQSVC import myQSVC
 from app.source.classificazioneDataset.myQSVM import myQSVM
-from app.source.classificazioneDataset.classicRegressor import classicRegressor
+from app.source.classificazioneDataset.myQSVR import myQSVR
 from app.source.model.models import Dataset
 from app.source.utils import utils
 
@@ -34,7 +32,7 @@ warnings.simplefilter(action="ignore", category=DeprecationWarning)
 class ClassificazioneControl:
     @app.route("/classify_control", methods=["POST"])
     # @login_required
-    def classify_control(self):
+    def classify_control():
         """
         The function get the form value and start the async thread that will handle the classification
         :return:
