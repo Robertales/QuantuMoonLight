@@ -224,31 +224,30 @@ def add():
     return render_template('add.html')
 
 
-@app.route('/like', methods=['GET'])
+@app.route('/like/<int:action>', methods=['GET'])
+@app.route('/like/', methods=['GET'])
 @login_required
-def like():
-    email_user = current_user.email
-    data = request.args
-    id_article = data['data']
-    like = Like(email_user=email_user, id_article=id_article)
+def like(action=0):
+    if action == 1:
+        email_user = current_user.email
+        data = request.args
+        id_article = data['data']
+        like = Like(email_user=email_user, id_article=id_article)
 
-    db.session.add(like)
-    db.session.commit()
-    return render_template('add.html')
+        db.session.add(like)
+        db.session.commit()
 
+    else:
+        email_user = current_user.email
+        data = request.args
+        id_article = data['data']
+        like = Like.query.filter_by(
+            email_user=email_user,
+            id_article=id_article).first()
 
-@app.route('/dislike', methods=['GET'])
-@login_required
-def dislike():
-    email_user = current_user.email
-    data = request.args
-    id_article = data['data']
-    like = Like.query.filter_by(
-        email_user=email_user,
-        id_article=id_article).first()
+        db.session.delete(like)
+        db.session.commit()
 
-    db.session.delete(like)
-    db.session.commit()
     return render_template('add.html')
 
 

@@ -173,7 +173,7 @@
             btnvar1.style.color = "grey"
             $.ajax({
                 type: 'GET',
-                url: "{{url_for("dislike")}}",
+                url: "{{url_for("like",action=0)}}",
                 data: {'data': JSON.stringify(intValue)},
                 contentType: "application/json",
                 dataType: 'json'
@@ -182,7 +182,7 @@
             btnvar1.style.color = "red"
             $.ajax({
                 type: 'GET',
-                url: "{{url_for("like")}}",
+                url: "{{url_for("like",action=1)}}",
                 data: {'data': JSON.stringify(intValue)},
                 contentType: "application/json",
                 dataType: 'json'
