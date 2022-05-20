@@ -36,28 +36,28 @@ class UtenteControl:
         cognome = request.form.get("cognome")
         if not 0 < username.__len__() < 30:
             flash(
-                "Lunghezza Username non valida (non compreso tra 0 e 30 caratteri)",
+                "Invalid username (length mus be between 1 and 30 characters)",
                 "error")
             return render_template("registration.html")
         if not re.fullmatch(
                 '^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,10}$',
                 email):
-            flash("Email non valida", "error")
+            flash("Invalid email", "error")
             return render_template("registration.html")
         if not password.__len__() >= 8:
-            flash("Lunghezza Password non valida (minore di 8 caratteri)", "error")
+            flash("Password length has to be at least 8 characters", "error")
             return render_template("registration.html")
         if not password.__eq__(cpassword):
-            flash("Conferma password e password non combaciano", "error")
+            flash("Password and confirm password do not match", "error")
             return render_template("registration.html")
         if not re.fullmatch('^[A-zÀ-ù ‘-]{2,30}$', Name):
-            flash("Nome non valido", "error")
+            flash("Invalid name, ,name must contain only alphabetical characters", "error")
             return render_template("registration.html")
         if not re.fullmatch('^[A-zÀ-ù ‘-]{2,30}$', cognome):
-            flash("Cognome non valida", "error")
+            flash("Invalid surname, ,surname must contain only alphabetical characters", "error")
             return render_template("registration.html")
         if not ((token is None) or token.__len__() == 128):
-            flash("Lunghezza token non valida", "error")
+            flash("Invalid ibmq token", "error")
             return render_template("registration.html")
 
         utente=User.query.filter_by(email=email).first()
