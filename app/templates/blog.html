@@ -36,7 +36,7 @@
         margin-left: 0em;
         margin-right: auto;
         width: 100%;
-        margin-top: auto;
+        margin-top: 1em;
         margin-bottom: auto;
         text-align: center;
         align-items: center;
@@ -46,6 +46,8 @@
     #btnSort{
         margin-left: auto;
         margin-right: auto;
+        margin-top: 1em;
+        margin-bottom: auto;
     }
 
     .sorting{
@@ -79,7 +81,7 @@
     <form action="{{url_for("add")}}">
         <button id="postBut" class="btn" type="submit">Create New Post</button>
     </form>
-</div><br>
+</div>
 
 
 <div>
@@ -200,10 +202,11 @@
 
 
 </script>
-<br>
+
 {% endif %}
 {% endfor %}
 </div>
+<br>
 
 {% endblock %}
 
