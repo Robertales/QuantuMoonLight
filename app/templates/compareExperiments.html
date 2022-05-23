@@ -92,7 +92,7 @@
                 }
 
                 .chartMetrics{
-                    width: 50%;
+                    width: 33.3%;
                     float: left;
                 }
 
@@ -269,34 +269,6 @@
           }
           </script>
 
-            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-        google.charts.load("current", {packages:["corechart"]});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-              var data = google.visualization.arrayToDataTable([
-                ['Precision', 'Value in %', { role: 'style' }],
-                ['{{maxF1.name}}\nID: {{maxF1.id}}\n{{maxF1.model}}', {{maxF1.f1}} ,  "#d23114"],
-                ['{{minF1.name}}\nID: {{minF1.id}}\n{{minF1.model}}', {{minF1.f1}} ,  "#3e8410" ],
-              ]);
-
-              var view = new google.visualization.DataView(data);
-
-              var options = {
-                title: "Comparison of F1 metric",
-                width: 500,
-                height: 300,
-                bar: {groupWidth: "75%"},
-                legend: { position: "none" },
-                hAxis: { title: 'F1 metric %', scaleType: 'log', format: '#,##%'}
-
-              };
-              var chart = new google.visualization.BarChart(document.getElementById("barchart_valuesF1"));
-              chart.draw(view, options);
-          }
-          </script>
-
         <!-- REGRESSIONE -->
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
@@ -388,53 +360,37 @@
           }
           </script>
 
-             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-        google.charts.load("current", {packages:["corechart"]});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-              var data = google.visualization.arrayToDataTable([
-                ['R2', 'Value in %', { role: 'style' } ],
-                ['{{maxR2.name}}\nID: {{maxR2.id}}\n{{maxR2.model}}', {{maxR2.r2}} , "#d23114"],
-                ['{{minR2.name}}\nID: {{minR2.id}}\n{{minR2.model}}', {{minR2.r2}} , "#3e8410"],
-              ]);
-
-              var view = new google.visualization.DataView(data);
-
-              var options = {
-                title: "Comparison of R2 metric",
-                width: 500,
-                height: 300,
-                bar: {groupWidth: "75%"},
-                hAxis: { title: 'MSE metric %', scaleType: 'log', format: '#,##%'},
-                legend: { position: "none" },
-              };
-
-
-              var chart = new google.visualization.BarChart(document.getElementById("barchart_valuesR2"));
-              chart.draw(view, options);
-          }
-          </script>
-
-            {% if((maxPrecision.model == 'QSVM') or (maxPrecision.model == 'QSVC') or (maxPrecision.model == 'Pegasos QSVC') or (maxPrecision.model == 'Quantum Neural Network') or (maxPrecision.model == 'SVC') or (maxPrecision.model == 'K Neighbors Classifier') or (maxPrecision.model == 'Decision Tree Classifier') or (maxPrecision.model == 'Naive Bayes') or (maxPrecision.model == 'Random Forest Classifier'))
+            {% if((maxPrecision.model == 'QSVM') or (maxPrecision.model == 'QSVC') or (maxPrecision.model == 'PegasosQSVC') or (maxPrecision.model == 'NeuralNetworkClassifier'))
             and
-           ((minPrecision.model == 'QSVM') or (minPrecision.model == 'QSVC') or (minPrecision.model == 'Pegasos QSVC') or (minPrecision.model == 'Quantum Neural Network') or (minPrecision.model == 'SVC') or (minPrecision.model == 'K Neighbors Classifier') or (minPrecision.model == 'Decision Tree Classifier') or (minPrecision.model == 'Naive Bayes') or (minPrecision.model == 'Random Forest Classifier'))
-            %}
+            ((minPrecision.model == 'QSVM') or (minPrecision.model == 'QSVC') or (minPrecision.model == 'PegasosQSVC') or (minPrecision.model == 'NeuralNetworkClassifier'))
+            and
+            ((maxAccuracy.model == 'QSVM') or (maxAccuracy.model == 'QSVC') or (maxAccuracy.model == 'PegasosQSVC') or (maxAccuracy.model == 'NeuralNetworkClassifier'))
+            and
+            ((minAccuracy.model == 'QSVM') or (minAccuracy.model == 'QSVC') or (minAccuracy.model == 'PegasosQSVC') or (minAccuracy.model == 'NeuralNetworkClassifier'))
+            and
+            ((maxRecall.model == 'QSVM') or (maxRecall.model == 'QSVC') or (maxRecall.model == 'PegasosQSVC') or (maxRecall.model == 'NeuralNetworkClassifier'))
+            and
+            ((minRecall.model == 'QSVM') or (minRecall.model == 'QSVC') or (minRecall.model == 'PegasosQSVC') or (minRecall.model == 'NeuralNetworkClassifier')) %}
             <div class="intestazione"> <h5 class="text-center">METRICS COMPARISON</h5> </div>
             <div id="barchart_valuesAccuracy" class="chartMetrics"></div>
             <div id="barchart_valuesPrecision" class="chartMetrics"></div>
             <div id="barchart_valuesRecall" class="chartMetrics"></div>
-            <div id="barchart_valuesF1" class="chartMetrics"></div>
             {% endif %}
-            {% if((maxMSE.model == 'QSVR') or (maxMSE.model == 'VQR') or (maxMSE.model == 'SVR') or (maxMSE.model == 'Linear Regression') )
+            {% if((maxMSE.model == 'QSVR') or (maxMSE.model == 'NeuralNetworkRegressor'))
              and
-            ((minMSE.model == 'QSVR') or (minMSE.model == 'VQR') or (minMSE.model == 'SVR') or (minMSE.model == 'Linear Regression') )            %}
+             ((minMSE.model == 'QSVR') or (minMSE.model == 'NeuralNetworkRegressor'))
+             and
+             ((maxMAE.model == 'QSVR') or (maxMAE.model == 'NeuralNetworkRegressor'))
+             and
+             ((minMAE.model == 'QSVR') or (minMAE.model == 'NeuralNetworkRegressor'))
+             and
+             ((maxRMSE.model == 'QSVR') or (maxRMSE.model == 'NeuralNetworkRegressor'))
+             and
+             ((minRMSE.model == 'QSVR') or (minRMSE.model == 'NeuralNetworkRegressor')) %}
              <div class="intestazione"> <h5 class="text-center">METRICS COMPARISON</h5> </div>
              <div id="barchart_valuesMSE" class="chartMetrics"></div>
              <div id="barchart_valuesMAE" class="chartMetrics"></div>
              <div id="barchart_valuesRMSE" class="chartMetrics"></div>
-             <div id="barchart_valuesR2" class="chartMetrics"></div>
             {% endif %}
 
         </div>
@@ -445,7 +401,7 @@
                 <div class="divTableRow">
                     <div class="divTableHead">Code</div>
                     <div class="divTableHead">Dataset</div>
-                    <div class="divTableHead">Preprocessing & Classification/Regression algorithm used</div>
+                    <div class="divTableHead">Algorithm used in the experiment</div>
                     <div class="divTableHead">Metrics</div>
                     <div class="divTableHead">Time</div>
                 </div>
@@ -455,6 +411,7 @@
             <div class="divTableCell"> {{item.id}} </div>
             <div class="divTableCell"> {{item.name}} </div>
             <div class="divTableCell">
+                Validation:
                 {% if(item.simple_split) %}
                 Simple Split <br>
                 {% endif %}
@@ -463,15 +420,11 @@
                 {% endif %}
 
                 {% if(item.ps) %}
-                   Prototype Selection with Genetic Algorithm<br>
+                   PS with GA<br>
                 {% endif %}
 
                 {% if(item.fe) %}
-                     Feature Extraction with PCA<br>
-                {% endif %}
-
-                 {% if(item.fs) %}
-                     Feature Selection with K Best<br>
+                     FE with PCA<br>
                 {% endif %}
 
                 <strong>{{ item.model }}</strong>
@@ -479,12 +432,12 @@
             </div>
 
             <div class="divTableCell">
-                {% if  (item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'Pegasos QSVC') or (item.model == 'Quantum Neural Network') or (item.model == 'SVC') or (item.model == 'K Neighbors Classifier') or (item.model == 'Decision Tree Classifier') or (item.model == 'Naive Bayes') or (item.model == 'Random Forest Classifier') %}
+                {% if(item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'PegasosQSVC') or (item.model == 'NeuralNetworkClassifier') %}
                 <strong> Accuracy: </strong>{{'%0.2f'|format(item.accuracy|float)}}% <br>
                 <strong> Precision: </strong> {{'%0.2f'|format(item.precision|float)}}% <br>
                 <strong> Recall: </strong>{{'%0.2f'|format(item.recall|float)}}%
                 {% else %}
-                 {% if (item.model == 'QSVR') or (item.model == 'VQR') or (item.model == 'SVR') or (item.model == 'Linear Regression') %}
+                 {% if(item.model ==  'QSVR') or (item.model ==  'NeuralNetworkRegressor') %}
                 <strong>MSE </strong> : {{'%0.2f'|format(item.mse|float)}}% <br>
                 <strong>MAE: </strong>: {{'%0.2f'|format(item.mae|float)}}% <br>
                 <strong>RMSE: </strong>: {{'%0.2f'|format(item.rmse|float)}}%

@@ -248,17 +248,10 @@
                     ['Class', 'Number'],
                     ['QSVM',  {{datasets|selectattr('model',"equalto",'QSVM')|list|length }} ],
                     ['QSVC',  {{datasets|selectattr('model',"equalto",'QSVC')|list|length }} ],
-                    ['PegasosQSVC',   {{datasets|selectattr('model',"equalto",'Pegasos QSVC')|list|length }} ],
-                    ['Quantum Neural Network',   {{datasets|selectattr('model',"equalto",'Quantum Neural Network')|list|length }} ],
+                    ['PegasosQSVC',   {{datasets|selectattr('model',"equalto",'PegasosQSVC')|list|length }} ],
+                    ['NeuralNetworkClassifier',   {{datasets|selectattr('model',"equalto",'NeuralNetworkClassifier')|list|length }} ],
                     ['QSVR',   {{datasets|selectattr('model',"equalto",'QSVR')|list|length }} ],
-                    ['VQR',   {{datasets|selectattr('model',"equalto",'VQR')|list|length }} ],
-                    ['SVC',  {{datasets|selectattr('model',"equalto",'SVC')|list|length }} ],
-                    ['K Neighbors',  {{datasets|selectattr('model',"equalto",'K Neighbors Classifier')|list|length }} ],
-                    ['Decision Tree',  {{datasets|selectattr('model',"equalto",'Decision Tree Classifier')|list|length }} ],
-                    ['Naive Bayes',  {{datasets|selectattr('model',"equalto",'Naive Bayes')|list|length }} ],
-                    ['Random Forest',  {{datasets|selectattr('model',"equalto",'Random Forest Classifier')|list|length }} ],
-                    ['SVR',  {{datasets|selectattr('model',"equalto",'SVR')|list|length }} ],
-                    ['Linear Regression',  {{datasets|selectattr('model',"equalto",'Linear Regression')|list|length }} ],
+                    ['NeuralNetworkRegressor',   {{datasets|selectattr('model',"equalto",'NeuralNetworkRegressor')|list|length }} ],
               ]);
 
                 var options = {
@@ -286,13 +279,12 @@
                     ['FE-PS', 'Num',  { role: 'annotation' }, {role: 'style'}],
                     ['Feature Extraction', {{datasets|selectattr('fe')|list|length }} ,  "FE", '#4065c5' ],
                     ['Prototype Selection', {{datasets|selectattr('ps')|list|length }} , "PS", '#ff9c23' ],
-                    ['Feature Selection', {{datasets|selectattr('fs')|list|length }} ,  "FS", '#c54040' ],
               ]);
 
                 var view = new google.visualization.DataView(data);
 
                 var options = {
-                            title:  'History of FE,PS,FS used',
+                            title:  'History of FE and PS used',
                             bar: {groupWidth: "85%"},
                             vAxis: {format: '0'},
                             legend: { position: "none" },
@@ -345,7 +337,8 @@
                     <div class="divTableHead">Dataset</div>
                     <div class="divTableHead">Upload Date</div>
                     <div class="divTableHead">Validation Method</div>
-                    <div class="divTableHead">Preprocessing</div>
+                    <div class="divTableHead">PS</div>
+                    <div class="divTableHead">FE</div>
                     <div class="divTableHead">Classificator/Regressor</div>
                     <div class="divTableHead">Metrics</div>
                     <div class="divTableHead">Time</div>
@@ -367,23 +360,31 @@
                 {% if(item.validation == 'K Fold') %}
                 K Fold
                 {% endif %}
+                {% if(item.validation == 'None') %}
+                None
+                {% endif %}
             </div>
             <div class="divTableCell">
                 {% if(item.ps) %}
-                   Prototype Selection with Genetic Algorithm<br>
+                   GA
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
                 {% endif %}
-
+            </div>
+            <div class="divTableCell">
                 {% if(item.fe) %}
-                     Feature Extraction with PCA<br>
-                {% endif %}
-
-                 {% if(item.fs) %}
-                     Feature Selection with K Best<br>
+                     PCA
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
                 {% endif %}
             </div>
             <div class="divTableCell">{{ item.model }}</div>
-
             <div class="divTableCell">
+
                 {% if(item.model == 'QSVM') or (item.model == 'QSVC') or (item.model == 'Pegasos QSVC') or (item.model == 'Quantum Neural Network') or (item.model == 'SVC')
                 or (item.model == 'K Neighbors Classifier') or (item.model == 'Naive Bayes') or (item.model == 'Decision Tree Classifier') or (item.model == 'Random Forest Classifier') %}
                     {% if(item.accuracy==-1) %}

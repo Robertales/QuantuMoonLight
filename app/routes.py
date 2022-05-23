@@ -10,9 +10,8 @@ from flask_login import current_user, login_required
 from imblearn.over_sampling import SMOTE
 from qiskit import IBMQ
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from sqlalchemy import func, desc
 
-from app import app, db
+from app import app, db, ckeditor
 from app.source.model.models import User, Dataset, Article, Comment, Like
 from app.source.preprocessingDataset.aggId import addId
 from app.source.utils import addAttribute
@@ -95,13 +94,6 @@ def compareExperiments():
         Dataset.id.in_(listDataset)).order_by(
         Dataset.recall.desc()).first()
 
-    maxF1 = Dataset.query.filter(
-        Dataset.id.in_(listDataset)).order_by(
-        Dataset.f1).first()
-    minF1 = Dataset.query.filter(
-        Dataset.id.in_(listDataset)).order_by(
-        Dataset.f1.desc()).first()
-
     # COMPARISION FOR MSE
     maxMSE = Dataset.query.filter(
         Dataset.id.in_(listDataset)).order_by(
@@ -125,14 +117,6 @@ def compareExperiments():
     minRMSE = Dataset.query.filter(
         Dataset.id.in_(listDataset)).order_by(
         Dataset.rmse.desc()).first()
-
-    maxR2 = Dataset.query.filter(
-        Dataset.id.in_(listDataset)).order_by(
-        Dataset.r2).first()
-    minR2 = Dataset.query.filter(
-        Dataset.id.in_(listDataset)).order_by(
-        Dataset.r2.desc()).first()
-
     return render_template("compareExperiments.html",
                            datasets=datasets,
                            maxTotalTime=maxTotalTime,
@@ -150,11 +134,7 @@ def compareExperiments():
                            maxMAE=maxMAE,
                            minMAE=minMAE,
                            maxRMSE=maxRMSE,
-                           minRMSE=minRMSE,
-                           maxF1=maxF1,
-                           minF1=minF1,
-                           maxR2=maxR2,
-                           minR2=minR2
+                           minRMSE=minRMSE
                            )
 
 
@@ -190,14 +170,6 @@ def sendEmail():
 def blog(label=None):
     if label is None:
         posts = Article.query.order_by(Article.data.desc()).all()
-    elif label == "likes":
-        posts = db.session.query(Article, func.count(Like.email_user).label('total')).outerjoin(Like).group_by(
-            Article).order_by(desc('total')).all()
-        posts = [item[0] for item in posts]
-
-    elif label == "oldest":
-        posts = Article.query.order_by(Article.data.asc()).all()
-
     else:
         posts = Article.query.filter_by(label=label).order_by(Article.data.desc()).all()
 
@@ -206,7 +178,7 @@ def blog(label=None):
 
 @app.route("/ArticleApproval")
 def ArticleApproval():
-    posts = Article.query.filter_by(authorized=False).order_by(Article.data.desc()).all()
+    posts = Article.query.order_by(Article.data.desc()).all()
 
     return render_template("ArticleApproval.html", posts=posts)
 
@@ -224,30 +196,31 @@ def add():
     return render_template('add.html')
 
 
-@app.route('/like/<int:action>', methods=['GET'])
-@app.route('/like/', methods=['GET'])
+@app.route('/like', methods=['GET'])
 @login_required
-def like(action=0):
-    if action == 1:
-        email_user = current_user.email
-        data = request.args
-        id_article = data['data']
-        like = Like(email_user=email_user, id_article=id_article)
+def like():
+    email_user = current_user.email
+    data = request.args
+    id_article = data['data']
+    like = Like(email_user=email_user, id_article=id_article)
 
-        db.session.add(like)
-        db.session.commit()
+    db.session.add(like)
+    db.session.commit()
+    return render_template('add.html')
 
-    else:
-        email_user = current_user.email
-        data = request.args
-        id_article = data['data']
-        like = Like.query.filter_by(
-            email_user=email_user,
-            id_article=id_article).first()
 
-        db.session.delete(like)
-        db.session.commit()
+@app.route('/dislike', methods=['GET'])
+@login_required
+def dislike():
+    email_user = current_user.email
+    data = request.args
+    id_article = data['data']
+    like = Like.query.filter_by(
+        email_user=email_user,
+        id_article=id_article).first()
 
+    db.session.delete(like)
+    db.session.commit()
     return render_template('add.html')
 
 
@@ -281,7 +254,7 @@ def enableArticle(article_id):
     article.authorized = True
     db.session.commit()
 
-    return redirect(url_for('ArticleApproval'))
+    return redirect(url_for('blog'))
 
 
 @app.route('/deleteArticle/<int:article_id>', methods=['POST', 'GET'])
@@ -289,7 +262,7 @@ def deleteArticle(article_id):
     article = Article.query.filter_by(id=article_id).one()
     db.session.delete(article)
     db.session.commit()
-    return redirect(url_for('ArticleApproval'))
+    return redirect(url_for('blog'))
 
 
 @app.route('/enableComment/<int:comment_id>', methods=['POST', 'GET'])
@@ -299,14 +272,12 @@ def enableComment(comment_id):
     db.session.commit()
     return redirect(request.referrer)
 
-
 @app.route('/deleteComment/<int:comment_id>', methods=['POST', 'GET'])
 def deleteComment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).one()
     db.session.delete(comment)
     db.session.commit()
     return redirect(request.referrer)
-
 
 @app.route('/addcomment', methods=['POST'])
 @login_required
