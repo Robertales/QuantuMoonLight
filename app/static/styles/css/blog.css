@@ -39,8 +39,8 @@ div{ /* non funziona */
 {
     margin-left: 1em;
     margin-right: 1em;
-    margin-top: 1em;
-    margin-bottom: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
     border : 4px solid transparent;
     border-radius: 20px;
     background: linear-gradient(to right, white,white),
