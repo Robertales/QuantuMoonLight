@@ -36,7 +36,7 @@
         margin-left: 0em;
         margin-right: auto;
         width: 100%;
-        margin-top: auto;
+        margin-top: 1em;
         margin-bottom: auto;
         text-align: center;
         align-items: center;
@@ -46,6 +46,8 @@
     #btnSort{
         margin-left: auto;
         margin-right: auto;
+        margin-top: 1em;
+        margin-bottom: auto;
     }
 
     .sorting{
@@ -79,7 +81,7 @@
     <form action="{{url_for("add")}}">
         <button id="postBut" class="btn" type="submit">Create New Post</button>
     </form>
-</div><br>
+</div>
 
 
 <div>
@@ -93,10 +95,10 @@
                     <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort" class="btn d-flex align-items-center"> ARTICLE</button> </a>
                 </td>
                   <td>
-                    <a href="{{ url_for('blog', label='Experiment') }}"> <button id="btnSort" class="btn d-flex align-items-center" > MOST LIKED</button> </a>
+                    <a href="{{ url_for('blog', label='likes') }}"> <button id="btnSort" class="btn d-flex align-items-center" > MOST LIKED</button> </a>
                 </td>
                 <td>
-                    <a href="{{ url_for('blog', label='Article') }}"> <button id="btnSort" class="btn d-flex align-items-center"> OLDEST</button> </a>
+                    <a href="{{ url_for('blog') }}"> <button id="btnSort" class="btn d-flex align-items-center"> NEWEST</button> </a>
                 </td>
               </tr>
             </thead>
@@ -173,7 +175,7 @@
             btnvar1.style.color = "grey"
             $.ajax({
                 type: 'GET',
-                url: "{{url_for("dislike")}}",
+                url: "{{url_for("like",action=0)}}",
                 data: {'data': JSON.stringify(intValue)},
                 contentType: "application/json",
                 dataType: 'json'
@@ -182,7 +184,7 @@
             btnvar1.style.color = "red"
             $.ajax({
                 type: 'GET',
-                url: "{{url_for("like")}}",
+                url: "{{url_for("like",action=1)}}",
                 data: {'data': JSON.stringify(intValue)},
                 contentType: "application/json",
                 dataType: 'json'
@@ -200,10 +202,11 @@
 
 
 </script>
-<br>
+
 {% endif %}
 {% endfor %}
 </div>
+<br>
 
 {% endblock %}
 
