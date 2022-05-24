@@ -228,8 +228,8 @@
                                             <input type="checkbox" id="checkSplitTrain" name="splitDataset" value="splitDataset" >  Automatically Split the Training Set
                                         </label>
                                         <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Uploading</strong></a> only the training set, this technique.<br>
+                                                execute a simple split, 80% for train set<br> and 20% for test set </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -243,8 +243,8 @@
                                             <input type="checkbox" id="checkFSKB" name="reduceFS" value="KBest" > Reduce columns with Feature Selection(K Best)
                                         </label>
                                         <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Reduce</strong></a> the number of columns <br>
+                                                through PCA or K-best. Default K is 2 </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -255,8 +255,8 @@
                                             <input type="checkbox" id="checkPrototypeSelection" name="reducePS" value="reducePS" > Reduce rows with Prototype Selection
                                         </label>
                                         <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Apply</strong></a> a genethic algoritm to reduce number of instances<br>
+                                                Keep good accuracy and<br> decrease training time. Default value is 100 </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -290,8 +290,8 @@
                                             </optgroup>
                                         </select></label>
                                         <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Choose</strong></a> quantum alghorithm or canonical<br> to execute machine learning tasks<br>
+                                                None, if you want get only dataset preprocessed </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -314,7 +314,7 @@
                                             </optgroup>
                                         </select></label>
                                         <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -332,8 +332,8 @@
                                 <div class="card card-body">
                                     <div class = "card card-body" id = "validation"> <b class="headTitle">Validation</b>
                                         <label><input type="radio" class="AdvancedOption" id="checkSimpleSplit" name="Radio" value="simpleSplit" checked>   Simple Train-Test Split <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>By deafult</strong></a> is simple split 80-20, but<br>
+                                                You can select k-fold cross validation </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -342,8 +342,10 @@
 
 
                                     <label><input type="radio" class="AdvancedOption" id="checkKFold" name="Radio" value="kFold">  K-fold Cross Validation <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>This approach</strong></a>involves randomly dividing the set <br>
+                                                of observations into k groups, or folds, <br>
+                                                The first fold is treated as a validation set,<br>
+                                                and the method is fit on the remaining k − 1 folds</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -351,8 +353,10 @@
 
 
                                     <label id="label_kp">Insert k parameter:   <input type="number" max="10000" value="10" id="kFoldValue" name="kFoldValue" min="10" style="border: 0.1em solid grey"> <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>When a specific</strong></a> value for k is chosen, it may<br>
+                                                be used in place of k in the reference<br>
+                                                to the model, deafult is k=10 so <br>
+                                                becoming 10-fold cross-validation </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -365,7 +369,7 @@
 
                                     <div class="card card-body" id = "Preprocessing"> <p class="headTitle"> Preprocessing </p>
                                         <label><input type="checkbox" class="AdvancedOption" id="imputation" name="imputation" value="imputation">  Data Imputation <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -374,7 +378,7 @@
 
 
                                         <label><input type="checkbox" class="AdvancedOption" id="balancing" name="balancing" value="balancing">  Data Balancing <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -383,8 +387,9 @@
 
 
                                     <label><input type="radio" class="AdvancedOption" id="MinMax" name="scaling" value="MinMax">   MinMax Scaling <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>One approach</strong></a>  to addressing imbalanced datasets is<br>
+                                                to oversample the minority class<br>
+                                                - Apply data augumentation through SMOTE </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -392,8 +397,8 @@
 
 
                                     <label><input type="radio" class="AdvancedOption" id="Standard" name="scaling" value="Standard">  Standard Scaling <div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Scale</strong></a> the value of your datset ,typically <br>
+                                                to perform KNN or SVM problems </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -402,8 +407,11 @@
 
                                         <div class ="card card-body" id = "FeatureExtraction"> <p class="headTitle"> Feature Extraction</p>
                                              <label>Insert nr of columns to reduce Feature Extraction:   <input type="number" max="10000" min="2" value="2" id="nrColumnsFE" name="nrColumnsFE" style="border: 0.1em solid grey"><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Dimensionally </strong></a>reduction of your dataset<br>
+                                                - PCA can be thought of as fitting<br>
+                                                a p-dimensional ellipsoid to the data,<br>
+                                                where each axis of the ellipsoid <br>
+                                                represents a principal component. </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -411,7 +419,7 @@
 
                                         <div class ="card card-body" id = "FeatureSelection"> <p class="headTitle"> Feature Selection </p>
                                              <label>Insert nr of columns to reduce Feature Selection:   <input type="number" max="10000" min="2" value="2" id="nrColumnsFS" name="nrColumnsFS" style="border: 0.1em solid grey"><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Select</strong></a>  features according to the k highest scores.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -422,8 +430,8 @@
                                     </div>
                                         <div class ="card card-body" id = "PrototypeSelection"> <p class="headTitle">Prototype Selection</p>
                                             <label>Insert nr of rows to reduce:    <input type="number" max="10000" min="2" value="100" id="nrRows" name="nrRows" style="border: 0.1em solid grey"><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Selected</strong></a> the most relevant istances<br>
+                                                of dataset, applyied only at training set </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -432,8 +440,9 @@
                                     <div class ="card card-body" id = "Hyperparameter">  <p class="headTitle">Hyperparameter</p>
                                         <div class ="card card-body" id = "Pegasos"> Pegasos QSVC
                                     <label>Insert PegasosQSVC C:    <input type="number" max="10000" min="2" value="1000" id="C" name="C" style="border: 0.1em solid grey"><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Positive</strong></a> regularization parameter. <br> The strength of the regularization is inversely proportional to C.
+                                                <br> Smaller C induce smaller weights<br>
+                                                which generally helps preventing overfitting.</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -441,8 +450,8 @@
 
 
                                     <label>Insert PegasosQSVC tau:    <input type="number" max="10000" min="2" value="100" id="tau" name="tau" style="border: 0.1em solid grey"><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Number</strong></a> of iteration used during the train phase<br>
+                                            There is no early stopping criterion. The algorithm iterates over all steps.</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -458,8 +467,7 @@
                                                                         <option value="GradientDescent">Gradient Descent </option>
                                                                         <option value="COBYLA">COBYLA</option>
                                                                     </select><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Choose</strong></a>from different available neural networks</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -470,8 +478,9 @@
                                                                             <option value="squared_error">Squared Error </option>
                                                                             <option value="absolute_error">Absolute Error </option>
                                                                         </select><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>The loss function</strong></a>in a neural network quantifies the difference between<br>
+                                                the expected outcome and the outcome produced<br>
+                                                by the machine learning model </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -479,8 +488,8 @@
 
 
                                     <label>Insert max iterations optimizer:    <input type="number" max="10000" min="10" value="100" id="max_iter" name="max_iter" style="border: 0.1em solid grey"><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href=""><strong>Number</strong></a> of iteration<br>
+                                              </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -497,8 +506,8 @@
                                                                         <option value="sigmoid">sigmoid</option>
                                                                         <option value="precomputed">precomputed</option>
                                                                     </select><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
-                                                Morbi elit magna, auctor ac enim sed, faucibus </span>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Select</strong></a> the kernel method to apply at SVC problems<br>
+                                               </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
@@ -506,7 +515,7 @@
 
                                         <div class ="card card-body" id = "C_SVC">
                                     <label>Insert SVC C:    <input type="number" max="10000" min="1" value="1" id="CSVC" name="C_SVC" style="border: 0.1em solid grey"><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -521,7 +530,7 @@
                                                                         <option value="sigmoid">sigmoid</option>
                                                                         <option value="precomputed">precomputed</option>
                                                                     </select><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -530,7 +539,7 @@
 
                                         <div class ="card card-body" id = "C_SVR">
                                     <label>Insert SVR C:    <input type="number" max="10000" min="1" value="1" id="CSVR" name="C_SVR" style="border: 0.1em solid grey"><div id="tooltip">
-                                            <span id="tooltipText"><a href="https://www.google.com/"><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
+                                            <span id="tooltipText"><a href={{url_for("getStarted")}}><strong>Lorem</strong></a> ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                                 Morbi elit magna, auctor ac enim sed, faucibus </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="info" viewBox="0 0 16 16">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
