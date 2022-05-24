@@ -195,6 +195,7 @@ class ClassificazioneControl:
                     backend = Aer.get_backend('aer_simulator')
                     print("backend selected: aer_simulator")
                 else:
+
                     backend = least_busy(
                         provider.backends(
                             filters=lambda x: int(x.configuration().n_qubits) >= qubit
@@ -211,7 +212,9 @@ class ClassificazioneControl:
                 # backend
                 print(e)
                 no_backend = True
-                backend = Aer.get_backend('aer_simulator')
+                backend =  provider.get_backend(
+                    'ibmq_qasm_simulator'
+                )
                 print("backend selected: simulator")
                 print("backend qubit: 32")
 
