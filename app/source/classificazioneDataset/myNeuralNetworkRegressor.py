@@ -111,4 +111,5 @@ class myNeuralNetworkRegressor:
         except Exception as e:
             print(e)
             result["error"] = 1
+            result["exception"] = e
         return result

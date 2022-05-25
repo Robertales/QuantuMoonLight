@@ -166,6 +166,7 @@ class myQSVM:
             print("Error on IBM server")
             print(e)
             result["error"] = 1
+            result["exception"] = e
 
         return result
 

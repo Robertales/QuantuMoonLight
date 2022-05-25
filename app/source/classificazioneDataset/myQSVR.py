@@ -56,44 +56,45 @@ class myQSVR:
         qkernel = QuantumKernel(feature_map=feature_map, quantum_instance=QuantumInstance(backend))
         qsvr = QSVR(quantum_kernel=qkernel)
 
-        #try:
-        # training
-        print("Running...")
-        start_time = time.time()
-        qsvr.fit(train_features, train_labels)
-        training_time = time.time() - start_time
-        print("Train effettuato in " + str(training_time))
+        try:
+            # training
+            print("Running...")
+            start_time = time.time()
+            qsvr.fit(train_features, train_labels)
+            training_time = time.time() - start_time
+            print("Train effettuato in " + str(training_time))
 
-        # test
-        start_time = time.time()
-        score = qsvr.score(test_features, test_labels)
-        test_prediction = qsvr.predict(test_features)
-        print(test_labels, test_prediction)
-        testing_time = time.time() - start_time
-        result["regression_score"] = score
-        mse = mean_squared_error(test_labels, test_prediction)
-        mae = mean_absolute_error(test_labels, test_prediction)
-        result["mse"] = mse
-        result["mae"] = mae
-        rmse = math.sqrt(mse)
-        result["regression_score"] = score
-        result["rmse"] = rmse
+            # test
+            start_time = time.time()
+            score = qsvr.score(test_features, test_labels)
+            test_prediction = qsvr.predict(test_features)
+            print(test_labels, test_prediction)
+            testing_time = time.time() - start_time
+            result["regression_score"] = score
+            mse = mean_squared_error(test_labels, test_prediction)
+            mae = mean_absolute_error(test_labels, test_prediction)
+            result["mse"] = mse
+            result["mae"] = mae
+            rmse = math.sqrt(mse)
+            result["regression_score"] = score
+            result["rmse"] = rmse
 
-        # prediction
-        start_time = time.time()
-        if utils.numberOfColumns(path_predict) == 1:
-            prediction_data = prediction_data.reshape(-1, 1)
-        if utils.numberOfRows(path_predict) == 1:
-            prediction_data = prediction_data.reshape(1, -1)
-        predicted_labels = qsvr.predict(prediction_data)
-        print(predicted_labels)
-        total_time = time.time() - start_time
-        print("Prediction effettuata in " + str(total_time))
-        result["predicted_labels"] = np.array(predicted_labels)
+            # prediction
+            start_time = time.time()
+            if utils.numberOfColumns(path_predict) == 1:
+                prediction_data = prediction_data.reshape(-1, 1)
+            if utils.numberOfRows(path_predict) == 1:
+                prediction_data = prediction_data.reshape(1, -1)
+            predicted_labels = qsvr.predict(prediction_data)
+            print(predicted_labels)
+            total_time = time.time() - start_time
+            print("Prediction effettuata in " + str(total_time))
+            result["predicted_labels"] = np.array(predicted_labels)
 
-        result["total_time"] = str(testing_time + training_time)[0:6]
-        result["training_time"] = str(training_time)[0:6]
-        """except Exception as e:
+            result["total_time"] = str(testing_time + training_time)[0:6]
+            result["training_time"] = str(training_time)[0:6]
+        except Exception as e:
             print(e)
-            result["error"] = 1"""
+            result["error"] = 1
+            result["exception"] = e
         return result

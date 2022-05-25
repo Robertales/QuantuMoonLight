@@ -126,7 +126,7 @@ class ClassificazioneControl:
             max_iter, kernelSVR, kernelSVC, C_SVC, C_SVR, id_dataset)
         if result != 0:
             ClassificazioneControl.get_classified_dataset(
-                self, result, path_prediction, email)
+                self, result, path_prediction, email, model)
         return result
 
     def classify(
@@ -249,7 +249,7 @@ class ClassificazioneControl:
             result = {**result, **r}
 
         elif model == "SVR" or model == "Linear Regression":
-            r = classicRegressor.classify(path_train, path_test, user_path_to_predict, model, kernelSVC, C_SVR)
+            r = classicRegressor.classify(path_train, path_test, user_path_to_predict, model, kernelSVR, C_SVR)
             result = {**result, **r}
 
         if result["error"] != 1:
@@ -300,7 +300,7 @@ class ClassificazioneControl:
         result["no_backend"] = no_backend
         return result
 
-    def get_classified_dataset(self, result, userpathToPredict, email):
+    def get_classified_dataset(self, result, userpathToPredict, email, model):
         """
 
         :param result: dict used to add details sent through email
@@ -331,12 +331,22 @@ class ClassificazioneControl:
         msg.attach(img)
 
         if result["error"] == 1:
-            msg.attach(
-                MIMEText(
-                    "<center><h4>An error has been detected for one of the following reasons:<br>"
-                    "- IBM Server Error, check status on: //quantum-computing.ibm.com/services?services=systems<br>"
-                    "- A dataset for multilabel classification has been inserted by selecting PegasosQSVC(only binary classification)</center></h4>",
-                    'html'))
+            exception = str(result["exception"])
+            if model == "PegasosSVC":
+                msg.attach(
+                    MIMEText(
+                        "<center><h4>An error has been detected for one of the following reasons:<br>"
+                        "- IBM Server Error, check status on: //quantum-computing.ibm.com/services?services=systems<br>"
+                        "- A dataset for multilabel classification has been inserted by selecting PegasosQSVC(only binary classification)</center></h4>"
+                        "<br>Error: " + exception,
+                        'html'))
+            else:
+                msg.attach(
+                    MIMEText(
+                        "<center><h4>An error has been detected:<br>"
+                        "- " + exception +" <br>Check status on: //quantum-computing.ibm.com/services?services=systems<br>"
+                        "- A dataset for multilabel classification has been inserted by selecting PegasosQSVC(only binary classification)</center></h4>",
+                        'html'))
 
         else:
             msg.attach(
