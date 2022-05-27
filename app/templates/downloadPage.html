@@ -34,12 +34,15 @@ h4{
     padding-right: 0.5em;
 
 }
-#download{
-    background: -moz-linear-gradient(left, #000080 0%, #4B0082 100%);
-    background: -webkit-linear-gradient(left, #000080 0%, #4B0082 100%);
-    background: linear-gradient(to right, #000080 0%, #4B0082 100%);
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
+
+#downloadResults {
+    border-bottom: #777;
+    padding: 20px 60px;
+    text-align: center;
+    font-weight: bold;
+    background-image: linear-gradient(to left,darkblue, blueviolet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 </style>
 
@@ -49,7 +52,7 @@ h4{
 {% block content %}
 
         <div id="download">
-            <h1 class="text-center font-weight-bold">DOWNLOAD YOUR RESULTS</h1>
+            <h1 id="downloadResults">DOWNLOAD YOUR RESULTS</h1>
         </div>
 
         <section class="features-section">
@@ -78,8 +81,8 @@ h4{
                         </div>
                 </div>
             </div><br>
-            <h4 class="font-italic">If you have selected QSVM you will shortly receive an email with the result</h4><br>
-            <a href="{{url_for("homepage")}}">Back to homepage</a>
+            <h4 class="font-italic">If you have selected an algorithm for classification/regression you will shortly receive an email with the result</h4><br>
+            <a href="{{url_for("homepage")}}">Back to Quantum ML Page</a>
         </section>
         <br><br>
         {% endblock %}
