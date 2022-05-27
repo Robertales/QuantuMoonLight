@@ -554,6 +554,7 @@
                                     {% if current_user.isResearcher %}
                                     <label><p class="headTitle">Select quantum system:</p> <select name="backend" id="backend" style="border: 0.1em solid grey" >
                                                                 <option value="backend">Least Busy IBM Backend</option>
+                                                                <option value="qasm_simulator">IBM Qasm Simulator; Qubit: 32 </option>
                                                                 <option value="aer_simulator">IBM Aer Simulator; Qubit: 32 </option>
                                                                 <option value="ibm_washington">IBM Washington; Processor type: Eagle R1; Qubit: 127 </option>
                                                                 <option value="ibmq_brooklyn">IBMQ Brooklyn; Processor type: Hammingbird R1; Qubit: 65 </option>
@@ -571,6 +572,7 @@
                                     {% else %}
                                     <label>Select quantum system: <select name="backend" id="backend" style="max-width: 50%;"> <!-- da fixare il width -->
                                                                 <option value="backend">Least Busy IBM Backend</option>
+                                                                <option value="ibmq_qasm_simulator">IBM Qasm Simulator; Qubit: 32 </option>
                                                                 <option value= "aer_simulator">aer_simulator; Qubit: 16 </option>
                                                                 <option value="ibmq_manila">IBMQ Manila; Processor type: Falcon r5.11L;	Qubit: 5 </option>
                                                                 <option value="ibmq_bogota">IBMQ Bogota; Processor type: Falcon r4L; Qubit: 5 </option>
