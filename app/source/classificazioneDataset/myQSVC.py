@@ -104,9 +104,9 @@ class myQSVC:
             ax1.pie(sizes, labels=labels, autopct='%1.1f%%')
             # Equal aspect ratio ensures that pie is drawn as a circle.
             ax1.axis('equal')
-
-            plt.show()
             plt.savefig(Path(pathTest).parent / 'graphLabels', dpi=150)
+            plt.show()
+
 
             # Each attribute we'll plot in the radar chart.
             labels = ['Precision', 'Recall', 'Accuracy', 'f1']
@@ -166,8 +166,9 @@ class myQSVC:
 
             # Lastly, give the chart a title and give it some padding
             ax.set_title('QSVC metrics', y=1.08)
-            plt.show()
             plt.savefig(Path(pathTest).parent / 'graphClassifier', dpi=150)
+            plt.show()
+
         except Exception as e:
             print(e)
             result["error"] = 1
