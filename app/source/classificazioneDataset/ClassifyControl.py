@@ -174,8 +174,9 @@ class ClassificazioneControl:
                 IBMQ.enable_account(token)
                 provider = IBMQ.get_provider(hub="ibm-q")
                 IBMQ.disable_account()
-            except:
-                print("Error activating/deactivating IBM account")
+            except Exception as e:
+                print(e)
+                print("Invalid token")
 
 
             try:
