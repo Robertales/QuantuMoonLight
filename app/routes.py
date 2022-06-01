@@ -14,6 +14,7 @@ from sqlalchemy import func, desc
 
 from app import app, db
 from app.source.model.models import User, Dataset, Article, Comment, Like
+from app.source.preprocessingDataset import callPS
 from app.source.preprocessingDataset.aggId import addId
 from app.source.utils import addAttribute
 from app.source.utils import utils
@@ -709,6 +710,8 @@ def smista():
             df.columns = columns
             df.insert(loc=len(df.columns), column="labels", value=y_train_bal)
             df.to_csv(pathTrain, index=False)
+            if prototypeSelection:
+                pathTrain = callPS.callPrototypeSelection(pathTrain, numRawsPS)
             addId(pathTrain, pathTrain)
     except Exception as e:
         print(e)

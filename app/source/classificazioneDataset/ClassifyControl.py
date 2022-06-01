@@ -8,6 +8,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formatdate
 from threading import Thread
+from flask_login import current_user
 
 import flask
 from flask import request
@@ -126,7 +127,7 @@ class ClassificazioneControl:
             max_iter, kernelSVR, kernelSVC, C_SVC, C_SVR, id_dataset)
         if result != 0:
             ClassificazioneControl.get_classified_dataset(
-                self, result, path_prediction, email, model)
+                self, result, path_prediction, email, model, backend)
         return result
 
     def classify(
@@ -172,7 +173,10 @@ class ClassificazioneControl:
         if model == "QSVM" or model == "QSVC" or model == "Pegasos QSVC" or model == "QSVR" or model == "Quantum Neural Network" or model == "VQR":
             try:
                 IBMQ.enable_account(token)
-                provider = IBMQ.get_provider(hub="ibm-q")
+                if(current_user.isResearcher == True):
+                    provider = IBMQ.get_provider(group=str(current_user.group))
+                else:
+                    provider = IBMQ.get_provider(hub='ibm-q')
                 IBMQ.disable_account()
             except Exception as e:
                 print(e)
@@ -301,7 +305,7 @@ class ClassificazioneControl:
         result["no_backend"] = no_backend
         return result
 
-    def get_classified_dataset(self, result, userpathToPredict, email, model):
+    def get_classified_dataset(self, result, userpathToPredict, email, model, backend):
         """
 
         :param result: dict used to add details sent through email
@@ -373,6 +377,7 @@ class ClassificazioneControl:
                         "{:.2f}".format(float(rmse)) +
                         "<br><br> R2: " +
                         "{:.2f}".format(float(score)) +
+                        "Backend used: " + str(backend) +
                         "</h3></center>",
                         'html'))
             else:
@@ -392,6 +397,7 @@ class ClassificazioneControl:
                         "{:.2%}".format(recall) +
                         "<br><br>Testing f1: " +
                         "{:.2%}".format(f1) +
+                        "<br><br>Backend used: " + str(backend) +
                         "</h3></center>", 'html'))
 
             if result.get("training_time") == -1:
