@@ -152,7 +152,7 @@ def callFeatureExtraction_Selection(
         pathFileYourPCAToPredict = pathFileYourPCA / "doPredictionFE.csv"
         PCA_df_to_predict.to_csv(pathFileYourPCAToPredict, index=False, header=False)
 
-        print("Feature Extraction result for: " + pathToPredict.__str__())
+        print("Feature Extraction/Selection result for: " + pathToPredict.__str__())
         print(PCA_df_to_predict.head())
 
 

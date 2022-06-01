@@ -35,7 +35,7 @@ class PreprocessingControl:
         # Cartella dell'utente dove scrivere tutti i risultati
         pathPC = pathlib.Path(userpath).parents[0]
         print("path in PC: ", pathPC)
-        if not featureExtraction and not prototypeSelection and classification:
+        if not featureExtraction and not prototypeSelection and not featureSelection and model == "QSVM":
             # Se l'utente non vuole preprocessare il dataset ma vuole fare QSVM,
             # allora qui creo i dataset da classificare aggiungendo la colonna ID
             aggId.addId(
