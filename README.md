@@ -1,8 +1,8 @@
-#QuantuMoonLight
+<h1>QuantuMoonLight</h1>
 
-QuantuMoonLight is a user-friendly web platform aimed at quantum computation and machine learning enthusiasts, industry professionals, students and researchers.
+QuantuMoonLight is the major user-friendly web platform aimed at quantum computation and machine learning enthusiasts, industry professionals, students and researchers.
 
-The main function of the system is to allow registered users to perform common operation as validation, preprocessing and classifications on datasets uploaded by users.
+The main function of the system is to allow registered users to perform common operation as validation, preprocessing, classifications, regression and more on datasets uploaded by users.
 
 Quantum Machine Learning is a little-known area and therefore we want to extend the interested community, trying to offer a product simple, reliable and useful, using the solutions made available by new Quantum Computing technologies.
 
