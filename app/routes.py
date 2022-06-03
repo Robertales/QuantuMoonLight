@@ -767,12 +767,12 @@ def smista():
                 kernelSVC=kernelSVC,
                 C_SVC=C_SVC,
                 C_SVR=C_SVR,
-                id_dataset=salvataggiodatabase.id
+                id_dataset=salvataggiodatabase.id,
+                User=current_user.get_id()
             ),
         )
 
     print("\n\nSmista ha finito! To the Moon!")
-
     return render_template(
         "downloadPage.html",
         ID=salvataggiodatabase.id)

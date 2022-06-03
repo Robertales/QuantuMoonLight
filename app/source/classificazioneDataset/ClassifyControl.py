@@ -24,7 +24,7 @@ from app.source.classificazioneDataset.myPegasosQSVC import myPegasosQSVC
 from app.source.classificazioneDataset.myQSVC import myQSVC
 from app.source.classificazioneDataset.myQSVM import myQSVM
 from app.source.classificazioneDataset.myQSVR import myQSVR
-from app.source.model.models import Dataset
+from app.source.model.models import Dataset, User
 from app.source.utils import utils
 
 warnings.simplefilter(action="ignore", category=DeprecationWarning)
@@ -56,7 +56,7 @@ class ClassificazioneControl:
         C_SVC = request.form.get("C_SVC")
         C_SVR = request.form.get("C_SVR")
         id_dataset = request.form.get("id_dataset")
-
+        user_id = request.form.get("User")
 
         thread = Thread(
             target=ClassificazioneControl.classification_thread,
@@ -79,7 +79,8 @@ class ClassificazioneControl:
                 kernelSVC,
                 C_SVC,
                 C_SVR,
-                id_dataset))
+                id_dataset,
+                user_id))
         thread.setDaemon(True)
         thread.start()
         flask.g = thread
@@ -104,7 +105,8 @@ class ClassificazioneControl:
             kernelSVC,
             C_SVC,
             C_SVR,
-            id_dataset):
+            id_dataset,
+            user_id):
         """
         The function is called from classify_control(), anc starts the async thread to run the classification,
         at the end of which the email with the result is sent, through the function get_classified_dataset()
@@ -123,8 +125,25 @@ class ClassificazioneControl:
         :return: dict containing classification-related info
         """
         result: dict = ClassificazioneControl.classify(
-            self, path_train, path_test, path_prediction, features, token, backend, model, C, tau, optimizer, loss,
-            max_iter, kernelSVR, kernelSVC, C_SVC, C_SVR, id_dataset)
+            self,
+            path_train,
+            path_test,
+            path_prediction,
+            features,
+            token,
+            backend,
+            model,
+            C,
+            tau,
+            optimizer,
+            loss,
+            max_iter,
+            kernelSVR,
+            kernelSVC,
+            C_SVC,
+            C_SVR,
+            id_dataset,
+            user_id)
         if result != 0:
             ClassificazioneControl.get_classified_dataset(
                 self, result, path_prediction, email, model, backend)
@@ -148,8 +167,9 @@ class ClassificazioneControl:
             kernelSVC,
             C_SVC,
             C_SVR,
-            id_dataset
-        ):
+            id_dataset,
+            user_id
+    ):
         """
         This function connects to the IBM backend, handles IBM backend errors, executes the QSVM classification,
         and creates the result dataset (classifiedDataset.csv)
@@ -169,19 +189,25 @@ class ClassificazioneControl:
         result["model"] = model
         provider = ""
         qubit = len(features)
+        user = User.query.filter_by(email=user_id).first()
+
+        if user.isResearcher:
+            Researcher = True
+        else:
+            Researcher = False
+
         global backend
         if model == "QSVM" or model == "QSVC" or model == "Pegasos QSVC" or model == "QSVR" or model == "Quantum Neural Network" or model == "VQR":
             try:
                 IBMQ.enable_account(token)
-                if(current_user.isResearcher == True):
-                    provider = IBMQ.get_provider(group=str(current_user.group))
+                if Researcher:
+                    provider = IBMQ.get_provider(group=str(user.group))
                 else:
                     provider = IBMQ.get_provider(hub='ibm-q')
                 IBMQ.disable_account()
             except Exception as e:
                 print(e)
                 print("Invalid token")
-
 
             try:
                 if (
@@ -204,12 +230,13 @@ class ClassificazioneControl:
                     backend = least_busy(
                         provider.backends(
                             filters=lambda x: int(x.configuration().n_qubits) >= qubit
-                                              and not x.configuration().simulator
-                                              and x.status().operational == True
+                            and not x.configuration().simulator
+                            and x.status().operational
                         )
                     )
                     print("least busy backend: ", backend)
-                    print("backend qubit:" + str(provider.get_backend(backend.name()).configuration().n_qubits))
+                    print("backend qubit:" +
+                          str(provider.get_backend(backend.name()).configuration().n_qubits))
 
             except Exception as e:
                 # when selected backend has not enough qubit, or no backends has enough
@@ -217,44 +244,93 @@ class ClassificazioneControl:
                 # backend
                 print(e)
                 no_backend = True
-                backend =  provider.get_backend(
+                backend = provider.get_backend(
                     'ibmq_qasm_simulator'
                 )
                 print("backend selected: simulator")
                 print("backend qubit: 32")
 
         if model == "QSVM":
-            r = myQSVM.classify(path_train, path_test, user_path_to_predict, backend, features, qubit)
+            r = myQSVM.classify(
+                path_train,
+                path_test,
+                user_path_to_predict,
+                backend,
+                features,
+                qubit)
             result = {**result, **r}
 
         elif model == "Pegasos QSVC":
-            r = myPegasosQSVC.classify(path_train, path_test, user_path_to_predict, backend, qubit, C, tau)
+            r = myPegasosQSVC.classify(
+                path_train,
+                path_test,
+                user_path_to_predict,
+                backend,
+                qubit,
+                C,
+                tau)
             result = {**result, **r}
 
         elif model == "QSVC":
-            r = myQSVC.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            r = myQSVC.classify(
+                path_train,
+                path_test,
+                user_path_to_predict,
+                backend,
+                qubit)
             result = {**result, **r}
 
         elif model == "Quantum Neural Network":
-            r = myNeuralNetworkClassifier.classify(path_train, path_test, user_path_to_predict, backend, qubit,
-                                                   optimizer, loss, max_iter)
+            r = myNeuralNetworkClassifier.classify(
+                path_train,
+                path_test,
+                user_path_to_predict,
+                backend,
+                qubit,
+                optimizer,
+                loss,
+                max_iter)
             result = {**result, **r}
 
         elif model == "QSVR":
-            r = myQSVR.classify(path_train, path_test, user_path_to_predict, backend, qubit)
+            r = myQSVR.classify(
+                path_train,
+                path_test,
+                user_path_to_predict,
+                backend,
+                qubit)
             result = {**result, **r}
 
         elif model == "VQR":
-            r = myNeuralNetworkRegressor.classify(path_train, path_test, user_path_to_predict, backend, qubit,
-                                                  optimizer, loss, max_iter)
+            r = myNeuralNetworkRegressor.classify(
+                path_train,
+                path_test,
+                user_path_to_predict,
+                backend,
+                qubit,
+                optimizer,
+                loss,
+                max_iter)
             result = {**result, **r}
 
         elif model == "SVC" or model == "K Neighbors Classifier" or model == "Naive Bayes" or model == "Decision Tree Classifier" or model == "Random Forest Classifier":
-            r = classicClassifier.classify(path_train, path_test, user_path_to_predict, model, kernelSVC, C_SVC)
+            r = classicClassifier.classify(
+                path_train,
+                path_test,
+                user_path_to_predict,
+                model,
+                kernelSVC,
+                C_SVC)
             result = {**result, **r}
 
         elif model == "SVR" or model == "Linear Regression":
-            r = classicRegressor.classify(path_train, path_test, user_path_to_predict, model, kernelSVR, C_SVR)
+            r = classicRegressor.classify(
+                path_train,
+                path_test,
+                user_path_to_predict,
+                model,
+                kernelSVR,
+                C_SVR)
             result = {**result, **r}
 
         if result["error"] != 1:
@@ -281,7 +357,8 @@ class ClassificazioneControl:
             predicted_labels = result["predicted_labels"]
 
             classified_file = open(
-                pathlib.Path(user_path_to_predict).parent / "classifiedFile.csv",
+                pathlib.Path(user_path_to_predict).parent /
+                "classifiedFile.csv",
                 "w",
             )
             prediction_file = open(user_path_to_predict, "r")
@@ -305,7 +382,13 @@ class ClassificazioneControl:
         result["no_backend"] = no_backend
         return result
 
-    def get_classified_dataset(self, result, userpathToPredict, email, model, backend):
+    def get_classified_dataset(
+            self,
+            result,
+            userpathToPredict,
+            email,
+            model,
+            backend):
         """
 
         :param result: dict used to add details sent through email
@@ -343,13 +426,14 @@ class ClassificazioneControl:
                         "<center><h4>An error has been detected for one of the following reasons:<br>"
                         "- IBM Server Error, check status on: //quantum-computing.ibm.com/services?services=systems<br>"
                         "- A dataset for multilabel classification has been inserted by selecting PegasosQSVC(only binary classification)</center></h4>"
-                        "<br>Error: " + exception,
-                        'html'))
+                        "<br>Error: " + exception, 'html'))
             else:
                 msg.attach(
                     MIMEText(
                         "<center><h4>An error has been detected:<br>"
-                        "- " + exception +" <br>Check status on: //quantum-computing.ibm.com/services?services=systems<br>"
+                        "- " +
+                        exception +
+                        " <br>Check status on: //quantum-computing.ibm.com/services?services=systems<br>"
                         "- A dataset for multilabel classification has been inserted by selecting PegasosQSVC(only binary classification)</center></h4>",
                         'html'))
 
@@ -432,7 +516,7 @@ class ClassificazioneControl:
                         "</center></h6>", 'html'))
 
             file = pathlib.Path(userpathToPredict).parent / \
-                   "classifiedFile.csv"
+                "classifiedFile.csv"
             attach_file = open(file, "rb")
             payload = MIMEBase("application", "octet-stream")
             payload.set_payload(attach_file.read())
@@ -451,7 +535,7 @@ class ClassificazioneControl:
             server.login("quantumoonlight@gmail.com", "Quantum123?")
             server.send_message(msg)
             server.close()
-        except:
+        except BaseException:
             return 0
         return 1
 
