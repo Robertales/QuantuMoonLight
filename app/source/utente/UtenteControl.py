@@ -1,6 +1,7 @@
 import hashlib
 import itertools
 import re
+from datetime import timedelta
 from os.path import exists
 from pathlib import Path
 from zipfile import ZipFile
@@ -52,20 +53,25 @@ class UtenteControl:
             flash("Password and confirm password do not match", "error")
             return render_template("registration.html")
         if not re.fullmatch('^[A-zÀ-ù ‘-]{2,30}$', Name):
-            flash("Invalid name, ,name must contain only alphabetical characters", "error")
+            flash(
+                "Invalid name, ,name must contain only alphabetical characters",
+                "error")
             return render_template("registration.html")
         if not re.fullmatch('^[A-zÀ-ù ‘-]{2,30}$', cognome):
-            flash("Invalid surname, ,surname must contain only alphabetical characters", "error")
+            flash(
+                "Invalid surname, ,surname must contain only alphabetical characters",
+                "error")
             return render_template("registration.html")
         if not ((token is None) or token.__len__() == 128):
             flash("Invalid ibmq token", "error")
             return render_template("registration.html")
 
-        utente=User.query.filter_by(email=email).first()
+        utente = User.query.filter_by(email=email).first()
         if utente:
-            flash("Email is invalid or already taken","error")
+            flash("Email is invalid or already taken", "error")
             return render_template("registration.html")
 
+        group = request.form.get("group")
         utente = User(
             email=email,
             password=hashed_password,
@@ -73,7 +79,8 @@ class UtenteControl:
             username=username,
             name=Name,
             surname=cognome,
-            isResearcher=bool(isResearcher)
+            isResearcher=bool(isResearcher),
+            group=group
         )
 
         db.session.add(utente)
@@ -83,7 +90,7 @@ class UtenteControl:
         print(path.__str__())
         if not path.is_dir():
             path.mkdir()
-        login_user(utente)
+        login_user(utente, duration=timedelta(days=365), force=True)
         return render_template("index.html")
 
     @app.route("/login", methods=["GET", "POST"])
@@ -103,7 +110,7 @@ class UtenteControl:
             return render_template("login.html")
 
         if attempted_user.password == hashed_password:
-            login_user(attempted_user)
+            login_user(attempted_user, duration=timedelta(days=365), force=True)
         else:
             flash("password errata", "error")
             return render_template("login.html")
@@ -140,7 +147,7 @@ class UtenteControl:
         ID = request.form.get("id")
         filename = request.form.get("filename")
         filepath = Path(__file__).parents[3] / \
-                   "upload_dataset" / current_user.email / ID
+            "upload_dataset" / current_user.email / ID
         print(filename)
 
         if filename:
@@ -152,10 +159,10 @@ class UtenteControl:
                 zip_name = 'ValidationResult.zip'
                 zip = ZipFile(zip_path, 'w')
                 if exists(
-                        filepath /
-                        "Data_training.csv") and exists(
                     filepath /
-                    "Data_testing.csv"):
+                    "Data_training.csv") and exists(
+                        filepath /
+                        "Data_testing.csv"):
                     zip.write(
                         filepath / "Data_training.csv",
                         "data_training.csv")
@@ -179,10 +186,10 @@ class UtenteControl:
                 zip_name = 'PreprocessingResult.zip'
                 zip = ZipFile(zip_path, 'w')
                 if exists(
-                        filepath /
-                        "DataSetTestPreprocessato.csv") and exists(
                     filepath /
-                    "DataSetTrainPreprocessato.csv"):
+                    "DataSetTestPreprocessato.csv") and exists(
+                        filepath /
+                        "DataSetTrainPreprocessato.csv"):
                     zip.write(
                         filepath / 'DataSetTestPreprocessato.csv',
                         'DataSetTestPreprocessato.csv')
@@ -198,10 +205,10 @@ class UtenteControl:
                         filepath / 'reducedTrainingPS.csv',
                         'reducedTrainingPS.csv')
                 if exists(
-                        filepath /
-                        "Test_Feature_Extraction.csv") and exists(
                     filepath /
-                    "Train_Feature_Extraction.csv"):
+                    "Test_Feature_Extraction.csv") and exists(
+                        filepath /
+                        "Train_Feature_Extraction.csv"):
                     zip.write(
                         filepath / 'Test_Feature_Extraction.csv',
                         'Test_Feature_Extraction.csv')
@@ -209,22 +216,34 @@ class UtenteControl:
                         filepath / 'Train_Feature_Extraction.csv',
                         'Train_Feature_Extraction.csv')
                 if exists(filepath / "Train_Feature_Selection.csv"):
-                    zip.write(filepath / "Train_Feature_Selection.csv", "Train_Feature_Selection.csv")
+                    zip.write(
+                        filepath / "Train_Feature_Selection.csv",
+                        "Train_Feature_Selection.csv")
                 if exists(filepath / "Test_Feature_Selection.csv"):
-                    zip.write(filepath / "Test_Feature_Selection.csv", "Test_Feature_Selection.csv")
+                    zip.write(
+                        filepath / "Test_Feature_Selection.csv",
+                        "Test_Feature_Selection.csv")
 
                 if exists(filepath / "TrainImputation.csv"):
-                    zip.write(filepath / "TrainImputation.csv", "TrainImputation.csv")
+                    zip.write(
+                        filepath / "TrainImputation.csv",
+                        "TrainImputation.csv")
                 if exists(filepath / "TestImputation.csv"):
-                    zip.write(filepath / "TestImputation.csv", "TestImputation.csv")
+                    zip.write(
+                        filepath / "TestImputation.csv",
+                        "TestImputation.csv")
                 if exists(filepath / "PredictImputation.csv"):
-                    zip.write(filepath / "PredictImputation.csv", "PredictImputation.csv")
+                    zip.write(
+                        filepath / "PredictImputation.csv",
+                        "PredictImputation.csv")
                 if exists(filepath / "TrainScaled.csv"):
                     zip.write(filepath / "TrainScaled.csv", "TrainScaled.csv")
                 if exists(filepath / "TestScaled.csv"):
                     zip.write(filepath / "TestScaled.csv", "TestScaled.csv")
                 if exists(filepath / "PredictScaled.csv"):
-                    zip.write(filepath / "PredictScaled.csv", "PredictScaled.csv")
+                    zip.write(
+                        filepath / "PredictScaled.csv",
+                        "PredictScaled.csv")
                 zip.close()
 
             return send_from_directory(
@@ -236,4 +255,3 @@ class UtenteControl:
                 "Unable to download the file, try again",
                 "error")
             return render_template("downloadPage.html")
-
