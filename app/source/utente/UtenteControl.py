@@ -1,5 +1,7 @@
+import collections
 import hashlib
 import itertools
+import json
 import re
 from datetime import timedelta
 from os.path import exists
@@ -8,6 +10,7 @@ from zipfile import ZipFile
 
 from flask import request, render_template, flash, send_from_directory
 from flask_login import login_user, logout_user, current_user
+from qiskit import IBMQ
 
 from app import app, db
 from app.source.model.models import User
@@ -255,3 +258,4 @@ class UtenteControl:
                 "Unable to download the file, try again",
                 "error")
             return render_template("downloadPage.html")
+

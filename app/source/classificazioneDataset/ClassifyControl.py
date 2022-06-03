@@ -495,7 +495,7 @@ class ClassificazioneControl:
                     MIMEText(
                         "<center><h3>Training time: " +
                         result.get("training_time") +
-                        "</h3></center>",
+                        "s</h3></center>",
                         'html'))
             msg.attach(
                 MIMEText(

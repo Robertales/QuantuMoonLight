@@ -365,8 +365,22 @@ def userPage():
 
 
 @app.route("/formPage")
+@login_required
 def formPage():
-    return render_template("formDataset.html")
+    backends = None
+    if current_user.is_authenticated:
+        try:
+            IBMQ.enable_account(current_user.token)
+            if (current_user.isResearcher == True):
+                provider = IBMQ.get_provider(group=str(current_user.group))
+            else:
+                provider = IBMQ.get_provider(hub='ibm-q')
+            backends = provider.backends()
+            IBMQ.disable_account()
+        except Exception as e:
+            print(e)
+            print("Invalid token")
+    return render_template("formDataset.html", backends=backends)
 
 
 @app.route("/getStarted")
