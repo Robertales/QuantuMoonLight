@@ -74,7 +74,7 @@
 <div class="colonna">
 <div align="center">
     <h1 id="blog_title">QUANTUM COMMUNITY</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dapibus, augue non sagittis varius, elit neque sagittis risus, eu varius.</p>
+    <p>Immerse yourself in the quantum community, you can share your experiments and stay update on new topics</p>
 </div>
 
 <div class="create_post">
@@ -118,7 +118,7 @@
         <h2 class="post-title">
             {{ Article.title }} </h2>
         <h5>Post pending approval </h5>
-    <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }} </p>
+    <p class="post-meta">Posted by <b>{{ Article.author }}</b> on {{ Article.data.strftime('%B %d, %Y') }} </p>
     </a>
 </div>
 
@@ -139,7 +139,6 @@
         </div>
         <h2 class="post-title">
             {{ Article.title }} </h2>
-
     <p class="post-meta">Posted by <b>{{ Article.author }}</b> on {{ Article.data.strftime('%B %d, %Y') }} </p>
 
     </a>
