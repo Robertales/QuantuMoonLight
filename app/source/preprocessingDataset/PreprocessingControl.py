@@ -52,14 +52,12 @@ class PreprocessingControl:
         numRaws = utils.numberOfRows(userpath)
         numCols = utils.numberOfColumns(userpath)
         if featureExtraction and numColsFE > numCols:
-            print("Impossibile ridurre le colonne: numColsFE > numColsData")
-            return Response(status=400)
+            numColsFE=numCols
         if featureSelection and numColsFS > numCols:
-            print("Impossibile ridurre le colonne: numColsFS > numColsData")
-            return Response(status=400)
+            numColsFS = numCols
         if prototypeSelection and numRawsPS > numRaws:
-            print("Impossibile ridurre le righe: numRawsPS > numRawsData ")
-            return Response(status=400)
+            numRawsPS=numRaws
+
 
         PreprocessingControl.preprocessing(
             userpath,
