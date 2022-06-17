@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 
   <head>
 
@@ -31,6 +31,11 @@
     #commentApproval{
         color: #00a8ff;
     }
+
+    #post-heading {
+        overflow-wrap: break-word;
+
+    }
 </style>
 
   <body>
@@ -44,10 +49,10 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="post-heading">
-              <h1>{{ post.title }}</h1>
-              <span class="meta"> <B>Posted by
-                {{ post.author }}</B>
+            <div id="post-heading">
+              <p><h1>{{ post.title }}</h1></p>
+              <span class="meta"> Posted by
+                <B>{{ post.author }}</B>
                 on {{ post.data.strftime('%B %d, %Y') }} </span>
             </div>
           </div>
