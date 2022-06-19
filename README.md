@@ -17,33 +17,32 @@ The following prerequisites must be used to install such a platform locally:
 <li>Anaconda >= vers. 2021.11;</li>
 <li>Editor to set up the code (example PyCharm);</li>
 <li>MySql vers. >= 7.0;</li>
-<li>Client MySQL (example HeidiSQL);</li>
+<li>MySQL Client(example HeidiSQL);</li>
 </ul>
 
 After verifying that you have these prerequisites you will need to proceed in this order:
 
    <h4>If you want to run on IDE:</h4>
 <ol>
-<li> Import repository on you IDE (ex. using https://github.com/Robertales/QuantuMoonLight.git)</li>
-<li> Open Anaconda Prompt and install the environment.yml using this command (download from env/yourOS/environment.yml)</li>
+<li> Import the repository on your IDE (ex. using https://github.com/Robertales/QuantuMoonLight.git)</li>
+<li> Open Anaconda Prompt and install the environment.yml using this command (you can find in ./env/yourOS/environment.yml)<br>
    "conda env create -f environment.yml"
-   next
-   "conda activate name-environment"</li>
 <li> Set-up the interpreter and the environment on your IDE as a Flask Application</li>
 <li>Run the code</li>
-<li>The home page will be shown on your browser</li>
+<li>Click the link http://127.0.0.1/5000, the home page will be shown on your browser</li>
 </ol>
    <h4>Else if you want to run on prompt:</h4>
    <ol>
-<li> clone the github repository</li>(ex. using https://github.com/Robertales/QuantuMoonLight.git)
-<li>Open Anaconda Prompt and install the environment.yml using this command 
-   "conda env create -f environment.yml"</li>
-   next
-   "conda activate name-environment"</li>
+<li> clone the github repository</li> (git clone https://github.com/Robertales/QuantuMoonLight)
+<li>Open Anaconda Prompt and install the environment.yml using this command (you can find in ./env/yourOS/environment.yml)<br>
+   "conda env create -f environment.yml" <br>
+   next activate the environment<br>
+   "conda activate environment-name"</li>
 <li>cd into the QuantuMoonLight folder of the local copy of the repository</li>
-<li> type in "flask run" command and run it</li>
-<li> open the link provided by the cli interface to access your local copy</li>
+<li>type in "flask run" and run it</li>
+<li>open the link provided by the cli interface to access your local copy of QuantuMoonLight</li>
    </ol>
+
    
  
 
