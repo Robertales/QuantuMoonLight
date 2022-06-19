@@ -42,19 +42,21 @@
     </div>
 
     <!-- Admin Page -->
-    <form action={{url_for("getList")}} method="post">
+      {% if current_user.isAdmin %}
+    <!-- <form action={{url_for("getList")}} method="post">
         <input type="hidden" name="scelta" value="listUser">
         <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-list"></span>  Show All Users</button>
     </form><br>
     <form action={{url_for("removeUser")}}>
         <input type="email" name="email" placeholder="User email to be removed"> <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-user-times"></span>  Remove User</button>
-    </form><br>
+    </form><br> -->
     <form action={{url_for("modifyUserPage")}}>
-        <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Edit User</button>
+        <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-pencil"></span>  Edit User Token</button>
     </form><br>
-      <form action={{url_for("sendEmail")}}>
+    <!--  <form action={{url_for("sendEmail")}}>
         <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-sign-out"></span> Send Email</button>
-    </form><br>
+    </form><br> -->
+      {% endif %}
     <form action="/logout" method="post">
         <button type="submit" class="fadeIn fourth btn btn-primary"><span class="fa fa-sign-out"></span> Log-Out</button>
     </form><br>
@@ -65,7 +67,7 @@
 
   </div>
 </div>
-
+</div>
 {% endblock %}
 </body>
 </html>

@@ -118,7 +118,7 @@
                                                       {% endfor %}
                                                       {% endif %}
                                             {% endwith %}
-                                    <form method="POST" action="{{url_for("signup_newsletter")}}">
+                               <form>  <!--   <form method="POST" action="{{url_for("signup_newsletter")}}"> -->
                                         <div class="form-group">
                                             <input type="email" name="email" value="" placeholder="Enter your email address" required autocomplete="off">
                                             <button type="submit" name="submit" class="hvr-bounce-to-right"><span class="fa fa-paper-plane"></span></button>

@@ -45,6 +45,9 @@
     .post-title
     {
     color: black;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     }
     #colonna{
      margin-left: 20%;
@@ -57,7 +60,7 @@
 {% if not Article.authorized and current_user.isAdmin %}
 <br>
 <div class="post-preview">
-    <p class="post-meta">Posted by {{ Article.author }} on {{ Article.data.strftime('%B %d, %Y') }}</p>
+    <p class="post-meta">Posted by <b> {{ Article.author }}</b> on {{ Article.data.strftime('%B %d, %Y') }}</p>
 
     <a href="{{ url_for('post', post_id=Article.id) }}">
                     <span class="post-label label-primary"> Category: {{Article.label}} </span>

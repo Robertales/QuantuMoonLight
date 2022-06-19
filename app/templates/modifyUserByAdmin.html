@@ -59,7 +59,7 @@
 
     <!-- User Page -->
       <h4>EDIT YOUR INFORMATIONS HERE</h4><br>
-      <form method="POST" action={{url_for("modifyUserProfile")}}
+      <form method="POST" action={{url_for("modifyUserProfile")}}>
       <h6 class="text-uppercase font-weight-bold">User Email to Edit<input type="text" name="email"></h6>
       <h6 class="text-uppercase font-weight-bold">New IBM Token</h6><textarea type="text" id="newToken" class="fadeIn fourth" name="token" required></textarea><br>
       <br><br>
@@ -73,7 +73,9 @@
 
   </div>
 </div>
+</div>
 
 {% endblock %}
 </body>
+
 </html>

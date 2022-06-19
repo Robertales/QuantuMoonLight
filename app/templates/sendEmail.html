@@ -59,7 +59,7 @@
 
     <!-- Send Email -->
       <h4>Send Email</h4><br>
-      <form method="POST" action={{url_for("sendEmailNewsletter")}}
+      <form method="POST" action={{url_for("sendEmailNewsletter")}}>
       <h4 class="text-uppercase font-weight-bold">Title:</h4><br><input type="text" id="title" class="fadeIn fourth" name="title"><br>
       <h5 class="text-uppercase font-weight-bold">Body:</h5><br><textarea rows="4" cols="50" id="body" class="fadeIn fourth" name="body">Send Email</textarea><br>
       <br><br>
@@ -73,7 +73,7 @@
 
   </div>
 </div>
-
+</div>
 {% endblock %}
 </body>
 </html>
