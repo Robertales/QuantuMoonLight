@@ -12,32 +12,38 @@ The purpose of this project is to present, in detail, the algorithms of the Mach
 
 <h2>Local Installation</h2>
 The following prerequisites must be used to install such a platform locally:
-Python >= vers. 3.7
-Anaconda >= vers. 2021.11
-Editor to set up the code (example PyCharm)
-MySql vers. >= 7.0
-Client MySQL (example HeidiSQL)
+<ul>
+<li>Python >= vers. 3.7;</li>
+<li>Anaconda >= vers. 2021.11;</li>
+<li>Editor to set up the code (example PyCharm);</li>
+<li>MySql vers. >= 7.0;</li>
+<li>Client MySQL (example HeidiSQL);</li>
+</ul>
 
 After verifying that you have these prerequisites you will need to proceed in this order:
 
-   IF YOU WANT TO RUN ON IDE:
-1) Import repository on you IDE (ex. using https://github.com/Robertales/QuantuMoonLight.git)
-2) Open Anaconda Prompt and install the environment.yml using this commanad (download from env/yourOS/environment.yml)
+   <h4>If you want to run on IDE:</h4>
+<ol>
+<li> Import repository on you IDE (ex. using https://github.com/Robertales/QuantuMoonLight.git)</li>
+<li> Open Anaconda Prompt and install the environment.yml using this command (download from env/yourOS/environment.yml)</li>
    "conda env create -f environment.yml"
    next
-   "conda activate name-environment"
-3) Set-up the interpreter and the environment on your IDE as a Flask Application
-4) Run the code
-5) The home page will be shown on your browser
-
-   ELSE IF YOU WANT TO RUN ON PROMPT:
-1) clone the github repository
-2) Open Anaconda Prompt and install the environment.yml using this commnad 
-   "conda env create -f environment.yml"
+   "conda activate name-environment"</li>
+<li> Set-up the interpreter and the environment on your IDE as a Flask Application</li>
+<li>Run the code</li>
+<li>The home page will be shown on your browser</li>
+</ol>
+   <h4>Else if you want to run on prompt:</h4>
+   <ol>
+<li> clone the github repository</li>(ex. using https://github.com/Robertales/QuantuMoonLight.git)
+<li>Open Anaconda Prompt and install the environment.yml using this command 
+   "conda env create -f environment.yml"</li>
    next
-   "conda activate name-environment"
-3) cd into the QuantuMoonLight folder of the local copy of the repository
-4)  type in "flask run" command and run it
-5)  open the link provided by the cli interface to access your local copy
+   "conda activate name-environment"</li>
+<li>cd into the QuantuMoonLight folder of the local copy of the repository</li>
+<li> type in "flask run" command and run it</li>
+<li> open the link provided by the cli interface to access your local copy</li>
+   </ol>
+   
+ 
 
-![immagine](https://user-images.githubusercontent.com/21276583/174491339-711adce9-8439-4193-a237-af916d82056d.png)
