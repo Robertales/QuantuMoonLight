@@ -1,6 +1,6 @@
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/21276583/174580320-c1fd36fc-0cdc-4f59-9ca8-a877059b21ff.gif) 
 
-This repository was developed for the research paper <br>
+This repository was developed for the tool demo paper <br>
 QUANTUMOONLIGHT: A Low-Code Platform to Experiment Quantum Machine Learning for Software Maintenance and Evolution Problem
 
 <h1>QuantuMoonLight</h1>
