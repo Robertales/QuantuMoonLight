@@ -1,3 +1,7 @@
+#This code was developed for the paper
+#G. Acampora and A. Vitiello, "TSSweb: a Web Tool for Training Set Selection," 
+#2020 IEEE International Conference on Fuzzy Systems (FUZZ-IEEE), 2020, pp. 1-7, doi: 10.1109/FUZZ48607.2020.9177677.
+
 from __future__ import division
 import random
 from deap import tools
