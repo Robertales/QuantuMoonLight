@@ -530,11 +530,13 @@ class ClassificazioneControl:
             attach_file.close()
 
         try:
-            server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-            server.ehlo()
-            server.login("quantumoonlight@gmail.com", "Quantum123?")
-            server.send_message(msg)
-            server.close()
+            recipients = ['quantumoonlight@gmail.com', email]
+            session = smtplib.SMTP('smtp.gmail.com', 587)  # use gmail with port
+            session.ehlo()
+            session.starttls()  # enable security
+            session.login("quantumoonlight@gmail.com", "pqhzkgabmxtdfxex")  # login with mail_id and password
+            session.sendmail("quantumoonlight@gmail.com", recipients, msg.__str__())
+            session.quit()
         except BaseException:
             return 0
         return 1
