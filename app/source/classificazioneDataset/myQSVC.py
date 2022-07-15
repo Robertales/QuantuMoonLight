@@ -72,6 +72,10 @@ class myQSVC:
             start_time = time.time()
             test_prediction = qsvc.predict(test_features)
             testing_time = time.time() - start_time
+            print("the oracle for the test label is, Check that there are both TP and TN")
+            print(test_labels)
+            print("the predicted labels on the test dataset are")
+            print(test_prediction)
             accuracy = accuracy_score(test_labels, test_prediction)
             precision = precision_score(test_labels, test_prediction,  zero_division=0)
             recall = recall_score(test_labels, test_prediction)
