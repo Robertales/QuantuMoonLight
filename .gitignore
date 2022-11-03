@@ -1,4 +1,4 @@
-/app/log/
+/src/log/
 /.idea/
 /.pytest_cache
 /htmlcov
