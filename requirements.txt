@@ -11,8 +11,8 @@ openpyxl==3.0.9
 pandas==1.4.2
 pytest==7.1.1
 qiskit==0.36.2
-qiskit_machine_learning==0.3.1
-qiskit_terra==0.19.1
+qiskit_machine_learning==0.4.0
+qiskit_terra==0.20.2
 scikit_learn==1.1.1
 selenium==4.2.0
 SQLAlchemy==1.4.32
