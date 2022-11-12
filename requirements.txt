@@ -17,4 +17,4 @@ scikit_learn==1.1.1
 selenium==4.2.0
 SQLAlchemy==1.4.32
 SQLAlchemy_Utils==0.38.2
-
+jinja2==3.0.3
